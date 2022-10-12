@@ -1,22 +1,22 @@
-%module robot
+%module l_master
 %include  "jsonbase.i"
 
 
 %{
-#include "lebai-sdk/jsonbase.hh"
-#include "lebai-sdk/posture.hh"
-#include "lebai-sdk/motion.hh"
-#include "lebai-sdk/robot.hh"
+// #include "lebai/jsonbase.hh"
+// #include "lebai/posture.hh"
+// #include "lebai/motion.hh"
+#include "lebai/robot.hh"
 %}
 
 
 // __STR__(lebai::MoveParam)
 // __STR__(lebai::MoveRequest)
 // %ignore lebai::JSONBase;
-%import "lebai-sdk/jsonbase.hh"
-%import "lebai-sdk/posture.hh"
-%import "lebai-sdk/motion.hh"
-%include "lebai-sdk/robot.hh"
+// %import "lebai/jsonbase.hh"
+// %import "lebai/posture.hh"
+// %import "lebai/motion.hh"
+%include "lebai/robot.hh"
 
 
 

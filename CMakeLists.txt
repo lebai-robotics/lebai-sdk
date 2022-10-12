@@ -1,14 +1,14 @@
-# This file is just an orchestration
-cmake_minimum_required(VERSION 3.15)
+cmake_minimum_required(VERSION 3.18)
 if (POLICY CMP0122)
   cmake_policy(SET CMP0122 NEW)
 endif()
+
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 option(CMAKE_EXPORT_COMPILE_COMMANDS "Export compile command" TRUE)
 
-project(lebai-sdk VERSION 1.0 LANGUAGES CXX)
+project(lebai VERSION 1.0.0 LANGUAGES CXX)
 set(PROJECT_NAMESPACE lebai)
 message(STATUS "${PROJECT_NAME} version: ${PROJECT_VERSION}")
 # message(STATUS "major: ${PROJECT_VERSION_MAJOR}")
@@ -87,4 +87,29 @@ include(python)
 option(BUILD_EXAMPLES "Build examples" ON)
 message(STATUS "Build examples: ${BUILD_EXAMPLES}")
 add_subdirectory(examples)
+
+
+
+find_package(Doxygen QUIET)
+option(BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen)" ${DOXYGEN_FOUND})
+
+if(BUILD_DOCUMENTATION)
+    # find_package(Doxygen)
+    if(NOT DOXYGEN_FOUND)
+        message(FATAL_ERROR "Doxygen is needed to build the documentation.")
+    endif()
+
+    set(doxyfile_in ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile  )
+    set(doxyfile ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
+
+    configure_file(${doxyfile_in} ${doxyfile} @ONLY)
+
+    add_custom_target(doc ALL
+        COMMAND ${DOXYGEN_EXECUTABLE} ${doxyfile}
+        WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+        COMMENT "Generating API documentation with Doxygen"
+        VERBATIM)
+
+    install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION share/doc)
+endif()
 

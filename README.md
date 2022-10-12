@@ -1,32 +1,50 @@
-# 编译安装
+# 从源代码构建安装
 ## Windows平台
 TODO
 ## Ubuntu&&Debian平台
 ### 依赖
- - python3 >= 3.5
- - cmake >= 3.18
- - gcc >= 5.4
- - swig >= 4.0
- - doxygen (可选)
+- gcc or clang support c++14
+- cmake >= 3.18
+- swig >= 4.0
+- python3 >= 3.5
+- doxygen (可选)
 
 安装依赖的方法：
-相对早的发行版系统cmake和swig版本过低，不能使用，可以通过pip安装较新的版本:
+相对旧的发行版系统cmake和swig版本过低，不能使用，可以通过pip安装较新的版本:
 ```bash
-sudo apt install python3-pip
+sudo apt install build-essential python3-pip
 sudo pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
+# 如果需要生成文档，还需要安装doxygen。
+sudo apt install doxygen
+# 如果需要生成python的wrapper包。
+sudo apt install python3-dev
 ```
+
+
 ### 编译
 ```bash
-mkdir build
-cd build
-cmake ..
-## cmake .. -DBUILD_PYTHON=ON
-make
+cmake -S. -Bbuild -DBUILD_PYTHON=ON -DBUILD_TESTING=OFF
+cmake --build build
 ```
 编译选项
- - BUILD_PYTHON: 是否编译python接口
- - BUILD_TESTING: 是否编译测试程序
- - BUILD_EXAMPLES: 是否编译示例程序
+ - BUILD_PYTHON: 是否编译python接口 默认为OFF
+ - BUILD_TESTING: 是否编译C++测试程序 默认为ON 
+ - BUILD_EXAMPLES: 是否编译示例程序 默认为ON
+
+## 使用
+您可以通过docs目录下的文档了解更多各语言的信息。
+
+TODO 
+### Python
+build目录下会生成python的whl包，可以直接使用。
+```python
+cd build/python/dist
+## 安装
+sudo pip3 install lebai-1.0-cp35-cp35m-linux_x86_64.whl
+## 卸载
+sudo pip3 uninstall lebai
+```
+
 
 # 后续工作
 - 功能完成（目前为框架结构示例）

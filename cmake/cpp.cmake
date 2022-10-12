@@ -135,10 +135,13 @@ function(add_cpp_example FILE_NAME)
   endif()
 
   add_executable(${EXAMPLE_NAME} ${FILE_NAME})
-  target_include_directories(${EXAMPLE_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
+  target_include_directories(${EXAMPLE_NAME} 
+    PUBLIC 
+    ${CMAKE_CURRENT_SOURCE_DIR}
+    ${PROJECT_SOURCE_DIR}/sdk/src)
   target_compile_features(${EXAMPLE_NAME} PRIVATE cxx_std_14)
   target_link_libraries(${EXAMPLE_NAME} PRIVATE
-    ${PROJECT_NAMESPACE}::lebai-sdk
+    ${PROJECT_NAMESPACE}::lebai-cpp
     pthread)
 
   include(GNUInstallDirs)

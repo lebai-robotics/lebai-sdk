@@ -2,7 +2,6 @@ if(NOT BUILD_PYTHON)
   return()
 endif()
 
-# Use latest UseSWIG module (3.14) and Python3 module (3.18)
 cmake_minimum_required(VERSION 3.18)
 
 # Will need swig
@@ -76,12 +75,6 @@ function(search_python_module)
   endif()
 endfunction()
 
-# Find if a python builtin module is available.
-# e.g
-# search_python_internal_module(
-#   NAME
-#     mypy_protobuf
-# )
 function(search_python_internal_module)
   set(options "")
   set(oneValueArgs NAME)
@@ -106,12 +99,11 @@ function(search_python_internal_module)
   endif()
 endfunction()
 
-set(PYTHON_PROJECT lebai_sdk)
-message(STATUS "Python project: ${PYTHON_PROJECT}")
+set(PYTHON_PROJECT lebai)
 set(PYTHON_PROJECT_DIR ${PROJECT_BINARY_DIR}/python/${PYTHON_PROJECT})
 message(STATUS "Python project build path: ${PYTHON_PROJECT_DIR}")
 
-# Swig wrap all libraries
+# Swig wrap sdk
 foreach(SUBPROJECT IN ITEMS sdk)
   add_subdirectory(${SUBPROJECT}/python)
 endforeach()
@@ -120,11 +112,9 @@ endforeach()
 ## Python Packaging  ##
 #######################
 #file(MAKE_DIRECTORY python/${PYTHON_PROJECT})
-# file(GENERATE OUTPUT ${PYTHON_PROJECT_DIR}/__init__.py CONTENT "__version__ = \"${PROJECT_VERSION}\"\n")
-file(GENERATE OUTPUT ${PYTHON_PROJECT_DIR}/__init__.py CONTENT "")
+file(GENERATE OUTPUT ${PYTHON_PROJECT_DIR}/__init__.py CONTENT "__version__ = \"${PROJECT_VERSION}\"\n")
+# file(GENERATE OUTPUT ${PYTHON_PROJECT_DIR}/__init__.py CONTENT "")
 
-# setup.py.in contains cmake variable e.g. @PYTHON_PROJECT@ and
-# generator expression e.g. $<TARGET_FILE_NAME:pyFoo>
 configure_file(
   ${PROJECT_SOURCE_DIR}/python/setup.py.in
   ${PROJECT_BINARY_DIR}/python/setup.py.in
@@ -152,21 +142,14 @@ add_custom_command(
   COMMAND ${CMAKE_COMMAND} -E remove_directory dist
   COMMAND ${CMAKE_COMMAND} -E make_directory ${PYTHON_PROJECT}/.libs
   # Don't need to copy static lib on Windows.
-  COMMAND ${CMAKE_COMMAND} -E $<IF:$<STREQUAL:$<TARGET_PROPERTY:lebai-sdk,TYPE>,SHARED_LIBRARY>,copy,true>
-  $<$<STREQUAL:$<TARGET_PROPERTY:lebai-sdk,TYPE>,SHARED_LIBRARY>:$<TARGET_SONAME_FILE:lebai-sdk>>
+  COMMAND ${CMAKE_COMMAND} -E $<IF:$<STREQUAL:$<TARGET_PROPERTY:lebai-cpp,TYPE>,SHARED_LIBRARY>,copy,true>
+  $<$<STREQUAL:$<TARGET_PROPERTY:lebai-cpp,TYPE>,SHARED_LIBRARY>:$<TARGET_SONAME_FILE:lebai-cpp>>
   ${PYTHON_PROJECT}/.libs
-  # COMMAND ${CMAKE_COMMAND} -E $<IF:$<STREQUAL:$<TARGET_PROPERTY:Bar,TYPE>,SHARED_LIBRARY>,copy,true>
-  # $<$<STREQUAL:$<TARGET_PROPERTY:Bar,TYPE>,SHARED_LIBRARY>:$<TARGET_SONAME_FILE:Bar>>
-  # ${PYTHON_PROJECT}/.libs
-  # COMMAND ${CMAKE_COMMAND} -E $<IF:$<STREQUAL:$<TARGET_PROPERTY:FooBar,TYPE>,SHARED_LIBRARY>,copy,true>
-  # $<$<STREQUAL:$<TARGET_PROPERTY:FooBar,TYPE>,SHARED_LIBRARY>:$<TARGET_SONAME_FILE:FooBar>>
-  # ${PYTHON_PROJECT}/.libs
-  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:lebai-sdk> ${PYTHON_PROJECT}/
-  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:posture> ${PYTHON_PROJECT}/
-  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:motion> ${PYTHON_PROJECT}/
-  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:robot> ${PYTHON_PROJECT}/
-  # COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:pyBar> ${PYTHON_PROJECT}/bar
-  # COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:pyFooBar> ${PYTHON_PROJECT}/foobar
+  # COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:lebai-cpp> ${PYTHON_PROJECT}/
+  # COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:posture> ${PYTHON_PROJECT}/
+  # COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:motion> ${PYTHON_PROJECT}/
+  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:l_master> ${PYTHON_PROJECT}/
+  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:zeroconf> ${PYTHON_PROJECT}/
   # COMMAND ${Python3_EXECUTABLE} setup.py bdist_egg bdist_wheel
   COMMAND ${Python3_EXECUTABLE} setup.py bdist_wheel
   COMMAND ${CMAKE_COMMAND} -E touch ${PROJECT_BINARY_DIR}/python/dist/timestamp
@@ -174,12 +157,11 @@ add_custom_command(
     python/setup.py.in
   DEPENDS
     python/setup.py
-    ${PROJECT_NAMESPACE}::lebai-sdk    
-    ${PROJECT_NAMESPACE}::posture
-    ${PROJECT_NAMESPACE}::motion
-    ${PROJECT_NAMESPACE}::robot
-    # ${PROJECT_NAMESPACE}::pyBar
-    # ${PROJECT_NAMESPACE}::pyFooBar
+    ${PROJECT_NAMESPACE}::lebai-cpp
+    # ${PROJECT_NAMESPACE}::posture
+    # ${PROJECT_NAMESPACE}::motion
+    ${PROJECT_NAMESPACE}::l_master
+    ${PROJECT_NAMESPACE}::zeroconf
   BYPRODUCTS
     python/${PYTHON_PROJECT}
     python/${PYTHON_PROJECT}.egg-info
@@ -250,15 +232,15 @@ add_custom_target(python_package ALL
 #  the python filename
 # e.g.:
 # add_python_example(foo.py)
-function(add_python_example FILE_NAME)
-  message(STATUS "Configuring example ${FILE_NAME} ...")
-  get_filename_component(EXAMPLE_NAME ${FILE_NAME} NAME_WE)
+# function(add_python_example FILE_NAME)
+#   message(STATUS "Configuring example ${FILE_NAME} ...")
+#   get_filename_component(EXAMPLE_NAME ${FILE_NAME} NAME_WE)
 
-  if(BUILD_TESTING)
-    add_test(
-      NAME python_example_${EXAMPLE_NAME}
-      COMMAND ${VENV_Python3_EXECUTABLE} ${FILE_NAME}
-      WORKING_DIRECTORY ${VENV_DIR})
-  endif()
-  message(STATUS "Configuring example ${FILE_NAME} done")
-endfunction()
+#   if(BUILD_TESTING)
+#     add_test(
+#       NAME python_example_${EXAMPLE_NAME}
+#       COMMAND ${VENV_Python3_EXECUTABLE} ${FILE_NAME}
+#       WORKING_DIRECTORY ${VENV_DIR})
+#   endif()
+#   message(STATUS "Configuring example ${FILE_NAME} done")
+# endfunction()

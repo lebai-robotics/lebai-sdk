@@ -1,18 +1,18 @@
-%module motion
+%module l_master
 %include  "jsonbase.i"
 
 %{
-#include "lebai-sdk/posture.hh"
-#include "lebai-sdk/motion.hh"
+#include "lebai/posture.hh"
+#include "lebai/motion.hh"
 %}
 
 
 __STR__(lebai::MoveParam)
 __STR__(lebai::MoveRequest)
 %ignore lebai::JSONBase;
-%import "lebai-sdk/jsonbase.hh"
-%import "lebai-sdk/posture.hh"
-%include "lebai-sdk/motion.hh"
+%import "lebai/jsonbase.hh"
+%import "lebai/posture.hh"
+%include "lebai/motion.hh"
 
 
 

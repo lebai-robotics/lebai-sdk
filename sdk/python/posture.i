@@ -4,7 +4,7 @@
 
 
 %{
-#include <lebai-sdk/posture.hh>
+#include <lebai/posture.hh>
 %}
 
 __STR__(lebai::JointPose)
@@ -17,8 +17,8 @@ __STR__(lebai::Pose)
 %typemap(doctype) std::vector<double> & "array of double";
 
 
-%import "lebai-sdk/jsonbase.hh"
-%include "lebai-sdk/posture.hh"
+%import "lebai/jsonbase.hh"
+%include "lebai/posture.hh"
 
 
 

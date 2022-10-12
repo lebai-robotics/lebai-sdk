@@ -1,17 +1,12 @@
-from lebai_sdk import robot
-from lebai_sdk import motion
-from lebai_sdk import posture
+from lebai import l_master
+from lebai import zeroconf
 import time
+## Try to find the l_master
+discovery = zeroconf.Discovery()
+ip_list = d.resolve()
 ## Robot instance
-robot = robot.Robot("172.17.0.3", True)
+robot = l_master.Robot(ip_list[0], True)
 time.sleep(2)
-## Move Request data
-move_req = motion.MoveRequest()
-move_req.pose().mutable_joint().delta().set_joint([1.5,0,0,0,0,0])
-move_req.param().set_v(0.2)
-## Call movej
-robot.movej(move_req)
-## Change joint pose
-move_req.pose().joint().delta().set_joint([-1.5,0,0,0,0,0])
-## Call movej again
-robot.movej(move_req)
+robot.start_sys()
+robot.movej({"j1": 1.0,"j2": -1.0,"j3": 1.,"j4": -0.0,"j5": -1.0,"j6": 0.0},1.0,1.0,0.0,0.0)
+robot.movej([1,2,3,4,5,6],1.0,1.0,0.0,0.0)

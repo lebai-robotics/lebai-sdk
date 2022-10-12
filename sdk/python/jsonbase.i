@@ -1,7 +1,9 @@
 %include "stdint.i"
 %include "std_vector.i"
+%include "std_map.i"
 %include "std_string.i"
 %include "std_pair.i"
+%include "std_array.i"
 
 %ignore Deserialize;
 %ignore Serialize;
@@ -9,8 +11,10 @@
 %ignore IsNullJSONData;
 
 %template(DoubleVector) std::vector<double>;
+%template(CartArray) std::array<double, 6>;
+%template(JointMap) std::map<std::string, double>;
 %{
-#include <lebai-sdk/jsonbase.hh>
+#include <protos/jsonbase.hh>
 %}
 
 
