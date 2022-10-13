@@ -72,5 +72,78 @@ namespace lebai
 			virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const;
 			virtual bool IsNullJSONData() const;
 		};
+
+
+    enum VoiceKind
+    {
+      OFF	= 0,
+      BOOTING	= 1,
+      STOPING	= 2,
+      COLLISION_DETECTED	= 3,
+      UPGRADE	= 4,
+      TEACH_MODE_ON	= 5,
+      TEACH_MODE_OFF	= 6,
+      FINE_TUNNING_ON	= 7,
+      FINE_TUNNING_OFF	= 8,
+      FINE_TUNNING_CHANGE	= 9,
+      BORING	= 10,
+      CUSTOM1	= 11,
+      CUSTOM2	= 12,
+      CUSTOM3	= 13,
+      CUSTOM4	= 14,
+      CUSTOM5	= 15,
+    };
+
+    enum Volume
+    {
+      MUTE	= 0,
+      LOW	= 1,
+      MID	= 2,
+      HIGH	= 3,
+    };
+    class VoiceData : public JSONBase
+		{
+		public:
+      void set_voice(VoiceKind voice);
+      VoiceKind voice() const;
+      VoiceKind * mutable_voice();
+
+      void set_volume(Volume volume);
+      Volume volume() const;
+      Volume * mutable_volume();
+
+		protected:
+      VoiceKind	voice_;	  
+      LedSpeed volume_;
+			// These methods are used to serialize and deserialize the class.
+			// They will not be wrapped in the SDK.
+		public:
+			virtual bool Deserialize(const rapidjson::Value &obj);
+			virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const;
+			virtual bool IsNullJSONData() const;
+		};
+
+    enum FanMode
+    {
+      HOLD_FAN = 0,
+      CLOSE_FAN = 1,
+      OPEN_FAN = 2,
+    };
+    class FanData : public JSONBase
+		{
+		public:
+      void set_fan(VoiceKind voice);
+      VoiceKind fan() const;
+      VoiceKind * mutable_fan();
+
+		protected:
+      FanMode	fan_;	  
+			// These methods are used to serialize and deserialize the class.
+			// They will not be wrapped in the SDK.
+		public:
+			virtual bool Deserialize(const rapidjson::Value &obj);
+			virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const;
+			virtual bool IsNullJSONData() const;
+		};
 	}
 }

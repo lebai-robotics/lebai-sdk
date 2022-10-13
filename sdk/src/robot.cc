@@ -49,6 +49,51 @@ void Robot::stop_sys()
   impl_->stopSys();
 }
 
+void Robot::powerdown()
+{
+  impl_->powerdown();
+}
+
+void Robot::stop()
+{
+  impl_->stop();
+}
+
+void Robot::estop()
+{
+  impl_->estop();
+}
+
+void Robot::teach_mode()
+{
+  impl_->teach_mode();
+}
+
+void Robot::end_teach_mode()
+{
+  impl_->end_teach_mode();
+}
+
+void Robot::pause()
+{
+  impl_->pause();
+}
+
+void Robot::resume()
+{
+  impl_->resume();
+}
+
+void Robot::wait(unsigned int time)
+{
+  impl_->wait(time);
+}
+
+void Robot::wait_until(std::string fn)
+{
+  impl_->wait_until(fn);
+}
+
 bool Robot::movej(const std::map<std::string, double> & joint_positions, double a, double v, double t, double r)
 {
   MoveRequest move_req;
@@ -321,6 +366,103 @@ std::tuple<double, double ,bool> Robot::get_claw()
   auto resp = impl_->getClaw();
   return std::make_tuple(resp.force(), resp.amplitude(), resp.hold_on());
 }
+
+void Robot::set_led(unsigned int mode,unsigned int speed,std::vector<unsigned int> color)
+{
+  led::LedData req;
+  switch(mode)
+  {
+    case 0:req.set_mode(led::LedMode::HOLD_LED);break;
+    case 1:req.set_mode(led::LedMode::CLOSE_LED);break;
+    case 2:req.set_mode(led::LedMode::OPEN_LED);break;
+    case 3:req.set_mode(led::LedMode::BREATH);break;
+    case 4:req.set_mode(led::LedMode::FOUR);break;
+    case 5:req.set_mode(led::LedMode::WATER);break;
+    case 6:req.set_mode(led::LedMode::BLINK);break;
+    default:return;
+  }
+  switch(speed)
+  {
+    case 0:req.set_speed(led::LedSpeed::HOLD_LED_SPEED);break;
+    case 1:req.set_speed(led::LedSpeed::FAST);break;
+    case 2:req.set_speed(led::LedSpeed::NORMAL);break;
+    case 3:req.set_speed(led::LedSpeed::SLOW);break;
+    default:return;
+  }
+  std::vector<led::LedColor> _color;
+  for(auto _c:color){
+    switch(_c)
+    {
+      case 0:_color.push_back(led::LedColor::RED);break;
+      case 1:_color.push_back(led::LedColor::GREEN);break;
+      case 2:_color.push_back(led::LedColor::BLUE);break;
+      case 3:_color.push_back(led::LedColor::PINK);break;
+      case 4:_color.push_back(led::LedColor::YELLOW);break;
+      case 5:_color.push_back(led::LedColor::CYAN);break;
+      case 6:_color.push_back(led::LedColor::GRAY);break;
+      case 7:_color.push_back(led::LedColor::BROWN);break;
+      case 8:_color.push_back(led::LedColor::ORANGE);break;
+      case 9:_color.push_back(led::LedColor::GOLD);break;
+      case 10:_color.push_back(led::LedColor::INDIGO);break;
+      case 11:_color.push_back(led::LedColor::LIGHT_SKY_BLUE);break;
+      case 12:_color.push_back(led::LedColor::DARK_VIOLET);break;
+      case 13:_color.push_back(led::LedColor::CHOCOLATE);break;
+      case 14:_color.push_back(led::LedColor::LIGHT_RED);break;
+      case 15:_color.push_back(led::LedColor::WHITE);break;
+      default:return;
+    }
+  }
+  req.set_colors(_color);
+  impl_->setLed(req);
+}
+
+void Robot::set_voice(unsigned int voice,unsigned int volume)
+{
+  led::VoiceData req;
+  switch(voice)
+  {
+    case 0:req.set_voice(led::VoiceKind::OFF);break;
+    case 1:req.set_voice(led::VoiceKind::BOOTING);break;
+    case 2:req.set_voice(led::VoiceKind::STOPING);break;
+    case 3:req.set_voice(led::VoiceKind::COLLISION_DETECTED);break;
+    case 4:req.set_voice(led::VoiceKind::UPGRADE);break;
+    case 5:req.set_voice(led::VoiceKind::TEACH_MODE_ON);break;
+    case 6:req.set_voice(led::VoiceKind::TEACH_MODE_OFF);break;
+    case 7:req.set_voice(led::VoiceKind::FINE_TUNNING_ON);break;
+    case 8:req.set_voice(led::VoiceKind::FINE_TUNNING_OFF);break;
+    case 9:req.set_voice(led::VoiceKind::FINE_TUNNING_CHANGE);break;
+    case 10:req.set_voice(led::VoiceKind::BORING);break;
+    case 11:req.set_voice(led::VoiceKind::CUSTOM1);break;
+    case 12:req.set_voice(led::VoiceKind::CUSTOM2);break;
+    case 13:req.set_voice(led::VoiceKind::CUSTOM3);break;
+    case 14:req.set_voice(led::VoiceKind::CUSTOM4);break;
+    case 15:req.set_voice(led::VoiceKind::CUSTOM5);break;
+    default:return;
+  }
+  switch(volume)
+  {
+    case 0:req.set_volume(led::Volume::MUTE);break;
+    case 1:req.set_volume(led::Volume::LOW);break;
+    case 2:req.set_volume(led::Volume::MID);break;
+    case 3:req.set_volume(led::Volume::HIGH);break;
+    default:return;
+  }
+  impl_->setVoice(req);
+}
+
+void set_fan(unsigned int status)
+{
+  led::FanData req;
+  switch(status)
+  {
+    case 0:req.set_fan(led::FanMode::HOLD_FAN);break;
+    case 1:req.set_fan(led::FanMode::CLOSE_FAN);break;
+    case 2:req.set_fan(led::FanMode::OPEN_FAN);break;
+    default:return;
+  }
+  impl_->setFan(req);
+}
+
 
 std::tuple<std::array<double, 6>, bool> Robot::kinematics_forward(const std::map<std::string, double> & joint_positions)
 {

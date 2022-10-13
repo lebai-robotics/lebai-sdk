@@ -102,6 +102,18 @@ namespace lebai
      *  \brief    夹爪相关的接口.
      */ 
 
+    /** \defgroup LED 灯板.
+     *  \brief    灯板相关的接口.
+    */
+
+    /** \defgroup SIGNAL 信号量.
+     *  \brief    信号量相关的接口.
+    */
+
+    /** \defgroup CONTROL 程序控制.
+     *  \brief    程序控制相关的接口.
+    */
+
     /** \defgroup ROBOTICS 机器人.
      *  \brief    机器人计算相关的接口.
      */       
@@ -121,6 +133,53 @@ namespace lebai
      */
 
     void stop_sys();
+    /**
+     * @brief 关闭机器人电源（关机）。
+     * 
+     */
+    void powerdown();
+    /**
+     * @brief 停止运动（但不下电）。
+     * 
+     */
+    void stop();
+    /**
+     * @brief 紧急停止（急停）。
+     * 
+     */
+    void estop();
+    /**
+     * @brief 进入示教模式。
+     * 
+     */
+    void teach_mode();
+    /**
+     * @brief 退出示教模式。
+     * 
+     */
+    void end_teach_mode();
+    /**
+     * @brief 暂停运动。
+     * 
+     */
+    void pause();
+    /**
+     * @brief 恢复运动。
+     * 
+     */
+    void resume();
+    /**
+     * @brief 机器人将等待一段时间。
+     * 
+     * @param time 休眠时间（毫秒）
+     */
+    void wait(unsigned int time);
+    /**
+     * @brief 机器人将等待一段时间，直到满足指定条件。
+     * 
+     * @param fn 等待条件。每个周期执行一次判断，直到该`fn()`返回`true`
+     */
+    void wait_until(std::string fn);
     /** @}*/
 
 
@@ -418,6 +477,33 @@ namespace lebai
      * @return std::tuple<double, double ,bool> 第一个数据为夹爪力度，第二个数据为幅度，第三个数据为开度是否稳定
      */
     std::tuple<double, double ,bool> get_claw();
+    /** @}*/
+
+    /** \addtogroup LED
+     *  @{
+     */
+
+    /**
+     * @brief 设置LED灯状态。
+     * 
+     * @param mode 亮灯模式。0：不变；1：关闭；2：常亮；3：呼吸；4：均分旋转；5：同色旋转；6：闪烁
+     * @param speed 速度。1：快速；2：正常；3：慢速
+     * @param color 最多包含 4 个 0 ~ 15 之间的整数
+     */
+    void set_led(unsigned int mode,unsigned int speed,std::vector<unsigned int> color);
+    /**
+     * @brief 设置声音
+     * 
+     * @param voice 声音列表
+     * @param volume 音量。0：静音；1：低；2：正常；3：高
+     */
+    void set_voice(unsigned int voice,unsigned int volume);
+    /**
+     * @brief 开关风扇
+     * 
+     * @param status 状态。1：关闭；2：开启
+     */
+    void set_fan(unsigned int status);
     /** @}*/
 
 

@@ -22,6 +22,7 @@
 #include "protos/system.hh"
 #include "protos/io.hh"
 #include "protos/claw.hh"
+#include "protos/led.hh"
 #include "protos/kinematic.hh"
 #include "jsonrpc_connector.hh"
 
@@ -37,6 +38,15 @@ namespace lebai
       std::tuple<int, std::string> call(const std::string & method, const std::string & params);
       int startSys();
       int stopSys();
+      int powerdown();
+      int stop();
+      int estop();
+      int teach_mode();
+      int end_teach_mode();
+      int pause();
+      int resume();
+      int wait(unsigned int time);
+      int wait_until(std::string fn);
       // // int movej(const std::vector<double> & p, double v, double a, double t, double r, bool relative);
       void moveJoint(const MoveRequest & req);
       void moveLinear(const MoveRequest & req);
@@ -50,6 +60,9 @@ namespace lebai
       io::GetAioPinResponse getAI(const io::GetAioPinRequest & req);
       void setAO(const io::SetAoPinRequest & req);
       void setClaw(const claw::SetClawRequest & req);
+      void setLed(const led::LedData & req);
+      void setVoice(const led::VoiceData & req);
+      void setFan(const led::FanData & req);
       claw::Claw getClaw();
       posture::CartesianPose getForwardKin(const posture::PoseRequest & req);
       posture::JointPose getInverseKin(const posture::GetInverseKinRequest & req);

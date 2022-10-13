@@ -54,6 +54,51 @@ namespace lebai
     json_rpc_connector_->CallRpc( "stop_sys","{}", nullptr);
   }
 
+  int Robot::RobotImpl::powerdown()
+  {
+    json_rpc_connector_->CallRpc( "powerdown","{}", nullptr);
+  }
+
+  int Robot::RobotImpl::stop()
+  {
+    json_rpc_connector_->CallRpc( "stop","{}",nullptr);
+  }
+
+  int Robot::RobotImpl::estop()
+  {
+    json_rpc_connector_->CallRpc( "estop","{}",nullptr);
+  }
+
+  int Robot::RobotImpl::teach_mode()
+  {
+    json_rpc_connector_->CallRpc( "teach_mode","{}",nullptr);
+  }
+
+  int Robot::RobotImpl::end_teach_mode()
+  {
+    json_rpc_connector_->CallRpc( "end_teach_mode","{}",nullptr);
+  }
+
+  int Robot::RobotImpl::pause()
+  {
+    json_rpc_connector_->CallRpc( "pause","{}",nullptr);
+  }
+
+  int Robot::RobotImpl::resume()
+  {
+    json_rpc_connector_->CallRpc( "resume","{}",nullptr);
+  }
+
+  int Robot::RobotImpl::wait(unsigned int time)
+  {
+    json_rpc_connector_->CallRpc( "wait",std::format("time:{}",time),nullptr);
+  }
+
+  int Robot::RobotImpl::wait_until(std::string fn)
+  {
+    json_rpc_connector_->CallRpc( "wait_until",std::format("fn:{}",fn),nullptr);
+  }
+
   void Robot::RobotImpl::moveJoint(const MoveRequest & req)
   {
     std::string resp;
@@ -143,6 +188,21 @@ namespace lebai
     claw::Claw get_claw_resp;
     get_claw_resp.FromJSONString(resp);
     return get_claw_resp;
+  }
+
+  void Robot::RobotImpl::setLed(const led::LedData & req)
+  {
+    json_rpc_connector_->CallRpc("set_led",req.ToJSONString(),nullptr);
+  }
+
+  void Robot::RobotImpl::setVoice(const led::VoiceData & req)
+  {
+    json_rpc_connector_->CallRpc("set_voice",req.ToJSONString(),nullptr);
+  }
+
+  void Robot::RobotImpl::setFan(const led::FanData & req)
+  {
+    json_rpc_connector_->CallRpc("set_fan",req.ToJSONString(),nullptr);
   }
 
   posture::CartesianPose Robot::RobotImpl::getForwardKin(const posture::PoseRequest & req)
