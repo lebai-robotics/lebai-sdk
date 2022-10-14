@@ -196,5 +196,189 @@ namespace lebai
     {
       return false;
     }   
+
+    void VoiceData::set_voice(VoiceKind voice)
+    {
+      voice_ = voice;
+    }
+
+    VoiceKind VoiceData::voice() const
+    {
+      return voice_;
+    }
+
+    VoiceKind * VoiceData::mutable_voice()
+    {
+      return &voice_;
+    }
+
+    void VoiceData::set_volume(Volume volume)
+    {
+      volume_ = volume;
+    }
+
+    Volume VoiceData::volume() const
+    {
+      return volume_;
+    }
+
+    Volume * VoiceData::mutable_volume()
+    {
+      return &volume_;
+    }
+
+    bool VoiceData::Deserialize(const rapidjson::Value &obj)
+    {
+      if (obj.HasMember("voice"))
+      {
+        std::string voice_str = std::string(obj["voice"].GetString());
+        if(voice_str == "OFF")
+        {
+          voice_ = OFF;
+        }
+        else if(voice_str == "BOOTING")
+        {
+          voice_ = BOOTING;
+        }
+        else if(voice_str == "STOPING")
+        {
+          voice_ = STOPING;
+        }
+        else if(voice_str == "COLLISION_DETECTED")
+        {
+          voice_ = COLLISION_DETECTED;
+        }
+        else if(voice_str == "UPGRADE")
+        {
+          voice_ = UPGRADE;
+        }
+        else if(voice_str == "TEACH_MODE_ON")
+        {
+          voice_ = TEACH_MODE_ON;
+        }
+        else if(voice_str == "TEACH_MODE_OFF")
+        {
+          voice_ = TEACH_MODE_OFF;
+        }
+        else if(voice_str == "FINE_TUNNING_ON")
+        {
+          voice_ = FINE_TUNNING_ON;
+        }
+        else if(voice_str == "FINE_TUNNING_OFF")
+        {
+          voice_ = FINE_TUNNING_OFF;
+        }
+        else if(voice_str == "FINE_TUNNING_CHANGE")
+        {
+          voice_ = FINE_TUNNING_CHANGE;
+        }
+        else if(voice_str == "BORING")
+        {
+          voice_ = BORING;
+        }
+        else if(voice_str == "CUSTOM1")
+        {
+          voice_ = CUSTOM1;
+        }
+        else if(voice_str == "CUSTOM2")
+        {
+          voice_ = CUSTOM2;
+        }
+        else if(voice_str == "CUSTOM3")
+        {
+          voice_ = CUSTOM3;
+        }
+        else if(voice_str == "CUSTOM4")
+        {
+          voice_ = CUSTOM4;
+        }
+        else if(voice_str == "CUSTOM5")
+        {
+          voice_ = CUSTOM5;
+        }
+      }
+      if (obj.HasMember("volume"))
+      {
+        std::string volume_str = std::string(obj["volume"].GetString());
+        if(volume_str == "MUTE")
+        {
+          volume_ = MUTE;
+        }
+        else if(volume_str == "LOW")
+        {
+          volume_ = LOW;
+        }
+        else if(volume_str == "MID")
+        {
+          volume_ = MID;
+        }
+        else if(volume_str == "HIGH")
+        {
+          volume_ = HIGH;
+        }
+      }
+      return true;
+    }
+		bool VoiceData::Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const
+    {
+      writer->StartObject();
+      writer->String("voice");
+      writer->Int(voice_);
+      writer->String("volume");
+      writer->Int(volume_);
+      writer->EndObject();
+      return true;
+    }
+
+		bool VoiceData::IsNullJSONData() const
+    {
+      return false;
+    }
+
+    void FanData::set_fan(FanMode fan)
+    {
+      fan_ = fan;
+    }
+    FanMode FanData::fan() const
+    {
+      return fan_;
+    }
+    FanMode * FanData::mutable_fan()
+    {
+      return &fan_;
+    }
+
+    bool FanData::Deserialize(const rapidjson::Value &obj)
+    {
+      if (obj.HasMember("mode"))
+      {
+        std::string voice_str = std::string(obj["mode"].GetString());
+        if(voice_str == "HOLD_FAN")
+        {
+          fan_ = HOLD_FAN;
+        }
+        else if(voice_str == "CLOSE_FAN")
+        {
+          fan_ = CLOSE_FAN;
+        }
+        else if(voice_str == "OPEN_FAN")
+        {
+          fan_ = OPEN_FAN;
+        }
+      }
+      return true;
+    }
+		bool FanData::Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const
+    {
+      writer->StartObject();
+      writer->String("mode");
+      writer->Int(fan_);
+      writer->EndObject();
+      return true;
+    }
+	  bool FanData::IsNullJSONData() const
+    {
+      return false;
+    }
   }
 }

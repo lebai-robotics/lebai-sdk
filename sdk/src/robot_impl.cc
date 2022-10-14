@@ -91,12 +91,12 @@ namespace lebai
 
   int Robot::RobotImpl::wait(unsigned int time)
   {
-    json_rpc_connector_->CallRpc( "wait",std::format("time:{}",time),nullptr);
+    json_rpc_connector_->CallRpc( "wait","{}",nullptr);
   }
 
   int Robot::RobotImpl::wait_until(std::string fn)
   {
-    json_rpc_connector_->CallRpc( "wait_until",std::format("fn:{}",fn),nullptr);
+    json_rpc_connector_->CallRpc( "wait_until","{}",nullptr);
   }
 
   void Robot::RobotImpl::moveJoint(const MoveRequest & req)

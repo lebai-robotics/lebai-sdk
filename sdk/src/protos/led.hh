@@ -114,7 +114,7 @@ namespace lebai
 
 		protected:
       VoiceKind	voice_;	  
-      LedSpeed volume_;
+      Volume volume_;
 			// These methods are used to serialize and deserialize the class.
 			// They will not be wrapped in the SDK.
 		public:
@@ -132,9 +132,9 @@ namespace lebai
     class FanData : public JSONBase
 		{
 		public:
-      void set_fan(VoiceKind voice);
-      VoiceKind fan() const;
-      VoiceKind * mutable_fan();
+      void set_fan(FanMode fan);
+      FanMode fan() const;
+      FanMode * mutable_fan();
 
 		protected:
       FanMode	fan_;	  

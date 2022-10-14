@@ -450,7 +450,7 @@ void Robot::set_voice(unsigned int voice,unsigned int volume)
   impl_->setVoice(req);
 }
 
-void set_fan(unsigned int status)
+void Robot::set_fan(unsigned int status)
 {
   led::FanData req;
   switch(status)
