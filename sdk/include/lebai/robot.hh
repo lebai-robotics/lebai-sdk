@@ -168,18 +168,6 @@ namespace lebai
      * 
      */
     void resume();
-    /**
-     * @brief 机器人将等待一段时间。
-     * 
-     * @param time 休眠时间（毫秒）
-     */
-    void wait(unsigned int time);
-    /**
-     * @brief 机器人将等待一段时间，直到满足指定条件。
-     * 
-     * @param fn 等待条件。每个周期执行一次判断，直到该`fn()`返回`true`
-     */
-    void wait_until(std::string fn);
     /** @}*/
 
 
@@ -505,7 +493,50 @@ namespace lebai
      */
     void set_fan(unsigned int status);
     /** @}*/
+    
 
+    /** \addtogroup SIGNAL
+     *  @{
+    */
+
+    /**
+     * @brief 设置信号量
+     * 
+     * @param index 信号量下标（取值范围0~255)
+     * @param value 待设置的信号量(32位有符号整数)
+    */
+    void set_signal(unsigned int index,int value);
+    /**
+     * @brief 获取信号量
+     * 
+     * @param index 信号量下标（取值范围0~255)
+     * @return 返回对应的信号量
+    */
+    int get_signal(unsigned int index);
+    /**
+     * @brief 增加指定下标的信号量值，该操作是原子的。
+     * 
+     * @param index 信号量下标（取值范围0~255）
+     * @param value 待增加的信号量值
+    */
+    void add_signal(unsigned int index,int value);
+    /** @}*/
+
+    /** \addtogroup CONTROL
+     *  @{
+    */
+
+    /**
+      * @brief 调用场景
+      * 
+      * @param name 调用场景的名字
+      * @param is_main 是否以主任务方式运行（主任务会排队执行，子任务会并发执行）
+      * @param loop_to 循环次数（默认0永久循环）
+      * @param dir 调用场景所在的文件夹名
+      * @param params 其他参数
+    */
+    unsigned int scene(std::string name,bool is_main,unsigned int loop_to,std::string dir,std::vector<std::string> params);
+    /** @}*/
 
     /** \addtogroup ROBOTICS
      *  @{

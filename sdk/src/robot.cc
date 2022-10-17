@@ -66,12 +66,12 @@ void Robot::estop()
 
 void Robot::teach_mode()
 {
-  impl_->teach_mode();
+  impl_->teachMode();
 }
 
 void Robot::end_teach_mode()
 {
-  impl_->end_teach_mode();
+  impl_->endTeachMode();
 }
 
 void Robot::pause()
@@ -82,16 +82,6 @@ void Robot::pause()
 void Robot::resume()
 {
   impl_->resume();
-}
-
-void Robot::wait(unsigned int time)
-{
-  impl_->wait(time);
-}
-
-void Robot::wait_until(std::string fn)
-{
-  impl_->wait_until(fn);
 }
 
 bool Robot::movej(const std::map<std::string, double> & joint_positions, double a, double v, double t, double r)
@@ -461,6 +451,40 @@ void Robot::set_fan(unsigned int status)
     default:return;
   }
   impl_->setFan(req);
+}
+
+void Robot::set_signal(unsigned int index,int value)
+{
+  signal::SetSignalRequest req;
+  req.set_key(index);
+  req.set_value(value);
+  impl_->setSignal(req);
+}
+int Robot::get_signal(unsigned int index)
+{
+  signal::GetSignalRequest req;
+  req.set_key(index);
+  signal::GetSignalResponse resp = impl_->getSignal(req);
+  return resp.value();
+}
+void Robot::add_signal(unsigned int index,int value)
+{
+  signal::SetSignalRequest req;
+  req.set_key(index);
+  req.set_value(value);
+  impl_->addSignal(req);
+}
+
+unsigned int Robot::scene(std::string name,bool is_main,unsigned int loop_to,std::string dir,std::vector<std::string> params)
+{
+  control::StartTaskRequest req;
+  req.set_name(name);
+  req.set_is_main(is_main);
+  req.set_loop_to(loop_to);
+  req.set_dir(dir);
+  req.set_params(params);
+  control::TaskIndex resp = impl_->scene(req);
+  return resp.id();
 }
 
 

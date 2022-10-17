@@ -69,12 +69,12 @@ namespace lebai
     json_rpc_connector_->CallRpc( "estop","{}",nullptr);
   }
 
-  int Robot::RobotImpl::teach_mode()
+  int Robot::RobotImpl::teachMode()
   {
     json_rpc_connector_->CallRpc( "teach_mode","{}",nullptr);
   }
 
-  int Robot::RobotImpl::end_teach_mode()
+  int Robot::RobotImpl::endTeachMode()
   {
     json_rpc_connector_->CallRpc( "end_teach_mode","{}",nullptr);
   }
@@ -87,16 +87,6 @@ namespace lebai
   int Robot::RobotImpl::resume()
   {
     json_rpc_connector_->CallRpc( "resume","{}",nullptr);
-  }
-
-  int Robot::RobotImpl::wait(unsigned int time)
-  {
-    json_rpc_connector_->CallRpc( "wait","{}",nullptr);
-  }
-
-  int Robot::RobotImpl::wait_until(std::string fn)
-  {
-    json_rpc_connector_->CallRpc( "wait_until","{}",nullptr);
   }
 
   void Robot::RobotImpl::moveJoint(const MoveRequest & req)
@@ -203,6 +193,32 @@ namespace lebai
   void Robot::RobotImpl::setFan(const led::FanData & req)
   {
     json_rpc_connector_->CallRpc("set_fan",req.ToJSONString(),nullptr);
+  }
+
+  void Robot::RobotImpl::setSignal(const signal::SetSignalRequest & req)
+  {
+    json_rpc_connector_->CallRpc("set_signal",req.ToJSONString(),nullptr);
+  }
+  signal::GetSignalResponse Robot::RobotImpl::getSignal(const signal::GetSignalRequest & req)
+  {
+    std::string resp;
+    json_rpc_connector_->CallRpc("get_signal",req.ToJSONString(),&resp);
+    signal::GetSignalResponse set_signal_resp;
+    set_signal_resp.FromJSONString(resp);
+    return set_signal_resp;
+  }
+  void Robot::RobotImpl::addSignal(const signal::SetSignalRequest & req)
+  {
+    json_rpc_connector_->CallRpc("add_signal",req.ToJSONString(),nullptr);
+  }
+
+  control::TaskIndex Robot::RobotImpl::scene(const control::StartTaskRequest & req)
+  {
+    std::string resp;
+    json_rpc_connector_->CallRpc("scene",req.ToJSONString(),&resp);
+    control::TaskIndex start_task_resp;
+    start_task_resp.FromJSONString(resp);
+    return start_task_resp;
   }
 
   posture::CartesianPose Robot::RobotImpl::getForwardKin(const posture::PoseRequest & req)
