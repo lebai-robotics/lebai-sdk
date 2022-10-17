@@ -1,5 +1,5 @@
 /**
- * Copyright 2002 lebai.ltd
+ * Copyright 2022 lebai.ltd
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,11 +36,11 @@ namespace lebai
   TEST_F(DiscoveryTest, Basic)
   {
     lebai::zeroconf::Discovery discovery;
-    auto all_ip_list = discovery.resolve();
-    for (auto& ip : all_ip_list)
-    {
-      std::cout << "ip: " << ip << std::endl;
-    }
+    auto controller_data = discovery.resolve();
+    // for (auto& data : controller_data)
+    // {
+    //   std::cout << "ip: " << data.ip_address << std::endl;
+    // }
   }
 }
 

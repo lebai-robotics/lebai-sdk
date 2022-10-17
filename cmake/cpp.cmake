@@ -37,60 +37,9 @@ if(CHECK_TYPE)
   cmake_pop_check_state()
 endif()
 
-# if(BUILD_TESTING)
-#   include(FetchContent)
-#   #FetchContent_Declare(
-#   #  googletest
-#   #  GIT_REPOSITORY https://github.com/google/googletest.git
-#   #  GIT_TAG master)
-#   #set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
-#   #FetchContent_MakeAvailable(googletest)
-#   FetchContent_Declare(
-#     Catch2
-#     GIT_REPOSITORY https://github.com/catchorg/Catch2.git
-#     GIT_TAG devel
-#     GIT_SHALLOW TRUE
-#     GIT_PROGRESS TRUE
-#   )
-#   FetchContent_MakeAvailable(Catch2)
-# endif()
 
 include(GNUInstallDirs)
 
-# add_cpp_test()
-# CMake function to generate and build C++ test.
-# Parameters:
-#  the C++ filename
-# e.g.:
-# add_cpp_test(foo.cpp)
-# function(add_cpp_test FILE_NAME)
-#   message(STATUS "Configuring test ${FILE_NAME}: ...")
-#   get_filename_component(TEST_NAME ${FILE_NAME} NAME_WE)
-#   get_filename_component(TEST_DIR ${FILE_NAME} DIRECTORY)
-#   get_filename_component(COMPONENT_DIR ${FILE_NAME} DIRECTORY)
-#   get_filename_component(COMPONENT_NAME ${COMPONENT_DIR} NAME)
-
-#   if(APPLE)
-#     set(CMAKE_INSTALL_RPATH
-#       "@loader_path/../${CMAKE_INSTALL_LIBDIR};@loader_path")
-#   elseif(UNIX)
-#     set(CMAKE_INSTALL_RPATH "$ORIGIN/../${CMAKE_INSTALL_LIBDIR}:$ORIGIN")
-#   endif()
-
-#   add_executable(${TEST_NAME} ${FILE_NAME})
-#   target_include_directories(${TEST_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
-#   target_compile_features(${TEST_NAME} PRIVATE cxx_std_11)
-#   target_link_libraries(${TEST_NAME} PRIVATE
-#     Catch2 Catch2WithMain
-#     ${PROJECT_NAMESPACE}::Foo
-#     ${PROJECT_NAMESPACE}::Bar
-#     ${PROJECT_NAMESPACE}::FooBar)
-
-#   if(BUILD_TESTING)
-#     add_test(NAME cpp_${COMPONENT_NAME}_${TEST_NAME} COMMAND ${TEST_NAME})
-#   endif()
-#   message(STATUS "Configuring test ${FILE_NAME}: ...DONE")
-# endfunction()
 
 add_subdirectory(sdk)
 

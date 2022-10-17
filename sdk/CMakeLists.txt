@@ -14,7 +14,6 @@ target_include_directories(lebai-cpp
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third/zeroconf>
     $<INSTALL_INTERFACE:include>)
 target_compile_features(lebai-cpp PUBLIC cxx_std_14)
 set_target_properties(lebai-cpp PROPERTIES
@@ -40,3 +39,4 @@ install(TARGETS lebai-cpp
   EXPORT ${PROJECT_NAME}Targets
   PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
   )
+

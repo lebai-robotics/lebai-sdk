@@ -2,7 +2,7 @@ from lebai import l_master
 from lebai import zeroconf
 import time
 ## Try to find the l_master
-discovery = zeroconf.Discovery()
+d = zeroconf.Discovery()
 ip_list = d.resolve()
 ## Robot instance
 robot = l_master.Robot(ip_list[0], True)

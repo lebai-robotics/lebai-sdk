@@ -6,8 +6,8 @@ TODO
 - gcc or clang support c++14
 - cmake >= 3.18
 - swig >= 4.0
-- python3 >= 3.5
-- doxygen (可选)
+- python3 >= 3.5 (可选,如果需要生成python的接口库)
+- doxygen (可选,如果需要C++文档)
 
 安装依赖的方法：
 相对旧的发行版系统cmake和swig版本过低，不能使用，可以通过pip安装较新的版本:
@@ -25,11 +25,16 @@ sudo apt install python3-dev
 ```bash
 cmake -S. -Bbuild -DBUILD_PYTHON=ON -DBUILD_TESTING=OFF
 cmake --build build
+## 生成DEB包
+cd build
+cpack
 ```
 编译选项
  - BUILD_PYTHON: 是否编译python接口 默认为OFF
  - BUILD_TESTING: 是否编译C++测试程序 默认为ON 
  - BUILD_EXAMPLES: 是否编译示例程序 默认为ON
+
+
 
 ## 使用
 您可以通过docs目录下的文档了解更多各语言的信息。
@@ -53,5 +58,12 @@ sudo pip3 uninstall lebai
 - 文档完善
 - 开源后放入对应语言的包管理器，简化安装过程
 
+# 第三方库
+lebai-sdk使用如下第三方软件
 
-
+| 软件名      | 协议 | 官方网站 | 
+| ----------- | ----------- |----------- |
+| Asio      | Boost  | https://think-async.com/Asio/ |
+| rapidjson      | MIT  | https://rapidjson.org/ |
+| websocketpp      | BSD  | https://www.zaphoyd.com/websocketpp |
+| mdns | public domain | https://github.com/mjansson/mdns |

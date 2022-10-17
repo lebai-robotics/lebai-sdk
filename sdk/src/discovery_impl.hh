@@ -1,5 +1,5 @@
 /**
- * Copyright 2002 lebai.ltd
+ * Copyright 2022 lebai.ltd
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,9 @@
 
 
 #include <lebai/discovery.hh>
-
+#include <mdns.h>
+#include <map>
+#include <string>
 namespace lebai
 {
   namespace zeroconf
@@ -28,7 +30,11 @@ namespace lebai
     public:
       DiscoveryImpl();
       virtual ~DiscoveryImpl();
-      std::vector<std::string> resolve();
+      std::vector<ControllerInfo> resolve();
+    private:
+      void send_mdns_query(mdns_query_t* query, size_t count);
+      int open_client_sockets(int* sockets, int max_sockets, int port);
+      const std::string PTR_ = "_lebai._tcp.local";
     };
   } // namespace zeroconf
 }

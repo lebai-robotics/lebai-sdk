@@ -24,6 +24,28 @@ namespace lebai
 {
   namespace zeroconf
   {
+  struct ControllerInfo
+  {
+    std::string str()
+    {
+      std::string str;
+      str += "name:" + hostname + ",";
+      str += "ip_address:" + ip_address + ",";
+      str += "mac_address:" + mac_address + ",";
+      str += "model:" + model + ",";
+      str += "ds_version:" + ds_version + ",";
+      str += "rc_version:" + rc_version + ",";
+      str += "id:" + id;
+      return str;
+    }
+    std::string hostname;
+    std::string ip_address;
+    std::string mac_address;
+    std::string model;
+    std::string ds_version;
+    std::string rc_version;
+    std::string id;
+  };
     
   /**
    *  @brief 自动发现局域网内lebai机械臂。
@@ -33,7 +55,7 @@ namespace lebai
   {
   public:
     /**
-     * @brief 内部实现.
+     * @brief Discovery的内部实现.
      * @note 用户无需使用.
      */
     class DiscoveryImpl;
@@ -53,7 +75,7 @@ namespace lebai
      * 
      * @return std::vector<std::string> 所有的机械臂的IP列表
      */
-    std::vector<std::string> resolve();
+    std::vector<ControllerInfo> resolve();
 
   protected:
     std::unique_ptr<DiscoveryImpl> impl_; /*!< 内部实现数据结构，用户无需关注。 */

@@ -113,3 +113,15 @@ if(BUILD_DOCUMENTATION)
     install(DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/html DESTINATION share/doc)
 endif()
 
+option(BUILD_DEB "Create deb package" OFF)
+if(BUILD_DEB)
+  set(CPACK_PACKAGE_NAME "lebai")
+  set(CPACK_GENERATOR "DEB")
+  set(CPACK_SOURCE_GENERATOR "DEB")
+  set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
+  set(CPACK_PACKAGE_CONTACT "liufang_robot@outlook.com")
+  set(CPACK_DEBIAN_PACKAGE_MAINTAINER "liufang <${CPACK_PACKAGE_CONTACT}>")
+  include(CPack)
+endif()
+
+
