@@ -3,9 +3,9 @@ from lebai import zeroconf
 import time
 ## Try to find the l_master
 d = zeroconf.Discovery()
-ip_list = d.resolve()
+controllers = d.resolve()
 ## Robot instance
-robot = l_master.Robot(ip_list[0], True)
+robot = l_master.Robot(controllers[0].ip_address, True)
 time.sleep(2)
 robot.start_sys()
 robot.movej({"j1": 1.0,"j2": -1.0,"j3": 1.,"j4": -0.0,"j5": -1.0,"j6": 0.0},1.0,1.0,0.0,0.0)
