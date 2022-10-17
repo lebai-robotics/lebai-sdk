@@ -24,27 +24,27 @@ namespace lebai
 {
   namespace zeroconf
   {
-  struct ControllerInfo
+  /**
+   * \brief Lebai机械臂控制器的信息数据结构
+   * 
+   */
+  class ControllerInfo
   {
-    std::string str()
-    {
-      std::string str;
-      str += "name:" + hostname + ",";
-      str += "ip_address:" + ip_address + ",";
-      str += "mac_address:" + mac_address + ",";
-      str += "model:" + model + ",";
-      str += "ds_version:" + ds_version + ",";
-      str += "rc_version:" + rc_version + ",";
-      str += "id:" + id;
-      return str;
-    }
-    std::string hostname;
-    std::string ip_address;
-    std::string mac_address;
-    std::string model;
-    std::string ds_version;
-    std::string rc_version;
-    std::string id;
+  public:
+    /**
+     * \brief 将控制器信息转换为字符串
+     * 
+     * \return 字符串
+     */
+    std::string str();
+
+    std::string hostname; /*!< 主机名字 */
+    std::string ip_address; /*!< IP地址 */
+    std::string mac_address; /*!< MAC地址 */
+    std::string model; /*!< 机械臂型号 */
+    std::string ds_version; /*!< ds软件版本 */
+    std::string rc_version; /*!< rc软件版本 */
+    std::string id; /*!< 机械臂产品ID */
   };
     
   /**

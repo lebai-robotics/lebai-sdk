@@ -143,13 +143,14 @@ namespace lebai
      * 
      * @brief 通过关节位置发送机械臂关节移动
      * @note 该接口为异步接口，仅向控制器内部的运动缓冲区写入一个关节移动即返回，不会等待运动结束。
-     * @param joint_positions 目标位置的关节map数据，应当包括"j1","j2","j3","j4","j5","j6"六个关节的角度值。
-     * @param a 加速度
-     * @param v 速度
-     * @param t 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数。
-     * @param r 交融半径，设置为0，则无交融半径。
+     * @param[in] joint_positions 目标位置的关节map数据,应当包括"j1","j2","j3","j4","j5","j6"六个关节的角度值.
+     * @param[in] a 加速度
+     * @param[in] v 速度
+     * @param[in] t 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数。
+     * @param[in] r 交融半径，设置为0，则无交融半径。
      * @return true 发送成功
      * @return false 发送失败
+     * 
      */
     bool movej(const std::map<std::string, double> & joint_positions, double a, double v, double t, double r);
     /**
@@ -160,11 +161,11 @@ namespace lebai
      * 
      * @brief 通过坐标位置发送机械臂关节移动
      * @note 该接口为异步接口，仅向控制器内部的运动缓冲区写入一个关节移动即返回，不会等待运动结束。
-     * @param cart_pose 目标位置在机器人基座标系下的坐标数据(目前不支持在其它坐标系下的坐标数据)，CartesianPose = std::array<double,6>，数组大小为6，前三个数据为空间中的[x,y,z]点位，后三个数据是以欧拉ZYX形式的姿态数据[rz,ry,rx]。
-     * @param a 加速度
-     * @param v 速度
-     * @param t 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数。
-     * @param r 交融半径，设置为0，则无交融半径。
+     * @param[in] cart_pose 目标位置在机器人基座标系下的坐标数据(目前不支持在其它坐标系下的坐标数据)，CartesianPose = std::array<double,6>，数组大小为6，前三个数据为空间中的[x,y,z]点位，后三个数据是以欧拉ZYX形式的姿态数据[rz,ry,rx]。
+     * @param[in] a 加速度
+     * @param[in] v 速度
+     * @param[in] t 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数。
+     * @param[in] r 交融半径，设置为0，则无交融半径。
      * @return true 发送成功
      * @return false 发送失败
      */    
@@ -184,11 +185,12 @@ namespace lebai
      * 
      * @brief 通过关节位置发送机械臂直线移动
      * @note 该接口为异步接口，仅向控制器内部的运动缓冲区写入一个关节移动即返回，不会等待运动结束。
-     * @param joint_positions 目标位置的关节map数据，应当包括"j1","j2","j3","j4","j5","j6"六个关节的角度值。
-     * @param a 加速度
-     * @param v 速度
-     * @param t 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数。
-     * @param r 交融半径，设置为0，则无交融半径。
+     * @param[in] joint_positions 目标位置的关节map数据，应当包括"j1","j2","j3","j4","j5","j6"六个关节的角度值。
+     * @param[in] a 加速度
+     * @param[in] v 速度
+     * @param[in] t 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数。
+     * @param[in] r
+     *  交融半径，设置为0，则无交融半径。
      * @return true 发送成功
      * @return false 发送失败
      */

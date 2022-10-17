@@ -23,8 +23,12 @@ sudo apt install python3-dev
 
 ### 编译
 ```bash
+# 生成编译配置
 cmake -S. -Bbuild -DBUILD_PYTHON=ON -DBUILD_TESTING=OFF
+# 编译
 cmake --build build
+# 运行单元测试
+cmake --build build --target test
 ## 生成DEB包
 cd build
 cpack
@@ -33,13 +37,14 @@ cpack
  - BUILD_PYTHON: 是否编译python接口 默认为OFF
  - BUILD_TESTING: 是否编译C++测试程序 默认为ON 
  - BUILD_EXAMPLES: 是否编译示例程序 默认为ON
+ - BUILD_DEB: 是否生成DEB包的构建 默认为OFF
 
 
 
 ## 使用
 您可以通过docs目录下的文档了解更多各语言的信息。
 
-TODO 
+TODO
 ### Python
 build目录下会生成python的whl包，可以直接使用。
 ```python
