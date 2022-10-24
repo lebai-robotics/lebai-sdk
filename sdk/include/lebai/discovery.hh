@@ -41,7 +41,7 @@ namespace lebai
     std::string hostname; /*!< 主机名字 */
     std::string ip_address; /*!< IP地址 */
     std::string mac_address; /*!< MAC地址 */
-    std::string model; /*!< 机械臂型号 */
+    std::string model; /*!< 机械臂模型 */
     std::string ds_version; /*!< ds软件版本 */
     std::string rc_version; /*!< rc软件版本 */
     std::string id; /*!< 机械臂产品ID */
@@ -71,9 +71,9 @@ namespace lebai
     virtual ~Discovery();
 
     /**
-     * @brief 获取局域网内lebai机械臂的IP地址.
+     * @brief 获取局域网内lebai机械臂的信息数据,可以用来自动发现局域网内的所有机械臂控制器
      * 
-     * @return std::vector<std::string> 所有的机械臂的IP列表
+     * @return std::vector<std::string> 所有的机械臂的信息数据
      */
     std::vector<ControllerInfo> resolve();
 

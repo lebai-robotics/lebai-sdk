@@ -22,8 +22,8 @@
 
 namespace lebai {
 
-  namespace l_master
-  {
+namespace l_master
+{
 
   
 
@@ -513,7 +513,7 @@ unsigned int Robot::scene(std::string name)
 }
 
 
-std::tuple<std::array<double, 6>, bool> Robot::kinematics_forward(const std::map<std::string, double> & joint_positions)
+KinematicsForwardResp Robot::kinematics_forward(const std::map<std::string, double> & joint_positions)
 {
   posture::PoseRequest req;
   if(joint_positions.find("j1") != joint_positions.end() && 
@@ -532,20 +532,21 @@ std::tuple<std::array<double, 6>, bool> Robot::kinematics_forward(const std::map
   }
   else
   {
-    return std::tuple<std::array<double, 6>, bool>({0.0,0.0,0.0,0.0,0.0,0.0}, false);
+    return KinematicsForwardResp();
   }
   auto resp = impl_->getForwardKin(req);
-  std::array<double, 6> pose;
-  pose[0] = resp.position().x();
-  pose[1] = resp.position().y();
-  pose[2] = resp.position().z();
-  pose[3] = resp.rotation().euler_zyx()->z();
-  pose[4] = resp.rotation().euler_zyx()->y();
-  pose[5] = resp.rotation().euler_zyx()->x();
-  return std::tuple<std::array<double, 6>, bool>(pose, true);
+  KinematicsForwardResp kf_resp;
+  kf_resp.pose[0] = resp.position().x();
+  kf_resp.pose[1] = resp.position().y();
+  kf_resp.pose[2] = resp.position().z();
+  kf_resp.pose[3] = resp.rotation().euler_zyx()->z();
+  kf_resp.pose[4] = resp.rotation().euler_zyx()->y();
+  kf_resp.pose[5] = resp.rotation().euler_zyx()->x();
+  kf_resp.ok = true;
+  return kf_resp;
 }
 
-std::tuple<std::map<std::string, double>, bool> Robot::kinematics_inverse(const std::array<double, 6> & pose, const std::vector<double> & joint_init_positions)
+KinematicsInverseResp Robot::kinematics_inverse(const std::array<double, 6> & pose, const std::vector<double> & joint_init_positions)
 {
   posture::GetInverseKinRequest req;
   req.mutable_pose()->mutable_cart()->mutable_delta()->mutable_position()->set_x(pose[0]);
@@ -569,22 +570,24 @@ std::tuple<std::map<std::string, double>, bool> Robot::kinematics_inverse(const 
     auto resp = impl_->getInverseKin(req);
     if(resp.joint().size() == 6)
     {
-      joint_positions["j1"] = resp.joint()[0];
-      joint_positions["j2"] = resp.joint()[1];
-      joint_positions["j3"] = resp.joint()[2];
-      joint_positions["j4"] = resp.joint()[3];
-      joint_positions["j5"] = resp.joint()[4];
-      joint_positions["j6"] = resp.joint()[5];
-      return std::tuple<std::map<std::string, double>, bool>(joint_positions, true);
+      KinematicsInverseResp ki_resp;
+      ki_resp.joint_positions["j1"] = resp.joint()[0];
+      ki_resp.joint_positions["j2"] = resp.joint()[1];
+      ki_resp.joint_positions["j3"] = resp.joint()[2];
+      ki_resp.joint_positions["j4"] = resp.joint()[3];
+      ki_resp.joint_positions["j5"] = resp.joint()[4];
+      ki_resp.joint_positions["j6"] = resp.joint()[5];
+      ki_resp.ok = true;
+      return ki_resp;
     }
     else
     {
-      return std::tuple<std::map<std::string, double>, bool>(joint_positions, false);
+      return KinematicsInverseResp();
     }    
   }
   catch(std::exception & e)
   {
-    return std::tuple<std::map<std::string, double>, bool>(joint_positions, false);
+    return KinematicsInverseResp();
   }
 
 }

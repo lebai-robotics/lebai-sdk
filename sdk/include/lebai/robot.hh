@@ -27,6 +27,24 @@ namespace lebai
   namespace l_master
   {
   /**
+   * @brief 运动学正解的返回值数据结构
+   * 
+   */
+  struct KinematicsForwardResp
+  {
+    std::array<double, 6> pose; /*!< 笛卡尔坐标位置，依次为 x, y, z, rz, ry, rx */
+    bool ok = false;  /*!< 计算是否成功 */
+  };
+  /**
+   * @brief 运动学逆解的返回值数据结构
+   * 
+   */
+  struct KinematicsInverseResp
+  {
+    std::map<std::string, double> joint_positions;  /*!< 机械臂关节位置的map数据，应当包括"j1","j2","j3","j4","j5","j6"六个关节的角度值。  */
+    bool ok = false;  /*!< 计算是否成功 */
+  };  
+  /**
    *  @brief 机械臂的主要接口对象，通过本对象的方法与机械臂进行数据交互。
    *
    */
@@ -38,6 +56,9 @@ namespace lebai
      * @note 用户无需使用.
      */
     class RobotImpl;
+
+
+
     /**
      * @brief 构造Robot对象.
      * 
@@ -51,8 +72,8 @@ namespace lebai
      */
     virtual ~Robot();
     /**
-     * @brief CartesianPose should be an array of 6 elements, which represent the position and orientation of the end effector.
-     * The data is: x,y,z,rz,ry,rx.
+     * @brief CartesianPose是用来表示空间位姿的数据结构.
+     * 数据为一个包含六个数的数组，其数据排布为: x,y,z,rz,ry,rx.
      * 
      */
     using CartesianPose = std::array<double, 6>;
@@ -562,20 +583,18 @@ namespace lebai
     /**
      * @brief 根据机械臂关节位置计算机器人末端位姿（位置的运动学正解）
      * @param joint_positions 机械臂关节位置的map数据，应当包括"j1","j2","j3","j4","j5","j6"六个关节的角度值。
-     * @return 返回一个元组，第一个值是坐标位置（以数组保存），依次为 x, y, z, rz, ry, rx
-     * 第二个值是计算是否成功，如果为 false，则第一个值无效
+     * @return 返回计算结果 \ref KinematicsForwardResp "KinematicsForwardResp"。
      *
      */
-    std::tuple<std::array<double, 6>, bool> kinematics_forward(const std::map<std::string, double> & joint_positions);
+    KinematicsForwardResp kinematics_forward(const std::map<std::string, double> & joint_positions);
     
     /**
      * @brief 根据机械臂的末端位姿计算关节位置（位置的运动学逆解）
      * @param pose 机械臂末端位姿，依次为 x, y, z, rz, ry, rx
      * @param joint_init_positions 机械臂关节初始位置, 以数组形式传入。
-     * @return 返回一个元组，第一个值是关节位置的map数据，通过键"j1","j2","j3","j4","j5","j6"得到关节位置
-     * 第二个值是计算是否成功，如果为 false，则第一个值无效
+     * @return 返回计算结果 \ref KinematicsInverseResp "KinematicsInverseResp"。
      */
-    std::tuple<std::map<std::string, double>, bool> kinematics_inverse(const std::array<double, 6> & pose, const std::vector<double> & joint_init_positions = {});
+    KinematicsInverseResp kinematics_inverse(const std::array<double, 6> & pose, const std::vector<double> & joint_init_positions = {});
     
     /**
      * @brief 位姿变换乘法（等价于对应的齐次坐标矩阵乘法）

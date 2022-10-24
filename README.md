@@ -24,7 +24,7 @@ sudo apt install python3-dev
 ### 编译
 ```bash
 # 生成编译配置
-cmake -S. -Bbuild -DBUILD_PYTHON=ON -DBUILD_TESTING=OFF
+cmake -S. -Bbuild -DBUILD_PYTHON=ON -DBUILD_DEB=ON -DBUILD_TESTING=OFF 
 # 编译
 cmake --build build
 # 运行单元测试
@@ -50,7 +50,8 @@ build目录下会生成python的whl包，可以直接使用。
 ```python
 cd build/python/dist
 ## 安装
-sudo pip3 install lebai-1.0-cp35-cp35m-linux_x86_64.whl
+sudo pip3 install lebai-1.0-cpXX-cpXXm-linux_x86_64.whl
+### XX取决于您的python版本
 ## 卸载
 sudo pip3 uninstall lebai
 ```
