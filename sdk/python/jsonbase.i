@@ -4,6 +4,7 @@
 %include "std_string.i"
 %include "std_pair.i"
 %include "std_array.i"
+%include "std_tuple.i"
 
 %ignore Deserialize;
 %ignore Serialize;
@@ -11,8 +12,34 @@
 %ignore IsNullJSONData;
 
 %template(DoubleVector) std::vector<double>;
+
+
+
+%extend std::array {
+    std::string __repr__() {
+      std::string repr = "(";      
+      repr+=std::to_string((*self)[0]);
+      repr+=", ";
+      repr+=std::to_string((*self)[1]);
+      repr+=", ";
+      repr+=std::to_string((*self)[2]);
+      repr+=", ";
+      repr+=std::to_string((*self)[3]);
+      repr+=", ";
+      repr+=std::to_string((*self)[4]);
+      repr+=", ";
+      repr+=std::to_string((*self)[5]);
+      repr+=")";
+      return repr;
+    }
+};
 %template(CartArray) std::array<double, 6>;
 %template(JointMap) std::map<std::string, double>;
+%std_tuple(TupleDDB, double, double, bool);
+%std_tuple(TupleIntStr, int, std::string);
+
+
+
 %{
 #include <protos/jsonbase.hh>
 %}
