@@ -51,6 +51,7 @@ namespace lebai
       void moveJoint(const MoveRequest & req);
       void moveLinear(const MoveRequest & req);
       void moveCircle(const MovecRequest & req);
+      void waitMove();
       system::RobotState getRobotState();
       system::PhyData getPhyData();
       kinematic::KinData getKinData();

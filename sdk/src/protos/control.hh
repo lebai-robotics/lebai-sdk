@@ -34,7 +34,7 @@ namespace lebai
             std::string dir();
             std::string * mutable_dir();
 
-            void set_params(std::vector<std::string> name);
+            void set_params(const std::vector<std::string> & name);
             std::vector<std::string> params();
             std::vector<std::string> * mutable_params();
 

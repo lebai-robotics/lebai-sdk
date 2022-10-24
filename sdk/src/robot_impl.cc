@@ -71,7 +71,7 @@ namespace lebai
 
   int Robot::RobotImpl::teachMode()
   {
-    json_rpc_connector_->CallRpc( "teach_mode","{}",nullptr);
+    json_rpc_connector_->CallRpc( "start_teach_mode","{}",nullptr);
   }
 
   int Robot::RobotImpl::endTeachMode()
@@ -98,6 +98,10 @@ namespace lebai
   {
     std::string resp;
     json_rpc_connector_->CallRpc("move_linear", req.ToJSONString(), &resp);
+  }
+  void Robot::RobotImpl::waitMove()
+  {
+    json_rpc_connector_->CallRpc("wait_move","{}",nullptr);
   }
   system::RobotState Robot::RobotImpl::getRobotState()
   {
@@ -215,7 +219,7 @@ namespace lebai
   control::TaskIndex Robot::RobotImpl::scene(const control::StartTaskRequest & req)
   {
     std::string resp;
-    json_rpc_connector_->CallRpc("scene",req.ToJSONString(),&resp);
+    json_rpc_connector_->CallRpc("start_task",req.ToJSONString(),&resp);
     control::TaskIndex start_task_resp;
     start_task_resp.FromJSONString(resp);
     return start_task_resp;

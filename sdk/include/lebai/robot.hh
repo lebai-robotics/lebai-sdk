@@ -259,7 +259,10 @@ namespace lebai
      * @return false 发送失败
      */    
     bool movel(const CartesianPose & cart_pose, double a, double v, double t, double r);
-
+    /**
+     * @brief 等待运动完成
+    */
+    void wait_move();
     /** @}*/
     /** \addtogroup STATUS
      *  @{
@@ -478,7 +481,7 @@ namespace lebai
      * @param speed 速度。1：快速；2：正常；3：慢速
      * @param color 最多包含 4 个 0 ~ 15 之间的整数
      */
-    void set_led(unsigned int mode,unsigned int speed,std::vector<unsigned int> color);
+    void set_led(unsigned int mode,unsigned int speed,const std::vector<unsigned int> & color);
     /**
      * @brief 设置声音
      * 
@@ -535,7 +538,22 @@ namespace lebai
       * @param dir 调用场景所在的文件夹名
       * @param params 其他参数
     */
-    unsigned int scene(std::string name,bool is_main,unsigned int loop_to,std::string dir,std::vector<std::string> params);
+    unsigned int scene(std::string name,bool is_main,unsigned int loop_to,std::string dir,const std::vector<std::string> & params);
+    /**
+      * @brief 调用场景
+      * 
+      * @param name 调用场景的名字
+      * @param is_main 是否以主任务方式运行（主任务会排队执行，子任务会并发执行）
+      * @param loop_to 循环次数（默认0永久循环）
+      * @param dir 调用场景所在的文件夹名
+    */
+    unsigned int scene(std::string name,bool is_main,unsigned int loop_to,std::string dir);
+    /**
+      * @brief 调用场景
+      * 
+      * @param name 调用场景的名字
+    */
+    unsigned int scene(std::string name);
     /** @}*/
 
     /** \addtogroup ROBOTICS

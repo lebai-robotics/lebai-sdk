@@ -57,7 +57,7 @@ namespace lebai
             return &dir_;
         }
         
-        void StartTaskRequest::set_params(std::vector<std::string> params)
+        void StartTaskRequest::set_params(const std::vector<std::string> & params)
         {
             params_ = params;
         }

@@ -176,6 +176,12 @@ bool Robot::movel(const CartesianPose & cart_pose, double a, double v, double t,
   impl_->moveLinear(move_req);
   return true;
 }
+
+void Robot::wait_move()
+{
+  impl_->waitMove();
+}
+
 int Robot::get_robot_mode()
 {
   return impl_->getRobotState();
@@ -357,7 +363,7 @@ std::tuple<double, double ,bool> Robot::get_claw()
   return std::make_tuple(resp.force(), resp.amplitude(), resp.hold_on());
 }
 
-void Robot::set_led(unsigned int mode,unsigned int speed,std::vector<unsigned int> color)
+void Robot::set_led(unsigned int mode,unsigned int speed,const std::vector<unsigned int> & color)
 {
   led::LedData req;
   switch(mode)
@@ -475,7 +481,7 @@ void Robot::add_signal(unsigned int index,int value)
   impl_->addSignal(req);
 }
 
-unsigned int Robot::scene(std::string name,bool is_main,unsigned int loop_to,std::string dir,std::vector<std::string> params)
+unsigned int Robot::scene(std::string name,bool is_main,unsigned int loop_to,std::string dir,const std::vector<std::string> & params)
 {
   control::StartTaskRequest req;
   req.set_name(name);
@@ -483,6 +489,25 @@ unsigned int Robot::scene(std::string name,bool is_main,unsigned int loop_to,std
   req.set_loop_to(loop_to);
   req.set_dir(dir);
   req.set_params(params);
+  control::TaskIndex resp = impl_->scene(req);
+  return resp.id();
+}
+unsigned int Robot::scene(std::string name,bool is_main,unsigned int loop_to,std::string dir)
+{
+  control::StartTaskRequest req;
+  req.set_name(name);
+  req.set_is_main(is_main);
+  req.set_loop_to(loop_to);
+  req.set_dir(dir);
+  control::TaskIndex resp = impl_->scene(req);
+  return resp.id();
+}
+unsigned int Robot::scene(std::string name)
+{
+  control::StartTaskRequest req;
+  req.set_name(name);
+  req.set_is_main(false);
+  req.set_loop_to(1);
   control::TaskIndex resp = impl_->scene(req);
   return resp.id();
 }
