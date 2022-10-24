@@ -511,6 +511,31 @@ unsigned int Robot::scene(std::string name)
   control::TaskIndex resp = impl_->scene(req);
   return resp.id();
 }
+std::vector<unsigned int> Robot::load_task_list()
+{
+  control::TaskIds resp = impl_->loadTaskList();
+  return resp.ids();
+}
+void Robot::pause_task(unsigned int id,unsigned long time,bool wait)
+{
+  control::PauseRequest req;
+  req.set_id(id);
+  req.set_time(time);
+  req.set_wait(wait);
+  impl_->pauseTask(req);
+}
+void Robot::resume_task(unsigned int id)
+{
+  control::TaskIndex req;
+  req.set_id(id);
+  impl_->resumeTask(req);
+}
+void Robot::cancel_task(unsigned int id)
+{
+  control::TaskIndex req;
+  req.set_id(id);
+  impl_->cancelTask(req);
+}
 
 
 KinematicsForwardResp Robot::kinematics_forward(const std::map<std::string, double> & joint_positions)

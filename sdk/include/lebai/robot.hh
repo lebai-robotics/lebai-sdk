@@ -575,6 +575,30 @@ namespace lebai
       * @param name 调用场景的名字
     */
     unsigned int scene(std::string name);
+    /**
+     * @brief 查询任务列表
+    */
+    std::vector<unsigned int> load_task_list();
+    /**
+     * @brief 暂停任务与运动
+     * 
+     * @param id 任务的ID
+     * @param time 暂停的时间
+     * @param wait 是否等待
+    */
+    void pause_task(unsigned int id,unsigned long time,bool wait);
+    /**
+     * @brief 恢复任务与运动
+     * 
+     * @param id 任务的ID
+    */
+    void resume_task(unsigned int id);
+    /**
+     * @brief 取消任务与运动
+     * 
+     * @param id 任务的ID
+    */
+    void cancel_task(unsigned int id);
     /** @}*/
 
     /** \addtogroup ROBOTICS

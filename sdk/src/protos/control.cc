@@ -207,5 +207,80 @@ namespace lebai
         {
             return false;
         }
+
+        void PauseRequest::set_id(unsigned int id)
+        {
+            id_ = id;
+        }
+        unsigned int PauseRequest::id()
+        {
+            return id_;
+        }
+        unsigned int * PauseRequest::mutable_id()
+        {
+            return &id_;
+        }
+
+        void PauseRequest::set_time(unsigned long time)
+        {
+            time_ = time;
+        }
+        unsigned long PauseRequest::time()
+        {
+            return time_;
+        }
+        unsigned long * PauseRequest::mutable_time()
+        {
+            return time_;
+        }
+
+        void PauseRequest::set_wait(bool wait)
+        {
+            wait_ = wait;
+        }
+        bool PauseRequest::wait()
+        {
+            return wait_;
+        }
+        bool * PauseRequest::mutable_wait()
+        {
+            return &wait_;
+        }
+
+        bool PauseRequest::Deserialize(const rapidjson::Value &obj)
+        {
+            if(obj.HasMember("id"))
+            {
+                unsigned int id_int = (unsigned int)(obj["id"].GetUint());
+                id_ = id_int; 
+            }
+            if(obj.HasMember("time"))
+            {
+                unsigned long time_u64 = (unsigned long)(obj["time"].GetUint64());
+                time_ = time_u64; 
+            }
+            if(obj.HasMember("wait"))
+            {
+                bool wait_bool = (bool)(obj["wait"].GetBool());
+                wait_ = wait_bool; 
+            }
+            return true;
+        }
+		bool PauseRequest::Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const
+        {
+            writer->StartObject();
+            writer->Key("id");
+            writer->Uint(id_);
+            writer->Key("time");
+            writer->Uint64(time_);
+            writer->Key("wait");
+            writer->Bool(wait_);
+            writer->EndObject();
+            return true;
+        }
+		bool PauseRequest::IsNullJSONData() const
+        {
+            return false;
+        }
     }
 }

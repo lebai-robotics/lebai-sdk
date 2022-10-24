@@ -225,6 +225,28 @@ namespace lebai
     return start_task_resp;
   }
 
+  control::TaskIds Robot::RobotImpl::loadTaskList()
+  {
+    std::string resp;
+    json_rpc_connector_->CallRpc("load_task_list","{}",&resp);
+    control::TaskIds list_resp;
+    list_resp.FromJSONString(resp);
+    return list_resp;
+  }
+
+  void Robot::RobotImpl::pauseTask(const control::PauseRequest & req)
+  {
+    json_rpc_connector_->CallRpc("pause_task",req.ToJSONString(),nullptr);
+  }
+  void Robot::RobotImpl::resumeTask(const control::TaskIndex & req)
+  {
+    json_rpc_connector_->CallRpc("resume_task",req.ToJSONString(),nullptr);
+  }
+  void Robot::RobotImpl::cancelTask(const control::TaskIndex & req)
+  {
+    json_rpc_connector_->CallRpc("cancel_task",req.ToJSONString(),nullptr);
+  }
+
   posture::CartesianPose Robot::RobotImpl::getForwardKin(const posture::PoseRequest & req)
   {
     std::string resp;
