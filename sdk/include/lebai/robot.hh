@@ -139,6 +139,10 @@ namespace lebai
      *  \brief    机器人计算相关的接口.
      */       
 
+    /** \defgroup FILE 文件系统
+     *  \brief    文件系统相关的接口
+    */
+
     /** \addtogroup STARTSTOP
      *  @{
      */
@@ -637,6 +641,45 @@ namespace lebai
      */    
     std::array<double, 6> pose_inverse(const std::array<double, 6> & in);
     /** @}*/    
+
+    /** \addtogroup FILE
+     * @{
+     */
+    /**
+     * @brief 保存文件（以字节形式）
+     * 
+     * @param dir 保存的文件路径
+     * @param name 保存的文件名
+     * @param is_dir 要保存的文件是否为文件夹
+     * @param data 文件字节
+    */
+    void save_file(std::string dir,std::string name,bool is_dir,std::string data);
+
+    /**
+     * @brief 保存文件（以文件形式）
+     * 
+     * @param dir 保存的文件路径
+     * @param name 保存的文件名
+     * @param file 要保存的文件
+    */
+    // void save_file(std::string dir,std::string name,file::File file);
+    /**
+     * @brief 重命名文件
+     * 
+     * @param from_dir 源文件所在的文件夹
+     * @param from_name 源文件名称
+     * @param to_dir 目标文件文件夹
+     * @param to_name 目标文件文件名
+    */
+    void rename_file(std::string from_dir,std::string from_name,std::string to_dir,std::string to_name);
+    /**
+     * @brief 重命名文件
+     * 
+     * @param from 源文件
+     * @param to 目标文件
+    */
+  //  void rename_file(file::FileIndex from,file::FileIndex to);
+    /** @}*/
 
   protected:
     std::unique_ptr<RobotImpl> impl_; /*!< 内部实现数据结构，用户无需关注。 */

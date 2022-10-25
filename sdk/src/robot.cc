@@ -240,7 +240,8 @@ Robot::CartesianPose Robot::get_target_tcp_pose()
 
 double Robot::get_joint_temp(unsigned int joint_index)
 {
-  auto data = impl_->getPhyData();  
+  auto data = impl_->getPhyData(); 
+  joint_index -= 1; 
   if(data.joint_temp().size() > joint_index)
   {
     return data.joint_temp()[joint_index];
@@ -665,6 +666,51 @@ std::array<double, 6> Robot::pose_inverse(const std::array<double, 6> & in)
   return pose;
 }
 
+void Robot::save_file(std::string dir,std::string name,bool is_dir,std::string data)
+{
+  file::SaveFileRequest req;
+  req.set_dir(dir);
+  req.set_name(name);
+  file::File file;
+  file.set_is_dir(is_dir);
+  file.set_data(data);
+  req.set_file(file);
+  impl_->saveFile(req);
+}
+/**
+void Robot::save_file(std::string dir,std::string name,file::File file)
+{
+  file::SaveFileRequest req;
+  req.set_dir(dir);
+  req.set_name(name);
+  req.set_file(file);
+  impl_->saveFile(req);
+}
+*/
+
+
+void Robot::rename_file(std::string from_dir,std::string from_name,std::string to_dir,std::string to_name)
+{
+  file::RenameFileRequest req;
+  file::FileIndex from;
+  file::FileIndex to;
+  from.set_dir(from_dir);
+  from.set_name(from_name);
+  to.set_dir(to_dir);
+  to.set_name(to_name);
+  req.set_from(from);
+  req.set_to(to);
+  impl_->renameFile(req);
+}
+/**
+void Robot::rename_file(file::FileIndex from,file::FileIndex to)
+{
+  file::RenameFileRequest req;
+  file.set_from(from);
+  file.set_to(to);
+  impl_->renameFile(req);
+}
+*/
 }
 
 }  // namespace l_master_sdk

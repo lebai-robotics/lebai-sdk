@@ -286,6 +286,16 @@ namespace lebai
     return resp;
   }
 
+  void Robot::RobotImpl::saveFile(const file::SaveFileRequest & req)
+  {
+    json_rpc_connector_->CallRpc("save_file",req.ToJSONString(),nullptr);
+  }
+
+  void Robot::RobotImpl::renameFile(const file::RenameFileRequest & req)
+  {
+    json_rpc_connector_->CallRpc("rename_file",req.ToJSONString(),nullptr);
+  }
+
   }
 
 }

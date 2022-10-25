@@ -231,7 +231,7 @@ namespace lebai
         }
         unsigned long * PauseRequest::mutable_time()
         {
-            return time_;
+            return &time_;
         }
 
         void PauseRequest::set_wait(bool wait)

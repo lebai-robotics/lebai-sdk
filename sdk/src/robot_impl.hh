@@ -27,6 +27,7 @@
 #include "jsonrpc_connector.hh"
 #include "protos/signal.hh"
 #include "protos/control.hh"
+#include "protos/file.hh"
 
 namespace lebai
 {
@@ -77,6 +78,8 @@ namespace lebai
       posture::JointPose getInverseKin(const posture::GetInverseKinRequest & req);
       posture::CartesianPose getPoseMultiply(const posture::GetPoseMultiplyRequest & req);
       posture::CartesianPose getPoseInverse(const posture::PoseRequest & req);
+      void saveFile(const file::SaveFileRequest & req);
+      void renameFile(const file::RenameFileRequest & req);
 
       protected:
       std::unique_ptr<JSONRpcConnector> json_rpc_connector_;
