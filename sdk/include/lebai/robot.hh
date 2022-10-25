@@ -139,6 +139,10 @@ namespace lebai
      *  \brief    机器人计算相关的接口.
      */       
 
+    /** \defgroup FILE 文件系统
+     *  \brief    文件系统相关的接口
+    */
+
     /** \addtogroup STARTSTOP
      *  @{
      */
@@ -280,7 +284,10 @@ namespace lebai
      * @return false 发送失败
      */    
     bool movel(const CartesianPose & cart_pose, double a, double v, double t, double r);
-
+    /**
+     * @brief 等待运动完成
+    */
+    void wait_move();
     /** @}*/
     /** \addtogroup STATUS
      *  @{
@@ -499,7 +506,7 @@ namespace lebai
      * @param speed 速度。1：快速；2：正常；3：慢速
      * @param color 最多包含 4 个 0 ~ 15 之间的整数
      */
-    void set_led(unsigned int mode,unsigned int speed,std::vector<unsigned int> color);
+    void set_led(unsigned int mode,unsigned int speed,const std::vector<unsigned int> & color);
     /**
      * @brief 设置声音
      * 
@@ -556,7 +563,46 @@ namespace lebai
       * @param dir 调用场景所在的文件夹名
       * @param params 其他参数
     */
-    unsigned int scene(std::string name,bool is_main,unsigned int loop_to,std::string dir,std::vector<std::string> params);
+    unsigned int scene(std::string name,bool is_main,unsigned int loop_to,std::string dir,const std::vector<std::string> & params);
+    /**
+      * @brief 调用场景
+      * 
+      * @param name 调用场景的名字
+      * @param is_main 是否以主任务方式运行（主任务会排队执行，子任务会并发执行）
+      * @param loop_to 循环次数（默认0永久循环）
+      * @param dir 调用场景所在的文件夹名
+    */
+    unsigned int scene(std::string name,bool is_main,unsigned int loop_to,std::string dir);
+    /**
+      * @brief 调用场景
+      * 
+      * @param name 调用场景的名字
+    */
+    unsigned int scene(std::string name);
+    /**
+     * @brief 查询任务列表
+    */
+    std::vector<unsigned int> load_task_list();
+    /**
+     * @brief 暂停任务与运动
+     * 
+     * @param id 任务的ID
+     * @param time 暂停的时间
+     * @param wait 是否等待
+    */
+    void pause_task(unsigned int id,unsigned long time,bool wait);
+    /**
+     * @brief 恢复任务与运动
+     * 
+     * @param id 任务的ID
+    */
+    void resume_task(unsigned int id);
+    /**
+     * @brief 取消任务与运动
+     * 
+     * @param id 任务的ID
+    */
+    void cancel_task(unsigned int id);
     /** @}*/
 
     /** \addtogroup ROBOTICS
@@ -595,6 +641,45 @@ namespace lebai
      */    
     std::array<double, 6> pose_inverse(const std::array<double, 6> & in);
     /** @}*/    
+
+    /** \addtogroup FILE
+     * @{
+     */
+    /**
+     * @brief 保存文件（以字节形式）
+     * 
+     * @param dir 保存的文件路径
+     * @param name 保存的文件名
+     * @param is_dir 要保存的文件是否为文件夹
+     * @param data 文件字节
+    */
+    void save_file(std::string dir,std::string name,bool is_dir,std::string data);
+
+    /**
+     * @brief 保存文件（以文件形式）
+     * 
+     * @param dir 保存的文件路径
+     * @param name 保存的文件名
+     * @param file 要保存的文件
+    */
+    // void save_file(std::string dir,std::string name,file::File file);
+    /**
+     * @brief 重命名文件
+     * 
+     * @param from_dir 源文件所在的文件夹
+     * @param from_name 源文件名称
+     * @param to_dir 目标文件文件夹
+     * @param to_name 目标文件文件名
+    */
+    void rename_file(std::string from_dir,std::string from_name,std::string to_dir,std::string to_name);
+    /**
+     * @brief 重命名文件
+     * 
+     * @param from 源文件
+     * @param to 目标文件
+    */
+  //  void rename_file(file::FileIndex from,file::FileIndex to);
+    /** @}*/
 
   protected:
     std::unique_ptr<RobotImpl> impl_; /*!< 内部实现数据结构，用户无需关注。 */

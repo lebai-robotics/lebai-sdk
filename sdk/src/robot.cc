@@ -176,6 +176,12 @@ bool Robot::movel(const CartesianPose & cart_pose, double a, double v, double t,
   impl_->moveLinear(move_req);
   return true;
 }
+
+void Robot::wait_move()
+{
+  impl_->waitMove();
+}
+
 int Robot::get_robot_mode()
 {
   return impl_->getRobotState();
@@ -234,7 +240,8 @@ Robot::CartesianPose Robot::get_target_tcp_pose()
 
 double Robot::get_joint_temp(unsigned int joint_index)
 {
-  auto data = impl_->getPhyData();  
+  auto data = impl_->getPhyData(); 
+  joint_index -= 1; 
   if(data.joint_temp().size() > joint_index)
   {
     return data.joint_temp()[joint_index];
@@ -357,7 +364,7 @@ std::tuple<double, double ,bool> Robot::get_claw()
   return std::make_tuple(resp.force(), resp.amplitude(), resp.hold_on());
 }
 
-void Robot::set_led(unsigned int mode,unsigned int speed,std::vector<unsigned int> color)
+void Robot::set_led(unsigned int mode,unsigned int speed,const std::vector<unsigned int> & color)
 {
   led::LedData req;
   switch(mode)
@@ -475,7 +482,7 @@ void Robot::add_signal(unsigned int index,int value)
   impl_->addSignal(req);
 }
 
-unsigned int Robot::scene(std::string name,bool is_main,unsigned int loop_to,std::string dir,std::vector<std::string> params)
+unsigned int Robot::scene(std::string name,bool is_main,unsigned int loop_to,std::string dir,const std::vector<std::string> & params)
 {
   control::StartTaskRequest req;
   req.set_name(name);
@@ -485,6 +492,50 @@ unsigned int Robot::scene(std::string name,bool is_main,unsigned int loop_to,std
   req.set_params(params);
   control::TaskIndex resp = impl_->scene(req);
   return resp.id();
+}
+unsigned int Robot::scene(std::string name,bool is_main,unsigned int loop_to,std::string dir)
+{
+  control::StartTaskRequest req;
+  req.set_name(name);
+  req.set_is_main(is_main);
+  req.set_loop_to(loop_to);
+  req.set_dir(dir);
+  control::TaskIndex resp = impl_->scene(req);
+  return resp.id();
+}
+unsigned int Robot::scene(std::string name)
+{
+  control::StartTaskRequest req;
+  req.set_name(name);
+  req.set_is_main(false);
+  req.set_loop_to(1);
+  control::TaskIndex resp = impl_->scene(req);
+  return resp.id();
+}
+std::vector<unsigned int> Robot::load_task_list()
+{
+  control::TaskIds resp = impl_->loadTaskList();
+  return resp.ids();
+}
+void Robot::pause_task(unsigned int id,unsigned long time,bool wait)
+{
+  control::PauseRequest req;
+  req.set_id(id);
+  req.set_time(time);
+  req.set_wait(wait);
+  impl_->pauseTask(req);
+}
+void Robot::resume_task(unsigned int id)
+{
+  control::TaskIndex req;
+  req.set_id(id);
+  impl_->resumeTask(req);
+}
+void Robot::cancel_task(unsigned int id)
+{
+  control::TaskIndex req;
+  req.set_id(id);
+  impl_->cancelTask(req);
 }
 
 
@@ -615,6 +666,51 @@ std::array<double, 6> Robot::pose_inverse(const std::array<double, 6> & in)
   return pose;
 }
 
+void Robot::save_file(std::string dir,std::string name,bool is_dir,std::string data)
+{
+  file::SaveFileRequest req;
+  req.set_dir(dir);
+  req.set_name(name);
+  file::File file;
+  file.set_is_dir(is_dir);
+  file.set_data(data);
+  req.set_file(file);
+  impl_->saveFile(req);
+}
+/**
+void Robot::save_file(std::string dir,std::string name,file::File file)
+{
+  file::SaveFileRequest req;
+  req.set_dir(dir);
+  req.set_name(name);
+  req.set_file(file);
+  impl_->saveFile(req);
+}
+*/
+
+
+void Robot::rename_file(std::string from_dir,std::string from_name,std::string to_dir,std::string to_name)
+{
+  file::RenameFileRequest req;
+  file::FileIndex from;
+  file::FileIndex to;
+  from.set_dir(from_dir);
+  from.set_name(from_name);
+  to.set_dir(to_dir);
+  to.set_name(to_name);
+  req.set_from(from);
+  req.set_to(to);
+  impl_->renameFile(req);
+}
+/**
+void Robot::rename_file(file::FileIndex from,file::FileIndex to)
+{
+  file::RenameFileRequest req;
+  file.set_from(from);
+  file.set_to(to);
+  impl_->renameFile(req);
+}
+*/
 }
 
 }  // namespace l_master_sdk
