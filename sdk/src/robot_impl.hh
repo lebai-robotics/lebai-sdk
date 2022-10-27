@@ -80,6 +80,11 @@ namespace lebai
       posture::CartesianPose getPoseInverse(const posture::PoseRequest & req);
       void saveFile(const file::SaveFileRequest & req);
       void renameFile(const file::RenameFileRequest & req);
+      file::File loadFile(const file::FileIndex & req);
+      file::LoadFileListResponse loadFileList(const file::LoadFileListRequest & req);
+      void zip(const file::ZipRequest & req);
+      void unzip(const file::UnzipRequest & req);
+      file::LoadZipListResponse loadZipList(const file::LoadZipListRequest & req);
 
       protected:
       std::unique_ptr<JSONRpcConnector> json_rpc_connector_;

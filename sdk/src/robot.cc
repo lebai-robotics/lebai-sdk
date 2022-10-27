@@ -711,6 +711,30 @@ void Robot::rename_file(file::FileIndex from,file::FileIndex to)
   impl_->renameFile(req);
 }
 */
+std::tuple<bool,std::string> Robot::load_file(std::string dir,std::string name)
+{
+  file::FileIndex req;
+  req.set_dir(dir);
+  req.set_name(name);
+  file::File resp = impl_->loadFile(req);
+  std::tuple<bool,std::string> ret = std::make_tuple(resp.is_dir(),resp.data());
+  return ret;
+}
+std::vector<std::tuple<bool,std::string>> Robot::load_file_list(std::string dir,std::string prefix,std::string suffix)
+{
+  file::LoadFileListRequest req;
+  req.set_dir(dir);
+  req.set_prefix(prefix);
+  req.set_suffix(suffix);
+  file::LoadFileListResponse resp = impl_->loadFileList(req);
+  std::vector<std::tuple<bool,std::string>> ret;
+  for(auto f:resp.files())
+  {
+    std::tuple<bool,std::string> temp = std::make_tuple(f.is_dir(),f.name());
+    ret.push_back(temp);
+  }
+  return ret;
+}
 }
 
 }  // namespace l_master_sdk

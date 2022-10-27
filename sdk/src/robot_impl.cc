@@ -296,6 +296,41 @@ namespace lebai
     json_rpc_connector_->CallRpc("rename_file",req.ToJSONString(),nullptr);
   }
 
+  file::File Robot::RobotImpl::loadFile(const file::FileIndex & req)
+  {
+    std::string resp_str;
+    json_rpc_connector_->CallRpc("load_file",req.ToJSONString(),&resp_str);
+    file::File resp;
+    resp.FromJSONString(resp_str);
+    return resp;
   }
 
+  file::LoadFileListResponse Robot::RobotImpl::loadFileList(const file::LoadFileListRequest &req)
+  {
+    std::string resp_str;
+    json_rpc_connector_->CallRpc("load_file_list", req.ToJSONString(), &resp_str);
+    file::LoadFileListResponse resp;
+    resp.FromJSONString(resp_str);
+    return resp;
+  }
+
+  void Robot::RobotImpl::zip(const file::ZipRequest &req)
+  {
+    json_rpc_connector_->CallRpc("zip",req.ToJSONString(),nullptr);
+  }
+
+  void Robot::RobotImpl::unzip(const file::UnzipRequest &req)
+  {
+    json_rpc_connector_->CallRpc("unzip",req.ToJSONString(),nullptr);
+  }
+
+  file::LoadZipListResponse Robot::RobotImpl::loadZipList(const file::LoadZipListRequest &req)
+  {
+    std::string resp_str;
+    json_rpc_connector_->CallRpc("load_zip_list",req.ToJSONString(),&resp_str);
+    file::LoadZipListResponse resp;
+    resp.FromJSONString(resp_str);
+    return resp;
+  }
+  }
 }

@@ -679,6 +679,55 @@ namespace lebai
      * @param to 目标文件
     */
   //  void rename_file(file::FileIndex from,file::FileIndex to);
+    /**
+     * @brief 查询文件
+     * 
+     * @param dir 文件的目录
+     * @param name 文件名
+     * 
+     * @return 文件的具体内容
+    */
+    std::tuple<bool,std::string> load_file(std::string dir,std::string name);
+    /**
+     * @brief 查询文件列表
+     * 
+     * @param dir 文件的目录
+     * @param prefix 前缀
+     * @param suffix 后缀
+     * 
+     * @return 文件列表
+    */
+    std::vector<std::tuple<bool,std::string>> load_file_list(std::string dir,std::string prefix,std::string suffix);
+    /**
+     * @brief 将文件从文件系统中压缩到zip文件
+     * 
+     * @param from_dir 源文件的目录
+     * @param files 源文件的文件名
+     * @param to_dir  压缩后文件的路径
+     * @param name 压缩后文件的名称
+    */
+    void zip(std::string from_dir, std::vector<std::string> files, std::string to_dir, std::string name);
+    /**
+     *  @brief 将zip文件解压到文件系统
+     *
+     * @param from_dir zip文件的路径
+     * @param name zip文件的名称
+     * @param files zip文件内的文件名
+     * @param to_dir  解压到的路径
+     */
+    void unzip(std::string from_dir, std::string name, std::vector<std::string> files, std::string to_dir);
+    /**
+     * @brief 查询文件列表
+     *
+     * @brief 目标zip文件名
+     * @param dir 文件的目录
+     * @param prefix 前缀
+     * @param suffix 后缀
+     *
+     * @return 文件列表
+     */
+    //std::vector<std::tuple<bool,string>> load_zip_list(std::string zip,std::string dir,std::string prefix,std::string suffix);
+
     /** @}*/
 
   protected:

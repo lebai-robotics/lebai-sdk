@@ -153,5 +153,101 @@ namespace lebai
 			virtual bool IsNullJSONData() const;
         };
        
+        class ZipRequest : public JSONBase
+        {
+        public:
+            void set_zip(FileIndex zip);
+            FileIndex zip();
+            FileIndex * mutable_zip();
+
+            void set_files(std::vector<std::string> files);
+            std::vector<std::string> files();
+            std::vector<std::string> * mutable_files();
+
+            void set_dir(std::string dir);
+            std::string dir();
+            std::string * mutable_dir();
+
+        protected:
+            FileIndex zip_;
+            std::vector<std::string> files_;
+            std::string dir_;
+        public:
+            virtual bool Deserialize(const rapidjson::Value &obj);
+			virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const;
+			virtual bool IsNullJSONData() const;
+        };
+
+        class UnzipRequest : public JSONBase
+        {
+        public:
+            void set_zip(FileIndex zip);
+            FileIndex zip();
+            FileIndex * mutable_zip();
+
+            void set_files(std::vector<std::string> files);
+            std::vector<std::string> files();
+            std::vector<std::string> * mutable_files();
+
+            void set_dir(std::string dir);
+            std::string dir();
+            std::string * mutable_dir();
+
+        protected:
+            FileIndex zip_;
+            std::vector<std::string> files_;
+            std::string dir_;
+        public:
+            virtual bool Deserialize(const rapidjson::Value &obj);
+			virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const;
+			virtual bool IsNullJSONData() const;
+        };
+
+        class LoadZipListRequest : public JSONBase
+        {
+        public:
+            void set_zip(FileIndex zip);
+            FileIndex zip();
+            FileIndex * mutable_zip();
+
+            void set_dir(std::string dir);
+            std::string dir();
+            std::string *mutable_dir();
+
+            void set_prefix(std::string prefix);
+            std::string prefix();
+            std::string *mutable_prefix();
+
+            void set_suffix(std::string suffix);
+            std::string suffix();
+            std::string *mutable_suffix();
+
+        protected:
+            FileIndex zip_;
+            std::string dir_;
+            std::string prefix_;
+            std::string suffix_;
+
+        public:
+            virtual bool Deserialize(const rapidjson::Value &obj);
+			virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const;
+			virtual bool IsNullJSONData() const;
+        };
+
+        class LoadZipListResponse : public JSONBase
+        {
+        public:
+            void set_files(std::vector<FileName> dir);
+            std::vector<FileName> files();
+            std::vector<FileName> * mutable_files();
+
+        protected:
+            std::vector<FileName> files_;
+
+        public:
+            virtual bool Deserialize(const rapidjson::Value &obj);
+			virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const;
+			virtual bool IsNullJSONData() const;
+        };
     }
 }
