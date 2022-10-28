@@ -27,6 +27,7 @@
 #include "jsonrpc_connector.hh"
 #include "protos/signal.hh"
 #include "protos/control.hh"
+#include "protos/file.hh"
 
 namespace lebai
 {
@@ -51,6 +52,7 @@ namespace lebai
       void moveJoint(const MoveRequest & req);
       void moveLinear(const MoveRequest & req);
       void moveCircle(const MovecRequest & req);
+      void waitMove();
       system::RobotState getRobotState();
       system::PhyData getPhyData();
       kinematic::KinData getKinData();
@@ -67,11 +69,17 @@ namespace lebai
       signal::GetSignalResponse getSignal(const signal::GetSignalRequest & req);
       void addSignal(const signal::SetSignalRequest & req);
       control::TaskIndex scene(const control::StartTaskRequest & req);
+      control::TaskIds loadTaskList();
+      void pauseTask(const control::PauseRequest & req);
+      void resumeTask(const control::TaskIndex & req);
+      void cancelTask(const control::TaskIndex & req);
       claw::Claw getClaw();
       posture::CartesianPose getForwardKin(const posture::PoseRequest & req);
       posture::JointPose getInverseKin(const posture::GetInverseKinRequest & req);
       posture::CartesianPose getPoseMultiply(const posture::GetPoseMultiplyRequest & req);
       posture::CartesianPose getPoseInverse(const posture::PoseRequest & req);
+      void saveFile(const file::SaveFileRequest & req);
+      void renameFile(const file::RenameFileRequest & req);
 
       protected:
       std::unique_ptr<JSONRpcConnector> json_rpc_connector_;

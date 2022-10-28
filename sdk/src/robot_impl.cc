@@ -71,7 +71,7 @@ namespace lebai
 
   int Robot::RobotImpl::teachMode()
   {
-    json_rpc_connector_->CallRpc( "teach_mode","{}",nullptr);
+    json_rpc_connector_->CallRpc( "start_teach_mode","{}",nullptr);
   }
 
   int Robot::RobotImpl::endTeachMode()
@@ -98,6 +98,10 @@ namespace lebai
   {
     std::string resp;
     json_rpc_connector_->CallRpc("move_linear", req.ToJSONString(), &resp);
+  }
+  void Robot::RobotImpl::waitMove()
+  {
+    json_rpc_connector_->CallRpc("wait_move","{}",nullptr);
   }
   system::RobotState Robot::RobotImpl::getRobotState()
   {
@@ -215,10 +219,32 @@ namespace lebai
   control::TaskIndex Robot::RobotImpl::scene(const control::StartTaskRequest & req)
   {
     std::string resp;
-    json_rpc_connector_->CallRpc("scene",req.ToJSONString(),&resp);
+    json_rpc_connector_->CallRpc("start_task",req.ToJSONString(),&resp);
     control::TaskIndex start_task_resp;
     start_task_resp.FromJSONString(resp);
     return start_task_resp;
+  }
+
+  control::TaskIds Robot::RobotImpl::loadTaskList()
+  {
+    std::string resp;
+    json_rpc_connector_->CallRpc("load_task_list","{}",&resp);
+    control::TaskIds list_resp;
+    list_resp.FromJSONString(resp);
+    return list_resp;
+  }
+
+  void Robot::RobotImpl::pauseTask(const control::PauseRequest & req)
+  {
+    json_rpc_connector_->CallRpc("pause_task",req.ToJSONString(),nullptr);
+  }
+  void Robot::RobotImpl::resumeTask(const control::TaskIndex & req)
+  {
+    json_rpc_connector_->CallRpc("resume_task",req.ToJSONString(),nullptr);
+  }
+  void Robot::RobotImpl::cancelTask(const control::TaskIndex & req)
+  {
+    json_rpc_connector_->CallRpc("cancel_task",req.ToJSONString(),nullptr);
   }
 
   posture::CartesianPose Robot::RobotImpl::getForwardKin(const posture::PoseRequest & req)
@@ -258,6 +284,16 @@ namespace lebai
     posture::CartesianPose resp;    
     resp.FromJSONString(resp_str);
     return resp;
+  }
+
+  void Robot::RobotImpl::saveFile(const file::SaveFileRequest & req)
+  {
+    json_rpc_connector_->CallRpc("save_file",req.ToJSONString(),nullptr);
+  }
+
+  void Robot::RobotImpl::renameFile(const file::RenameFileRequest & req)
+  {
+    json_rpc_connector_->CallRpc("rename_file",req.ToJSONString(),nullptr);
   }
 
   }
