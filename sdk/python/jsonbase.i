@@ -26,17 +26,18 @@
 };
 
 
-%extend std::vector {
-    std::string __repr__() {
-      std::string repr = "(";
-      for (auto it = self->begin(); it != self->end(); ++it) {
-        repr += std::to_string(it) ",";
-      }
-      repr.pop_back();
-      repr+=")";
-      return repr;
-    }
-};
+// %extend std::vector<unsigned int> {
+    // std::string __repr__() {
+      // std::string repr = "(";
+      // for (auto it = self->begin(); it != self->end(); ++it) {
+        // repr += std::to_string(it);
+        // repr+=",";
+      // }
+      // repr.pop_back();
+      // repr+=")";
+      // return repr;
+    // }
+// };
 
 %extend std::tuple<double, double, bool> {
     std::string __repr__() {
