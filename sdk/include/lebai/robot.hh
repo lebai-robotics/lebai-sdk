@@ -313,15 +313,15 @@ namespace lebai
     /**
      * @brief 获取机械臂关节当前反馈位置 
      * 
-     * @return 关节反馈位置数据
+     * @return 关节反馈位置字典数据，包括"j1","j2","j3","j4","j5","j6"六个关节的角度值。
      */
-    std::vector<double> get_actual_joint_positions();
+    std::map<std::string, double> get_actual_joint_positions();
     /**
      * @brief 获取机械臂关节当前控制位置 
      * 
-     * @return 关节控制位置数据
+     * @return 关节控制位置字典数据，包括"j1","j2","j3","j4","j5","j6"六个关节的角度值。
      */
-    std::vector<double> get_target_joint_positions();
+    std::map<std::string, double> get_target_joint_positions();
     /**
      * @brief 获取机械臂关节当前反馈速度 
      * 
@@ -391,10 +391,16 @@ namespace lebai
      * @brief 设置控制箱数字输出
      * 
      * @param pin 端口，从 0 开始
-     * @param value 待设置的值，可以指定 1/0，也可以是 true/false
+     * @param value 待设置的值
      */
     void set_do(unsigned int pin, bool value);
-
+    /**
+     * @brief 设置控制箱数字输出
+     * 
+     * @param pin 端口，从 0 开始
+     * @param value 待设置的值
+     */
+    void set_do(unsigned int pin, unsigned int value);
     /**
      * @brief 获取控制箱模拟输入
      * 
@@ -428,9 +434,16 @@ namespace lebai
      * @brief 设置法兰数字输出
      * 
      * @param pin 端口，从 0 开始
-     * @param value 待设置的值，可以指定 1/0，也可以是 true/false
+     * @param value 待设置的值
      */
     void set_flange_do(unsigned int pin, bool value);
+    /**
+     * @brief 设置法兰数字输出
+     * 
+     * @param pin 端口，从 0 开始
+     * @param value 待设置的值
+     */
+    void set_flange_do(unsigned int pin, unsigned int value);
     /** @}*/
 
     /** \addtogroup EXTRAIO
@@ -449,10 +462,16 @@ namespace lebai
      * @brief 设置扩展数字输出
      * 
      * @param pin 端口，从 0 开始
-     * @param value 待设置的值，可以指定 1/0，也可以是 true/false
+     * @param value 待设置的值
      */
     void set_extra_do(unsigned int pin, bool value);
-
+    /**
+     * @brief 设置扩展数字输出
+     * 
+     * @param pin 端口，从 0 开始
+     * @param value 待设置的值
+     */
+    void set_extra_do(unsigned int pin, unsigned int value);
     /**
      * @brief 获取扩展模拟输入
      * 
@@ -564,7 +583,7 @@ namespace lebai
      */
     /**
      * @brief 根据机械臂关节位置计算机器人末端位姿（位置的运动学正解）
-     * @param joint_positions 机械臂关节位置的map数据，应当包括"j1","j2","j3","j4","j5","j6"六个关节的角度值。
+     * @param joint_positions 机械臂关节位置的字典数据，应当包括"j1","j2","j3","j4","j5","j6"六个关节的角度值。
      * @return 返回计算结果 \ref KinematicsForwardResp "KinematicsForwardResp"。
      *
      */
