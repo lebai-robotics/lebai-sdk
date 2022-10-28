@@ -13,6 +13,44 @@
 
 %template(DoubleVector) std::vector<double>;
 
+%extend std::map {
+    std::string __repr__() {
+      std::string repr = "{";
+      for (auto it = self->begin(); it != self->end(); ++it) {
+        repr += "'" + it->first + ": " + std::to_string(it->second) + "',";
+      }
+      repr.pop_back();
+      repr+="}";
+      return repr;
+    }
+};
+
+
+// %extend std::vector<unsigned int> {
+    // std::string __repr__() {
+      // std::string repr = "(";
+      // for (auto it = self->begin(); it != self->end(); ++it) {
+        // repr += std::to_string(it);
+        // repr+=",";
+      // }
+      // repr.pop_back();
+      // repr+=")";
+      // return repr;
+    // }
+// };
+
+%extend std::tuple<double, double, bool> {
+    std::string __repr__() {
+      std::string repr = "(";      
+      repr+=std::to_string(std::get<0>(*self));
+      repr+=", ";
+      repr+=std::to_string(std::get<1>(*self));
+      repr+=", ";
+      repr+=std::to_string(std::get<2>(*self));
+      repr+=")";
+      return repr;
+    }
+};
 
 
 %extend std::array {
@@ -33,6 +71,7 @@
       return repr;
     }
 };
+
 %template(CartArray) std::array<double, 6>;
 %template(JointMap) std::map<std::string, double>;
 %template(UintVector) std::vector<unsigned int>;
@@ -40,6 +79,7 @@
 %template(IntVector) std::vector<int>;
 %std_tuple(TupleDDB, double, double, bool);
 %std_tuple(TupleIntStr, int, std::string);
+
 %{
 #include <protos/jsonbase.hh>
 %}
