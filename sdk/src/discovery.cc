@@ -27,13 +27,13 @@ namespace lebai
     std::string ControllerInfo::str()
     {
       std::string str;
-      str += "name:" + hostname + ",";
-      str += "ip_address:" + ip_address + ",";
-      str += "mac_address:" + mac_address + ",";
-      str += "model:" + model + ",";
-      str += "ds_version:" + ds_version + ",";
-      str += "rc_version:" + rc_version + ",";
-      str += "id:" + id;
+      str += "{'hostname':" + hostname + ",";
+      str += "'ip_address':" + ip_address + ",";
+      str += "'mac_address':" + mac_address + ",";
+      str += "'model':" + model + ",";
+      str += "'ds_version':" + ds_version + ",";
+      str += "'rc_version':" + rc_version + ",";
+      str += "'id':" + id+"}";
       return str;
     }
     Discovery::Discovery()

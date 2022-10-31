@@ -187,14 +187,30 @@ int Robot::get_robot_mode()
   return impl_->getRobotState();
 }
 
-std::vector<double> Robot::get_actual_joint_positions()
+std::map<std::string, double> Robot::get_actual_joint_positions()
 {
-  return *impl_->getKinData().mutable_actual_joint_pose();
+  std::map<std::string, double> ret;
+  auto joint_positions = *impl_->getKinData().mutable_actual_joint_pose();
+  ret["j1"] = joint_positions[0];
+  ret["j2"] = joint_positions[1];
+  ret["j3"] = joint_positions[2];
+  ret["j4"] = joint_positions[3];
+  ret["j5"] = joint_positions[4];
+  ret["j6"] = joint_positions[5];
+  return ret;
 }
 
-std::vector<double> Robot::get_target_joint_positions()
+std::map<std::string, double> Robot::get_target_joint_positions()
 {
-  return *impl_->getKinData().mutable_target_joint_pose();
+  std::map<std::string, double> ret;
+  auto joint_positions = *impl_->getKinData().mutable_target_joint_pose();
+  ret["j1"] = joint_positions[0];
+  ret["j2"] = joint_positions[1];
+  ret["j3"] = joint_positions[2];
+  ret["j4"] = joint_positions[3];
+  ret["j5"] = joint_positions[4];
+  ret["j6"] = joint_positions[5];
+  return ret;
 }
 std::vector<double> Robot::get_actual_joint_speed()
 {
@@ -277,6 +293,15 @@ void Robot::set_do(unsigned int pin, bool value)
   impl_->setDO(req);
 }
 
+void Robot::set_do(unsigned int pin, unsigned int value)
+{
+  io::SetDoPinRequest req;
+  req.set_pin(pin);
+  req.set_value(value);
+  req.set_device(io::IoDevice::ROBOT);
+  impl_->setDO(req);  
+}
+
 double Robot::get_ai(unsigned int pin)
 {
   io::GetAioPinRequest req;
@@ -313,6 +338,14 @@ void Robot::set_flange_do(unsigned int pin, bool value)
   req.set_device(io::IoDevice::FLANGE);
   impl_->setDO(req);
 }
+void Robot::set_flange_do(unsigned int pin, unsigned int value)
+{
+  io::SetDoPinRequest req;
+  req.set_pin(pin);
+  req.set_value(value);
+  req.set_device(io::IoDevice::FLANGE);
+  impl_->setDO(req);
+}
 
 bool Robot::get_extra_di(unsigned int pin)
 {
@@ -324,6 +357,14 @@ bool Robot::get_extra_di(unsigned int pin)
 }
 
 void Robot::set_extra_do(unsigned int pin, bool value)
+{
+  io::SetDoPinRequest req;
+  req.set_pin(pin);
+  req.set_value(value);
+  req.set_device(io::IoDevice::EXTRA);
+  impl_->setDO(req);
+}
+void Robot::set_extra_do(unsigned int pin, unsigned int value)
 {
   io::SetDoPinRequest req;
   req.set_pin(pin);
