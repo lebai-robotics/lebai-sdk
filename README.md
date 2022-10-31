@@ -1,6 +1,31 @@
 # 从源代码构建安装
 ## Windows平台
+
+- [MinGW-w64 (prefer x86_64-posix-seh)](https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/)
+- [cmake >= 3.18](https://cmake.org)
+- [boost](https://www.boost.org/users/download/)
+- python3 >= 3.5 (可选,如果需要生成python的接口库)
+
+根据需求手动安装
+> 安装完成后需将以下目录添加到环境变量PATH  
+> python目录下的根目录、Scripts、Library\bin  
+> mingw64目录下的根目录、bin  
+> cmake目录下的bin
+ 
+> 将boost目录添加到BOOST_ROOT变量
+
+修改CMakeLists.txt：
 TODO
+
+```bash
+#安装python依赖
+pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
+# 生成编译配置
+cmake -S. -Bbuild -DBUILD_PYTHON=ON -DBUILD_DEB=ON -DBUILD_TESTING=OFF 
+# 编译
+cmake --build build
+```
+
 ## Ubuntu&&Debian平台
 ### 依赖
 - gcc or clang support c++14
