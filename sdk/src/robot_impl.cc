@@ -46,47 +46,47 @@ namespace lebai
 
   int Robot::RobotImpl::startSys()
   {
-    json_rpc_connector_->CallRpc("start_sys", "{}", nullptr);
+    return json_rpc_connector_->CallRpc("start_sys", "{}", nullptr);
   }
 
   int Robot::RobotImpl::stopSys()
   {
-    json_rpc_connector_->CallRpc( "stop_sys","{}", nullptr);
+    return json_rpc_connector_->CallRpc( "stop_sys","{}", nullptr);
   }
 
   int Robot::RobotImpl::powerdown()
   {
-    json_rpc_connector_->CallRpc( "powerdown","{}", nullptr);
+    return json_rpc_connector_->CallRpc( "powerdown","{}", nullptr);
   }
 
   int Robot::RobotImpl::stop()
   {
-    json_rpc_connector_->CallRpc( "stop","{}",nullptr);
+    return json_rpc_connector_->CallRpc( "stop","{}",nullptr);
   }
 
   int Robot::RobotImpl::estop()
   {
-    json_rpc_connector_->CallRpc( "estop","{}",nullptr);
+    return json_rpc_connector_->CallRpc( "estop","{}",nullptr);
   }
 
   int Robot::RobotImpl::teachMode()
   {
-    json_rpc_connector_->CallRpc( "start_teach_mode","{}",nullptr);
+    return json_rpc_connector_->CallRpc( "start_teach_mode","{}",nullptr);
   }
 
   int Robot::RobotImpl::endTeachMode()
   {
-    json_rpc_connector_->CallRpc( "end_teach_mode","{}",nullptr);
+    return json_rpc_connector_->CallRpc( "end_teach_mode","{}",nullptr);
   }
 
   int Robot::RobotImpl::pause()
   {
-    json_rpc_connector_->CallRpc( "pause","{}",nullptr);
+    return json_rpc_connector_->CallRpc( "pause","{}",nullptr);
   }
 
   int Robot::RobotImpl::resume()
   {
-    json_rpc_connector_->CallRpc( "resume","{}",nullptr);
+    return json_rpc_connector_->CallRpc( "resume","{}",nullptr);
   }
 
   void Robot::RobotImpl::moveJoint(const MoveRequest & req)

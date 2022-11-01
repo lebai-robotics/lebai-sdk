@@ -27,13 +27,13 @@ namespace lebai
   namespace l_master
   {
   /**
-   * @brief 运动学正解的返回值数据结构
+   * @brief 运动学正解的返回值数据结构.
    * 
    */
   struct KinematicsForwardResp
   {
-    std::array<double, 6> pose; /*!< 笛卡尔坐标位置，依次为 x, y, z, rz, ry, rx */
-    bool ok = false;  /*!< 计算是否成功 */
+    std::array<double, 6> pose = {{0.0, 0.0, 0.0, 0.0, 0.0, 0.0}}; /*!< 笛卡尔坐标位置，依次为 x, y, z, rz, ry, rx. */
+    bool ok = false;  /*!< 计算是否成功. */
   };
   /**
    * @brief 运动学逆解的返回值数据结构
@@ -41,11 +41,11 @@ namespace lebai
    */
   struct KinematicsInverseResp
   {
-    std::map<std::string, double> joint_positions;  /*!< 机械臂关节位置的map数据，应当包括"j1","j2","j3","j4","j5","j6"六个关节的角度值。  */
+    std::map<std::string, double> joint_positions;  /*!< 机械臂关节位置的map数据，应当包括'j1','j2','j3','j4','j5','j6'六个关节的角度值.  */
     bool ok = false;  /*!< 计算是否成功 */
   };  
   /**
-   *  @brief 机械臂的主要接口对象，通过本对象的方法与机械臂进行数据交互。
+   *  @brief 机械臂的主要接口对象，通过本对象的方法与机械臂进行数据交互.
    *
    */
   class Robot
@@ -86,12 +86,12 @@ namespace lebai
      * 
      *  
      * @brief 用JSON格式字符串调用机械臂的接口.
-     * @note SDK采用JSONRPC协议和机械臂控制进行通讯. 您可以自行生成JSON数据，并通过本接口调用相应的JSONRPC，并获取返回的结果和JSON数据。
+     * @note SDK采用JSONRPC协议和机械臂控制进行通讯. 您可以自行生成JSON数据，并通过本接口调用相应的JSONRPC，并获取返回的结果和JSON数据.
      * @param[in] method 方法名字
-     * @param[in] params 请求JSONRPC的JSON格式字符串。
-     * @return 返回一个元组，第一个元素是返回码，第二个元素是数据字符串。
-     * 如果返回码为0，表示调用成功，第二个元素是JSONRPC的返回数据。
-     * 如果返回码为非0，表示调用失败，第二个元素是错误信息。
+     * @param[in] params 请求JSONRPC的JSON格式字符串.
+     * @return 返回一个元组，第一个元素是返回码，第二个元素是数据字符串.
+     * 如果返回码为0，表示调用成功，第二个元素是JSONRPC的返回数据.
+     * 如果返回码为非0，表示调用失败，第二个元素是错误信息.
      */
     std::tuple<int, std::string> call(const std::string & method, const std::string & params);
     
@@ -148,48 +148,48 @@ namespace lebai
      */
     
     /**
-     * @brief 启动机械臂（机械臂上使能）。
+     * @brief 启动机械臂（机械臂上使能）.
      * 
      */
     void start_sys();
     /**
-     * @brief 停止机械臂（机械臂上使能）。
+     * @brief 停止机械臂（机械臂上使能）.
      * 
      */
 
     void stop_sys();
     /**
-     * @brief 关闭机器人电源（关机）。
+     * @brief 关闭机器人电源（关机.
      * 
      */
     void powerdown();
     /**
-     * @brief 停止运动（但不下电）。
+     * @brief 停止运动（但不下电）.
      * 
      */
     void stop();
     /**
-     * @brief 紧急停止（急停）。
+     * @brief 紧急停止（急停）.
      * 
      */
     void estop();
     /**
-     * @brief 进入示教模式。
+     * @brief 进入示教模式.
      * 
      */
     void teach_mode();
     /**
-     * @brief 退出示教模式。
+     * @brief 退出示教模式.
      * 
      */
     void end_teach_mode();
     /**
-     * @brief 暂停运动。
+     * @brief 暂停运动.
      * 
      */
     void pause();
     /**
-     * @brief 恢复运动。
+     * @brief 恢复运动.
      * 
      */
     void resume();
@@ -214,12 +214,12 @@ namespace lebai
      * 
      * 
      * @brief 通过关节位置发送机械臂关节移动
-     * @note 该接口为异步接口，仅向控制器内部的运动缓冲区写入一个关节移动即返回，不会等待运动结束。
+     * @note 该接口为异步接口，仅向控制器内部的运动缓冲区写入一个关节移动即返回，不会等待运动结束.
      * @param[in] joint_positions 目标位置的关节map数据,应当包括"j1","j2","j3","j4","j5","j6"六个关节的角度值.
      * @param[in] a 加速度
      * @param[in] v 速度
-     * @param[in] t 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数。
-     * @param[in] r 交融半径，设置为0，则无交融半径。
+     * @param[in] t 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
+     * @param[in] r 交融半径，设置为0，则无交融半径.
      * @return true 发送成功
      * @return false 发送失败
      * 
@@ -232,12 +232,12 @@ namespace lebai
      * 
      * 
      * @brief 通过坐标位置发送机械臂关节移动
-     * @note 该接口为异步接口，仅向控制器内部的运动缓冲区写入一个关节移动即返回，不会等待运动结束。
-     * @param[in] cart_pose 目标位置在机器人基座标系下的坐标数据(目前不支持在其它坐标系下的坐标数据)，CartesianPose = std::array<double,6>，数组大小为6，前三个数据为空间中的[x,y,z]点位，后三个数据是以欧拉ZYX形式的姿态数据[rz,ry,rx]。
+     * @note 该接口为异步接口，仅向控制器内部的运动缓冲区写入一个关节移动即返回，不会等待运动结束.
+     * @param[in] cart_pose 目标位置在机器人基座标系下的坐标数据(目前不支持在其它坐标系下的坐标数据)，CartesianPose = std::array<double,6>，数组大小为6，前三个数据为空间中的[x,y,z]点位，后三个数据是以欧拉ZYX形式的姿态数据[rz,ry,rx].
      * @param[in] a 加速度
      * @param[in] v 速度
-     * @param[in] t 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数。
-     * @param[in] r 交融半径，设置为0，则无交融半径。
+     * @param[in] t 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
+     * @param[in] r 交融半径，设置为0，则无交融半径.
      * @return true 发送成功
      * @return false 发送失败
      */    
@@ -256,13 +256,13 @@ namespace lebai
      * 
      * 
      * @brief 通过关节位置发送机械臂直线移动
-     * @note 该接口为异步接口，仅向控制器内部的运动缓冲区写入一个关节移动即返回，不会等待运动结束。
-     * @param[in] joint_positions 目标位置的关节map数据，应当包括"j1","j2","j3","j4","j5","j6"六个关节的角度值。
+     * @note 该接口为异步接口，仅向控制器内部的运动缓冲区写入一个关节移动即返回，不会等待运动结束.
+     * @param[in] joint_positions 目标位置的关节map数据，应当包括'j1','j2','j3','j4','j5','j6'六个关节的角度值.
      * @param[in] a 加速度
      * @param[in] v 速度
-     * @param[in] t 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数。
+     * @param[in] t 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
      * @param[in] r
-     *  交融半径，设置为0，则无交融半径。
+     *  交融半径，设置为0，则无交融半径.
      * @return true 发送成功
      * @return false 发送失败
      */
@@ -274,12 +274,12 @@ namespace lebai
      * 
      * 
      * @brief 通过坐标位置发送机械臂直线移动
-     * @note 该接口为异步接口，仅向控制器内部的运动缓冲区写入一个关节移动即返回，不会等待运动结束。
-     * @param cart_pose 目标位置在机器人基座标系下的坐标数据(目前不支持在其它坐标系下的坐标数据)，CartesianPose = std::array<double,6>，数组大小为6，前三个数据为空间中的[x,y,z]点位，后三个数据是以欧拉ZYX形式的姿态数据[rz,ry,rx]。
+     * @note 该接口为异步接口，仅向控制器内部的运动缓冲区写入一个关节移动即返回，不会等待运动结束.
+     * @param cart_pose 目标位置在机器人基座标系下的坐标数据(目前不支持在其它坐标系下的坐标数据)，CartesianPose = std::array<double,6>，数组大小为6，前三个数据为空间中的[x,y,z]点位，后三个数据是以欧拉ZYX形式的姿态数据[rz,ry,rx].
      * @param a 加速度
      * @param v 速度
-     * @param t 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数。
-     * @param r 交融半径，设置为0，则无交融半径。
+     * @param t 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
+     * @param r 交融半径，设置为0，则无交融半径.
      * @return true 发送成功
      * @return false 发送失败
      */    
@@ -296,7 +296,7 @@ namespace lebai
     /**
      * @brief 获取机器人状态码
      * 
-     * @return int 返回状态码。
+     * @return int 返回状态码.
      * 
      *  状态码 |      状态	     |       说明  
      *  ------ | -------------  | -------------
@@ -320,13 +320,13 @@ namespace lebai
     /**
      * @brief 获取机械臂关节当前反馈位置 
      * 
-     * @return 关节反馈位置字典数据，包括"j1","j2","j3","j4","j5","j6"六个关节的角度值。
+     * @return 关节反馈位置字典数据，包括'j1','j2','j3','j4','j5','j6'六个关节的角度值.
      */
     std::map<std::string, double> get_actual_joint_positions();
     /**
      * @brief 获取机械臂关节当前控制位置 
      * 
-     * @return 关节控制位置字典数据，包括"j1","j2","j3","j4","j5","j6"六个关节的角度值。
+     * @return 关节控制位置字典数据，包括'j1','j2','j3','j4','j5','j6'六个关节的角度值.
      */
     std::map<std::string, double> get_target_joint_positions();
     /**
@@ -500,7 +500,7 @@ namespace lebai
      *  @{
      */   
     /**
-     * @brief 设置夹爪力度（力控）和幅度（位控）。如果在闭合过程中抓取到物体，则不再继续闭合以避免夹坏物体，判断的准则为这里设置的力的大小。
+     * @brief 设置夹爪力度（力控）和幅度（位控）.如果在闭合过程中抓取到物体，则不再继续闭合以避免夹坏物体，判断的准则为这里设置的力的大小.
      * 
      * @param force 力度（0-100）
      * @param amplitude 张合幅度（0-100）
@@ -519,10 +519,10 @@ namespace lebai
      */
 
     /**
-     * @brief 设置LED灯状态。
+     * @brief 设置LED灯状态.
      * 
-     * @param mode 亮灯模式。0：不变；1：关闭；2：常亮；3：呼吸；4：均分旋转；5：同色旋转；6：闪烁
-     * @param speed 速度。1：快速；2：正常；3：慢速
+     * @param mode 亮灯模式.0：不变；1：关闭；2：常亮；3：呼吸；4：均分旋转；5：同色旋转；6：闪烁
+     * @param speed 速度.1：快速；2：正常；3：慢速
      * @param color 最多包含 4 个 0 ~ 15 之间的整数
      */
     void set_led(unsigned int mode,unsigned int speed,const std::vector<unsigned int> & color);
@@ -530,13 +530,13 @@ namespace lebai
      * @brief 设置声音
      * 
      * @param voice 声音列表
-     * @param volume 音量。0：静音；1：低；2：正常；3：高
+     * @param volume 音量.0：静音；1：低；2：正常；3：高
      */
     void set_voice(unsigned int voice,unsigned int volume);
     /**
      * @brief 开关风扇
      * 
-     * @param status 状态。1：关闭；2：开启
+     * @param status 状态.1：关闭；2：开启
      */
     void set_fan(unsigned int status);
     /** @}*/
@@ -561,7 +561,7 @@ namespace lebai
     */
     int get_signal(unsigned int index);
     /**
-     * @brief 增加指定下标的信号量值，该操作是原子的。
+     * @brief 增加指定下标的信号量值，该操作是原子的.
      * 
      * @param index 信号量下标（取值范围0~255）
      * @param value 待增加的信号量值
@@ -629,8 +629,8 @@ namespace lebai
      */
     /**
      * @brief 根据机械臂关节位置计算机器人末端位姿（位置的运动学正解）
-     * @param joint_positions 机械臂关节位置的字典数据，应当包括"j1","j2","j3","j4","j5","j6"六个关节的角度值。
-     * @return 返回计算结果 \ref KinematicsForwardResp "KinematicsForwardResp"。
+     * @param joint_positions 机械臂关节位置的字典数据，应当包括'j1','j2','j3','j4','j5','j6'六个关节的角度值.
+     * @return 返回计算结果 \ref KinematicsForwardResp "KinematicsForwardResp".
      *
      */
     KinematicsForwardResp kinematics_forward(const std::map<std::string, double> & joint_positions);
@@ -638,25 +638,25 @@ namespace lebai
     /**
      * @brief 根据机械臂的末端位姿计算关节位置（位置的运动学逆解）
      * @param pose 机械臂末端位姿，依次为 x, y, z, rz, ry, rx
-     * @param joint_init_positions 机械臂关节初始位置, 以数组形式传入。
-     * @return 返回计算结果 \ref KinematicsInverseResp "KinematicsInverseResp"。
+     * @param joint_init_positions 机械臂关节初始位置, 以数组形式传入.
+     * @return 返回计算结果 \ref KinematicsInverseResp "KinematicsInverseResp".
      */
     KinematicsInverseResp kinematics_inverse(const std::array<double, 6> & pose, const std::vector<double> & joint_init_positions = {});
     
     /**
      * @brief 位姿变换乘法（等价于对应的齐次坐标矩阵乘法）
      * 
-     * @param a 位姿，依次为 x, y, z, rz, ry, rx
-     * @param b 位姿，依次为 x, y, z, rz, ry, rx
-     * @return std::array<double, 6> 返回的位姿，依次为 x, y, z, rz, ry, rx
+     * @param a 位姿，依次为 x, y, z, rz, ry, rx.
+     * @param b 位姿，依次为 x, y, z, rz, ry, rx.
+     * @return std::array<double, 6> 返回的位姿，依次为 x, y, z, rz, ry, rx.
      */
     std::array<double, 6> pose_times(const std::array<double, 6> & a, const std::array<double, 6> & b);
 
     /**
      * @brief 位姿变换的逆（等价于对应的齐次坐标矩的逆）
      * 
-     * @param in 位姿，依次为 x, y, z, rz, ry, rx
-     * @return std::array<double, 6> 返回位姿变换的逆，依次为 x, y, z, rz, ry, rx
+     * @param in 位姿，依次为 x, y, z, rz, ry, rx.
+     * @return std::array<double, 6> 返回位姿变换的逆，依次为 x, y, z, rz, ry, rx.
      */    
     std::array<double, 6> pose_inverse(const std::array<double, 6> & in);
     /** @}*/    
@@ -667,10 +667,10 @@ namespace lebai
     /**
      * @brief 保存文件（以字节形式）
      * 
-     * @param dir 保存的文件路径
-     * @param name 保存的文件名
-     * @param is_dir 要保存的文件是否为文件夹
-     * @param data 文件字节
+     * @param dir 保存的文件路径.
+     * @param name 保存的文件名.
+     * @param is_dir 要保存的文件是否为文件夹.
+     * @param data 文件字节.
     */
     void save_file(std::string dir,std::string name,bool is_dir,std::string data);
 
@@ -750,7 +750,7 @@ namespace lebai
     /** @}*/
 
   protected:
-    std::unique_ptr<RobotImpl> impl_; /*!< 内部实现数据结构，用户无需关注。 */
+    std::unique_ptr<RobotImpl> impl_; /*!< 内部实现数据结构，用户无需关注. */
   };
   }
 

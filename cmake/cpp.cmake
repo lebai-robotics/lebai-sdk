@@ -3,7 +3,7 @@ if(NOT BUILD_CXX)
 endif()
 
 enable_language(CXX)
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
@@ -90,8 +90,11 @@ function(add_cpp_example FILE_NAME)
     ${PROJECT_SOURCE_DIR}/sdk/src)
   target_compile_features(${EXAMPLE_NAME} PRIVATE cxx_std_14)
   target_link_libraries(${EXAMPLE_NAME} PRIVATE
-    ${PROJECT_NAMESPACE}::lebai-cpp
-    pthread)
+    ${PROJECT_NAMESPACE}::lebai-cpp)
+  if(UNIX)
+     target_link_libraries(${EXAMPLE_NAME} PRIVATE
+        pthread)
+  endif()
 
   include(GNUInstallDirs)
   install(TARGETS ${EXAMPLE_NAME})

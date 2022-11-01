@@ -15,7 +15,7 @@ class InstallPlatlib(install):
 
 setup(
   name='@PYTHON_PROJECT@',
-  description = 'xxxxxxxx',
+  description = 'lebai controller universal sdk',
   version='@PROJECT_VERSION@',
   author='liufang',
   author_email='liufang_robot@outlook.com',
@@ -24,7 +24,7 @@ setup(
   cmdclass={'install': InstallPlatlib},
   packages=find_packages(),
   package_data={
-  '@PYTHON_PROJECT@':[$<$<NOT:$<PLATFORM_ID:Windows>>:'.libs/*'>,'*.so'],
+  '@PYTHON_PROJECT@':['.libs/*','*.so','*.pyd'],
   },
   include_package_data=True,
   classifiers=[

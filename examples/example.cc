@@ -45,7 +45,6 @@ int main(int argc, char ** argv)
   // Create robot instance
   lebai::l_master::Robot robot(ip, sim);
   std::this_thread::sleep_for(std::chrono::seconds(1));
-
   {
     std::array<double, 6> a = {1, 2, 0, 0, 0, 0};
     std::array<double, 6> b = {0, 0, 3, 0, 0, 0};

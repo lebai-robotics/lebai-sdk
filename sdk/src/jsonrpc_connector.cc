@@ -136,6 +136,7 @@ int JSONRpcConnector::CallRpc(const std::string & method, const std::string & re
       return -1;
     }    
   }
+  return 0;
 }
 
 JSONRpcConnector::ConnectionStatus JSONRpcConnector::GetConnectionStatus()

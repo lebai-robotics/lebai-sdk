@@ -50,6 +50,9 @@ if(UNIX)
 else()
   # Currently Only support static build for windows
   option(BUILD_SHARED_LIBS "Build shared libraries (.dll)." OFF)
+  add_compile_definitions(_USE_MATH_DEFINES)
+  add_compile_definitions(NOMINMAX)
+  add_compile_definitions(_WEBSOCKETPP_CPP11_RANDOM_DEVICE_)
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
@@ -75,12 +78,19 @@ include(CTest)
 
 include(cpp)
 
+if(WIN32 AND (BUILD_DOTNET OR BUILD_JAVA OR BUILD_PYTHON))
+  message(STATUS "Getting SWIG: ...")
+  include(swig)
+  message(STATUS "Getting SWIG: ...DONE")
+endif()
+
 
 if(BUILD_PYTHON)
   option(FETCH_PYTHON_DEPS "Install python required modules if not available" ON)
   message(STATUS "Python fetch dependencies: ${FETCH_PYTHON_DEPS}")
 endif()
 include(python)
+
 
 # add_subdirectory(tests)
 

@@ -6,12 +6,18 @@
 %include "std_array.i"
 %include "std_tuple.i"
 
+
 %ignore Deserialize;
 %ignore Serialize;
 %ignore InitDocument;
 %ignore IsNullJSONData;
 
 %template(DoubleVector) std::vector<double>;
+
+%{
+#include <protos/jsonbase.hh>
+#include <array>
+%}
 
 %extend std::map {
     std::string __repr__() {
@@ -80,10 +86,12 @@
 %template(BSVector) std::vector<std::tuple<bool,std::string>>;
 %std_tuple(TupleDDB, double, double, bool);
 %std_tuple(TupleIntStr, int, std::string);
+
 %std_tuple(TupleBS,bool,std::string);
 %{
 #include <protos/jsonbase.hh>
 %}
+
 
 
 %define __STR__(class_name) 

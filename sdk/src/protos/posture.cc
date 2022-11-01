@@ -224,6 +224,7 @@ namespace lebai
       {
         euler_zyx_.reset();
       }
+      return *this;
     }
     void Rotation::set_rotation_matrix(const RotationMatrix &matrix)
     {
@@ -630,6 +631,7 @@ namespace lebai
         cart_ = std::make_unique<CartesianTargetPose>();
         *cart_ = *other.cart_;
       }
+      return *this;
     }
     void Pose::set_joint(const JointTargetPose &joint)
     {

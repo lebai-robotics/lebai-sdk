@@ -4,6 +4,7 @@
 #include <iostream>
 #include <memory>
 #include <vector>
+#include <array>
 
 #include "jsonbase.hh"
 
@@ -108,8 +109,7 @@ class RotationMatrix : public JSONBase {
   std::array<double, 9>* mutable_data();
 
  protected:
-  std::array<double, 9> data_ = {{1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0,
-                                  1.0}}; /*!< Rotation matrix data */
+  std::array<double, 9> data_ = {{1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0}};; /*!< Rotation matrix data */
   // These methods are used to serialize and deserialize the class.
   // They will not be wrapped in the SDK.
  public:

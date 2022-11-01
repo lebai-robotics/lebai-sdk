@@ -19,7 +19,8 @@ namespace lebai
       target_joint_torque_ = other.target_joint_torque_;
       // actual_tcp_pose_ = other.actual_tcp_pose_;
       // target_tcp_pose_ = other.target_tcp_pose_;  
-      // actual_flange_pose_ = other.actual_flange_pose_;    
+      // actual_flange_pose_ = other.actual_flange_pose_;
+      return *this;
     }
     void KinData::set_actual_joint_pose(const std::vector<double> & actual_joint_pose)
     {
