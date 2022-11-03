@@ -725,7 +725,7 @@ namespace lebai
      * @param to_dir  压缩后文件的路径
      * @param name 压缩后文件的名称
     */
-    void zip(std::string from_dir, std::vector<std::string> files, std::string to_dir, std::string name);
+    //void zip(std::string from_dir, std::vector<std::string> files, std::string to_dir, std::string name);
     /**
      *  @brief 将zip文件解压到文件系统
      *
@@ -734,7 +734,7 @@ namespace lebai
      * @param files zip文件内的文件名
      * @param to_dir  解压到的路径
      */
-    void unzip(std::string from_dir, std::string name, std::vector<std::string> files, std::string to_dir);
+    //void unzip(std::string from_dir, std::string name, std::vector<std::string> files, std::string to_dir);
     /**
      * @brief 查询文件列表
      *
