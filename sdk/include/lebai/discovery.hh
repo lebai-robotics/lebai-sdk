@@ -32,19 +32,19 @@ namespace lebai
   {
   public:
     /**
-     * \brief 将控制器信息转换为字符串
+     * \brief 将控制器信息转换为字符串.
      * 
-     * \return 字符串
+     * \return 字符串.
      */
     std::string str();
 
-    std::string hostname; /*!< 主机名字 */
-    std::string ip_address; /*!< IP地址 */
-    std::string mac_address; /*!< MAC地址 */
-    std::string model; /*!< 机械臂模型 */
-    std::string ds_version; /*!< ds软件版本 */
-    std::string rc_version; /*!< rc软件版本 */
-    std::string id; /*!< 机械臂产品ID */
+    std::string hostname; /*!< 主机名字. */
+    std::string ip_address; /*!< IP地址. */
+    std::string mac_address; /*!< MAC地址. */
+    std::string model; /*!< 机械臂模型. */
+    std::string ds_version; /*!< ds软件版本. */
+    std::string rc_version; /*!< rc软件版本. */
+    std::string id; /*!< 机械臂产品ID. */
   };
     
   /**

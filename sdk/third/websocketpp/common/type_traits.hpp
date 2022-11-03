@@ -39,6 +39,7 @@
     #endif
 #endif
 
+#define _WEBSOCKETPP_CPP11_TYPE_TRAITS_
 
 #ifdef _WEBSOCKETPP_CPP11_TYPE_TRAITS_
     #include <type_traits>

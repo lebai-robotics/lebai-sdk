@@ -130,6 +130,7 @@ namespace lebai
       {
         kernel_version_ = obj["kernel_version"].GetString();
       }
+      return true;
     }
 
     bool SystemInfo::Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const
@@ -228,7 +229,8 @@ namespace lebai
       writer->EndArray();
       writer->String("flange_voltage");
       writer->Double(flange_voltage_);
-      writer->EndObject();      
+      writer->EndObject();
+      return true;
     }
     bool PhyData::IsNullJSONData() const
     {

@@ -16,6 +16,9 @@ target_include_directories(lebai-cpp
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third>
     $<INSTALL_INTERFACE:include>)
 target_compile_features(lebai-cpp PUBLIC cxx_std_14)
+if(WIN32)
+  target_link_libraries(lebai-cpp INTERFACE iphlpapi ws2_32)
+endif()
 set_target_properties(lebai-cpp PROPERTIES
   VERSION ${PROJECT_VERSION}
   PUBLIC_HEADER include/lebai/robot.hh

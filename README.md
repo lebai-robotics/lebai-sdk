@@ -1,6 +1,14 @@
 # 从源代码构建安装
-## Windows平台
+## Windows平台 Visual Studio
+### 依赖
+- Visual Studio(C++ Support)
+- CMake >= 3.18
+- python3 >= 3.5 (可选,如果需要生成python的接口库)
 
+安装python库时，选择 `Download debug binaries`
+
+在Visual Studio中载入CMake工程，即可以生成构建运行测试等。
+## Windows平台 MinGW
 - [MinGW-w64 (prefer x86_64-posix-seh)](https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/)
 - [cmake >= 3.18](https://cmake.org)
 - [boost](https://www.boost.org/users/download/)
@@ -25,7 +33,6 @@ cmake -S. -Bbuild -DBUILD_PYTHON=ON -DBUILD_DEB=ON -DBUILD_TESTING=OFF
 # 编译
 cmake --build build
 ```
-
 ## Ubuntu&&Debian平台
 ### 依赖
 - gcc or clang support c++14
