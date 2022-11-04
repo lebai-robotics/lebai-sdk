@@ -101,7 +101,7 @@ namespace lebai
       data =  buffer.GetString();
       return 0;
     }
-    return -1;
+    return -5;
     
   }
 }

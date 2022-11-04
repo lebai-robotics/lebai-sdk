@@ -128,11 +128,23 @@ int JSONRpcConnector::CallRpc(const std::string & method, const std::string & re
     if(ret < 0)
     {
       std::cout<<"Invalid jsonrpc response! ret code is: "<<ret<<"\n";
+      switch (ret)
+      {
+      case -1:throw (std::string)"Response Parse Error";break;
+      case -2:throw (std::string)"Response Is Not \" jsonrpc \"";break;
+      case -3:throw (std::string)"Response \" jsonrpc \" Version Is Not 2.0";break;
+      case -4:throw (std::string)"Response Do Not Have \" id \"";break;
+      case -5:throw (std::string)"Response Do Not Have \" error \" Or \" result \"";break;
+      default:
+        throw (std::string)"Response Error"
+        break;
+      }
       return -1;
     }
     // std::cout<<"resp_data_str "<<*resp_data_str<<"\n";
     if(callback_jsonrpc_id != call_jsonrpc_id)
     {
+      throw (std::string)"Dismatch in Request and Response"
       return -1;
     }    
   }
