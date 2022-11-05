@@ -27,7 +27,11 @@ namespace lebai
     RobotTest()
     :robot_(TEST_L_MASTER_IP, true)
     {
+<<<<<<< HEAD
       std::cout<<"TEST_L_MASTER_IP "<<TEST_L_MASTER_IP<<"\n";
+=======
+      // std::cout<<"TEST_L_MASTER_IP "<<TEST_L_MASTER_IP<<"\n";
+>>>>>>> e99d4156d4765c80ced4a551531aa65dc8028879
     }
     void SetUp()
     {
@@ -61,6 +65,7 @@ namespace lebai
     std::this_thread::sleep_for(std::chrono::seconds(1));
     EXPECT_EQ(5, robot_.get_robot_mode());
   }
+<<<<<<< HEAD
   // TEST_F(RobotTest, TestMove)
   // {
   //   robot_.start_sys();
