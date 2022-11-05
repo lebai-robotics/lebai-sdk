@@ -48,7 +48,7 @@ cmake --build build
 sudo apt install build-essential python3-pip
 sudo pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
 # 如果需要生成文档，还需要安装doxygen。
-sudo apt install doxygen
+sudo apt install doxygen graphviz
 # 如果需要生成python的wrapper包。
 sudo apt install python3-dev
 ```
