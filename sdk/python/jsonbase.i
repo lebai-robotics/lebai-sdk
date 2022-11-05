@@ -23,7 +23,7 @@
     std::string __repr__() {
       std::string repr = "{";
       for (auto it = self->begin(); it != self->end(); ++it) {
-        repr += "'" + it->first + ": " + std::to_string(it->second) + "',";
+        repr += "'" + it->first + "': " + std::to_string(it->second) + ",";
       }
       repr.pop_back();
       repr+="}";

@@ -1,4 +1,4 @@
-FROM ubuntu:16.04 AS base
+FROM registry.cn-shanghai.aliyuncs.com/lebai/l-master:latest AS base
 
 CMD [ "bash" ]
 

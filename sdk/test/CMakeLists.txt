@@ -19,6 +19,7 @@ FetchContent_MakeAvailable(googletest)
 # find_package(Threads)
 
 
+
 add_executable(test_protos test_protos.cc)
 target_include_directories(test_protos PUBLIC 
   ${CMAKE_CURRENT_SOURCE_DIR}
@@ -36,6 +37,30 @@ set_target_properties(test_protos PROPERTIES
   INSTALL_RPATH 
   ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})  
 add_test(NAME TestProtos COMMAND test_protos WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/sdk/test)
+
+add_executable(test_robot test_robot.cc)
+if(DEFINED TEST_ROBOT_IP)
+  target_compile_definitions(test_robot PRIVATE TEST_L_MASTER_IP="${TEST_ROBOT_IP}")
+else()
+  target_compile_definitions(test_robot PRIVATE TEST_L_MASTER_IP="127.0.0.1")
+endif()
+
+
+target_include_directories(test_robot PUBLIC 
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${PROJECT_SOURCE_DIR}/sdk/src
+)
+target_link_directories(test_robot PRIVATE  
+  ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}
+)
+target_link_libraries(test_robot PRIVATE
+  ${PROJECT_NAMESPACE}::lebai-cpp
+  gtest)
+set_target_properties(test_robot PROPERTIES
+  INSTALL_RPATH 
+  ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})  
+add_test(NAME TestRobot COMMAND test_robot WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/sdk/test)
+
 
 
 
