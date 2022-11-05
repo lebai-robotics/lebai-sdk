@@ -28,6 +28,17 @@ namespace lebai
   {
     uint16_t port = simulator ? 3030 : 3031;
     json_rpc_connector_ = std::make_unique<JSONRpcConnector>(ip, port);
+    unsigned int i = 0;
+    unsigned int count = timeout_ / 0.1;
+    while(i < count)
+    {
+      if(json_rpc_connector_->GetConnectionStatus() == JSONRpcConnector::kOpen)
+      {
+        break;
+      }
+      std::this_thread::sleep_for(std::chrono::milliseconds(100));
+      i++;
+    }
   }
   Robot::RobotImpl::~RobotImpl() {}
 

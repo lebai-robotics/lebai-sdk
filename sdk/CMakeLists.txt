@@ -32,7 +32,6 @@ add_library(${PROJECT_NAMESPACE}::lebai-cpp ALIAS lebai-cpp)
 
 
 
-
 if(BUILD_TESTING)
   add_subdirectory(test)
 endif()

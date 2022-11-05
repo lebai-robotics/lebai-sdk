@@ -191,12 +191,15 @@ std::map<std::string, double> Robot::get_actual_joint_positions()
 {
   std::map<std::string, double> ret;
   auto joint_positions = *impl_->getKinData().mutable_actual_joint_pose();
-  ret["j1"] = joint_positions[0];
-  ret["j2"] = joint_positions[1];
-  ret["j3"] = joint_positions[2];
-  ret["j4"] = joint_positions[3];
-  ret["j5"] = joint_positions[4];
-  ret["j6"] = joint_positions[5];
+  if(joint_positions.size() == 6)
+  {
+    ret["j1"] = joint_positions[0];
+    ret["j2"] = joint_positions[1];
+    ret["j3"] = joint_positions[2];
+    ret["j4"] = joint_positions[3];
+    ret["j5"] = joint_positions[4];
+    ret["j6"] = joint_positions[5];
+  }
   return ret;
 }
 
@@ -204,12 +207,16 @@ std::map<std::string, double> Robot::get_target_joint_positions()
 {
   std::map<std::string, double> ret;
   auto joint_positions = *impl_->getKinData().mutable_target_joint_pose();
-  ret["j1"] = joint_positions[0];
-  ret["j2"] = joint_positions[1];
-  ret["j3"] = joint_positions[2];
-  ret["j4"] = joint_positions[3];
-  ret["j5"] = joint_positions[4];
-  ret["j6"] = joint_positions[5];
+  // size = 0
+  if(joint_positions.size() == 6)
+  {
+    ret["j1"] = joint_positions[0];
+    ret["j2"] = joint_positions[1];
+    ret["j3"] = joint_positions[2];
+    ret["j4"] = joint_positions[3];
+    ret["j5"] = joint_positions[4];
+    ret["j6"] = joint_positions[5];
+  }
   return ret;
 }
 std::vector<double> Robot::get_actual_joint_speed()
@@ -613,7 +620,7 @@ KinematicsForwardResp Robot::kinematics_forward(const std::map<std::string, doub
   return kf_resp;
 }
 
-KinematicsInverseResp Robot::kinematics_inverse(const std::array<double, 6> & pose, const std::vector<double> & joint_init_positions)
+KinematicsInverseResp Robot::kinematics_inverse(const std::array<double, 6> & pose, const std::map<std::string, double> & joint_init_positions)
 {
   posture::GetInverseKinRequest req;
   req.mutable_pose()->mutable_cart()->mutable_delta()->mutable_position()->set_x(pose[0]);
@@ -622,15 +629,21 @@ KinematicsInverseResp Robot::kinematics_inverse(const std::array<double, 6> & po
   req.mutable_pose()->mutable_cart()->mutable_delta()->mutable_rotation()->mutable_euler_zyx()->set_z(pose[3]);
   req.mutable_pose()->mutable_cart()->mutable_delta()->mutable_rotation()->mutable_euler_zyx()->set_y(pose[4]);
   req.mutable_pose()->mutable_cart()->mutable_delta()->mutable_rotation()->mutable_euler_zyx()->set_x(pose[5]);
-  if(joint_init_positions.size() == 6)
+  if(joint_init_positions.size() == 6 && 
+  joint_init_positions.find("j1") != joint_init_positions.end() &&
+  joint_init_positions.find("j2") != joint_init_positions.end() &&
+  joint_init_positions.find("j3") != joint_init_positions.end() &&
+  joint_init_positions.find("j4") != joint_init_positions.end() &&
+  joint_init_positions.find("j5") != joint_init_positions.end() &&
+  joint_init_positions.find("j6") != joint_init_positions.end())
   {
-    req.mutable_refer()->mutable_joint()->push_back(joint_init_positions[0]);
-    req.mutable_refer()->mutable_joint()->push_back(joint_init_positions[1]);
-    req.mutable_refer()->mutable_joint()->push_back(joint_init_positions[2]);
-    req.mutable_refer()->mutable_joint()->push_back(joint_init_positions[3]);
-    req.mutable_refer()->mutable_joint()->push_back(joint_init_positions[4]);
-    req.mutable_refer()->mutable_joint()->push_back(joint_init_positions[5]);
-  }
+    req.mutable_pose()->mutable_joint()->mutable_delta()->mutable_joint()->push_back(joint_init_positions.at("j1"));
+    req.mutable_pose()->mutable_joint()->mutable_delta()->mutable_joint()->push_back(joint_init_positions.at("j2"));
+    req.mutable_pose()->mutable_joint()->mutable_delta()->mutable_joint()->push_back(joint_init_positions.at("j3"));
+    req.mutable_pose()->mutable_joint()->mutable_delta()->mutable_joint()->push_back(joint_init_positions.at("j4"));
+    req.mutable_pose()->mutable_joint()->mutable_delta()->mutable_joint()->push_back(joint_init_positions.at("j5"));
+    req.mutable_pose()->mutable_joint()->mutable_delta()->mutable_joint()->push_back(joint_init_positions.at("j6"));
+  }  
   std::map<std::string, double> joint_positions;
   try
   {

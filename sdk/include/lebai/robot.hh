@@ -62,8 +62,8 @@ namespace lebai
     /**
      * @brief 构造Robot对象.
      * 
-     * @param ip 机械臂IP地址.
-     * @param simulator 用于表示机械臂是否为仿真机械臂(docker仿真或控制器运行在仿真模式下)的标志.True表示仿真模式，False表示实物机械臂.
+     * @param ip: 机械臂IP地址.
+     * @param simulator: 用于表示机械臂是否为仿真机械臂(docker仿真或控制器运行在仿真模式下)的标志.True表示仿真模式，False表示实物机械臂.
      */
     explicit Robot(std::string ip, bool simulator = false);
     /**
@@ -131,7 +131,7 @@ namespace lebai
      *  \brief    信号量相关的接口.
     */
 
-    /** \defgroup CONTROL 程序控制.
+    /** \defgroup PROGRAMCONTROL 程序控制.
      *  \brief    程序控制相关的接口.
     */
 
@@ -213,15 +213,15 @@ namespace lebai
      *     robot.movej(joint_positions, 3.0, 1.0, 0.0, 0.0);
      * 
      * 
-     * @brief 通过关节位置发送机械臂关节移动
-     * @note 该接口为异步接口，仅向控制器内部的运动缓冲区写入一个关节移动即返回，不会等待运动结束.
-     * @param[in] joint_positions 目标位置的关节map数据,应当包括"j1","j2","j3","j4","j5","j6"六个关节的角度值.
-     * @param[in] a 加速度
-     * @param[in] v 速度
-     * @param[in] t 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
-     * @param[in] r 交融半径，设置为0，则无交融半径.
-     * @return true 发送成功
-     * @return false 发送失败
+     * @brief   通过关节位置发送机械臂关节移动
+     * @note  该接口为异步接口，仅向控制器内部的运动缓冲区写入一个关节移动即返回，不会等待运动结束.
+     * @param[in] joint_positions: 目标位置的关节map数据,应当包括"j1","j2","j3","j4","j5","j6"六个关节的角度值.
+     * @param[in] a: 加速度.
+     * @param[in] v: 速度.
+     * @param[in] t: 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
+     * @param[in] r: 交融半径，设置为0，则无交融半径.
+     * @return  true 发送成功
+     * @return  false 发送失败
      * 
      */
     bool movej(const std::map<std::string, double> & joint_positions, double a, double v, double t, double r);
@@ -233,11 +233,11 @@ namespace lebai
      * 
      * @brief 通过坐标位置发送机械臂关节移动
      * @note 该接口为异步接口，仅向控制器内部的运动缓冲区写入一个关节移动即返回，不会等待运动结束.
-     * @param[in] cart_pose 目标位置在机器人基座标系下的坐标数据(目前不支持在其它坐标系下的坐标数据)，CartesianPose = std::array<double,6>，数组大小为6，前三个数据为空间中的[x,y,z]点位，后三个数据是以欧拉ZYX形式的姿态数据[rz,ry,rx].
-     * @param[in] a 加速度
-     * @param[in] v 速度
-     * @param[in] t 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
-     * @param[in] r 交融半径，设置为0，则无交融半径.
+     * @param[in] cart_pose: 目标位置在机器人基座标系下的坐标数据(目前不支持在其它坐标系下的坐标数据)，CartesianPose = std::array<double,6>，数组大小为6，前三个数据为空间中的[x,y,z]点位，后三个数据是以欧拉ZYX形式的姿态数据[rz,ry,rx].
+     * @param[in] a: 加速度
+     * @param[in] v: 速度
+     * @param[in] t: 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
+     * @param[in] r: 交融半径，设置为0，则无交融半径.
      * @return true 发送成功
      * @return false 发送失败
      */    
@@ -257,12 +257,11 @@ namespace lebai
      * 
      * @brief 通过关节位置发送机械臂直线移动
      * @note 该接口为异步接口，仅向控制器内部的运动缓冲区写入一个关节移动即返回，不会等待运动结束.
-     * @param[in] joint_positions 目标位置的关节map数据，应当包括'j1','j2','j3','j4','j5','j6'六个关节的角度值.
-     * @param[in] a 加速度
-     * @param[in] v 速度
-     * @param[in] t 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
-     * @param[in] r
-     *  交融半径，设置为0，则无交融半径.
+     * @param[in] joint_positions: 目标位置的关节map数据，应当包括'j1','j2','j3','j4','j5','j6'六个关节的角度值.
+     * @param[in] a: 加速度
+     * @param[in] v: 速度
+     * @param[in] t: 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
+     * @param[in] r: 交融半径，设置为0，则无交融半径.
      * @return true 发送成功
      * @return false 发送失败
      */
@@ -275,11 +274,11 @@ namespace lebai
      * 
      * @brief 通过坐标位置发送机械臂直线移动
      * @note 该接口为异步接口，仅向控制器内部的运动缓冲区写入一个关节移动即返回，不会等待运动结束.
-     * @param cart_pose 目标位置在机器人基座标系下的坐标数据(目前不支持在其它坐标系下的坐标数据)，CartesianPose = std::array<double,6>，数组大小为6，前三个数据为空间中的[x,y,z]点位，后三个数据是以欧拉ZYX形式的姿态数据[rz,ry,rx].
-     * @param a 加速度
-     * @param v 速度
-     * @param t 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
-     * @param r 交融半径，设置为0，则无交融半径.
+     * @param cart_pose: 目标位置在机器人基座标系下的坐标数据(目前不支持在其它坐标系下的坐标数据)，CartesianPose = std::array<double,6>，数组大小为6，前三个数据为空间中的[x,y,z]点位，后三个数据是以欧拉ZYX形式的姿态数据[rz,ry,rx].
+     * @param a: 加速度
+     * @param v: 速度
+     * @param t: 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
+     * @param r: 交融半径，设置为0，则无交融半径.
      * @return true 发送成功
      * @return false 发送失败
      */    
@@ -289,6 +288,7 @@ namespace lebai
     */
     void wait_move();
     /** @}*/
+
     /** \addtogroup STATUS
      *  @{
      */
@@ -310,9 +310,9 @@ namespace lebai
      *    7	   |   运行中	       |  机器人运行中
      *    8	   |   更新中	       |  机器人系统更新中
      *    9	   |   启动中	       |  机器人初始化完成到空闲的启动过程中
-     *     10	 |   正在停止	     |  机器人空闲状态转到停止状态
-     *     11	 |   示教中	       |  机器人处于示教模式中
-     *     12	 |   已停止	       |  机器人处于停止状态，非急停状态
+     *    10	 |   正在停止	     |  机器人空闲状态转到停止状态
+     *    11	 |   示教中	       |  机器人处于示教模式中
+     *    12	 |   已停止	       |  机器人处于停止状态，非急停状态
      *  
      * @note See state <a href="https://help.lebai.ltd/guide/basic.html#%E6%9C%BA%E5%99%A8%E4%BA%BA%E7%8A%B6%E6%80%81">here</a>.
      */
@@ -378,10 +378,6 @@ namespace lebai
     std::vector<double> get_target_joint_torques();
 
     /** @}*/
-
-  
-    
-
     /** \addtogroup CABINETIO
      *  @{
      */
@@ -397,8 +393,8 @@ namespace lebai
     /**
      * @brief 设置控制箱数字输出
      * 
-     * @param pin 端口，从 0 开始
-     * @param value 待设置的值
+     * @param pin: 端口，从 0 开始
+     * @param value: 待设置的值
      */
     void set_do(unsigned int pin, bool value);
     /**
@@ -411,7 +407,7 @@ namespace lebai
     /**
      * @brief 获取控制箱模拟输入
      * 
-     * @param pin 端口，从 0 开始
+     * @param pin: 端口，从 0 开始
      * @return 返回输入数值
      */
     double get_ai(unsigned int pin);
@@ -419,8 +415,8 @@ namespace lebai
     /**
      * @brief 设置控制箱模拟输出
      * 
-     * @param pin 端口，从 0 开始
-     * @param value 待设置的值
+     * @param pin: 端口，从 0 开始
+     * @param value: 待设置的值
      */
     void set_ao(unsigned int pin, double value);
     /** @}*/
@@ -432,7 +428,7 @@ namespace lebai
     /**
      * @brief 获取法兰数字输入
      * 
-     * @param pin 端口，从 0 开始
+     * @param pin: 端口，从 0 开始
      * @return 返回输入数值
      */
     bool get_flange_di(unsigned int pin);
@@ -440,15 +436,15 @@ namespace lebai
     /**
      * @brief 设置法兰数字输出
      * 
-     * @param pin 端口，从 0 开始
-     * @param value 待设置的值
+     * @param pin: 端口，从 0 开始
+     * @param value: 待设置的值
      */
     void set_flange_do(unsigned int pin, bool value);
     /**
      * @brief 设置法兰数字输出
      * 
-     * @param pin 端口，从 0 开始
-     * @param value 待设置的值
+     * @param pin: 端口，从 0 开始
+     * @param value: 待设置的值
      */
     void set_flange_do(unsigned int pin, unsigned int value);
     /** @}*/
@@ -460,7 +456,7 @@ namespace lebai
     /**
      * @brief 获取扩展数字输入
      * 
-     * @param pin 端口，从 0 开始
+     * @param pin: 端口，从 0 开始
      * @return 返回输入数值
      */
     bool get_extra_di(unsigned int pin);
@@ -468,21 +464,21 @@ namespace lebai
     /**
      * @brief 设置扩展数字输出
      * 
-     * @param pin 端口，从 0 开始
-     * @param value 待设置的值
+     * @param pin: 端口，从 0 开始
+     * @param value: 待设置的值
      */
     void set_extra_do(unsigned int pin, bool value);
     /**
      * @brief 设置扩展数字输出
      * 
-     * @param pin 端口，从 0 开始
-     * @param value 待设置的值
+     * @param pin: 端口，从 0 开始
+     * @param value: 待设置的值
      */
     void set_extra_do(unsigned int pin, unsigned int value);
     /**
      * @brief 获取扩展模拟输入
      * 
-     * @param pin 端口，从 0 开始
+     * @param pin: 端口，从 0 开始
      * @return 返回输入数值
      */
     double get_extra_ai(unsigned int pin);
@@ -502,8 +498,8 @@ namespace lebai
     /**
      * @brief 设置夹爪力度（力控）和幅度（位控）.如果在闭合过程中抓取到物体，则不再继续闭合以避免夹坏物体，判断的准则为这里设置的力的大小.
      * 
-     * @param force 力度（0-100）
-     * @param amplitude 张合幅度（0-100）
+     * @param force: 力度（0-100）
+     * @param amplitude: 张合幅度（0-100）
     */
     void set_claw(double force, double amplitude);
     /**
@@ -521,22 +517,22 @@ namespace lebai
     /**
      * @brief 设置LED灯状态.
      * 
-     * @param mode 亮灯模式.0：不变；1：关闭；2：常亮；3：呼吸；4：均分旋转；5：同色旋转；6：闪烁
-     * @param speed 速度.1：快速；2：正常；3：慢速
-     * @param color 最多包含 4 个 0 ~ 15 之间的整数
+     * @param mode: 亮灯模式.0：不变；1：关闭；2：常亮；3：呼吸；4：均分旋转；5：同色旋转；6：闪烁
+     * @param speed: 速度.1：快速；2：正常；3：慢速
+     * @param color: 最多包含 4 个 0 ~ 15 之间的整数
      */
     void set_led(unsigned int mode,unsigned int speed,const std::vector<unsigned int> & color);
     /**
      * @brief 设置声音
      * 
-     * @param voice 声音列表
-     * @param volume 音量.0：静音；1：低；2：正常；3：高
+     * @param voice: 声音列表
+     * @param volume: 音量.0：静音；1：低；2：正常；3：高
      */
     void set_voice(unsigned int voice,unsigned int volume);
     /**
      * @brief 开关风扇
      * 
-     * @param status 状态.1：关闭；2：开启
+     * @param status: 状态.1：关闭；2：开启
      */
     void set_fan(unsigned int status);
     /** @}*/
@@ -549,53 +545,53 @@ namespace lebai
     /**
      * @brief 设置信号量
      * 
-     * @param index 信号量下标（取值范围0~255)
-     * @param value 待设置的信号量(32位有符号整数)
+     * @param index: 信号量下标（取值范围0~255)
+     * @param value: 待设置的信号量(32位有符号整数)
     */
     void set_signal(unsigned int index,int value);
     /**
      * @brief 获取信号量
      * 
-     * @param index 信号量下标（取值范围0~255)
+     * @param index: 信号量下标（取值范围0~255)
      * @return 返回对应的信号量
     */
     int get_signal(unsigned int index);
     /**
      * @brief 增加指定下标的信号量值，该操作是原子的.
      * 
-     * @param index 信号量下标（取值范围0~255）
-     * @param value 待增加的信号量值
+     * @param index: 信号量下标（取值范围0~255）
+     * @param value: 待增加的信号量值
     */
     void add_signal(unsigned int index,int value);
     /** @}*/
 
-    /** \addtogroup CONTROL
+    /** \addtogroup PROGRAMCONTROL
      *  @{
     */
 
     /**
       * @brief 调用场景
       * 
-      * @param name 调用场景的名字
-      * @param is_main 是否以主任务方式运行（主任务会排队执行，子任务会并发执行）
-      * @param loop_to 循环次数（默认0永久循环）
-      * @param dir 调用场景所在的文件夹名
-      * @param params 其他参数
+      * @param name: 调用场景的名字
+      * @param is_main: 是否以主任务方式运行（主任务会排队执行，子任务会并发执行）
+      * @param loop_to: 循环次数（默认0永久循环）
+      * @param dir: 调用场景所在的文件夹名
+      * @param params: 其他参数
     */
     unsigned int scene(std::string name,bool is_main,unsigned int loop_to,std::string dir,const std::vector<std::string> & params);
     /**
       * @brief 调用场景
       * 
-      * @param name 调用场景的名字
-      * @param is_main 是否以主任务方式运行（主任务会排队执行，子任务会并发执行）
-      * @param loop_to 循环次数（默认0永久循环）
-      * @param dir 调用场景所在的文件夹名
+      * @param name: 调用场景的名字
+      * @param is_main: 是否以主任务方式运行（主任务会排队执行，子任务会并发执行）
+      * @param loop_to: 循环次数（默认0永久循环）
+      * @param dir: 调用场景所在的文件夹名
     */
     unsigned int scene(std::string name,bool is_main,unsigned int loop_to,std::string dir);
     /**
       * @brief 调用场景
       * 
-      * @param name 调用场景的名字
+      * @param name: 调用场景的名字
     */
     unsigned int scene(std::string name);
     /**
@@ -605,9 +601,9 @@ namespace lebai
     /**
      * @brief 暂停任务与运动
      * 
-     * @param id 任务的ID
-     * @param time 暂停的时间
-     * @param wait 是否等待
+     * @param id: 任务的ID
+     * @param time: 暂停的时间
+     * @param wait: 是否等待
     */
     void pause_task(unsigned int id,unsigned long time,bool wait);
     /**
@@ -619,7 +615,7 @@ namespace lebai
     /**
      * @brief 取消任务与运动
      * 
-     * @param id 任务的ID
+     * @param id: 任务的ID
     */
     void cancel_task(unsigned int id);
     /** @}*/
@@ -628,26 +624,26 @@ namespace lebai
      *  @{
      */
     /**
-     * @brief 根据机械臂关节位置计算机器人末端位姿（位置的运动学正解）
-     * @param joint_positions 机械臂关节位置的字典数据，应当包括'j1','j2','j3','j4','j5','j6'六个关节的角度值.
+     * @brief 根据机械臂关节位置计算机器人末端位姿（位置的运动学正解）.
+     * @param joint_positions: 机械臂关节位置的字典数据，应当包括'j1','j2','j3','j4','j5','j6'六个关节的角度值.
      * @return 返回计算结果 \ref KinematicsForwardResp "KinematicsForwardResp".
      *
      */
     KinematicsForwardResp kinematics_forward(const std::map<std::string, double> & joint_positions);
     
     /**
-     * @brief 根据机械臂的末端位姿计算关节位置（位置的运动学逆解）
-     * @param pose 机械臂末端位姿，依次为 x, y, z, rz, ry, rx
-     * @param joint_init_positions 机械臂关节初始位置, 以数组形式传入.
+     * @brief 根据机械臂的末端位姿计算关节位置（位置的运动学逆解）.
+     * @param pose: 机械臂末端位姿，依次为 x, y, z, rz, ry, rx.
+     * @param joint_init_positions: 机械臂关节初始位置, 以字典形式传入.
      * @return 返回计算结果 \ref KinematicsInverseResp "KinematicsInverseResp".
      */
-    KinematicsInverseResp kinematics_inverse(const std::array<double, 6> & pose, const std::vector<double> & joint_init_positions = {});
+    KinematicsInverseResp kinematics_inverse(const std::array<double, 6> & pose, const std::map<std::string, double> & joint_init_positions = {});
     
     /**
      * @brief 位姿变换乘法（等价于对应的齐次坐标矩阵乘法）
      * 
-     * @param a 位姿，依次为 x, y, z, rz, ry, rx.
-     * @param b 位姿，依次为 x, y, z, rz, ry, rx.
+     * @param a: 位姿，依次为 x, y, z, rz, ry, rx.
+     * @param b: 位姿，依次为 x, y, z, rz, ry, rx.
      * @return std::array<double, 6> 返回的位姿，依次为 x, y, z, rz, ry, rx.
      */
     std::array<double, 6> pose_times(const std::array<double, 6> & a, const std::array<double, 6> & b);
@@ -655,7 +651,7 @@ namespace lebai
     /**
      * @brief 位姿变换的逆（等价于对应的齐次坐标矩的逆）
      * 
-     * @param in 位姿，依次为 x, y, z, rz, ry, rx.
+     * @param in: 位姿，依次为 x, y, z, rz, ry, rx.
      * @return std::array<double, 6> 返回位姿变换的逆，依次为 x, y, z, rz, ry, rx.
      */    
     std::array<double, 6> pose_inverse(const std::array<double, 6> & in);
@@ -665,54 +661,40 @@ namespace lebai
      * @{
      */
     /**
-     * @brief 保存文件（以字节形式）
+     * @brief 保存文件（以字节形式）.
      * 
-     * @param dir 保存的文件路径.
-     * @param name 保存的文件名.
-     * @param is_dir 要保存的文件是否为文件夹.
-     * @param data 文件字节.
+     * @param dir: 保存的文件路径.
+     * @param name: 保存的文件名.
+     * @param is_dir: 要保存的文件是否为文件夹.
+     * @param data: 文件字节.
     */
     void save_file(std::string dir,std::string name,bool is_dir,std::string data);
-
-    /**
-     * @brief 保存文件（以文件形式）
-     * 
-     * @param dir 保存的文件路径
-     * @param name 保存的文件名
-     * @param file 要保存的文件
-    */
-    // void save_file(std::string dir,std::string name,file::File file);
     /**
      * @brief 重命名文件
      * 
-     * @param from_dir 源文件所在的文件夹
-     * @param from_name 源文件名称
-     * @param to_dir 目标文件文件夹
-     * @param to_name 目标文件文件名
+     * @param from_dir: 源文件所在的文件夹
+     * @param from_name: 源文件名称
+     * @param to_dir: 目标文件文件夹
+     * @param to_name: 目标文件文件名
     */
     void rename_file(std::string from_dir,std::string from_name,std::string to_dir,std::string to_name);
-    /**
-     * @brief 重命名文件
-     * 
-     * @param from 源文件
-     * @param to 目标文件
-    */
-  //  void rename_file(file::FileIndex from,file::FileIndex to);
+    
     /**
      * @brief 查询文件
      * 
-     * @param dir 文件的目录
-     * @param name 文件名
+     * @param dir: 文件的目录
+     * @param name: 文件名
      * 
      * @return 文件的具体内容
     */
     std::tuple<bool,std::string> load_file(std::string dir,std::string name);
+    
     /**
      * @brief 查询文件列表
      * 
-     * @param dir 文件的目录
-     * @param prefix 前缀
-     * @param suffix 后缀
+     * @param dir: 文件的目录
+     * @param prefix: 前缀
+     * @param suffix: 后缀
      * 
      * @return 文件列表
     */
@@ -725,27 +707,27 @@ namespace lebai
      * @param to_dir  压缩后文件的路径
      * @param name 压缩后文件的名称
     */
-    //void zip(std::string from_dir, std::vector<std::string> files, std::string to_dir, std::string name);
-    /**
-     *  @brief 将zip文件解压到文件系统
-     *
-     * @param from_dir zip文件的路径
-     * @param name zip文件的名称
-     * @param files zip文件内的文件名
-     * @param to_dir  解压到的路径
-     */
-    //void unzip(std::string from_dir, std::string name, std::vector<std::string> files, std::string to_dir);
-    /**
-     * @brief 查询文件列表
-     *
-     * @brief 目标zip文件名
-     * @param dir 文件的目录
-     * @param prefix 前缀
-     * @param suffix 后缀
-     *
-     * @return 文件列表
-     */
-    //std::vector<std::tuple<bool,string>> load_zip_list(std::string zip,std::string dir,std::string prefix,std::string suffix);
+    // void zip(std::string from_dir, std::vector<std::string> files, std::string to_dir, std::string name);
+    // /**
+    //  *  @brief 将zip文件解压到文件系统
+    //  *
+    //  * @param from_dir zip文件的路径
+    //  * @param name zip文件的名称
+    //  * @param files zip文件内的文件名
+    //  * @param to_dir  解压到的路径
+    //  */
+    // void unzip(std::string from_dir, std::string name, std::vector<std::string> files, std::string to_dir);
+    // /**
+    //  * @brief 查询文件列表
+    //  *
+    //  * @brief 目标zip文件名
+    //  * @param dir 文件的目录
+    //  * @param prefix 前缀
+    //  * @param suffix 后缀
+    //  *
+    //  * @return 文件列表
+    //  */
+    // //std::vector<std::tuple<bool,string>> load_zip_list(std::string zip,std::string dir,std::string prefix,std::string suffix);
 
     /** @}*/
 

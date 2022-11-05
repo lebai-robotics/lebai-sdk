@@ -8,6 +8,7 @@
 安装python库时，选择 `Download debug binaries`
 
 在Visual Studio中载入CMake工程，即可以生成构建运行测试等。
+
 ## Windows平台 MinGW
 - [MinGW-w64 (prefer x86_64-posix-seh)](https://sourceforge.net/projects/mingw-w64/files/mingw-w64/mingw-w64-release/)
 - [cmake >= 3.18](https://cmake.org)
@@ -17,7 +18,7 @@
 根据需求手动安装
 > 安装完成后需将以下目录添加到环境变量PATH  
 > python目录下的根目录、Scripts、Library\bin  
-> mingw64目录下的根目录、bin  
+> mingw64目录下的根目录和 `bin` 目录 
 > cmake目录下的bin
  
 > 将boost目录添加到BOOST_ROOT变量
@@ -47,7 +48,7 @@ cmake --build build
 sudo apt install build-essential python3-pip
 sudo pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
 # 如果需要生成文档，还需要安装doxygen。
-sudo apt install doxygen
+sudo apt install doxygen graphviz
 # 如果需要生成python的wrapper包。
 sudo apt install python3-dev
 ```
@@ -68,8 +69,10 @@ cpack
 编译选项
  - BUILD_PYTHON: 是否编译python接口 默认为OFF
  - BUILD_TESTING: 是否编译C++测试程序 默认为ON 
+ - TEST_ROBOT_IP: 测试程序的机器人IP地址，正确的设置该值用于单元测试 默认为127.0.0.1
  - BUILD_EXAMPLES: 是否编译示例程序 默认为ON
  - BUILD_DEB: 是否生成DEB包的构建 默认为OFF
+
 
 
 
@@ -90,8 +93,8 @@ sudo pip3 uninstall lebai
 
 
 # 后续工作
-- 功能完成（目前为框架结构示例）
-- Windows平台支持和相对应的跨平台的编译所需修改代码
+- 功能完善
+- Windows平台python支持
 - 代码优化
 - 文档完善
 - 开源后放入对应语言的包管理器，简化安装过程
