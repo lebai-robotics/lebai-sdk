@@ -49,36 +49,3 @@ int main(int argc, char **argv)
   ::testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
-
-// #include <zeroconf.hpp>
-// #include <iostream>
-// #include <string>
-// #include <vector>
-
-// void PrintLog(Zeroconf::LogLevel level, const std::string& message)
-// {
-//     switch (level)
-//     {
-//         case Zeroconf::LogLevel::Error:
-//             std::cout << "E: " << message << std::endl;
-//             break;
-//         case Zeroconf::LogLevel::Warning:
-//             std::cout << "W: " << message << std::endl;
-//             break;
-//     }
-// }
-
-// int main(int argc, char **argv)
-// {
-
-//   // std::string MdnsQuery = ;
-//   // std::cout << "Query: " << MdnsQuery << std::endl;
-
-//   // Zeroconf::SetLogCallback(PrintLog);
-
-//   std::vector<Zeroconf::mdns_responce> result;
-//   bool st = Zeroconf::Resolve("_coap._udp.local", /*scanTime*/ 3, &result);
-//   std::cout << "st "<<st << std::endl;
-//   std::cout << "result size "<<result.size() << std::endl;
-//   return 0;
-// }

@@ -88,6 +88,7 @@ namespace lebai
 
       protected:
       std::unique_ptr<JSONRpcConnector> json_rpc_connector_;
+      double timeout_ = 1.0;
       // int jsonrpc_id_ = 0;
         // WebSocketEndPoint endpoint_;
     };

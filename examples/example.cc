@@ -44,7 +44,25 @@ int main(int argc, char ** argv)
   std::cout<<"Connecting for simulation mode is "<<sim<<std::endl;
   // Create robot instance
   lebai::l_master::Robot robot(ip, sim);
-  std::this_thread::sleep_for(std::chrono::seconds(1));
+  // std::this_thread::sleep_for(std::chrono::seconds(1));  
+  try
+  {
+    auto jp = robot.get_actual_joint_positions();
+    for (auto&& j : jp)
+    {
+      std::cout << j.first<<" "<<j.second << std::endl;
+    }
+  }
+  catch(std::exception & e)
+  {
+    std::cout<<"Exception: "<<e.what()<<std::endl;
+  }
+  std::cout<<"xxx\n";
+
+  
+
+  return 0;
+  
   {
     std::array<double, 6> a = {1, 2, 0, 0, 0, 0};
     std::array<double, 6> b = {0, 0, 3, 0, 0, 0};
