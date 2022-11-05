@@ -61,7 +61,6 @@ namespace lebai
     std::this_thread::sleep_for(std::chrono::seconds(1));
     EXPECT_EQ(5, robot_.get_robot_mode());
   }
-<<<<<<< HEAD
   // TEST_F(RobotTest, TestMove)
   // {
   //   robot_.start_sys();
