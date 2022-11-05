@@ -27,11 +27,7 @@ namespace lebai
     RobotTest()
     :robot_(TEST_L_MASTER_IP, true)
     {
-<<<<<<< HEAD
       std::cout<<"TEST_L_MASTER_IP "<<TEST_L_MASTER_IP<<"\n";
-=======
-      // std::cout<<"TEST_L_MASTER_IP "<<TEST_L_MASTER_IP<<"\n";
->>>>>>> e99d4156d4765c80ced4a551531aa65dc8028879
     }
     void SetUp()
     {
