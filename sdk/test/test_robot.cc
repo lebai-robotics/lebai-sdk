@@ -84,7 +84,7 @@ namespace lebai
       robot_.movej(joint_positions, 1.0, 0.5, 0.0, 0.0);
       std::this_thread::sleep_for(std::chrono::milliseconds(100));
       EXPECT_EQ(7, robot_.get_robot_mode());
-      robot_.wait_move();
+      robot_.wait_move(0);
       auto jp = robot_.get_target_joint_positions();
       ASSERT_TRUE(jp.find("j1") != jp.end());
       ASSERT_TRUE(jp.find("j2") != jp.end());
@@ -103,7 +103,7 @@ namespace lebai
       robot_.movej({-0.296,-0.295,0.285,60.0 / 180.0 * M_PI,-5.0 / 180.0 * M_PI,81.0 / 180.0 * M_PI}, 3.0, 1.0, 0.0, 0.0);
       std::this_thread::sleep_for(std::chrono::milliseconds(100));
       EXPECT_EQ(7, robot_.get_robot_mode());
-      robot_.wait_move();
+      robot_.wait_move(0);
       auto tcp = robot_.get_target_tcp_pose();
       EXPECT_NEAR(tcp[0], -0.296, 1e-3);
       EXPECT_NEAR(tcp[1], -0.295, 1e-3);
@@ -120,7 +120,7 @@ namespace lebai
       robot_.movel(joint_positions, 0.3, 1.0, 0.0, 0.0);
       std::this_thread::sleep_for(std::chrono::milliseconds(100));
       EXPECT_EQ(7, robot_.get_robot_mode());
-      robot_.wait_move();
+      robot_.wait_move(0);
       EXPECT_NEAR(jp["j1"], joint_positions["j1"], 1e-3);
       EXPECT_NEAR(jp["j2"], joint_positions["j2"], 1e-3);
       EXPECT_NEAR(jp["j3"], joint_positions["j3"], 1e-3);
@@ -130,7 +130,7 @@ namespace lebai
       robot_.movel({-0.296,-0.295,0.285,60.0 / 180.0 * M_PI,-5.0 / 180.0 * M_PI,81.0 / 180.0 * M_PI}, 1.0, 0.5, 0.0, 0.0);
       std::this_thread::sleep_for(std::chrono::milliseconds(100));
       EXPECT_EQ(7, robot_.get_robot_mode());
-      robot_.wait_move();      
+      robot_.wait_move(0);      
       tcp = robot_.get_target_tcp_pose();
       EXPECT_NEAR(tcp[0], -0.296, 1e-3);
       EXPECT_NEAR(tcp[1], -0.295, 1e-3);

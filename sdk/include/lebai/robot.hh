@@ -285,8 +285,20 @@ namespace lebai
     bool movel(const CartesianPose & cart_pose, double a, double v, double t, double r);
     /**
      * @brief 等待运动完成
+     * 
+     * @param id 指定运动的id(0为等待全部任务)
     */
-    void wait_move();
+    void wait_move(unsigned int id);
+    /**
+     * @brief 查询当前正在运动的MotionId(无运动时返回上次MotionId) 
+    */
+    unsigned int get_running_motion();
+    /**
+     * @brief 查询指定MotionId的运动状态
+     * 
+     * @param id 指定的运动id 
+    */
+    std::string get_motion_state(unsigned int id);
     /** @}*/
 
     /** \addtogroup STATUS

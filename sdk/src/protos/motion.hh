@@ -95,7 +95,39 @@ namespace lebai
 		virtual bool IsNullJSONData() const;		
 	};
 
-		
+	class MotionIndex : public JSONBase
+	{
+	public:
+		void set_id(unsigned int id);
+		unsigned int id() const;
+		unsigned int * mutable_id();
+	protected:
+		unsigned int id_;
+	public:		
+		virtual bool Deserialize(const rapidjson::Value& obj);
+		virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer>* writer) const;		
+		virtual bool IsNullJSONData() const;
+	};
 
+	enum MotionState
+	{
+		WAIT = 0,
+		RUNNING = 1,
+		FINISHED = 2,
+	};
+	
+	class GetMotionStateResponse : public JSONBase
+	{
+	public:
+		void set_state(MotionState state);
+		const MotionState state() const;
+		MotionState * mutable_state();
+	protected:
+		MotionState state_;
+	public:		
+		virtual bool Deserialize(const rapidjson::Value& obj);
+		virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer>* writer) const;		
+		virtual bool IsNullJSONData() const;
+	};
 
 }

@@ -394,5 +394,79 @@ namespace lebai
     return false;
   }
 
+  void MotionIndex::set_id(unsigned int id)
+  {
+    id_ = id;
+  }
+  unsigned int MotionIndex::id() const
+  {
+    return id_;
+  }
+  unsigned int *MotionIndex::mutable_id()
+  {
+    return &id_;
+  }
 
+  bool MotionIndex::Deserialize(const rapidjson::Value& obj)
+  {
+    if(obj.HasMember("id"))
+    {
+      unsigned int id_int = (unsigned int)(obj["id"].GetUint());
+      id_ = id_int;
+    }
+    return true;
+  }
+  bool MotionIndex::Serialize(rapidjson::Writer<rapidjson::StringBuffer>* writer) const
+  {
+    writer->StartObject();
+    writer->Key("id");
+    writer->Uint(id_);
+    writer->EndObject();
+    return true;    
+  }
+  bool MotionIndex::IsNullJSONData() const
+  {
+    return false;
+  }
+  
+  void GetMotionStateResponse::set_state(MotionState state)
+  {
+    state_ = state;
+  }
+  const MotionState GetMotionStateResponse::state() const
+  {
+    return state_;
+  }
+  MotionState *GetMotionStateResponse::mutable_state()
+  {
+    return &state_;
+  }
+
+  bool GetMotionStateResponse::Deserialize(const rapidjson::Value& obj)
+  {
+    if(obj.HasMember("state"))
+    {
+      int state_int = (int)(obj["state"].GetInt());
+      switch(state_int)
+      {
+        case 0:state_ = WAIT;break;
+        case 1:state_ = RUNNING;break;
+        case 2:state_ = FINISHED;break;
+        default:state_ = WAIT;break;
+      }
+    }
+    return true;
+  }
+  bool GetMotionStateResponse::Serialize(rapidjson::Writer<rapidjson::StringBuffer>* writer) const
+  {
+    writer->StartObject();
+    writer->Key("state");
+    writer->Int(state_);
+    writer->EndObject();
+    return true;    
+  }
+  bool GetMotionStateResponse::IsNullJSONData() const
+  {
+    return false;
+  }
 }

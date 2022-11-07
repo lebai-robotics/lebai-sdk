@@ -177,9 +177,31 @@ bool Robot::movel(const CartesianPose & cart_pose, double a, double v, double t,
   return true;
 }
 
-void Robot::wait_move()
+void Robot::wait_move(unsigned int id)
 {
-  impl_->waitMove();
+  MotionIndex req;
+  req.set_id(id);
+  impl_->waitMove(req);
+}
+
+unsigned int Robot::get_running_motion()
+{
+  MotionIndex resp = impl_->getRunningMotion();
+  return resp.id();
+}
+
+std::string Robot::get_motion_state(unsigned int id)
+{
+  MotionIndex req;
+  req.set_id(id);
+  GetMotionStateResponse resp = impl_->getMotionState(req);
+  switch(resp.state())
+  {
+    case WAIT:return (std::string)"WAIT";
+    case RUNNING:return (std::string)"RUNNING";
+    case FINISHED:return (std::string)"FINISHED";
+    default:return (std::string)"WAIT";
+  }
 }
 
 int Robot::get_robot_mode()
