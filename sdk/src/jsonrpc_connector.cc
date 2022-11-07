@@ -136,7 +136,7 @@ int JSONRpcConnector::CallRpc(const std::string & method, const std::string & re
       case -4:throw (std::string)"Response Do Not Have \" id \"";break;
       case -5:throw (std::string)"Response Do Not Have \" error \" Or \" result \"";break;
       default:
-        throw (std::string)"Response Error"
+        throw (std::string)"Response Error";
         break;
       }
       return -1;
@@ -144,7 +144,7 @@ int JSONRpcConnector::CallRpc(const std::string & method, const std::string & re
     // std::cout<<"resp_data_str "<<*resp_data_str<<"\n";
     if(callback_jsonrpc_id != call_jsonrpc_id)
     {
-      throw (std::string)"Dismatch in Request and Response"
+      throw (std::string)"Dismatch in Request and Response";
       return -1;
     }    
   }
