@@ -284,6 +284,15 @@ namespace lebai
      */    
     unsigned int movel(const CartesianPose & cart_pose, double a, double v, double t, double r);
     /**
+     * @brief 伺服运动PVAT
+     * 
+     * @param p 关节位置，或者坐标位置（将通过运动学反解转为关节位置）
+     * @param v 每个关节的速度 (rad/s)。如该值为数字，则表示所有关节速度相同。
+     * @param a 每个关节的加速度 (rad/s2)。如该值为数字，则表示所有关节加速度相同。
+     * @param t 运动时间 (s)
+    */
+    void move_pvat(std::vector<double> p, std::vector<double> v, std::vector<double> a, double t);
+    /**
      * @brief 等待运动完成
      * 
      * @param id 指定运动的id(0为等待全部任务)

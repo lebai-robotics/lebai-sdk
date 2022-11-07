@@ -116,6 +116,10 @@ namespace lebai
     motion_resp.FromJSONString(resp);
     return motion_resp;
   }
+  void Robot::RobotImpl::movePvat(const MovePvatRequest & req)
+  {
+    json_rpc_connector_->CallRpc("move_pvat",req.ToJSONString(),nullptr);
+  }
   void Robot::RobotImpl::waitMove(const MotionIndex & req)
   {
     json_rpc_connector_->CallRpc("wait_move",req.ToJSONString(),nullptr);

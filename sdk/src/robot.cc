@@ -179,6 +179,23 @@ unsigned int Robot::movel(const CartesianPose & cart_pose, double a, double v, d
   return resp.id();
 }
 
+void Robot::move_pvat(std::vector<double> p, std::vector<double> v, std::vector<double> a, double t)
+{
+  MovePvatRequest req;
+  std::vector<JointMove> joints;
+  for(int i = 0;i < p.size();i++)
+  {
+    JointMove joint;
+    joint.set_pose(p[i]);
+    joint.set_velocity(v[i]);
+    joint.set_acc(a[i]);
+    joints.push_back(joint);
+  }
+  req.set_duration(t);
+  req.set_joints(joints);
+  impl_->movePvat(req);
+}
+
 void Robot::wait_move(unsigned int id)
 {
   MotionIndex req;

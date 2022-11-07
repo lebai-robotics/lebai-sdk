@@ -130,4 +130,43 @@ namespace lebai
 		virtual bool IsNullJSONData() const;
 	};
 
+	class JointMove : public JSONBase
+	{
+	public:
+		void set_pose(double pose);
+		const double pose() const;
+		double * mutable_pose();
+		void set_velocity(double velocity);
+		const double velocity() const;
+		double * mutable_velocity();
+		void set_acc(double acc);
+		const double acc() const;
+		double * mutable_acc();
+	protected:
+		double pose_;
+		double velocity_;
+		double acc_;
+	public:		
+		virtual bool Deserialize(const rapidjson::Value& obj);
+		virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer>* writer) const;		
+		virtual bool IsNullJSONData() const;
+	};
+	
+	class MovePvatRequest : public JSONBase
+	{
+	public:
+		void set_duration(double duration);
+		const double duration() const;
+		double * mutable_duration();
+		void set_joints(std::vector<JointMove> joints);
+		const std::vector<JointMove> joints() const;
+		std::vector<JointMove> * mutable_joints();
+	protected:
+		double duration_;
+		std::vector<JointMove> joints_;
+	public:		
+		virtual bool Deserialize(const rapidjson::Value& obj);
+		virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer>* writer) const;		
+		virtual bool IsNullJSONData() const;
+	};
 }
