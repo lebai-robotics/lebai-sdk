@@ -55,6 +55,7 @@ namespace lebai
       void waitMove(const MotionIndex & req);
       MotionIndex getRunningMotion();
       GetMotionStateResponse getMotionState(const MotionIndex & req);
+      void stopMove();
       system::RobotState getRobotState();
       system::PhyData getPhyData();
       kinematic::KinData getKinData();

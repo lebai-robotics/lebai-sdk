@@ -136,6 +136,10 @@ namespace lebai
     get_motion_state_resp.FromJSONString(resp);
     return get_motion_state_resp;
   }
+  void Robot::RobotImpl::stopMove()
+  {
+    json_rpc_connector_->CallRpc("stop_move","{}",nullptr);
+  }
   system::RobotState Robot::RobotImpl::getRobotState()
   {
     std::string resp;

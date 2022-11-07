@@ -84,13 +84,14 @@ void Robot::resume()
   impl_->resume();
 }
 
-bool Robot::movej(const std::map<std::string, double> & joint_positions, double a, double v, double t, double r)
+unsigned int Robot::movej(const std::map<std::string, double> & joint_positions, double a, double v, double t, double r)
 {
   MoveRequest move_req;
   move_req.mutable_param().set_acc(a);
   move_req.mutable_param().set_velocity(v);
   move_req.mutable_param().set_time(t);
   move_req.mutable_param().set_radius(r);
+  MotionIndex resp;
   if(joint_positions.find("j1") != joint_positions.end() && 
   joint_positions.find("j2") != joint_positions.end() &&
   joint_positions.find("j3") != joint_positions.end() &&
@@ -104,16 +105,16 @@ bool Robot::movej(const std::map<std::string, double> & joint_positions, double 
     move_req.mutable_pose().mutable_joint()->mutable_delta()->mutable_joint()->push_back(joint_positions.at("j4"));
     move_req.mutable_pose().mutable_joint()->mutable_delta()->mutable_joint()->push_back(joint_positions.at("j5"));
     move_req.mutable_pose().mutable_joint()->mutable_delta()->mutable_joint()->push_back(joint_positions.at("j6"));
-    impl_->moveJoint(move_req);
+    resp = impl_->moveJoint(move_req);
   }
   else
   {
-    return false;
+    return 0;
   }
-  return true;
+  return resp.id();
 }
 
-bool Robot::movej(const CartesianPose & cart_pose, double a, double v, double t, double r)
+unsigned int Robot::movej(const CartesianPose & cart_pose, double a, double v, double t, double r)
 {
   MoveRequest move_req;
   move_req.mutable_param().set_acc(a);
@@ -126,18 +127,19 @@ bool Robot::movej(const CartesianPose & cart_pose, double a, double v, double t,
   move_req.mutable_pose().mutable_cart()->mutable_delta()->mutable_rotation()->mutable_euler_zyx()->set_z(cart_pose[3]);
   move_req.mutable_pose().mutable_cart()->mutable_delta()->mutable_rotation()->mutable_euler_zyx()->set_y(cart_pose[4]);
   move_req.mutable_pose().mutable_cart()->mutable_delta()->mutable_rotation()->mutable_euler_zyx()->set_x(cart_pose[5]);
-  impl_->moveJoint(move_req);
-  return true;
+  MotionIndex resp = impl_->moveJoint(move_req);
+  return resp.id();
 }
 
 
-bool Robot::movel(const std::map<std::string, double> & joint_positions, double a, double v, double t, double r)
+unsigned int Robot::movel(const std::map<std::string, double> & joint_positions, double a, double v, double t, double r)
 {
   MoveRequest move_req;
   move_req.mutable_param().set_acc(a);
   move_req.mutable_param().set_velocity(v);
   move_req.mutable_param().set_time(t);
   move_req.mutable_param().set_radius(r);
+  MotionIndex resp;
   if(joint_positions.find("j1") != joint_positions.end() && 
   joint_positions.find("j2") != joint_positions.end() &&
   joint_positions.find("j3") != joint_positions.end() &&
@@ -151,16 +153,16 @@ bool Robot::movel(const std::map<std::string, double> & joint_positions, double 
     move_req.mutable_pose().mutable_joint()->mutable_delta()->mutable_joint()->push_back(joint_positions.at("j4"));
     move_req.mutable_pose().mutable_joint()->mutable_delta()->mutable_joint()->push_back(joint_positions.at("j5"));
     move_req.mutable_pose().mutable_joint()->mutable_delta()->mutable_joint()->push_back(joint_positions.at("j6"));
-    impl_->moveLinear(move_req);
+    resp = impl_->moveLinear(move_req);
   }
   else
   {
-    return false;
+    return 0;
   }
-  return true;
+  return resp.id();
 }
 
-bool Robot::movel(const CartesianPose & cart_pose, double a, double v, double t, double r)
+unsigned int Robot::movel(const CartesianPose & cart_pose, double a, double v, double t, double r)
 {
   MoveRequest move_req;
   move_req.mutable_param().set_acc(a);
@@ -173,14 +175,20 @@ bool Robot::movel(const CartesianPose & cart_pose, double a, double v, double t,
   move_req.mutable_pose().mutable_cart()->mutable_delta()->mutable_rotation()->mutable_euler_zyx()->set_z(cart_pose[3]);
   move_req.mutable_pose().mutable_cart()->mutable_delta()->mutable_rotation()->mutable_euler_zyx()->set_y(cart_pose[4]);
   move_req.mutable_pose().mutable_cart()->mutable_delta()->mutable_rotation()->mutable_euler_zyx()->set_x(cart_pose[5]);
-  impl_->moveLinear(move_req);
-  return true;
+  MotionIndex resp = impl_->moveLinear(move_req);
+  return resp.id();
 }
 
 void Robot::wait_move(unsigned int id)
 {
   MotionIndex req;
   req.set_id(id);
+  impl_->waitMove(req);
+}
+void Robot::wait_move()
+{
+  MotionIndex req;
+  req.set_id(0);
   impl_->waitMove(req);
 }
 
@@ -202,6 +210,11 @@ std::string Robot::get_motion_state(unsigned int id)
     case FINISHED:return (std::string)"FINISHED";
     default:return (std::string)"WAIT";
   }
+}
+
+void Robot::stop_move()
+{
+  impl_->stopMove();
 }
 
 int Robot::get_robot_mode()
