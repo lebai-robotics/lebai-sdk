@@ -127,6 +127,7 @@ int JSONRpcConnector::CallRpc(const std::string & method, const std::string & re
     auto ret = ExtractJSONRpcRespString(jsonrpc_resp, callback_jsonrpc_id, *resp_data_str);
     if(ret < 0)
     {
+      // throw std::runtime_error("ExtractJSONRpcRespString failed");
       std::cout<<"Invalid jsonrpc response! ret code is: "<<ret<<"\n";
       switch (ret)
       {
@@ -140,12 +141,14 @@ int JSONRpcConnector::CallRpc(const std::string & method, const std::string & re
         break;
       }
       return -1;
+      //TODO(liufang) throw exception.
     }
     // std::cout<<"resp_data_str "<<*resp_data_str<<"\n";
     if(callback_jsonrpc_id != call_jsonrpc_id)
     {
       throw (std::string)"Dismatch in Request and Response";
       return -1;
+      //TODO(liufang) throw exception.
     }    
   }
   return 0;

@@ -39,9 +39,9 @@ namespace lebai
     // /**
     // int CallRpc(const std::string & req_str, std::string * resp_str);
     int CallRpc(const std::string &method, const std::string & req_data_str, std::string * resp_data_str);
-
-  protected:
     ConnectionStatus GetConnectionStatus();
+  protected:
+    
     WebSocketEndPoint endpoint_;
     int id_;
     std::atomic<int> jsonrpc_id_;
