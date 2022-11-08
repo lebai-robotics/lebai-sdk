@@ -587,7 +587,7 @@ namespace lebai
       * @brief 调用场景
       * 
       * @param name 调用场景的名字
-      * @param is_main 是否以主任务方式运行（主任务会排队执行，子任务会并发执行）
+      * @param is_main 是否以主任方式运行（主任务会排队执行，子任务会并发执行）
       * @param loop_to 循环次数（默认0永久循环）
       * @param dir 调用场景所在的文件夹名
     */
