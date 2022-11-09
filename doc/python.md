@@ -60,6 +60,7 @@ robot.movej({"j1": 1.0,"j2": -1.0471975511965976,"j3": 1.3962634015954636,"j4": 
 [信号量](#信号量)  
 [程序控制](#程序控制)  
 [机器人学](#机器人学)  
+[设备发现](#设备发现)
 
 #### 启动停止
 
@@ -347,4 +348,38 @@ pose_times(a,b)
 #a  位姿a
 #return  逆矩阵的位姿
 pose_inverse(a)
+
+example:
+#原始关节角度
+jpose0={'j1':-0.2, 'j2':2.7, 'j3':-4.0, 'j4':-2.3, 'j5':1.6, 'j6':-1.3}
+fk_resp = robot.kinematics_forward(jpose0)
+#经正向转化后的笛卡尔位姿，ok=True代表转化成功
+#{1=0.36081962328886585,2=-0.19076037719926695,3=0.3537290579173756,4=-0.7527842092971923,5=-1.036487456216255,6=-2.623180719146089,ok=true}
+print(fk_resp)
+ik_resp  = robot.kinematics_inverse(fk_resp.pose)
+#将笛卡尔位姿反向转化为关节角，ok=True代表转化成功
+#{j1=-0.20000195232787238,j2=-1.613927211382733,j3=-1.4217944465440524,j4=-3.7058747067503983,j5=-1.6000033762300137,j6=1.841591302572852,ok=true}
+print(ik_resp)
+#经过两次转化后的关节角与原始关节角是相同的，且精度更高
+#{1=0.3608198951635695,2=-0.19076058061714882,3=0.35372925635352953,4=-0.7527992994328961,5=-1.0364868722925928,6=-2.6231651290324502,ok=true}
+print(robot.kinematics_forward(ik_resp.joint_positions))
+```
+
+#### 设备发现
+
+```python
+#返回当前局域网内最多16台可发现的设备，并返回控制器信息（包含信息：hostname、ip_address、mac_address、model、ds_version、rc_version、id
+resolve()
+
+
+
+example:
+#从lebai导入设备发现的模块
+from lebai import zeroconf
+#实例化一个Discovery类用来存储设备发现的信息
+d = zeroconf.Discovery()
+#搜索局域网内设备，返回一个最多16个元素的列表
+controllers = d.resolve()
+#根据局域网内发现的设备，建立连接
+robot = l_master.Robot(controllers[0].ip_address)
 ```
