@@ -224,7 +224,7 @@ namespace lebai
      * @return  0 发送失败
      * 
      */
-    unsigned int movej(const std::map<std::string, double> & joint_positions, double a, double v, double t, double r);
+    int movej(const std::map<std::string, double> & joint_positions, double a, double v, double t, double r);
     /**
      * 示例代码: 
      * 
@@ -241,7 +241,7 @@ namespace lebai
      * @return >0 发送成功
      * @return 0 发送失败
      */    
-    unsigned int movej(const CartesianPose & cart_pose, double a, double v, double t, double r);
+    int movej(const CartesianPose & cart_pose, double a, double v, double t, double r);
     /**
      * 示例代码: 
      * 
@@ -265,7 +265,7 @@ namespace lebai
      * @return >0 发送成功
      * @return 0 发送失败
      */
-    unsigned int movel(const std::map<std::string, double> & joint_positions, double a, double v, double t, double r);
+    int movel(const std::map<std::string, double> & joint_positions, double a, double v, double t, double r);
     /**
      * 示例代码: 
      * 
@@ -282,7 +282,7 @@ namespace lebai
      * @return >0 发送成功
      * @return 0 发送失败
      */    
-    unsigned int movel(const CartesianPose & cart_pose, double a, double v, double t, double r);
+    int movel(const CartesianPose & cart_pose, double a, double v, double t, double r);
     /**
      * @brief 伺服运动PVAT
      * 

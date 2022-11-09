@@ -84,7 +84,7 @@ void Robot::resume()
   impl_->resume();
 }
 
-unsigned int Robot::movej(const std::map<std::string, double> & joint_positions, double a, double v, double t, double r)
+int Robot::movej(const std::map<std::string, double> & joint_positions, double a, double v, double t, double r)
 {
   MoveRequest move_req;
   move_req.mutable_param().set_acc(a);
@@ -109,12 +109,12 @@ unsigned int Robot::movej(const std::map<std::string, double> & joint_positions,
   }
   else
   {
-    return 0;
+    return -1;
   }
   return resp.id();
 }
 
-unsigned int Robot::movej(const CartesianPose & cart_pose, double a, double v, double t, double r)
+int Robot::movej(const CartesianPose & cart_pose, double a, double v, double t, double r)
 {
   MoveRequest move_req;
   move_req.mutable_param().set_acc(a);
@@ -132,7 +132,7 @@ unsigned int Robot::movej(const CartesianPose & cart_pose, double a, double v, d
 }
 
 
-unsigned int Robot::movel(const std::map<std::string, double> & joint_positions, double a, double v, double t, double r)
+int Robot::movel(const std::map<std::string, double> & joint_positions, double a, double v, double t, double r)
 {
   MoveRequest move_req;
   move_req.mutable_param().set_acc(a);
@@ -157,12 +157,12 @@ unsigned int Robot::movel(const std::map<std::string, double> & joint_positions,
   }
   else
   {
-    return 0;
+    return -1;
   }
   return resp.id();
 }
 
-unsigned int Robot::movel(const CartesianPose & cart_pose, double a, double v, double t, double r)
+int Robot::movel(const CartesianPose & cart_pose, double a, double v, double t, double r)
 {
   MoveRequest move_req;
   move_req.mutable_param().set_acc(a);
