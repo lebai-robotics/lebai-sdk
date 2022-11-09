@@ -1,0 +1,27 @@
+name: lebai-sdk_linux_x64
+run-name: ${{ github.actor }} triggered Build
+on: 
+  workflow_dispatch: 
+  push: 
+  pull_requesst: 
+jobs: 
+  build: 
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: update env
+        run: apt-get update
+
+      - name: install component
+        run: apt-get install -y build-essential doxygen graphviz python3-pip python3-dev
+
+      - name: install dependencies
+        run: pip3 install -r requirements.txt
+
+      - name: configure
+        run: cmake -S. -Bbuild -DBUILD_PYTHON=ON -DBUILD_DEB=ON
+
+      - name: build
+        run: cmake --build build
