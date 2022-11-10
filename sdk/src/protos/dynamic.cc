@@ -1,5 +1,3 @@
-#pragma once
-
 #include "dynamic.hh"
 #include <vector>
 #include <string>

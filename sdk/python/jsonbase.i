@@ -86,7 +86,6 @@
 %template(BSVector) std::vector<std::tuple<bool,std::string>>;
 %std_tuple(TupleDDB, double, double, bool);
 %std_tuple(TupleIntStr, int, std::string);
-%std_tuple(TupleDJ, double, JointMap);
 %std_tuple(TupleBS,bool,std::string);
 %{
 #include <protos/jsonbase.hh>
