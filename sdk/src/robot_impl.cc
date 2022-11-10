@@ -343,5 +343,75 @@ namespace lebai
     resp.FromJSONString(resp_str);
     return resp;
   }
+
+  void Robot::RobotImpl::setPayload(const dynamic::SetPayloadRequest &req)
+  {
+    json_rpc_connector_->CallRpc("set_payload",req.ToJSONString(),nullptr);
+  }
+  dynamic::Payload Robot::RobotImpl::getPayload()
+  {
+    std::string resp_str;
+    json_rpc_connector_->CallRpc("get_payload","{}",&resp_str);
+    dynamic::Payload resp;
+    resp.FromJSONString(resp_str);
+    return resp;
+  }
+  void Robot::RobotImpl::setGravity(const posture::Position &req)
+  {
+    json_rpc_connector_->CallRpc("set_gravity",req.ToJSONString(),nullptr);
+  }
+  posture::Position Robot::RobotImpl::getGravity()
+  {
+    std::string resp_str;
+    json_rpc_connector_->CallRpc("get_gravity","{}",&resp_str);
+    posture::Position resp;
+    resp.FromJSONString(resp_str);
+    return resp;
+  }
+  void Robot::RobotImpl::savePayload(const dynamic::SavePayloadRequest &req)
+  {
+    json_rpc_connector_->CallRpc("save_payload",req.ToJSONString(),nullptr);
+  }
+  dynamic::Payload Robot::RobotImpl::loadPayload(const db::LoadRequest &req)
+  {
+    std::string resp_str;
+    json_rpc_connector_->CallRpc("load_payload",req.ToJSONString(),&resp_str);
+    dynamic::Payload resp;
+    resp.FromJSONString(resp_str);
+    return resp;
+  }
+  db::LoadListResponse Robot::RobotImpl::loadPayloadList(const db::LoadListRequest &req)
+  {
+    std::string resp_str;
+    json_rpc_connector_->CallRpc("load_payload_list",req.ToJSONString(),&resp_str);
+    db::LoadListResponse resp;
+    resp.FromJSONString(resp_str);
+    return resp;
+  }
+  
+  void Robot::RobotImpl::setTcp(const posture::CartesianPose & req)
+  {
+    json_rpc_connector_->CallRpc("set_tcp",req.ToJSONString(),nullptr);
+  }
+  posture::CartesianPose Robot::RobotImpl::getTcp()
+  {
+    std::string resp_str;
+    json_rpc_connector_->CallRpc("get_tcp","{}",&resp_str);
+    posture::CartesianPose resp;
+    resp.FromJSONString(resp_str);
+    return resp;
+  }
+  void Robot::RobotImpl::setKinFactor(const kinematic::KinFactor & req)
+  {
+    json_rpc_connector_->CallRpc("set_kin_factor",req.ToJSONString(),nullptr);
+  }
+  kinematic::KinFactor Robot::RobotImpl::getKinFactor()
+  {
+    std::string resp_str;
+    json_rpc_connector_->CallRpc("get_kin_factor","{}",&resp_str);
+    kinematic::KinFactor resp;
+    resp.FromJSONString(resp_str);
+    return resp;
+  }
   }
 }
