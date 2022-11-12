@@ -13,7 +13,7 @@
  * 查阅 \ref README.md "README" 文档,了解如何构建和安装本开发包。
  *  
  * # ChangeLog
- *  查阅 \ref doc/changelog.md。
+ *  查阅 \ref doc/changelog.md 。
  *  
  * # Python
  * 查看 \ref doc/python.md 来获取使用python相关的内容。
