@@ -789,6 +789,90 @@ std::vector<std::tuple<bool,std::string>> Robot::load_file_list(std::string dir,
   }
   return ret;
 }
+void Robot::set_payload(double mass, std::map<std::string, double> cog)
+{
+  dynamic::SetPayloadRequest req;
+  req.set_mass(mass);
+  std::vector<double> c;
+  c.push_back(cog.at("x"));
+  c.push_back(cog.at("y"));
+  c.push_back(cog.at("z"));
+  req.set_cog(c);
+  impl_->setPayload(req);
+}
+
+std::tuple<double, std::map<std::string, double>> Robot::get_payload()
+{
+  dynamic::Payload resp = impl_->getPayload();
+  std::map<std::string,double> cog;
+  cog["x"] = resp.cog()[0];
+  cog["y"] = resp.cog()[1];
+  cog["Z"] = resp.cog()[2];
+  std::tuple<double, std::map<std::string, double>> ret = std::make_tuple(resp.mass(),cog);
+  return ret;
+}
+
+void Robot::set_gravity(std::map<std::string,double> gravity)
+{
+  posture::Position req;
+  req.set_x(gravity.at("x"));
+  req.set_y(gravity.at("y"));
+  req.set_z(gravity.at("z"));
+  impl_->setGravity(req);
+}
+
+std::map<std::string,double> Robot::get_gravity()
+{
+  posture::Position resp = impl_->getGravity();
+  std::map<std::string,double> gravity;
+  gravity["x"] = resp.x();
+  gravity["y"] = resp.y();
+  gravity["z"] = resp.z();
+  return gravity;
+}
+
+void Robot::set_tcp(std::array<double, 6> tcp)
+{
+  posture::CartesianPose req;
+  posture::Position pos;
+  posture::Rotation rot;
+  pos.set_x(tcp[0]);
+  pos.set_y(tcp[1]);
+  pos.set_z(tcp[2]);
+  req.set_position(pos);
+  posture::Position p;
+  p.set_x(tcp[3]);
+  p.set_y(tcp[4]);
+  p.set_z(tcp[5]);
+  rot.set_euler_zyx(p);
+  req.set_rotation(rot);
+  impl_->setTcp(req);
+}
+std::array<double, 6> Robot::get_tcp()
+{
+  posture::CartesianPose resp = impl_->getTcp();
+  std::array<double, 6> ret;
+  ret[0] = resp.position().x();
+  ret[1] = resp.position().y();
+  ret[2] = resp.position().z();
+  ret[3] = resp.rotation().euler_zyx()->x();
+  ret[4] = resp.rotation().euler_zyx()->y();
+  ret[5] = resp.rotation().euler_zyx()->z();
+  return ret;
+}
+
+void Robot::set_velocity_factor(int factor)
+{
+  kinematic::KinFactor req;
+  req.set_factor(factor);
+  impl_->setKinFactor(req);
+}
+int Robot::get_velocity_factor()
+{
+  kinematic::KinFactor resp = impl_->getKinFactor();
+  return resp.factor();
+}
+
 }
 
 }  // namespace l_master_sdk

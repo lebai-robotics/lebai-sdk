@@ -139,5 +139,19 @@ namespace lebai
 		// 	virtual bool IsNullJSONData() const;
 		// };		
 
+		class KinFactor : public JSONBase
+		{
+		public:
+			void set_factor(int factor);
+			int factor();
+			int * mutable_factor();
+
+		protected:
+			int factor_;
+		public:
+			virtual bool Deserialize(const rapidjson::Value &obj);
+			virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const;
+			virtual bool IsNullJSONData() const;
+		};
 	}
 }
