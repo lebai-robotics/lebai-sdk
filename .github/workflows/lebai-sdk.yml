@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} triggered Build
 on: 
   workflow_dispatch: 
   push: 
-  pull_requesst: 
+  pull_request: 
 jobs: 
   build: 
     runs-on: ubuntu-latest
