@@ -17,12 +17,13 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
+    container: quay.io/pypa/manylinux_2_24_x86_64
     steps: 
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: install component
-        run: sudo apt-get install -y build-essential doxygen graphviz python3-pip python3-dev
+        run: sudo apt-get install -y build-essential doxygen graphviz python3-pip python3-dev auditwheel
 
       - name: install dependencies
         run: pip3 install -r requirements.txt
@@ -46,16 +47,11 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v1
         
-      - name: install twine
-        run: pip install twine
-        
       - name: remove timestamp
         run: rm ./build/python/dist/timestamp
         
-      - name: Build wheels
-        uses: pypa/cibuildwheel@v2.11.2
-        with:
-         package-dir: ./build/python/dist/
+      - name: repair whl
+        run: auditwheel repair ./build/python/dist/*
 
       - uses: actions/upload-artifact@v3
         with:
