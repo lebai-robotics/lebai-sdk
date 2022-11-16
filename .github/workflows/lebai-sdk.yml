@@ -46,33 +46,23 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v1
         
-      - name: remove timestamp
-        run: rm ./build/python/dist/timestamp
-        
-      - name: Build wheels
-        uses: pypa/cibuildwheel@v2.11.2
-        # env:
-        #   CIBW_SOME_OPTION: value
-        #    ...
-        # with:
-        #   package-dir: .
-        #   output-dir: wheelhouse
-        #   config-file: "{package}/pyproject.toml"
-
-      - uses: actions/upload-artifact@v3
-        with:
-          path: ./wheelhouse/*.whl
-          
-  upload_all:
-   needs: [build]
+      - name: upload .whl
+        uses: actions/upload-artifact@3
+        with: 
+         path: ./build/python/dist/*.whl
+  
+  test:
+   needs: build
    runs-on: ubuntu-latest
-   steps:
-    - uses: actions/download-artifact@v3
-      with:
-        name: artifact
-        path: dist
-        
-    - uses: pypa/gh-action-pypi-publish@v1.5.0
-      with:
-       user: ${{ secrets.USRNAME }}
-       password: ${{ secrets.PASSWD }}
+   container: registry.cn-shanghai.aliyuncs.com/lebai/l-master:latest
+   steps: 
+    - name: start nginx
+      run: nginx
+      
+    - name: start daemon
+      run: |
+       systemctl start l-master-rc
+       systemctl start l-master-ds
+       
+    - name: test
+      run: cmake --build build --target test
