@@ -45,3 +45,12 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
+        
+      - name: install twine
+        run: pip install twine
+        
+      - name: remove timestamp
+        run: rm ./build/python/dist/timestamp
+        
+      - name: upload Pypi
+        run: twine upload -u ${{ secrets.USRNAME }} -p ${{ secrets.PASSWD }} ./build/python/dist/*
