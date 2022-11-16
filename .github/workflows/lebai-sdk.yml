@@ -17,20 +17,15 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
-    container: quay.io/pypa/manylinux_2_24_x86_64
     steps: 
       - name: Checkout
         uses: actions/checkout@v3
 
       - name: install component
-        run: |
-         apt-get update
-         apt-get install -y build-essential doxygen graphviz python3-pip python3-dev
+        run: sudo apt-get install -y build-essential doxygen graphviz python3-pip python3-dev
 
       - name: install dependencies
-        run: |
-         pip3 install auditwheel pbr
-         pip3 install -r requirements.txt
+        run: pip3 install -r requirements.txt
 
       - name: configure
         run: cmake -S. -Bbuild -DBUILD_PYTHON=ON -DBUILD_DEB=ON
@@ -54,8 +49,15 @@ jobs:
       - name: remove timestamp
         run: rm ./build/python/dist/timestamp
         
-      - name: repair whl
-        run: auditwheel repair ./build/python/dist/*
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.11.2
+        # env:
+        #   CIBW_SOME_OPTION: value
+        #    ...
+        # with:
+        #   package-dir: .
+        #   output-dir: wheelhouse
+        #   config-file: "{package}/pyproject.toml"
 
       - uses: actions/upload-artifact@v3
         with:
