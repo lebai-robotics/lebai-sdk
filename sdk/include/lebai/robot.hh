@@ -220,11 +220,11 @@ namespace lebai
      * @param[in] v: 速度.
      * @param[in] t: 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
      * @param[in] r: 交融半径，设置为0，则无交融半径.
-     * @return  true 发送成功
-     * @return  false 发送失败
+     * @return  >0 发送成功
+     * @return  0 发送失败
      * 
      */
-    bool movej(const std::map<std::string, double> & joint_positions, double a, double v, double t, double r);
+    int movej(const std::map<std::string, double> & joint_positions, double a, double v, double t, double r);
     /**
      * 示例代码: 
      * 
@@ -238,10 +238,10 @@ namespace lebai
      * @param[in] v: 速度
      * @param[in] t: 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
      * @param[in] r: 交融半径，设置为0，则无交融半径.
-     * @return true 发送成功
-     * @return false 发送失败
+     * @return >0 发送成功
+     * @return 0 发送失败
      */    
-    bool movej(const CartesianPose & cart_pose, double a, double v, double t, double r);
+    int movej(const CartesianPose & cart_pose, double a, double v, double t, double r);
     /**
      * 示例代码: 
      * 
@@ -262,10 +262,10 @@ namespace lebai
      * @param[in] v: 速度
      * @param[in] t: 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
      * @param[in] r: 交融半径，设置为0，则无交融半径.
-     * @return true 发送成功
-     * @return false 发送失败
+     * @return >0 发送成功
+     * @return 0 发送失败
      */
-    bool movel(const std::map<std::string, double> & joint_positions, double a, double v, double t, double r);
+    int movel(const std::map<std::string, double> & joint_positions, double a, double v, double t, double r);
     /**
      * 示例代码: 
      * 
@@ -279,14 +279,40 @@ namespace lebai
      * @param v: 速度
      * @param t: 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
      * @param r: 交融半径，设置为0，则无交融半径.
-     * @return true 发送成功
-     * @return false 发送失败
+     * @return >0 发送成功
+     * @return 0 发送失败
      */    
-    bool movel(const CartesianPose & cart_pose, double a, double v, double t, double r);
+    int movel(const CartesianPose & cart_pose, double a, double v, double t, double r);
+    /**
+     * @brief 伺服运动PVAT
+     * 
+     * @param p 关节位置，或者坐标位置（将通过运动学反解转为关节位置）
+     * @param v 每个关节的速度 (rad/s)。如该值为数字，则表示所有关节速度相同。
+     * @param a 每个关节的加速度 (rad/s2)。如该值为数字，则表示所有关节加速度相同。
+     * @param t 运动时间 (s)
+    */
+    void move_pvat(std::vector<double> p, std::vector<double> v, std::vector<double> a, double t);
     /**
      * @brief 等待运动完成
+     * 
+     * @param id 指定运动的id(0为等待全部任务)
     */
+    void wait_move(unsigned int id);
     void wait_move();
+    /**
+     * @brief 查询当前正在运动的MotionId(无运动时返回上次MotionId) 
+    */
+    unsigned int get_running_motion();
+    /**
+     * @brief 查询指定MotionId的运动状态
+     * 
+     * @param id 指定的运动id 
+    */
+    std::string get_motion_state(unsigned int id);
+    /**
+     * @brief 停止所有运动
+    */
+    void stop_move();
     /** @}*/
 
     /** \addtogroup STATUS

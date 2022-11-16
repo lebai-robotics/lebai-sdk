@@ -394,5 +394,210 @@ namespace lebai
     return false;
   }
 
+  void MotionIndex::set_id(unsigned int id)
+  {
+    id_ = id;
+  }
+  unsigned int MotionIndex::id() const
+  {
+    return id_;
+  }
+  unsigned int *MotionIndex::mutable_id()
+  {
+    return &id_;
+  }
 
+  bool MotionIndex::Deserialize(const rapidjson::Value& obj)
+  {
+    if(obj.HasMember("id"))
+    {
+      unsigned int id_int = (unsigned int)(obj["id"].GetUint());
+      id_ = id_int;
+    }
+    return true;
+  }
+  bool MotionIndex::Serialize(rapidjson::Writer<rapidjson::StringBuffer>* writer) const
+  {
+    writer->StartObject();
+    writer->Key("id");
+    writer->Uint(id_);
+    writer->EndObject();
+    return true;    
+  }
+  bool MotionIndex::IsNullJSONData() const
+  {
+    return false;
+  }
+  
+  void GetMotionStateResponse::set_state(MotionState state)
+  {
+    state_ = state;
+  }
+  const MotionState GetMotionStateResponse::state() const
+  {
+    return state_;
+  }
+  MotionState *GetMotionStateResponse::mutable_state()
+  {
+    return &state_;
+  }
+
+  bool GetMotionStateResponse::Deserialize(const rapidjson::Value& obj)
+  {
+    if(obj.HasMember("state"))
+    {
+      int state_int = (int)(obj["state"].GetInt());
+      switch(state_int)
+      {
+        case 0:state_ = WAIT;break;
+        case 1:state_ = RUNNING;break;
+        case 2:state_ = FINISHED;break;
+        default:state_ = WAIT;break;
+      }
+    }
+    return true;
+  }
+  bool GetMotionStateResponse::Serialize(rapidjson::Writer<rapidjson::StringBuffer>* writer) const
+  {
+    writer->StartObject();
+    writer->Key("state");
+    writer->Int(state_);
+    writer->EndObject();
+    return true;    
+  }
+  bool GetMotionStateResponse::IsNullJSONData() const
+  {
+    return false;
+  }
+
+
+  void JointMove::set_pose(double pose)
+  {
+    pose_ = pose;
+  }
+  const double JointMove::pose() const
+  {
+    return pose_;
+  }
+  double *JointMove::mutable_pose()
+  {
+    return &pose_;
+  }
+  void JointMove::set_velocity(double velocity)
+  {
+    velocity_ = velocity;
+  }
+  const double JointMove::velocity() const
+  {
+    return velocity_;
+  }
+  double *JointMove::mutable_velocity()
+  {
+    return &velocity_;
+  }
+  void JointMove::set_acc(double acc)
+  {
+    acc_ = acc;
+  }
+  const double JointMove::acc() const
+  {
+    return acc_;
+  }
+  double *JointMove::mutable_acc()
+  {
+    return &acc_;
+  }
+  bool JointMove::Deserialize(const rapidjson::Value& obj)
+  {
+    if(obj.HasMember("pose"))
+    {
+      pose_ = (double)(obj["pose"].GetDouble());
+    }
+    if(obj.HasMember("velocity"))
+    {
+      velocity_ = (double)(obj["velocity"].GetDouble());
+    }
+    if(obj.HasMember("acc"))
+    {
+      acc_ = (double)(obj["acc"].GetDouble());
+    }
+    return true;
+  }
+  bool JointMove::Serialize(rapidjson::Writer<rapidjson::StringBuffer>* writer) const
+  {
+    writer->StartObject();
+    writer->Key("pose");
+    writer->Double(pose_);
+    writer->Key("velocity");
+    writer->Double(velocity_);
+    writer->Key("acc");
+    writer->Double(acc_);
+    writer->EndObject();
+    return true;    
+  }
+  bool JointMove::IsNullJSONData() const
+  {
+    return false;
+  }
+  void MovePvatRequest::set_duration(double duration)
+  {
+    duration_ = duration;
+  }
+  const double MovePvatRequest::duration() const
+  {
+    return duration_;
+  }
+  double *MovePvatRequest::mutable_duration()
+  {
+    return &duration_;
+  }
+  void MovePvatRequest::set_joints(std::vector<JointMove> joints)
+  {
+    joints_ = joints;
+  }
+  const std::vector<JointMove> MovePvatRequest::joints() const
+  {
+    return joints_;
+  }
+  std::vector<JointMove> *MovePvatRequest::mutable_joints()
+  {
+    return &joints_;
+  }
+  bool MovePvatRequest::Deserialize(const rapidjson::Value& obj)
+  {
+    if(obj.HasMember("duration"))
+    {
+      duration_ = (double)(obj["duration"].GetDouble());
+    }
+    if(obj.HasMember("joints"))
+    {
+      std::vector<JointMove> j;
+      for(auto joint = obj["joints"].GetArray().Begin();joint != obj["joints"].GetArray().End();joint++)
+      {
+        JointMove _j;
+        _j.FromJSONString(joint->GetString());
+        j.push_back(_j);
+      }
+      joints_ = j;
+    }
+    return true;
+  }
+  bool MovePvatRequest::Serialize(rapidjson::Writer<rapidjson::StringBuffer>* writer) const
+  {
+    writer->StartObject();
+    writer->Key("duration");
+    writer->Double(duration_);
+    writer->StartArray();
+    for(auto j:joints_)
+    {
+      writer->String(j.ToJSONString().c_str());
+    }
+    writer->EndArray();
+    writer->EndObject();
+    return true;    
+  }
+  bool MovePvatRequest::IsNullJSONData() const
+  {
+    return false;
+  }
 }

@@ -49,10 +49,14 @@ namespace lebai
       int pause();
       int resume();
       // // int movej(const std::vector<double> & p, double v, double a, double t, double r, bool relative);
-      void moveJoint(const MoveRequest & req);
-      void moveLinear(const MoveRequest & req);
-      void moveCircle(const MovecRequest & req);
-      void waitMove();
+      MotionIndex moveJoint(const MoveRequest & req);
+      MotionIndex moveLinear(const MoveRequest & req);
+      MotionIndex moveCircle(const MovecRequest & req);
+      void movePvat(const MovePvatRequest & req);
+      void waitMove(const MotionIndex & req);
+      MotionIndex getRunningMotion();
+      GetMotionStateResponse getMotionState(const MotionIndex & req);
+      void stopMove();
       system::RobotState getRobotState();
       system::PhyData getPhyData();
       kinematic::KinData getKinData();
