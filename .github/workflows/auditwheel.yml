@@ -8,7 +8,6 @@ on:
 jobs:
   compile:
      runs-on: ubuntu-latest
-     container: quay.io/pypa/manylinux1_x86_64
      steps:
        - name: Checkout
          uses: actions/checkout@v3
@@ -29,6 +28,8 @@ jobs:
          run: pip3 install auditwheel
         
        - run: cd build/python/dist/
+       - run: apt-get install docker | systectl start docker
+       - run: docker run -i -t -v `pwd`:/io quay.io/pypa/manylinux1_x86_64 /bin/bash
          
        - name: repair
          run: auditwheel repair ./*.whl
