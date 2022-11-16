@@ -23,7 +23,9 @@ jobs:
         uses: actions/checkout@v3
 
       - name: install component
-        run: apt-get install -y build-essential doxygen graphviz python3-pip python3-dev auditwheel
+        run: |
+         apt-get update
+         apt-get install -y build-essential doxygen graphviz python3-pip python3-dev auditwheel
 
       - name: install dependencies
         run: pip3 install -r requirements.txt
