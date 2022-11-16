@@ -56,13 +56,28 @@ jobs:
    runs-on: ubuntu-latest
    container: registry.cn-shanghai.aliyuncs.com/lebai/l-master:latest
    steps: 
-    - name: start nginx
-      run: nginx
+     - name: start nginx
+       run: nginx
       
-    - name: start daemon
-      run: |
-       systemctl start l-master-rc
-       systemctl start l-master-ds
+     - name: start daemon
+       run: |
+        systemctl start l-master-rc
+        systemctl start l-master-ds
        
-    - name: test
-      run: cmake --build build --target test
+     - name: Checkout
+       uses: actions/checkout@v3
+
+     - name: install component
+       run: sudo apt-get install -y build-essential doxygen graphviz python3-pip python3-dev
+
+     - name: install dependencies
+       run: pip3 install -r requirements.txt
+
+     - name: configure
+       run: cmake -S. -Bbuild -DBUILD_TESTING=ON
+
+     - name: build
+       run: cmake --build build
+       
+     - name: test
+       run: cmake --build build --target test
