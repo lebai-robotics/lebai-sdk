@@ -47,7 +47,7 @@ jobs:
         uses: actions/deploy-pages@v1
         
       - name: upload .whl
-        uses: actions/upload-artifact@3
+        uses: actions/upload-artifact@v3
         with: 
          path: ./build/python/dist/*.whl
   
