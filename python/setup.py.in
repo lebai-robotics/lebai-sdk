@@ -19,7 +19,7 @@ setup(
   version='@PROJECT_VERSION@',
   author='liufang',
   author_email='liufang_robot@outlook.com',
-  url='TODO',
+  Home_page='https://github.com/lebai-robotics/lebai-sdk',
   distclass=BinaryDistribution,
   cmdclass={'install': InstallPlatlib},
   packages=find_packages(),
