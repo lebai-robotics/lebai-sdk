@@ -1,0 +1,39 @@
+name: auditwheel
+run-name: ${{ github.actor }} triggered auditwheel
+on: 
+  workflow_dispatch: 
+  push: 
+  pull_request: 
+  
+jobs:
+  compile:
+     runs-on: ubuntu-latest
+     container: quay.io/pypa/manylinux1_x86_64
+       - name: Checkout
+         uses: actions/checkout@v3
+
+       - name: install component
+         run: apt-get install -y build-essential doxygen graphviz python3-pip python3-dev
+
+       - name: install dependencies
+         run: pip3 install -r requirements.txt
+
+       - name: configure
+         run: cmake -S. -Bbuild -DBUILD_PYTHON=ON
+
+       - name: build
+         run: cmake --build build
+         
+       - name: install auditwheel
+         run: pip3 install auditwheel
+        
+       - run: cd build/python/dist/
+         
+       - name: repair
+         run: auditwheel repair ./*.whl
+        
+       - name: upload
+         uses: actions/upload-artifact@v3
+         with:
+          path: ./wheelhouse/*.whl
+          
