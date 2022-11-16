@@ -52,5 +52,25 @@ jobs:
       - name: remove timestamp
         run: rm ./build/python/dist/timestamp
         
-      - name: upload Pypi
-        run: twine upload -u ${{ secrets.USRNAME }} -p ${{ secrets.PASSWD }} ./build/python/dist/*
+      - name: Build wheels
+        uses: pypa/cibuildwheel@v2.11.2
+        with:
+         package-dir: ./build/python/dist/
+
+      - uses: actions/upload-artifact@v3
+        with:
+          path: ./wheelhouse/*.whl
+          
+  upload_all:
+   needs: [build]
+   runs-on: ubuntu-latest
+   steps:
+    - uses: actions/download-artifact@v3
+      with:
+        name: artifact
+        path: dist
+        
+    - uses: pypa/gh-action-pypi-publish@v1.5.0
+      with:
+       user: ${{ secrets.USRNAME }}
+       password: ${{ secrets.PASSWD }}
