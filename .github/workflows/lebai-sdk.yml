@@ -16,10 +16,11 @@ jobs:
     strategy:
      matrix:
       py-version: [ 3.6, 3.7, 3.8, 3.9, 3.10.8, 3.11 ]
+      os-version: [ ubuntu-latest, macos-latest, windows-latest ]
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os-version }}
     steps: 
       - name: Checkout
         uses: actions/checkout@v3
