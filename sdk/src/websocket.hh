@@ -20,6 +20,7 @@
 #include <iostream>
 #include <map>
 #include <sstream>
+#include <future>
 #include <string>
 #include <mutex>
 #include <condition_variable>
@@ -32,6 +33,7 @@
 #include <websocketpp/common/memory.hpp>
 #include <websocketpp/common/thread.hpp>
 #include <websocketpp/config/asio_no_tls_client.hpp>
+#include "protos/utils.hh"
 
 namespace lebai
 {
@@ -78,13 +80,32 @@ namespace lebai
 
     void onMessage(websocketpp::connection_hdl, WSClient::message_ptr msg)
     {
-      std::unique_lock<std::mutex> lock(mutex_);
-      cv_.wait(lock, [&]
-               { return req_flag_; });
-      message_str_ = msg->get_payload();
-      lock.unlock();
-      resp_flag_ = true;
-      cv_.notify_one();
+      std::string message_str = msg->get_payload();
+      int callback_jsonrpc_id;
+      int error_code;
+      std::string resp_data_str;
+      auto ret = ExtractJSONRpcRespString(message_str, callback_jsonrpc_id, error_code, resp_data_str);
+      if(ret == JSONRpcRespParseResult::kInvalid)
+      {
+        return;
+      }
+      else
+      {        
+        if(promises_.find(callback_jsonrpc_id) != promises_.end())
+        {
+          if(ret == JSONRpcRespParseResult::kResult)
+          {
+            promises_[callback_jsonrpc_id]->set_value(std::make_tuple(0, resp_data_str));
+            promises_.erase(callback_jsonrpc_id);
+          }
+          else
+          {
+            promises_[callback_jsonrpc_id]->set_value(std::make_tuple(error_code, resp_data_str));
+            promises_.erase(callback_jsonrpc_id);
+          }
+
+        }
+      }
     }
 
     websocketpp::connection_hdl getHDL() const { return hdl_; }
@@ -97,47 +118,25 @@ namespace lebai
     //   m_messages.push_back(">> " + message);
     // }
 
-    void notify()
+    std::future<std::tuple<int, std::string>> createPromise(int rpc_id)
     {
-      cv_.notify_one();
-    }
-    void waitCV()
-    {
-      std::unique_lock<std::mutex> lock(mutex_);
-      cv_.wait(lock, [&]
-               { return resp_flag_; });
+      promises_[rpc_id] = std::make_unique<std::promise<std::tuple<int, std::string>>>();
+      return promises_[rpc_id]->get_future();;
     }
 
-    void SetReqFlag(bool flag)
-    {
-      req_flag_ = flag;
-    }
-    void SetRespFlag(bool flag)
-    {
-      resp_flag_ = flag;
-    }
-
-    const std::string &GetMessageStr()
-    {
-      return message_str_;
-    }
+    
 
     // friend std::ostream& operator<<(std::ostream& out,
     //                                 ConnectionMetadata const& data);
 
   private:
+    std::map<int, std::unique_ptr<std::promise<std::tuple<int, std::string>>>> promises_;
     int id_;
     websocketpp::connection_hdl hdl_;
     std::string status_;
     std::string uri_;
     std::string server_;
     std::string error_reason_;
-    // std::vector<std::string> m_messages;
-    std::mutex mutex_;
-    std::condition_variable cv_;
-    bool req_flag_ = false;
-    bool resp_flag_ = false;
-    std::string message_str_;
   };
 
   // std::ostream& operator<<(std::ostream& out, ConnectionMetadata const& data) {
@@ -253,7 +252,7 @@ namespace lebai
       }
     }
 
-    void send(int id, std::string message)
+    bool send(int id, std::string message)
     {
 
       websocketpp::lib::error_code ec;
@@ -261,8 +260,8 @@ namespace lebai
       ConList::iterator metadata_it = connection_list_.find(id);
       if (metadata_it == connection_list_.end())
       {
-        std::cout << "> No connection found with id " << id << std::endl;
-        return;
+        // std::cout << "> No connection found with id " << id << std::endl;
+        return false;
       }
 
       endpoint_.send(metadata_it->second->getHDL(), message,
@@ -271,18 +270,25 @@ namespace lebai
       if (ec)
       {
         std::cout << "> Error sending message: " << ec.message() << std::endl;
-        return;
+        return false;
       }
-      metadata_it->second->SetReqFlag(true);
-      metadata_it->second->notify();
-      metadata_it->second->waitCV();
-      metadata_it->second->SetReqFlag(false);
-      metadata_it->second->SetRespFlag(false);
+      return true;
 
       // std::unique_lock<std::mutex> lock(mutex);
       // cv.wait(lock, [] { return processed; });
       // metadata_it->second->record_sent_message(message);
     }
+    std::future<std::tuple<int, std::string>> createFuture(int id, int rpc_id)
+    {
+      // metadata_it->second->SetReqFlag(true);
+      // metadata_it->second->notify();
+      // metadata_it->second->waitCV();
+      // metadata_it->second->SetReqFlag(false);
+      // metadata_it->second->SetRespFlag(false);
+      ConList::iterator metadata_it = connection_list_.find(id);
+      return metadata_it->second->createPromise(rpc_id);
+    }
+
 
     ConnectionMetadata::ptr get_metadata(int id) const
     {

@@ -34,8 +34,8 @@ namespace lebai
     };
     JSONRpcConnector(const std::string &ip, uint16_t port);
     virtual ~JSONRpcConnector();
-    int Call(const std::string &method, rapidjson::Value &req_data, rapidjson::Value &resp_data);
-    int CallString(int id, const std::string &method, const std::string & req_str, std::string * resp_str);
+    // int Call(const std::string &method, rapidjson::Value &req_data, rapidjson::Value &resp_data);
+    // int CallString(int id, const std::string &method, const std::string & req_str, std::string * resp_str);
     // /**
     // int CallRpc(const std::string & req_str, std::string * resp_str);
     int CallRpc(const std::string &method, const std::string & req_data_str, std::string * resp_data_str);

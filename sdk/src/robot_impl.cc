@@ -122,7 +122,9 @@ namespace lebai
   }
   void Robot::RobotImpl::waitMove(const MotionIndex & req)
   {
-    json_rpc_connector_->CallRpc("wait_move",req.ToJSONString(),nullptr);
+    std::string resp;
+    json_rpc_connector_->CallRpc("wait_move",req.ToJSONString(),&resp);
+    // std::cout<<"resp " << resp << std::endl;
   }
   MotionIndex Robot::RobotImpl::getRunningMotion()
   {

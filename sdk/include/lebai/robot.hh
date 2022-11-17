@@ -298,6 +298,10 @@ namespace lebai
      * @param id 指定运动的id(0为等待全部任务)
     */
     void wait_move(unsigned int id);
+    /**
+     * @brief 等待所有运动完成
+     * 
+    */    
     void wait_move();
     /**
      * @brief 查询当前正在运动的MotionId(无运动时返回上次MotionId) 
