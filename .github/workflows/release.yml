@@ -6,7 +6,7 @@ on:
    branches:
     - master
   pull_request:
-   type:
+   types:
     - closed
   
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
@@ -14,7 +14,7 @@ permissions:
   contents: read
   pages: write
   id-token: write
-  pull_request: read
+  pull-requests: read
 
 jobs: 
   build: 
