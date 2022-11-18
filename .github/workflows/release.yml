@@ -60,7 +60,9 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v1
 
-      - run: cd build
+      - run: cd ./build
+      - run: echo `pwd`
+      - run: ls  
         
       - name: upload .whl
         uses: actions/upload-artifact@v3
