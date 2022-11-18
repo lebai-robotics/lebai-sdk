@@ -59,16 +59,12 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v1
-
-      - run: cd ./build
-      - run: echo `pwd`
-      - run: ls  
         
       - name: upload .whl
         uses: actions/upload-artifact@v3
         with: 
          name: WheelForPython
-         path: ./python/dist/*.whl
+         path: ./build/python/dist/*.whl
 
 #      - name: build deb pack
 #        run: cpack
