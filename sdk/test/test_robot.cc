@@ -103,7 +103,7 @@ namespace lebai
       robot_.movej({-0.296,-0.295,0.285,60.0 / 180.0 * M_PI,-5.0 / 180.0 * M_PI,81.0 / 180.0 * M_PI}, 3.0, 1.0, 0.0, 0.0);
       std::this_thread::sleep_for(std::chrono::milliseconds(100));
       EXPECT_EQ(7, robot_.get_robot_mode());
-      robot_.wait_move();
+      robot_.wait_move(0);
       auto tcp = robot_.get_target_tcp_pose();
       EXPECT_NEAR(tcp[0], -0.296, 1e-3);
       EXPECT_NEAR(tcp[1], -0.295, 1e-3);

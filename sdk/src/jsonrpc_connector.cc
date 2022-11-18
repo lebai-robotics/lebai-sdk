@@ -30,68 +30,69 @@ JSONRpcConnector::JSONRpcConnector(const std::string & ip, uint16_t port)
   id_ = endpoint_.connect(url);
 }
 JSONRpcConnector::~JSONRpcConnector(){}
-int JSONRpcConnector::Call(const std::string & method, rapidjson::Value & req_data, rapidjson::Value & resp_data)
-{
-  rapidjson::Document d;
-  rapidjson::Value req;
-  req.SetObject();
-  req.AddMember("jsonrpc", "2.0", d.GetAllocator());
-  // req.AddMember("id", jsonrpc_id_++, d.GetAllocator());
-  rapidjson::Value method_value;
-  method_value.SetString(method.c_str(), method.size(), d.GetAllocator());
-  req.AddMember("method", method_value, d.GetAllocator());
-  req.AddMember("params", req_data, d.GetAllocator());
-  rapidjson::StringBuffer buffer;
-  rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
-  req.Accept(writer);
-  std::string req_str = buffer.GetString();
-  if(GetConnectionStatus() != kOpen)
-  {
-    return -1;
-  }  
-  // std::cout << "req_str: " << req_str << std::endl;
-  endpoint_.send(id_, req_str);
-  auto const & resp_str = endpoint_.get_metadata(id_)->GetMessageStr();
-  // std::cout<<"resp_str: "<<resp_str<<"\n";
-  // ret_str to json
-  d.Parse<0>(resp_str.c_str());
-  rapidjson::Value::MemberIterator iter = d.FindMember("result");
-  if(iter == d.MemberEnd())
-  {
-    return -1;
-  }
-  resp_data = iter->value;
-  return 0;    
-}
 
-int JSONRpcConnector::CallString(int id, const std::string &method, const std::string & req_str, std::string * resp_str)
-{
-  if(GetConnectionStatus() != kOpen)
-  {
-    return -1;
-  }  
-  // std::string str_jsonrpc = "\"jsonrpc\":\"2.0\",";
-  // std::string str_method = "\"method\":\"" + method + "\",";
-  // std::string str_params = "\"params\":" + req_str + ",";
-  // std::string str_id = "\"id\":" + std::to_string(jsonrpc_id_); 
-  // jsonrpc_id_++;
-  std::string jsonrpc_req = "{\"jsonrpc\":\"2.0\",\"method\":\"" +method + 
-  "\",\"params\":"+req_str+",\"id\":"+ std::to_string(id)+ "}";
-  // str_method + str_params + str_id + "}";
-  std::cerr<<"xxx jsonrpc_req: "<<jsonrpc_req<<"\n";
-  endpoint_.send(id_, jsonrpc_req);  
-  if(resp_str)
-  {
-    std::string jsonrpc_resp;
-    jsonrpc_resp = endpoint_.get_metadata(id_)->GetMessageStr();
-    *resp_str = jsonrpc_resp;
+// int JSONRpcConnector::Call(const std::string & method, rapidjson::Value & req_data, rapidjson::Value & resp_data)
+// {
+//   rapidjson::Document d;
+//   rapidjson::Value req;
+//   req.SetObject();
+//   req.AddMember("jsonrpc", "2.0", d.GetAllocator());
+//   // req.AddMember("id", jsonrpc_id_++, d.GetAllocator());
+//   rapidjson::Value method_value;
+//   method_value.SetString(method.c_str(), method.size(), d.GetAllocator());
+//   req.AddMember("method", method_value, d.GetAllocator());
+//   req.AddMember("params", req_data, d.GetAllocator());
+//   rapidjson::StringBuffer buffer;
+//   rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
+//   req.Accept(writer);
+//   std::string req_str = buffer.GetString();
+//   if(GetConnectionStatus() != kOpen)
+//   {
+//     return -1;
+//   }  
+//   // std::cout << "req_str: " << req_str << std::endl;
+//   endpoint_.send(id_, req_str);
+//   auto const & resp_str = endpoint_.get_metadata(id_)->GetMessageStr();
+//   // std::cout<<"resp_str: "<<resp_str<<"\n";
+//   // ret_str to json
+//   d.Parse<0>(resp_str.c_str());
+//   rapidjson::Value::MemberIterator iter = d.FindMember("result");
+//   if(iter == d.MemberEnd())
+//   {
+//     return -1;
+//   }
+//   resp_data = iter->value;
+//   return 0;    
+// }
 
-    // std::cerr << "jsonrpc_resp: " << *resp_str << std::endl;
-  }
-  // {"jsonrpc": "2.0", "error": {"code": -32600, "message": "Invalid Request"}, "id": null}
+// int JSONRpcConnector::CallString(int id, const std::string &method, const std::string & req_str, std::string * resp_str)
+// {
+//   if(GetConnectionStatus() != kOpen)
+//   {
+//     return -1;
+//   }  
+//   // std::string str_jsonrpc = "\"jsonrpc\":\"2.0\",";
+//   // std::string str_method = "\"method\":\"" + method + "\",";
+//   // std::string str_params = "\"params\":" + req_str + ",";
+//   // std::string str_id = "\"id\":" + std::to_string(jsonrpc_id_); 
+//   // jsonrpc_id_++;
+//   std::string jsonrpc_req = "{\"jsonrpc\":\"2.0\",\"method\":\"" +method + 
+//   "\",\"params\":"+req_str+",\"id\":"+ std::to_string(id)+ "}";
+//   // str_method + str_params + str_id + "}";
+//   // std::cerr<<"xxx jsonrpc_req: "<<jsonrpc_req<<"\n";
+//   endpoint_.send(id_, jsonrpc_req);  
+//   if(resp_str)
+//   {
+//     std::string jsonrpc_resp;
+//     jsonrpc_resp = endpoint_.get_metadata(id_)->GetMessageStr();
+//     *resp_str = jsonrpc_resp;
 
-  return 0;  
-}
+//     // std::cerr << "jsonrpc_resp: " << *resp_str << std::endl;
+//   }
+//   // {"jsonrpc": "2.0", "error": {"code": -32600, "message": "Invalid Request"}, "id": null}
+
+//   return 0;  
+// }
 
 // int JSONRpcConnector::CallRpc(const std::string & req_str, std::string * resp_str)
 // {
@@ -112,44 +113,25 @@ int JSONRpcConnector::CallString(int id, const std::string &method, const std::s
 
 int JSONRpcConnector::CallRpc(const std::string & method, const std::string & req_data_str, std::string * resp_data_str)
 {
-  // std::cout<<"req_data_str "<<req_data_str<<"\n";
   int call_jsonrpc_id = jsonrpc_id_++;
   std::string jsonrpc_req;
   std::string jsonrpc_resp;
   jsonrpc_req = ToJSONRpcReqString(call_jsonrpc_id, method, req_data_str);
-  // std::cout<<"jsonrpc_req "<<jsonrpc_req<<"\n";
-  endpoint_.send(id_, jsonrpc_req);
+  // std::cout<<"jsonrpc_req id:"<<call_jsonrpc_id<<" "<<method<<"\n";
+  if(!endpoint_.send(id_, jsonrpc_req))
+  {
+    throw std::runtime_error("Send Jsonrpc request failed!");
+  }
+  auto future = endpoint_.createFuture(id_, call_jsonrpc_id);
+  auto resq_data = future.get();
   if(resp_data_str)
   {
-    jsonrpc_resp = endpoint_.get_metadata(id_)->GetMessageStr();
-    // std::cout<<"jsonrpc_resp "<<jsonrpc_resp<<"\n";
-    int callback_jsonrpc_id;
-    auto ret = ExtractJSONRpcRespString(jsonrpc_resp, callback_jsonrpc_id, *resp_data_str);
-    if(ret < 0)
+    auto error_code = std::get<0>(resq_data);
+    if(error_code < 0)
     {
-      // throw std::runtime_error("ExtractJSONRpcRespString failed");
-      std::cout<<"Invalid jsonrpc response! ret code is: "<<ret<<"\n";
-      switch (ret)
-      {
-      case -1:throw (std::string)"Response Parse Error";break;
-      case -2:throw (std::string)"Response Is Not \" jsonrpc \"";break;
-      case -3:throw (std::string)"Response \" jsonrpc \" Version Is Not 2.0";break;
-      case -4:throw (std::string)"Response Do Not Have \" id \"";break;
-      case -5:throw (std::string)"Response Do Not Have \" error \" Or \" result \"";break;
-      default:
-        throw (std::string)"Response Error";
-        break;
-      }
-      return -1;
-      //TODO(liufang) throw exception.
+      throw std::runtime_error(std::get<1>(resq_data));
     }
-    // std::cout<<"resp_data_str "<<*resp_data_str<<"\n";
-    if(callback_jsonrpc_id != call_jsonrpc_id)
-    {
-      throw (std::string)"Dismatch in Request and Response";
-      return -1;
-      //TODO(liufang) throw exception.
-    }    
+    *resp_data_str = std::get<1>(resq_data);   
   }
   return 0;
 }

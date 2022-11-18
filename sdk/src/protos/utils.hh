@@ -4,6 +4,8 @@
 #include "rapidjson/stringbuffer.h"	// wrapper of C stream for prettywriter as output
 #include "rapidjson/prettywriter.h"	// for stringify JSON
 
+#pragma once
+
 namespace lebai
 {
   /**
@@ -25,15 +27,21 @@ namespace lebai
    */  
   std::string ToJSONRpcReqString(int id, const std::string & method, const std::string & data);
   // int FromJSONRpcRespString(const std::string &s, JSONBase & data);
-
+  enum JSONRpcRespParseResult
+  {
+    kResult = 0,
+    kError = -1,
+    kInvalid = -2,
+  };
   /**
    * @brief Get the result from a json rpc response string.
    * 
    * @param s The json rpc response string.
    * @param id The id of the response.
+   * @param error_code The error code of the response.
    * @param data The response string data.
    * @return int return code. if 0, success. if not 0, it's not a valid response.
    */
 
-  int ExtractJSONRpcRespString(const std::string &s, int & id, std::string & data);
+  JSONRpcRespParseResult ExtractJSONRpcRespString(const std::string &s, int & id, int & error_code, std::string & data);
 }
