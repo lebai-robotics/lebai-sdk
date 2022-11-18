@@ -68,14 +68,14 @@ jobs:
          name: WheelForPython
          path: ./python/dist/*.whl
 
-      - name: build deb pack
-        run: cpack -G DEB
-
-      - name: upload .deb
-        uses: actions/upload-artifact@v3
-        with:
-         name: DebForCPP
-         path: ./*.deb
+#      - name: build deb pack
+#        run: cpack
+#
+#      - name: upload .deb
+#        uses: actions/upload-artifact@v3
+#        with:
+#         name: DebForCPP
+#         path: ./*.deb
   
   test:
    needs: build
