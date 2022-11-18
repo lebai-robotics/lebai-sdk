@@ -36,7 +36,7 @@ jobs:
          python-version: ${{ matrix.py-version }}
 
       - name: install component
-        run: sudo apt-get install -y build-essential doxygen graphviz python3-pip python3-dev
+        run: sudo apt-get install -y build-essential doxygen graphviz python3-pip python3-dev dpkg-dev
 
       - name: install dependencies
         run: pip3 install -r requirements.txt
@@ -66,14 +66,14 @@ jobs:
          name: WheelForPython
          path: ./build/python/dist/*.whl
 
-#      - name: build deb pack
-#        run: cpack
-#
-#      - name: upload .deb
-#        uses: actions/upload-artifact@v3
-#        with:
-#         name: DebForCPP
-#         path: ./*.deb
+      - name: build deb pack
+        run: cpack --config ./build/CPackConfig.cmake
+
+      - name: upload .deb
+        uses: actions/upload-artifact@v3
+        with:
+         name: DebForCPP
+         path: ./*.deb
   
   test:
    needs: build
