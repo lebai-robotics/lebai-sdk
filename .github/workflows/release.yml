@@ -69,7 +69,7 @@ jobs:
          path: ./python/dist/*.whl
 
       - name: build deb pack
-        run: cpack
+        run: cpack -G DEB
 
       - name: upload .deb
         uses: actions/upload-artifact@v3
