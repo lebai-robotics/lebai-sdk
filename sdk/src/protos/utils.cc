@@ -60,36 +60,37 @@ namespace lebai
 //     return true;    
 //   }
 
-  int ExtractJSONRpcRespString(const std::string &s, int & id, std::string & data)
+
+  JSONRpcRespParseResult ExtractJSONRpcRespString(const std::string &s, int & id, int & error_code, std::string & data)
   {
     rapidjson::Document doc;
     if(doc.Parse(s.c_str()).HasParseError())
     {
-      return -1;
+      return kInvalid;
     }
     if(!doc.HasMember("jsonrpc"))
     {
-      return -2;
+      return kInvalid;
     }
     // std::string v = std::string(doc["jsonrpc"].GetString());
     if(std::string(doc["jsonrpc"].GetString()) != "2.0")
     {
       // std::cout<<"ccc\n";
-      return -3;
+      return kInvalid;
     }
     if(!doc.HasMember("id"))
     {
-      return -4;
+      return kInvalid;
     }
     id = doc["id"].GetInt();
 
     if(doc.HasMember("error"))
     {
       // Error code and message.
-      int error_id = doc["error"]["code"].GetInt();
-      std::string error_msg = doc["error"]["message"].GetString();
+      error_code = doc["error"]["code"].GetInt();
+      data = doc["error"]["message"].GetString();
       // std::cout << "Error: " << error_id << " " << error_msg << std::endl;
-      return error_id;
+      return kError;
     }
 
     if (doc.HasMember("result"))
@@ -99,9 +100,9 @@ namespace lebai
       rapidjson::Writer<rapidjson::StringBuffer> writer(buffer);
       doc["result"].Accept(writer);
       data =  buffer.GetString();
-      return 0;
+      return kResult;
     }
-    return -5;
+    return kInvalid;
     
   }
 }
