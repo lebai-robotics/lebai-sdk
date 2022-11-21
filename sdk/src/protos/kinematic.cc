@@ -340,5 +340,39 @@ namespace lebai
       }
       return true;
     }  
+  
+    void KinFactor::set_factor(int factor)
+    {
+      factor_ = factor;
+    }
+    int KinFactor::factor()
+    {
+      return factor_;
+    }
+    int * KinFactor::mutable_factor()
+    {
+      return &factor_;
+    }
+    bool KinFactor::Deserialize(const rapidjson::Value &obj)
+    {
+      if(obj.HasMember("speed_factor"))
+      {
+        int factor = (int)(obj["speed_factor"].GetInt());
+        factor_ = factor;
+      }
+      return true;
+    }
+    bool KinFactor::Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const
+    {
+      writer->StartObject();
+      writer->Key("speed_factor");
+      writer->Int(factor_);
+      writer->EndObject();
+      return true;
+    }
+    bool KinFactor::IsNullJSONData() const
+    {
+      return false;
+    }
   }
 }

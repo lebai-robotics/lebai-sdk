@@ -1,0 +1,107 @@
+name: page release
+run-name: ${{ github.actor }} released page
+on: 
+  workflow_dispatch: 
+  push: 
+   branches:
+    - master
+  pull_request:
+   types:
+    - closed
+  
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  pull-requests: read
+
+jobs: 
+  build: 
+    strategy:
+     matrix:
+      py-version: [ 3.6, 3.7, 3.8, 3.9, 3.10.8, 3.11 ]
+      os-version: [ ubuntu-latest ]
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ${{ matrix.os-version }}
+    steps: 
+      - name: Checkout
+        uses: actions/checkout@v3
+        
+      - name: check python version
+        uses: actions/setup-python@v4.3.0
+        with: 
+         python-version: ${{ matrix.py-version }}
+
+      - name: install component
+        run: sudo apt-get install -y build-essential doxygen graphviz python3-pip python3-dev dpkg-dev
+
+      - name: install dependencies
+        run: pip3 install -r requirements.txt
+
+      - name: configure
+        run: cmake -S. -Bbuild -DBUILD_PYTHON=ON -DBUILD_DEB=ON
+
+      - name: build
+        run: cmake --build build
+        
+      - name: Setup Pages
+        uses: actions/configure-pages@v2
+        
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v1
+        with:
+          # Upload entire repository
+          path: './build/html'
+          
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v1
+        
+      - name: upload .whl
+        uses: actions/upload-artifact@v3
+        with: 
+         name: WheelForPython
+         path: ./build/python/dist/*.whl
+
+      - name: build deb pack
+        run: cpack --config ./build/CPackConfig.cmake
+
+      - name: upload .deb
+        uses: actions/upload-artifact@v3
+        with:
+         name: DebForCPP
+         path: ./*.deb
+  
+  test:
+   needs: build
+   runs-on: ubuntu-latest
+   container: registry.cn-shanghai.aliyuncs.com/lebai/l-master:latest
+   steps: 
+     - name: start nginx
+       run: nginx
+      
+     - name: start daemon
+       run: |
+        systemctl start l-master-rc
+        systemctl start l-master-ds
+       
+     - name: Checkout
+       uses: actions/checkout@v3
+
+     - name: install component
+       run: apt-get install -y build-essential doxygen graphviz python3-pip python3-dev
+
+     - name: install dependencies
+       run: pip3 install -r requirements.txt
+
+     - name: configure
+       run: cmake -S. -Bbuild -DBUILD_TESTING=ON
+
+     - name: build
+       run: cmake --build build
+       
+     - name: test
+       run: cmake --build build --target test

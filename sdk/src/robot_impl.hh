@@ -28,6 +28,8 @@
 #include "protos/signal.hh"
 #include "protos/control.hh"
 #include "protos/file.hh"
+#include "protos/dynamic.hh"
+#include "protos/db.hh"
 
 namespace lebai
 {
@@ -89,6 +91,17 @@ namespace lebai
       void zip(const file::ZipRequest & req);
       void unzip(const file::UnzipRequest & req);
       file::LoadZipListResponse loadZipList(const file::LoadZipListRequest & req);
+      void setPayload(const dynamic::SetPayloadRequest & req);
+      dynamic::Payload getPayload();
+      void setGravity(const posture::Position & req);
+      posture::Position getGravity();
+      void savePayload(const dynamic::SavePayloadRequest & req);
+      dynamic::Payload loadPayload(const db::LoadRequest & req);
+      db::LoadListResponse loadPayloadList(const db::LoadListRequest & req);
+      void setTcp(const posture::CartesianPose & req);
+      posture::CartesianPose getTcp();
+      void setKinFactor(const kinematic::KinFactor & req);
+      kinematic::KinFactor getKinFactor();
 
       protected:
       std::unique_ptr<JSONRpcConnector> json_rpc_connector_;
