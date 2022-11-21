@@ -12,7 +12,7 @@
 
 相对旧的发行版系统cmake和swig版本过低，不能使用，可以通过pip安装较新的版本:
 ```bash
-sudo apt install build-essential python3-pip
+sudo apt install build-essential python3-pip dpkg-dev
 sudo pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
 # 如果需要生成文档，还需要安装doxygen。
 sudo apt install doxygen graphviz
