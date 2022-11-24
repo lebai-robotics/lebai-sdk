@@ -18,17 +18,17 @@ namespace lebai
             return &name_;
         }
 
-        void StartTaskRequest::set_is_main(bool is_main)
+        void StartTaskRequest::set_is_parallel(bool is_parallel)
         {
-            is_main_ = is_main;
+            is_parallel_ = is_parallel;
         }
-        bool StartTaskRequest::is_main()
+        bool StartTaskRequest::is_parallel()
         {
-            return is_main_;
+            return is_parallel_;
         }
-        bool * StartTaskRequest::mutable_is_main()
+        bool * StartTaskRequest::mutable_is_parallel()
         {
-            return &is_main_;
+            return &is_parallel_;
         }
 
         void StartTaskRequest::set_loop_to(unsigned int loop_to)
@@ -77,10 +77,10 @@ namespace lebai
                 std::string name_str = std::string(obj["name"].GetString());
                 name_ = name_str;
             }
-            if(obj.HasMember("is_main"))
+            if(obj.HasMember("is_parallel"))
             {
-                bool is_main_bool = bool(obj["is_main"].GetBool());
-                is_main_ = is_main_bool;
+                bool is_parallel_bool = bool(obj["is_parallel"].GetBool());
+                is_parallel_ = is_parallel_bool;
             }
             if(obj.HasMember("loop_to"))
             {
@@ -108,8 +108,8 @@ namespace lebai
             writer->StartObject();
             writer->Key("name");
             writer->String(name_.c_str());
-            writer->Key("is_main");
-            writer->Bool(is_main_);
+            writer->Key("is_parallel");
+            writer->Bool(is_parallel_);
             writer->Key("loop_to");
             writer->Uint(loop_to_);
             writer->Key("dir");

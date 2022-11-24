@@ -582,22 +582,22 @@ void Robot::add_signal(unsigned int index,int value)
   impl_->addSignal(req);
 }
 
-unsigned int Robot::scene(std::string name,bool is_main,unsigned int loop_to,std::string dir,const std::vector<std::string> & params)
+unsigned int Robot::scene(std::string name,bool is_parallel,unsigned int loop_to,std::string dir,const std::vector<std::string> & params)
 {
   control::StartTaskRequest req;
   req.set_name(name);
-  req.set_is_main(is_main);
+  req.set_is_parallel(is_parallel);
   req.set_loop_to(loop_to);
   req.set_dir(dir);
   req.set_params(params);
   control::TaskIndex resp = impl_->scene(req);
   return resp.id();
 }
-unsigned int Robot::scene(std::string name,bool is_main,unsigned int loop_to,std::string dir)
+unsigned int Robot::scene(std::string name,bool is_parallel,unsigned int loop_to,std::string dir)
 {
   control::StartTaskRequest req;
   req.set_name(name);
-  req.set_is_main(is_main);
+  req.set_is_parallel(is_parallel);
   req.set_loop_to(loop_to);
   req.set_dir(dir);
   control::TaskIndex resp = impl_->scene(req);
@@ -607,7 +607,7 @@ unsigned int Robot::scene(std::string name)
 {
   control::StartTaskRequest req;
   req.set_name(name);
-  req.set_is_main(false);
+  req.set_is_parallel(false);
   req.set_loop_to(1);
   control::TaskIndex resp = impl_->scene(req);
   return resp.id();
