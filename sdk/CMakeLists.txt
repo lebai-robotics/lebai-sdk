@@ -21,12 +21,7 @@ if(WIN32)
 endif()
 set_target_properties(lebai-cpp PROPERTIES
   VERSION ${PROJECT_VERSION}
-  PUBLIC_HEADER include/lebai/robot.hh
-  PUBLIC_HEADER include/lebai/lebai.hh
-  PUBLIC_HEADER include/lebai/discovery.hh
-  # PUBLIC_HEADER include/lebai/jsonbase.hh
-  # PUBLIC_HEADER include/lebai/motion.hh
-  # PUBLIC_HEADER include/lebai/posture.hh
+  PUBLIC_HEADER "include/lebai/robot.hh;include/lebai/lebai.hh;include/lebai/discovery.hh"
   )
 add_library(${PROJECT_NAMESPACE}::lebai-cpp ALIAS lebai-cpp)
 
@@ -36,9 +31,10 @@ if(BUILD_TESTING)
   add_subdirectory(test)
 endif()
 
+
 # Install
 install(TARGETS lebai-cpp
   EXPORT ${PROJECT_NAME}Targets
-  PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}
+  PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
   )
 
