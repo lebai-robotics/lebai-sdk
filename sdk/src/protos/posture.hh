@@ -7,6 +7,7 @@
 #include <array>
 
 #include "jsonbase.hh"
+#include "db.hh"
 
 namespace lebai {
 namespace posture {
@@ -234,67 +235,83 @@ class CartesianPose : public JSONBase {
   virtual bool IsNullJSONData() const;
 };
 
-// JointTargetPose
-class JointTargetPose : public JSONBase {
- public:
-  // Data
-  void set_base(const JointFrame& base);
-  const JointFrame& base() const;
-  JointFrame* mutable_base();
-  void set_delta(const JointPose& joints);
-  const JointPose& delta() const;
-  JointPose* mutable_delta();
+// // JointTargetPose
+// class JointTargetPose : public JSONBase {
+//  public:
+//   // Data
+//   void set_base(const JointFrame& base);
+//   const JointFrame& base() const;
+//   JointFrame* mutable_base();
+//   void set_delta(const JointPose& joints);
+//   const JointPose& delta() const;
+//   JointPose* mutable_delta();
 
- protected:
-  JointFrame base_;
-  JointPose delta_;
+//  protected:
+//   JointFrame base_;
+//   JointPose delta_;
 
- public:
-  // These methods are used to serialize and deserialize the class.
-  // They will not be wrapped in the SDK.
-  virtual bool Deserialize(const rapidjson::Value& obj);
-  virtual bool Serialize(
-      rapidjson::Writer<rapidjson::StringBuffer>* writer) const;
-  virtual bool IsNullJSONData() const;
-};
+//  public:
+//   // These methods are used to serialize and deserialize the class.
+//   // They will not be wrapped in the SDK.
+//   virtual bool Deserialize(const rapidjson::Value& obj);
+//   virtual bool Serialize(
+//       rapidjson::Writer<rapidjson::StringBuffer>* writer) const;
+//   virtual bool IsNullJSONData() const;
+// };
 
-class CartesianTargetPose : public JSONBase {
- public:
-  void set_base(const CartesianFrame& base);
-  const CartesianFrame& base() const;
-  CartesianFrame* mutable_base();
-  void set_delta(const CartesianPose& delta);
-  const CartesianPose& delta() const;
-  CartesianPose* mutable_delta();
+// class CartesianTargetPose : public JSONBase {
+//  public:
+//   void set_base(const CartesianFrame& base);
+//   const CartesianFrame& base() const;
+//   CartesianFrame* mutable_base();
+//   void set_delta(const CartesianPose& delta);
+//   const CartesianPose& delta() const;
+//   CartesianPose* mutable_delta();
 
- protected:
-  CartesianFrame base_;
-  CartesianPose delta_;
+//  protected:
+//   CartesianFrame base_;
+//   CartesianPose delta_;
 
- public:
-  // These methods are used to serialize and deserialize the class.
-  // They will not be wrapped in the SDK.
-  virtual bool Deserialize(const rapidjson::Value& obj);
-  virtual bool Serialize(
-      rapidjson::Writer<rapidjson::StringBuffer>* writer) const;
-  virtual bool IsNullJSONData() const;
-};
+//  public:
+//   // These methods are used to serialize and deserialize the class.
+//   // They will not be wrapped in the SDK.
+//   virtual bool Deserialize(const rapidjson::Value& obj);
+//   virtual bool Serialize(
+//       rapidjson::Writer<rapidjson::StringBuffer>* writer) const;
+//   virtual bool IsNullJSONData() const;
+// };
 // Pose
 class Pose : public JSONBase {
  public:
-  // Data
-  // Pose(const Pose &;
+  enum Kind {
+    CARTESIAN = 0,
+    JOINT = 1,
+  };
   Pose& operator=(const Pose& other);
-  void set_joint(const JointTargetPose& joint);
-  const JointTargetPose* joint() const;
-  JointTargetPose* mutable_joint();
-  void set_cart(const CartesianTargetPose& cart);
-  const CartesianTargetPose* cart() const;
-  CartesianTargetPose* mutable_cart();
+  void set_kind(Kind kind);
+  Kind kind() const;
+
+  void set_joint(const JointPose& joint);
+  JointPose* mutable_joint();  
+  
+  void set_cart(const CartesianPose& cartesian_pose);
+  CartesianPose* mutable_cart();
+  
+  void set_cart_frame_index(const db::LoadRequest& cart_frame_index);
+  db::LoadRequest* mutable_cart_frame_index();
+  
+  void set_cart_frame(const CartesianFrame& cart_frame);
+  CartesianFrame* mutable_cart_frame();
+
+
 
  protected:
-  std::unique_ptr<JointTargetPose> joint_ = nullptr;
-  std::unique_ptr<CartesianTargetPose> cart_ = nullptr;
+  Kind kind_;
+  std::unique_ptr<JointPose> joint_ = nullptr;
+  std::unique_ptr<CartesianPose> cart_ = nullptr;
+  std::unique_ptr<db::LoadRequest> cart_frame_index_ = nullptr;
+  std::unique_ptr<CartesianFrame> cart_frame_ = nullptr;
+  
 
  public:
   // These methods are used to serialize and deserialize the class.

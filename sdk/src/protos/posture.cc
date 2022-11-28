@@ -530,208 +530,327 @@ namespace lebai
       return position_.IsNullJSONData() && rotation_.IsNullJSONData();
     }
 
-    // JointTargetPose begin
-    void JointTargetPose::set_base(const JointFrame &base) { base_ = base; }
-    const JointFrame &JointTargetPose::base() const { return base_; }
-    JointFrame *JointTargetPose::mutable_base() { return &base_; }
-    void JointTargetPose::set_delta(const JointPose &joints) { delta_ = joints; }
-    const JointPose &JointTargetPose::delta() const { return delta_; }
-    JointPose *JointTargetPose::mutable_delta() { return &delta_; }
-    bool JointTargetPose::Deserialize(const rapidjson::Value &obj)
-    {
-      if (obj.HasMember("base"))
-      {
-        base_.Deserialize(obj["base"]);
-      }
-      if (obj.HasMember("delta"))
-      {
-        delta_.Deserialize(obj["delta"]);
-      }
-      return true;
-    }
-    bool JointTargetPose::Serialize(
-        rapidjson::Writer<rapidjson::StringBuffer> *writer) const
-    {
-      writer->StartObject();
-      if (!base_.IsNullJSONData())
-      {
-        writer->String("base");
-        base_.Serialize(writer);
-      }
-      if (!delta_.IsNullJSONData())
-      {
-        writer->String("delta");
-        delta_.Serialize(writer);
-      }
-      writer->EndObject();
-      return true;
-    }
-    bool JointTargetPose::IsNullJSONData() const
-    {
-      return base_.IsNullJSONData() && delta_.IsNullJSONData();
-    }
-    // JointTargetPose end
+    // // JointTargetPose begin
+    // void JointTargetPose::set_base(const JointFrame &base) { base_ = base; }
+    // const JointFrame &JointTargetPose::base() const { return base_; }
+    // JointFrame *JointTargetPose::mutable_base() { return &base_; }
+    // void JointTargetPose::set_delta(const JointPose &joints) { delta_ = joints; }
+    // const JointPose &JointTargetPose::delta() const { return delta_; }
+    // JointPose *JointTargetPose::mutable_delta() { return &delta_; }
+    // bool JointTargetPose::Deserialize(const rapidjson::Value &obj)
+    // {
+    //   if (obj.HasMember("base"))
+    //   {
+    //     base_.Deserialize(obj["base"]);
+    //   }
+    //   if (obj.HasMember("delta"))
+    //   {
+    //     delta_.Deserialize(obj["delta"]);
+    //   }
+    //   return true;
+    // }
+    // bool JointTargetPose::Serialize(
+    //     rapidjson::Writer<rapidjson::StringBuffer> *writer) const
+    // {
+    //   writer->StartObject();
+    //   if (!base_.IsNullJSONData())
+    //   {
+    //     writer->String("base");
+    //     base_.Serialize(writer);
+    //   }
+    //   if (!delta_.IsNullJSONData())
+    //   {
+    //     writer->String("delta");
+    //     delta_.Serialize(writer);
+    //   }
+    //   writer->EndObject();
+    //   return true;
+    // }
+    // bool JointTargetPose::IsNullJSONData() const
+    // {
+    //   return base_.IsNullJSONData() && delta_.IsNullJSONData();
+    // }
+    // // JointTargetPose end
 
-    // CartesianTargetPose begin
-    void CartesianTargetPose::set_base(const CartesianFrame &base) { base_ = base; }
-    const CartesianFrame &CartesianTargetPose::base() const { return base_; }
-    CartesianFrame *CartesianTargetPose::mutable_base() { return &base_; }
-    void CartesianTargetPose::set_delta(const CartesianPose &delta)
-    {
-      delta_ = delta;
-    }
-    const CartesianPose &CartesianTargetPose::delta() const { return delta_; }
-    CartesianPose *CartesianTargetPose::mutable_delta() { return &delta_; }
-    bool CartesianTargetPose::Deserialize(const rapidjson::Value &obj)
-    {
-      if (obj.HasMember("base"))
-      {
-        base_.Deserialize(obj["base"]);
-      }
-      if (obj.HasMember("delta"))
-      {
-        delta_.Deserialize(obj["delta"]);
-      }
-      return true;
-    }
-    bool CartesianTargetPose::Serialize(
-        rapidjson::Writer<rapidjson::StringBuffer> *writer) const
-    {
-      writer->StartObject();
-      if (!base_.IsNullJSONData())
-      {
-        writer->String("base");
-        base_.Serialize(writer);
-      }
-      if (!delta_.IsNullJSONData())
-      {
-        writer->String("delta");
-        delta_.Serialize(writer);
-      }
-      writer->EndObject();
-      return true;
-    }
-    bool CartesianTargetPose::IsNullJSONData() const
-    {
-      return base_.IsNullJSONData() && delta_.IsNullJSONData();
-    }
+    // // CartesianTargetPose begin
+    // void CartesianTargetPose::set_base(const CartesianFrame &base) { base_ = base; }
+    // const CartesianFrame &CartesianTargetPose::base() const { return base_; }
+    // CartesianFrame *CartesianTargetPose::mutable_base() { return &base_; }
+    // void CartesianTargetPose::set_delta(const CartesianPose &delta)
+    // {
+    //   delta_ = delta;
+    // }
+    // const CartesianPose &CartesianTargetPose::delta() const { return delta_; }
+    // CartesianPose *CartesianTargetPose::mutable_delta() { return &delta_; }
+    // bool CartesianTargetPose::Deserialize(const rapidjson::Value &obj)
+    // {
+    //   if (obj.HasMember("base"))
+    //   {
+    //     base_.Deserialize(obj["base"]);
+    //   }
+    //   if (obj.HasMember("delta"))
+    //   {
+    //     delta_.Deserialize(obj["delta"]);
+    //   }
+    //   return true;
+    // }
+    // bool CartesianTargetPose::Serialize(
+    //     rapidjson::Writer<rapidjson::StringBuffer> *writer) const
+    // {
+    //   writer->StartObject();
+    //   if (!base_.IsNullJSONData())
+    //   {
+    //     writer->String("base");
+    //     base_.Serialize(writer);
+    //   }
+    //   if (!delta_.IsNullJSONData())
+    //   {
+    //     writer->String("delta");
+    //     delta_.Serialize(writer);
+    //   }
+    //   writer->EndObject();
+    //   return true;
+    // }
+    // bool CartesianTargetPose::IsNullJSONData() const
+    // {
+    //   return base_.IsNullJSONData() && delta_.IsNullJSONData();
+    // }
+    // // CartesianTargetPose end
 
     // Pose begin
     Pose &Pose::operator=(const Pose &other)
     {
+      kind_ = other.kind_;
       joint_.reset();
       cart_.reset();
-      if (other.joint_)
+      cart_frame_index_.reset();
+      cart_frame_.reset();
+      if (kind_ == JOINT)
       {
-        joint_ = std::make_unique<JointTargetPose>();
+        joint_ = std::make_unique<JointPose>();
         *joint_ = *other.joint_;
       }
-      else if (other.cart_)
+      else
       {
-        cart_ = std::make_unique<CartesianTargetPose>();
+        cart_ = std::make_unique<CartesianPose>();
         *cart_ = *other.cart_;
+        cart_frame_index_ = std::make_unique<db::LoadRequest>();
+        *cart_frame_index_ = *other.cart_frame_index_;
+        cart_frame_ = std::make_unique<CartesianFrame>();
+        *cart_frame_ = *other.cart_frame_;
       }
       return *this;
     }
-    void Pose::set_joint(const JointTargetPose &joint)
+    void Pose::set_kind(Kind kind)
     {
+      kind_ = kind;
+      joint_.reset();
       cart_.reset();
-      if (!joint_)
+      cart_frame_index_.reset();
+      cart_frame_.reset();
+      if (kind_ == JOINT)
       {
-        joint_ = std::make_unique<JointTargetPose>();
+        joint_ = std::make_unique<JointPose>();
       }
-      *joint_ = joint;
-      // joint_->set_base(joint.base());
-      // joint_->set_delta(joint.delta());
-    }
-    const JointTargetPose *Pose::joint() const { return joint_.get(); }
-    JointTargetPose *Pose::mutable_joint()
-    {
-      if (!joint_)
+      else
       {
-        cart_.reset();
-        joint_ = std::make_unique<JointTargetPose>();
+        cart_ = std::make_unique<CartesianPose>();
+        cart_frame_index_ = std::make_unique<db::LoadRequest>();
+        cart_frame_ = std::make_unique<CartesianFrame>();
       }
-      return joint_.get();
     }
 
-    void Pose::set_cart(const CartesianTargetPose &cart)
+    Pose::Kind Pose::kind() const
     {
+      return kind_;
+    }
+
+    void Pose::set_joint(const JointPose &joint)
+    {
+      kind_ = JOINT;
+      cart_.reset();
+      cart_frame_index_.reset();
+      cart_frame_.reset();
+      joint_ = std::make_unique<JointPose>(joint);
+    }
+
+    JointPose *Pose::mutable_joint()
+    {
+      kind_ = JOINT;
+      cart_.reset();
+      cart_frame_index_.reset();
+      cart_frame_.reset();
+      if (!joint_)
+      {
+        joint_ = std::make_unique<JointPose>();
+      }
+      return joint_.get();
+    }  
+
+    void Pose::set_cart(const CartesianPose &cart)
+    {
+      kind_ = CARTESIAN;
+      joint_.reset();
+      cart_ = std::make_unique<CartesianPose>(cart);
+    }
+
+    CartesianPose *Pose::mutable_cart()
+    {
+      kind_ = CARTESIAN;
       joint_.reset();
       if (!cart_)
       {
-        cart_ = std::make_unique<CartesianTargetPose>();
-      }
-      *cart_ = cart;
-    }
-    const CartesianTargetPose *Pose::cart() const { return cart_.get(); }
-    CartesianTargetPose *Pose::mutable_cart()
-    {
-      if (!cart_)
-      {
-        joint_.reset();
-        cart_ = std::make_unique<CartesianTargetPose>();
+        cart_ = std::make_unique<CartesianPose>();
       }
       return cart_.get();
     }
 
+    void Pose::set_cart_frame_index(const db::LoadRequest &cart_frame_index)
+    {
+      kind_ = CARTESIAN;
+      joint_.reset();
+      if (!cart_frame_index_)
+      {
+        cart_frame_index_ = std::make_unique<db::LoadRequest>(cart_frame_index);
+      };
+    }
+
+    db::LoadRequest *Pose::mutable_cart_frame_index()
+    {
+      kind_ = CARTESIAN;
+      joint_.reset();
+      if (!cart_frame_index_)
+      {
+        cart_frame_index_ = std::make_unique<db::LoadRequest>();
+      }
+      return cart_frame_index_.get();
+    }
+
+    void Pose::set_cart_frame(const CartesianFrame &cart_frame)
+    {
+      kind_ = CARTESIAN;
+      joint_.reset();
+      if (!cart_frame_)
+      {
+        cart_frame_ = std::make_unique<CartesianFrame>(cart_frame);
+      }
+    }
+
+    CartesianFrame *Pose::mutable_cart_frame()
+    {
+      kind_ = CARTESIAN;
+      joint_.reset();
+      if (!cart_frame_)
+      {
+        cart_frame_ = std::make_unique<CartesianFrame>();
+      }
+      return cart_frame_.get();
+    }
+
     bool Pose::Deserialize(const rapidjson::Value &obj)
     {
-      if (obj.HasMember("joint"))
+      if (obj.HasMember("kind"))
       {
-        if (!joint_)
-        {
-          joint_ = std::make_unique<JointTargetPose>();
-        }
-        cart_.reset();
-        joint_->Deserialize(obj["joint"]);
+        kind_ = static_cast<Kind>(obj["kind"].GetInt());
       }
-      else if (obj.HasMember("cart"))
+      else
       {
-        if (!cart_)
+        return false;
+      }
+      if(kind_ == JOINT)
+      {
+        if (obj.HasMember("joint"))
         {
-          cart_ = std::make_unique<CartesianTargetPose>();
-        }
+          if (!joint_)
+          {
+            joint_ = std::make_unique<JointPose>();
+          }
+          cart_.reset();
+          cart_frame_index_.reset();
+          cart_frame_.reset();
+          joint_->Deserialize(obj["joint"]);
+        }        
+      }      
+      else
+      {
         joint_.reset();
-        cart_->Deserialize(obj["cart"]);
+        if (obj.HasMember("cart"))
+        {
+          if (!cart_)
+          {
+            cart_ = std::make_unique<CartesianPose>();
+          }          
+          cart_->Deserialize(obj["cart"]);
+        }
+        else
+        {
+          return false;
+        }
+        if (obj.HasMember("cart_frame_index"))
+        {
+          if (!cart_frame_index_)
+          {
+            cart_frame_index_ = std::make_unique<db::LoadRequest>();
+          }
+          cart_frame_index_->Deserialize(obj["cart_frame_index"]);
+        }
+        if (obj.HasMember("cart_frame"))
+        {
+          if (!cart_frame_)
+          {
+            cart_frame_ = std::make_unique<CartesianFrame>();
+          }
+          cart_frame_->Deserialize(obj["cart_frame"]);
+        }
       }
-
       return true;
     }
 
     bool Pose::Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const
     {
       writer->StartObject();
-      if (joint_ && !joint_->IsNullJSONData())
+      writer->String("kind");
+      writer->Int(static_cast<int>(kind_));
+      if(kind_ == JOINT)
       {
-        writer->String("joint");
-        joint_->Serialize(writer);
+        if (joint_)
+        {
+          writer->String("joint");
+          joint_->Serialize(writer);
+        }
       }
-      else if (cart_ && !cart_->IsNullJSONData())
+      else
       {
-        writer->String("cart");
-        cart_->Serialize(writer);
+        if (cart_)
+        {
+          writer->String("cart");
+          cart_->Serialize(writer);
+        }
+        if (cart_frame_index_)
+        {
+          writer->String("cart_frame_index");
+          cart_frame_index_->Serialize(writer);
+        }
+        if (cart_frame_)
+        {
+          writer->String("cart_frame");
+          cart_frame_->Serialize(writer);
+        }
       }
       writer->EndObject();
       return true;
     }
     bool Pose::IsNullJSONData() const
     {
-      if (!joint_ && !cart_)
+      if(joint_ || cart_ || cart_frame_index_ || cart_frame_)
       {
-        return true;
-      }
-      if (joint_)
-      {
-        return joint_->IsNullJSONData();
-      }
-      else if (cart_)
-      {
-        return cart_->IsNullJSONData();
+        return false;
       }
       return true;
     }
+    // Pose end
 
+    // PoseRequest begin
     void PoseRequest::set_pose(const Pose &pose) { pose_ = pose; }
     const Pose &PoseRequest::pose() const { return pose_; }
     Pose *PoseRequest::mutable_pose() { return &pose_; }
