@@ -612,7 +612,7 @@ namespace lebai
       * @param dir: 调用场景所在的文件夹名
       * @param params: 其他参数
     */
-    unsigned int scene(std::string name,bool is_main,unsigned int loop_to,std::string dir,const std::vector<std::string> & params);
+    unsigned int scene(const std::string &name,bool is_main,unsigned int loop_to,const std::string &dir,const std::vector<std::string> & params);
     /**
       * @brief 调用场景
       * 
@@ -621,13 +621,13 @@ namespace lebai
       * @param loop_to: 循环次数（默认0永久循环）
       * @param dir: 调用场景所在的文件夹名
     */
-    unsigned int scene(std::string name,bool is_main,unsigned int loop_to,std::string dir);
+    unsigned int scene(const std::string &name,bool is_main,unsigned int loop_to,const std::string &dir);
     /**
       * @brief 调用场景
       * 
       * @param name: 调用场景的名字
     */
-    unsigned int scene(std::string name);
+    unsigned int scene(const std::string &name);
     /**
      * @brief 查询任务列表
     */
@@ -702,7 +702,7 @@ namespace lebai
      * @param is_dir: 要保存的文件是否为文件夹.
      * @param data: 文件字节.
     */
-    void save_file(std::string dir,std::string name,bool is_dir,std::string data);
+    void save_file(const std::string &dir,const std::string &name,bool is_dir,const std::string &data);
     /**
      * @brief 重命名文件
      * 
@@ -711,7 +711,7 @@ namespace lebai
      * @param to_dir: 目标文件文件夹
      * @param to_name: 目标文件文件名
     */
-    void rename_file(std::string from_dir,std::string from_name,std::string to_dir,std::string to_name);
+    void rename_file(const std::string &from_dir,const std::string &from_name,const std::string &to_dir,const std::string &to_name);
     
     /**
      * @brief 查询文件
@@ -721,7 +721,7 @@ namespace lebai
      * 
      * @return 文件的具体内容
     */
-    std::tuple<bool,std::string> load_file(std::string dir,std::string name);
+    std::tuple<bool,std::string> load_file(const std::string &dir,const std::string &name);
     
     /**
      * @brief 查询文件列表
@@ -732,7 +732,7 @@ namespace lebai
      * 
      * @return 文件列表
     */
-    std::vector<std::tuple<bool,std::string>> load_file_list(std::string dir,std::string prefix,std::string suffix);
+    std::vector<std::tuple<bool,std::string>> load_file_list(const std::string &dir,const std::string &prefix,const std::string &suffix);
     /**
      * @brief 将文件从文件系统中压缩到zip文件
      * 
@@ -741,7 +741,7 @@ namespace lebai
      * @param to_dir  压缩后文件的路径
      * @param name 压缩后文件的名称
     */
-    // void zip(std::string from_dir, std::vector<std::string> files, std::string to_dir, std::string name);
+    // void zip(const std::string &from_dir, std::vector<std::string> files, const std::string &to_dir, const std::string &name);
     // /**
     //  *  @brief 将zip文件解压到文件系统
     //  *
@@ -750,7 +750,7 @@ namespace lebai
     //  * @param files zip文件内的文件名
     //  * @param to_dir  解压到的路径
     //  */
-    // void unzip(std::string from_dir, std::string name, std::vector<std::string> files, std::string to_dir);
+    // void unzip(const std::string &from_dir, const std::string &name, std::vector<std::string> files, const std::string &to_dir);
     // /**
     //  * @brief 查询文件列表
     //  *
@@ -761,7 +761,7 @@ namespace lebai
     //  *
     //  * @return 文件列表
     //  */
-    // //std::vector<std::tuple<bool,string>> load_zip_list(std::string zip,std::string dir,std::string prefix,std::string suffix);
+    // //std::vector<std::tuple<bool,string>> load_zip_list(const std::string &zip,const std::string &dir,const std::string &prefix,const std::string &suffix);
 
     /** @}*/
 

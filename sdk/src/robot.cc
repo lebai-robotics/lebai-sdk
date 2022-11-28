@@ -582,7 +582,7 @@ void Robot::add_signal(unsigned int index,int value)
   impl_->addSignal(req);
 }
 
-unsigned int Robot::scene(std::string name,bool is_parallel,unsigned int loop_to,std::string dir,const std::vector<std::string> & params)
+unsigned int Robot::scene(const std::string &name,bool is_parallel,unsigned int loop_to,const std::string & dir,const std::vector<std::string> & params)
 {
   control::StartTaskRequest req;
   req.set_name(name);
@@ -593,7 +593,7 @@ unsigned int Robot::scene(std::string name,bool is_parallel,unsigned int loop_to
   control::TaskIndex resp = impl_->scene(req);
   return resp.id();
 }
-unsigned int Robot::scene(std::string name,bool is_parallel,unsigned int loop_to,std::string dir)
+unsigned int Robot::scene(const std::string &name,bool is_parallel,unsigned int loop_to,const std::string & dir)
 {
   control::StartTaskRequest req;
   req.set_name(name);
@@ -603,7 +603,7 @@ unsigned int Robot::scene(std::string name,bool is_parallel,unsigned int loop_to
   control::TaskIndex resp = impl_->scene(req);
   return resp.id();
 }
-unsigned int Robot::scene(std::string name)
+unsigned int Robot::scene(const std::string &name)
 {
   control::StartTaskRequest req;
   req.set_name(name);
@@ -772,7 +772,7 @@ std::array<double, 6> Robot::pose_inverse(const std::array<double, 6> & in)
   return pose;
 }
 
-void Robot::save_file(std::string dir,std::string name,bool is_dir,std::string data)
+void Robot::save_file(const std::string &dir,std::string name,bool is_dir,const std::string & data)
 {
   file::SaveFileRequest req;
   req.set_dir(dir);
@@ -784,7 +784,7 @@ void Robot::save_file(std::string dir,std::string name,bool is_dir,std::string d
   impl_->saveFile(req);
 }
 /**
-void Robot::save_file(std::string dir,std::string name,file::File file)
+void Robot::save_file(const std::string &dir,const std::string & name,file::File file)
 {
   file::SaveFileRequest req;
   req.set_dir(dir);
@@ -795,7 +795,7 @@ void Robot::save_file(std::string dir,std::string name,file::File file)
 */
 
 
-void Robot::rename_file(std::string from_dir,std::string from_name,std::string to_dir,std::string to_name)
+void Robot::rename_file(const std::string &from_dir,const std::string & from_name,const std::string & to_dir,const std::string & to_name)
 {
   file::RenameFileRequest req;
   file::FileIndex from;
@@ -817,7 +817,7 @@ void Robot::rename_file(file::FileIndex from,file::FileIndex to)
   impl_->renameFile(req);
 }
 */
-std::tuple<bool,std::string> Robot::load_file(std::string dir,std::string name)
+std::tuple<bool,std::string> Robot::load_file(const std::string &dir,const std::string & name)
 {
   file::FileIndex req;
   req.set_dir(dir);
@@ -826,7 +826,7 @@ std::tuple<bool,std::string> Robot::load_file(std::string dir,std::string name)
   std::tuple<bool,std::string> ret = std::make_tuple(resp.is_dir(),resp.data());
   return ret;
 }
-std::vector<std::tuple<bool,std::string>> Robot::load_file_list(std::string dir,std::string prefix,std::string suffix)
+std::vector<std::tuple<bool,std::string>> Robot::load_file_list(const std::string &dir,const std::string & prefix,const std::string & suffix)
 {
   file::LoadFileListRequest req;
   req.set_dir(dir);
