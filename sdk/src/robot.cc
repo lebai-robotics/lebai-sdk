@@ -772,7 +772,7 @@ std::array<double, 6> Robot::pose_inverse(const std::array<double, 6> & in)
   return pose;
 }
 
-void Robot::save_file(const std::string &dir,std::string name,bool is_dir,const std::string & data)
+void Robot::save_file(const std::string &dir,const std::string &name,bool is_dir,const std::string & data)
 {
   file::SaveFileRequest req;
   req.set_dir(dir);
