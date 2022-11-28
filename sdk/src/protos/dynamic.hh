@@ -17,7 +17,7 @@ namespace lebai
             double *mutable_mass();
 
             void set_cog(std::vector<double> cog);
-            std::vector<double>  cog() const;
+            std::vector<double> cog() const;
             std::vector<double> * mutable_cog();
 
         protected:

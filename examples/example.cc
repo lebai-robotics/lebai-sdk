@@ -45,47 +45,45 @@ int main(int argc, char ** argv)
   // Create robot instance
   lebai::l_master::Robot robot(ip, sim);
   std::this_thread::sleep_for(std::chrono::seconds(1));  
-  try
-  {
-    robot.start_sys();
-    auto jp = robot.get_actual_joint_positions();
-    for (auto&& j : jp)
-    {
-      std::cout << j.first<<" "<<j.second << std::endl;
-    }
-  }
-  catch(std::exception & e)
-  {
-    std::cout<<"Exception: "<<e.what()<<std::endl;
-  }
+  // try
+  // {
+  //   robot.start_sys();
+  //   auto jp = robot.get_actual_joint_positions();
+  //   for (auto&& j : jp)
+  //   {
+  //     std::cout << j.first<<" "<<j.second << std::endl;
+  //   }
+  // }
+  // catch(std::exception & e)
+  // {
+  //   std::cout<<"Exception: "<<e.what()<<std::endl;
+  // }
 
   
 
-  return 0;
   
-  {
-    std::array<double, 6> a = {1, 2, 0, 0, 0, 0};
-    std::array<double, 6> b = {0, 0, 3, 0, 0, 0};
-    auto c = robot.pose_inverse(a);
-    std::cout<<"pose_inverse: "<<c[0]<<", "<<c[1]<<", "<<c[2]<<", "<<c[3]<<", "<<c[4]<<", "<<c[5]<<std::endl;
-    a = {0, 0, 0, 1, 0, 0};
-    b = {0, 0, 0, 0, 0, 1};
-    c = robot.pose_times(a,b);
-    std::cout<<"pose_times: "<<c[0]<<", "<<c[1]<<", "<<c[2]<<", "<<c[3]<<", "<<c[4]<<", "<<c[5]<<std::endl;
-    auto d = robot.pose_inverse(a);
-    std::cout<<"pose_inverse: "<<d[0]<<", "<<d[1]<<", "<<d[2]<<", "<<d[3]<<", "<<d[4]<<", "<<d[5]<<std::endl;
-    return 0;
-  }
+  // {
+  //   std::array<double, 6> a = {1, 2, 0, 0, 0, 0};
+  //   std::array<double, 6> b = {0, 0, 3, 0, 0, 0};
+  //   auto c = robot.pose_inverse(a);
+  //   std::cout<<"pose_inverse: "<<c[0]<<", "<<c[1]<<", "<<c[2]<<", "<<c[3]<<", "<<c[4]<<", "<<c[5]<<std::endl;
+  //   a = {0, 0, 0, 1, 0, 0};
+  //   b = {0, 0, 0, 0, 0, 1};
+  //   c = robot.pose_times(a,b);
+  //   std::cout<<"pose_times: "<<c[0]<<", "<<c[1]<<", "<<c[2]<<", "<<c[3]<<", "<<c[4]<<", "<<c[5]<<std::endl;
+  //   auto d = robot.pose_inverse(a);
+  //   std::cout<<"pose_inverse: "<<d[0]<<", "<<d[1]<<", "<<d[2]<<", "<<d[3]<<", "<<d[4]<<", "<<d[5]<<std::endl;
+  //   return 0;
+  // }
 
   robot.start_sys();
-  std::this_thread::sleep_for(std::chrono::seconds(2));
   std::tuple<int,std::string> resp;
   // Call json string api
-  {    
-    std::string movej_req = "{\"param\":{\"velocity\":0.5},\"pose\":{\"joint\":{\"delta\":"
-    "{\"joint\":[-1.0,0.0,0.0,0.0,0.0,0.0]}}}}";
-    resp = robot.call("move_joint", movej_req);
-  }
+  // {    
+  //   std::string movej_req = "{\"param\":{\"velocity\":0.5},\"pose\":{\"joint\":{\"delta\":"
+  //   "{\"joint\":[-1.0,0.0,0.0,0.0,0.0,0.0]}}}}";
+  //   resp = robot.call("move_joint", movej_req);
+  // }
   // movej with joint positions.
   {    
     std::map<std::string, double> joint_positions;
