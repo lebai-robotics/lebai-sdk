@@ -13,21 +13,14 @@ jobs:
      steps:
        - name: Checkout
          uses: actions/checkout@v1
-
-       - name: install component
-         run: yum install -y build-essential doxygen graphviz python3-pip python3-dev python
-
-       - name: install dependencies
-         run: pip3 install -r requirements.txt
+         
+       - run: for PYBIN in /opt/python/*/bin;do "${PYBIN}/pip" install -r requirements.txt done
 
        - name: configure
          run: cmake -S. -Bbuild -DBUILD_PYTHON=ON
 
        - name: build
          run: cmake --build build
-         
-       - name: install auditwheel
-         run: pip3 install auditwheel
         
        - run: cd build/python/dist/
          
