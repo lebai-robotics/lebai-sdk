@@ -26,7 +26,7 @@ jobs:
          run: for PYWHL in build/python/dist/*.whl;do auditwheel repair "${PYWHL}";done;
         
        - name: upload
-         uses: actions/upload-artifact@v1
+         uses: actions/upload-artifact@v2
          with:
           path: build/python/dist/wheelhouse/*.whl
           
