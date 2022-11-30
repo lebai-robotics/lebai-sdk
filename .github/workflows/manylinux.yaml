@@ -25,7 +25,7 @@ jobs:
        - run: cd build/python/dist/
          
        - name: repair
-         run: auditwheel repair ./*.whl
+         run: for PYWHL in ./*.whl;do auditwheel repair "${PYWHL}";done;
         
        - name: upload
          uses: actions/upload-artifact@v3
