@@ -21,14 +21,12 @@ jobs:
 
        - name: build
          run: cmake --build build
-        
-       - run: cd build/python/dist/
          
        - name: repair
-         run: for PYWHL in ./*.whl;do auditwheel repair "${PYWHL}";done;
+         run: for PYWHL in build/python/dist/*.whl;do auditwheel repair "${PYWHL}";done;
         
        - name: upload
          uses: actions/upload-artifact@v3
          with:
-          path: ./wheelhouse/*.whl
+          path: build/python/dist/wheelhouse/*.whl
           
