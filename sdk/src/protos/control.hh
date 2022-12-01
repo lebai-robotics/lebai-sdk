@@ -33,9 +33,9 @@ namespace lebai
             std::string name();
             std::string * mutable_name();
 
-            void set_is_main(bool is_main);
-            bool is_main();
-            bool * mutable_is_main();
+            void set_is_parallel(bool is_main);
+            bool is_parallel();
+            bool * mutable_is_parallel();
 
             void set_loop_to(unsigned int loop_to);
             unsigned int loop_to();
@@ -52,7 +52,7 @@ namespace lebai
 
         protected:
             std::string name_;
-            bool is_main_;
+            bool is_parallel_;
             unsigned int loop_to_;
             std::string dir_;
             TaskKind kind_ = TaskKind::LUA;
