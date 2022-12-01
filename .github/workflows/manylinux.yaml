@@ -15,6 +15,7 @@ jobs:
          uses: actions/checkout@v1
          
        - run: for PYBIN in /opt/python/*/bin;do "${PYBIN}/pip" install -r requirements.txt; done;
+       - run: for PYBIN in /opt/python/*/bin;do "${PYBIN}/pip" install -r twine; done;
 
        - name: configure
          run: cmake -S. -Bbuild -DBUILD_PYTHON=ON
