@@ -51,10 +51,12 @@ cpack
 ## 编译选项
 
  - BUILD_PYTHON: 是否编译python接口 默认为OFF
+ - PYTHONPATH: PYTHON的安装目录
  - BUILD_TESTING: 是否编译C++测试程序 默认为ON 
  - TEST_ROBOT_IP: 测试程序的机器人IP地址，正确的设置该值用于单元测试 默认为127.0.0.1
  - BUILD_EXAMPLES: 是否编译示例程序 默认为ON
  - BUILD_DEB: 是否生成DEB包的构建 默认为OFF
+ 
 
 
 

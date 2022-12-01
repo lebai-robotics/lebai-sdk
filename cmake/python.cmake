@@ -18,6 +18,7 @@ if(UNIX AND NOT APPLE)
 endif()
 
 # Find Python 3
+
 find_package(Python3 REQUIRED COMPONENTS Interpreter Development.Module)
 list(APPEND CMAKE_SWIG_FLAGS  "-threads" "-py3" "-DPY3")
 

@@ -72,10 +72,16 @@ message(STATUS "Build C++ library: ${BUILD_CXX}")
 option(BUILD_PYTHON "Build Python Library" OFF)
 message(STATUS "Build Python: ${BUILD_PYTHON}")
 
+if(BUILD_PYTHON)
+  if(DEFINED PYTHONPATH)
+    message(STATUS "Python path: ${PYTHONPATH}")
+    set(Python3_ROOT_DIR ${PYTHONPATH})
+  endif()
+endif()
+
 # Disable CTest targets
 set_property(GLOBAL PROPERTY CTEST_TARGETS_ADDED 1)
 include(CTest)
-
 include(cpp)
 
 if(WIN32 AND (BUILD_DOTNET OR BUILD_JAVA OR BUILD_PYTHON))

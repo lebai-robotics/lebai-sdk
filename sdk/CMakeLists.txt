@@ -26,7 +26,6 @@ set_target_properties(lebai-cpp PROPERTIES
 add_library(${PROJECT_NAMESPACE}::lebai-cpp ALIAS lebai-cpp)
 
 
-
 if(BUILD_TESTING)
   add_subdirectory(test)
 endif()
@@ -36,5 +35,6 @@ endif()
 install(TARGETS lebai-cpp
   EXPORT ${PROJECT_NAME}Targets
   PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${PROJECT_NAME}
-  )
+)
+
 
