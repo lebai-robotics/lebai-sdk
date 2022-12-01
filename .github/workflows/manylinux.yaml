@@ -15,7 +15,7 @@ jobs:
          uses: actions/checkout@v1
          
        - run: for PYBIN in /opt/python/*/bin;do "${PYBIN}/pip" install -r requirements.txt; done;
-       - run: for PYBIN in /opt/python/*/bin;do "${PYBIN}/pip" install twine; done;
+       - run: /opt/python/cp310-cp310m/bin/pip install twine==2.0.0
 
        - name: configure
          run: cmake -S. -Bbuild -DBUILD_PYTHON=ON
@@ -29,7 +29,7 @@ jobs:
 #       - name: upload
 #         uses: actions/upload-artifact@v1
 #         with:
-#          name: build/python/dist/wheelhouse/*.whl
+#          name: wheelhouse/*.whl
           
        - name: upload Pypi
-         run: twine upload -u ${{ secrets.USRNAME }} -p ${{ secrets.PASSWD }} wheelhouse/*.whl
+         run: /opt/python/cp310-cp310m/bin/twine upload -u ${{ secrets.USRNAME }} -p ${{ secrets.PASSWD }} wheelhouse/*.whl
