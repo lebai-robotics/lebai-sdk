@@ -74,6 +74,28 @@ jobs:
         with:
          name: DebForCPP
          path: ./*.deb
+         
+  pypi: 
+     runs-on: ubuntu-latest
+     container: quay.io/pypa/manylinux2010_x86_64
+     steps:
+       - name: Checkout
+         uses: actions/checkout@v1
+         
+       - run: for PYBIN in /opt/python/*/bin;do "${PYBIN}/pip" install -r requirements.txt; done;
+       - run: /opt/python/cp310-cp310/bin/pip install twine==2.0.0
+
+       - name: configure
+         run: cmake -S. -Bbuild -DBUILD_PYTHON=ON
+
+       - name: build
+         run: cmake --build build
+         
+       - name: repair
+         run: auditwheel repair build/python/dist/*.whl
+          
+       - name: upload Pypi
+         run: /opt/python/cp310-cp310/bin/twine upload -u ${{ secrets.USRNAME }} -p ${{ secrets.PASSWD }} wheelhouse/*.whl
   
   test:
    needs: build
