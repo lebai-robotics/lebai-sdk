@@ -19,35 +19,35 @@ jobs:
        - name: create-whl-dir
          run: mkdir -p whl
 
-       - name: build-with-python3.6
+       - name: build with python3.6
          run: |
           rm -rf build
           cmake -S. -Bbuild -DBUILD_PYTHON=ON -DPYTHONPATH=/opt/python/cp36-cp36m
           cmake --build build
           cp build/python/dist/*.whl whl/
        
-       - name: build-with-python3.7
+       - name: build with python3.7
          run: |
           rm -rf build
           cmake -S. -Bbuild -DBUILD_PYTHON=ON -DPYTHONPATH=/opt/python/cp37-cp37m
           cmake --build build
           cp build/python/dist/*.whl whl/
 
-       - name: build-with-python3.8
+       - name: build with python3.8
          run: |
           rm -rf build
           cmake -S. -Bbuild -DBUILD_PYTHON=ON -DPYTHONPATH=/opt/python/cp38-cp38
           cmake --build build
           cp build/python/dist/*.whl whl/
 
-       - name: build-with-python3.9
+       - name: build with python3.9
          run: |
           rm -rf build
           cmake -S. -Bbuild -DBUILD_PYTHON=ON -DPYTHONPATH=/opt/python/cp39-cp39
           cmake --build build
           cp build/python/dist/*.whl whl/
 
-       - name: build-with-python3.10
+       - name: build with python3.10
          run: |
           rm -rf build
           cmake -S. -Bbuild -DBUILD_PYTHON=ON -DPYTHONPATH=/opt/python/cp310-cp310
@@ -55,7 +55,7 @@ jobs:
           cp build/python/dist/*.whl whl/          
 
 
-       - name: repair-whl
+       - name: repair whl
          run: |
           cd whl
           for PYWHL in *.whl;do auditwheel repair "${PYWHL}";done;
