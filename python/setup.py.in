@@ -14,7 +14,7 @@ class InstallPlatlib(install):
         self.install_lib=self.install_platlib
 
 setup(
-  name='@PYTHON_PROJECT@',
+  name='@PYTHON_PROJECT@-sdk',
   description = 'lebai controller python sdk',
   version='@PROJECT_VERSION@',
   author='liufang',

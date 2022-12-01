@@ -25,14 +25,43 @@ jobs:
           cmake -S. -Bbuild -DBUILD_PYTHON=ON -DPYTHONPATH=/opt/python/cp36-cp36m
           cmake --build build
           cp build/python/dist/*.whl whl/
-        
+       
+       - name: build-with-python3.7
+         run: |
+          rm -rf build
+          cmake -S. -Bbuild -DBUILD_PYTHON=ON -DPYTHONPATH=/opt/python/cp37-cp37m
+          cmake --build build
+          cp build/python/dist/*.whl whl/
+
+       - name: build-with-python3.8
+         run: |
+          rm -rf build
+          cmake -S. -Bbuild -DBUILD_PYTHON=ON -DPYTHONPATH=/opt/python/cp38-cp38
+          cmake --build build
+          cp build/python/dist/*.whl whl/
+
+       - name: build-with-python3.9
+         run: |
+          rm -rf build
+          cmake -S. -Bbuild -DBUILD_PYTHON=ON -DPYTHONPATH=/opt/python/cp39-cp39
+          cmake --build build
+          cp build/python/dist/*.whl whl/
+
+       - name: build-with-python3.10
+         run: |
+          rm -rf build
+          cmake -S. -Bbuild -DBUILD_PYTHON=ON -DPYTHONPATH=/opt/python/cp310-cp310
+          cmake --build build
+          cp build/python/dist/*.whl whl/          
+
+
        - name: repair-whl
          run: |
-          cd whl;
+          cd whl
           for PYWHL in *.whl;do auditwheel repair "${PYWHL}";done;
        
        - name: list
-         run: ls whl
+         run: ls whl/wheelhouse
 #       - name: upload
 #         uses: actions/upload-artifact@v1
 #         with:
