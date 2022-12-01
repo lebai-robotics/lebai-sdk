@@ -20,7 +20,7 @@ jobs:
   build: 
     strategy:
      matrix:
-      py-version: [ 3.6, 3.7, 3.8, 3.9, 3.10.8, 3.11 ]
+      py-version: [ 3.5, 3.6, 3.7, 3.8, 3.9, 3.10.8, 3.11 ]
       os-version: [ ubuntu-latest ]
     environment:
       name: github-pages
