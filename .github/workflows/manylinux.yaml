@@ -23,10 +23,12 @@ jobs:
          run: cmake --build build
          
        - name: repair
-         run: for PYWHL in build/python/dist/*.whl;do auditwheel repair "${PYWHL}";done;
+         run: auditwheel repair build/python/dist/*.whl
         
 #       - name: upload
 #         uses: actions/upload-artifact@v1
 #         with:
 #          name: build/python/dist/wheelhouse/*.whl
           
+       - name: upload Pypi
+         run: twine upload -u ${{ secrets.USRNAME }} -p ${{ secrets.PASSWD }} wheelhouse/*.whl
