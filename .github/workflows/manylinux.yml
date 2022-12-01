@@ -16,21 +16,23 @@ jobs:
          
        - run: for PYBIN in /opt/python/*/bin;do "${PYBIN}/pip" install -r requirements.txt; done;
        
-       - name: create-wheelhouse-dir
-         run: mkdir -p wheelhouse
+       - name: create-whl-dir
+         run: mkdir -p whl
 
        - name: build-with-python3.6
          run: |
           rm -rf build
           cmake -S. -Bbuild -DBUILD_PYTHON=ON -DPYTHONPATH=/opt/python/cp36-cp36m
           cmake --build build
-          cp build/python/dist/*.whl wheelhouse/
+          cp build/python/dist/*.whl whl/
         
        - name: repair-whl
-         run: for PYWHL in wheelhouse/*.whl;do auditwheel repair "${PYWHL}";done;
+         run: |
+          cd whl;
+          for PYWHL in *.whl;do auditwheel repair "${PYWHL}";done;
        
        - name: list
-         run: ls wheelhouse/
+         run: ls whl
 #       - name: upload
 #         uses: actions/upload-artifact@v1
 #         with:
