@@ -98,8 +98,9 @@ jobs:
          run: for PY in /opt/python/*;do
           rm -rf build;
           cmake -S. -Bbuild -DBUILD_PYTHON=ON -DPYTHONPATH=${PY};
-          cmake --build build
-          cp build/python/dist/*.whl whl/
+          cmake --build build;
+          cp build/python/dist/*.whl whl/;
+          done;
          
        - name: repair
          run: auditwheel repair whl/*.whl
