@@ -20,7 +20,7 @@ jobs:
   build: 
     strategy:
      matrix:
-      py-version: [ 3.5, 3.6, 3.7, 3.8, 3.9, 3.10.8, 3.11 ]
+      py-version: [ 3.11 ]
       os-version: [ ubuntu-latest ]
     environment:
       name: github-pages
@@ -60,11 +60,11 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v1
         
-      - name: upload .whl
-        uses: actions/upload-artifact@v3
-        with: 
-         name: WheelForPython
-         path: ./build/python/dist/*.whl
+      # - name: upload .whl
+      #   uses: actions/upload-artifact@v3
+      #   with: 
+      #    name: WheelForPython
+      #    path: ./build/python/dist/*.whl
 
       - name: build deb pack
         run: cpack --config ./build/CPackConfig.cmake
@@ -74,6 +74,41 @@ jobs:
         with:
          name: DebForCPP
          path: ./*.deb
+         
+  pypi: 
+     runs-on: ubuntu-latest
+     container: quay.io/pypa/manylinux2010_x86_64
+     steps:
+       - name: Checkout
+         uses: actions/checkout@v1
+         
+       - run: for PYBIN in /opt/python/*/bin;do "${PYBIN}/pip" install -r requirements.txt; done;
+       - run: /opt/python/cp310-cp310/bin/pip install twine==2.0.0
+
+       - name: configure
+         run: cmake -S. -Bbuild -DBUILD_PYTHON=ON
+
+       - name: build
+         run: cmake --build build
+
+       - name: create-whl-dir
+         run: mkdir -p whl
+
+       - name: build with python
+         run: for PY in /opt/python/*;do
+          rm -rf build;
+          cmake -S. -Bbuild -DBUILD_PYTHON=ON -DPYTHONPATH=${PY};
+          cmake --build build;
+          cp build/python/dist/*.whl whl/;
+          done;
+         
+       - name: repair
+         run: for PYWHL in whl/*.whl;do
+          auditwheel repair ${PYWHL};
+          done;
+          
+       - name: upload Pypi
+         run: /opt/python/cp310-cp310/bin/twine upload -u ${{ secrets.USRNAME }} -p ${{ secrets.PASSWD }} wheelhouse/*.whl
   
   test:
    needs: build
