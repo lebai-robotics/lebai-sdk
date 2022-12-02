@@ -1,0 +1,69 @@
+
+name: auditwheel
+run-name: ${{ github.actor }} triggered auditwheel
+on: 
+  workflow_dispatch: 
+  push:
+  pull_request:
+  
+jobs:
+  compile:
+     runs-on: ubuntu-latest
+     container: quay.io/pypa/manylinux2010_x86_64
+     steps:
+       - name: Checkout
+         uses: actions/checkout@v1
+         
+       - run: for PYBIN in /opt/python/*/bin;do "${PYBIN}/pip" install -r requirements.txt; done;
+       
+       - name: create-whl-dir
+         run: mkdir -p whl
+
+       - name: build with python3.6
+         run: |
+          rm -rf build
+          cmake -S. -Bbuild -DBUILD_PYTHON=ON -DPYTHONPATH=/opt/python/cp36-cp36m
+          cmake --build build
+          cp build/python/dist/*.whl whl/
+       
+       - name: build with python3.7
+         run: |
+          rm -rf build
+          cmake -S. -Bbuild -DBUILD_PYTHON=ON -DPYTHONPATH=/opt/python/cp37-cp37m
+          cmake --build build
+          cp build/python/dist/*.whl whl/
+
+       - name: build with python3.8
+         run: |
+          rm -rf build
+          cmake -S. -Bbuild -DBUILD_PYTHON=ON -DPYTHONPATH=/opt/python/cp38-cp38
+          cmake --build build
+          cp build/python/dist/*.whl whl/
+
+       - name: build with python3.9
+         run: |
+          rm -rf build
+          cmake -S. -Bbuild -DBUILD_PYTHON=ON -DPYTHONPATH=/opt/python/cp39-cp39
+          cmake --build build
+          cp build/python/dist/*.whl whl/
+
+       - name: build with python3.10
+         run: |
+          rm -rf build
+          cmake -S. -Bbuild -DBUILD_PYTHON=ON -DPYTHONPATH=/opt/python/cp310-cp310
+          cmake --build build
+          cp build/python/dist/*.whl whl/          
+
+
+       - name: repair whl
+         run: |
+          cd whl
+          for PYWHL in *.whl;do auditwheel repair "${PYWHL}";done;
+       
+       - name: list
+         run: ls whl/wheelhouse
+#       - name: upload
+#         uses: actions/upload-artifact@v1
+#         with:
+#          name: build/python/dist/wheelhouse/*.whl
+          
