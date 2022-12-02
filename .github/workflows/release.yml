@@ -103,7 +103,9 @@ jobs:
           done;
          
        - name: repair
-         run: auditwheel repair whl/*.whl
+         run: for PYWHL in whl/*.whl;do
+          auditwheel repair whl/*.whl;
+          done;
           
        - name: upload Pypi
          run: /opt/python/cp310-cp310/bin/twine upload -u ${{ secrets.USRNAME }} -p ${{ secrets.PASSWD }} wheelhouse/*.whl
