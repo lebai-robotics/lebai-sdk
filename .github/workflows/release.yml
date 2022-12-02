@@ -104,7 +104,7 @@ jobs:
          
        - name: repair
          run: for PYWHL in whl/*.whl;do
-          auditwheel repair whl/*.whl;
+          auditwheel repair ${PYWHL};
           done;
           
        - name: upload Pypi
