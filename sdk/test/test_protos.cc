@@ -17,6 +17,7 @@
 #include <math.h>
 #include <memory>
 #include "protos/posture.hh"
+#include "protos/motion.hh"
 
 namespace lebai
 {
@@ -186,6 +187,72 @@ namespace lebai
       EXPECT_NEAR(0.2, rot_check.euler_zyx()->y(), 1e-6);
       EXPECT_NEAR(0.3, rot_check.euler_zyx()->z(), 1e-6);
       // std::cout<<"json_str:"<<json_str<<std::endl;
+    }
+    {
+      lebai::posture::GetPoseTransRequest req, req_check;
+      req.mutable_from()->mutable_cart()->mutable_position()->set_x(0.1);
+      req.mutable_from()->mutable_cart()->mutable_position()->set_y(0.2);
+      req.mutable_from()->mutable_cart()->mutable_position()->set_z(0.3);
+      req.mutable_from()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_x(0.4);
+      req.mutable_from()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_y(0.5);
+      req.mutable_from()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_z(0.6);
+
+      req.mutable_from_to()->mutable_cart()->mutable_position()->set_x(0.1);
+      req.mutable_from_to()->mutable_cart()->mutable_position()->set_y(0.2);
+      req.mutable_from_to()->mutable_cart()->mutable_position()->set_z(0.3);
+      req.mutable_from_to()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_x(0.4);
+      req.mutable_from_to()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_y(0.5);
+      req.mutable_from_to()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_z(0.6);
+      auto json_str = req.ToJSONString();      
+      req_check.FromJSONString(json_str);
+      EXPECT_NEAR(0.1, req_check.mutable_from()->mutable_cart()->mutable_position()->x(), 1e-6);
+      EXPECT_NEAR(0.2, req_check.mutable_from()->mutable_cart()->mutable_position()->y(), 1e-6);
+      EXPECT_NEAR(0.3, req_check.mutable_from()->mutable_cart()->mutable_position()->z(), 1e-6);
+      EXPECT_NEAR(0.4, req_check.mutable_from()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->x(), 1e-6);
+      EXPECT_NEAR(0.5, req_check.mutable_from()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->y(), 1e-6);
+      EXPECT_NEAR(0.6, req_check.mutable_from()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->z(), 1e-6);
+
+      EXPECT_NEAR(0.1, req_check.mutable_from_to()->mutable_cart()->mutable_position()->x(), 1e-6);
+      EXPECT_NEAR(0.2, req_check.mutable_from_to()->mutable_cart()->mutable_position()->y(), 1e-6);
+      EXPECT_NEAR(0.3, req_check.mutable_from_to()->mutable_cart()->mutable_position()->z(), 1e-6);
+      EXPECT_NEAR(0.4, req_check.mutable_from_to()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->x(), 1e-6);
+      EXPECT_NEAR(0.5, req_check.mutable_from_to()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->y(), 1e-6);
+      EXPECT_NEAR(0.6, req_check.mutable_from_to()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->z(), 1e-6);
+    }
+    {
+      lebai::motion::SpeedParam data, data_check;
+      *data.mutable_acc() = 0.1;
+      *data.mutable_time() = 0.2;
+      *data.mutable_constrained() = true;
+      auto json_str = data.ToJSONString();
+      data_check.FromJSONString(json_str);
+      EXPECT_NEAR(0.1, *data_check.acc(), 1e-6);
+      EXPECT_NEAR(0.2, *data_check.time(), 1e-6);
+      EXPECT_TRUE(*data_check.constrained());
+
+      lebai::motion::SpeedJRequest req, req_check;
+      *req.mutable_param()->mutable_acc() = 0.1;
+      *req.mutable_param()->mutable_time() = 0.2;
+      *req.mutable_param()->mutable_constrained() = true;
+      req.mutable_speed()->mutable_joint()->push_back(0.1);
+      req.mutable_speed()->mutable_joint()->push_back(0.2);
+      req.mutable_speed()->mutable_joint()->push_back(0.3);
+      req.mutable_speed()->mutable_joint()->push_back(0.4);
+      req.mutable_speed()->mutable_joint()->push_back(0.5);
+      req.mutable_speed()->mutable_joint()->push_back(0.6);
+
+      json_str = req.ToJSONString();
+      req_check.FromJSONString(json_str);
+      EXPECT_NEAR(0.1, *req_check.mutable_param()->mutable_acc(), 1e-6);
+      EXPECT_NEAR(0.2, *req_check.mutable_param()->mutable_time(), 1e-6);
+      EXPECT_TRUE(*req_check.mutable_param()->mutable_constrained());
+      EXPECT_NEAR(0.1, req_check.mutable_speed()->mutable_joint()->at(0), 1e-6);
+      EXPECT_NEAR(0.2, req_check.mutable_speed()->mutable_joint()->at(1), 1e-6);
+      EXPECT_NEAR(0.3, req_check.mutable_speed()->mutable_joint()->at(2), 1e-6);
+      EXPECT_NEAR(0.4, req_check.mutable_speed()->mutable_joint()->at(3), 1e-6);
+      EXPECT_NEAR(0.5, req_check.mutable_speed()->mutable_joint()->at(4), 1e-6);
+      EXPECT_NEAR(0.6, req_check.mutable_speed()->mutable_joint()->at(5), 1e-6);
+
     }
 
 

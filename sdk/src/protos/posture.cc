@@ -937,44 +937,44 @@ namespace lebai
     }
     bool GetInverseKinRequest::IsNullJSONData() const { return false; }
 
-    void GetPoseMultiplyRequest::set_base(const Pose &base) { base_ = base; }
-    const Pose &GetPoseMultiplyRequest::base() const { return base_; }
-    Pose *GetPoseMultiplyRequest::mutable_base() { return &base_; }
+    void GetPoseTransRequest::set_from(const Pose &from) { from_ = from; }
+    const Pose &GetPoseTransRequest::from() const { return from_; }
+    Pose *GetPoseTransRequest::mutable_from() { return &from_; }
 
-    void GetPoseMultiplyRequest::set_target(const Pose &target){ target_ = target; }
-    const Pose &GetPoseMultiplyRequest::target() const { return target_; }
-    Pose *GetPoseMultiplyRequest::mutable_target() { return &target_; }
+    void GetPoseTransRequest::set_from_to(const Pose &from_to){ from_to_ = from_to; }
+    const Pose &GetPoseTransRequest::from_to() const { return from_to_; }
+    Pose *GetPoseTransRequest::mutable_from_to() { return &from_to_; }
 
-    bool GetPoseMultiplyRequest::Deserialize(const rapidjson::Value &obj)
+    bool GetPoseTransRequest::Deserialize(const rapidjson::Value &obj)
     {
-      if (obj.HasMember("base"))
+      if (obj.HasMember("from"))
       {
-        base_.Deserialize(obj["base"]);
+        from_.Deserialize(obj["from"]);
       }
-      if (obj.HasMember("target"))
+      if (obj.HasMember("from_to"))
       {
-        target_.Deserialize(obj["target"]);
+        from_to_.Deserialize(obj["from_to"]);
       }
       return true;
     }
-    bool GetPoseMultiplyRequest::Serialize(
+    bool GetPoseTransRequest::Serialize(
         rapidjson::Writer<rapidjson::StringBuffer> *writer) const
     {
       writer->StartObject();
-      if (!base_.IsNullJSONData())
+      if (!from_.IsNullJSONData())
       {
-        writer->String("base");
-        base_.Serialize(writer);
+        writer->String("from");
+        from_.Serialize(writer);
       }
-      if (!target_.IsNullJSONData())
+      if (!from_to_.IsNullJSONData())
       {
-        writer->String("target");
-        target_.Serialize(writer);
+        writer->String("from_to");
+        from_to_.Serialize(writer);
       }
       writer->EndObject();
       return true;
     }
-    bool GetPoseMultiplyRequest::IsNullJSONData() const { return false; }
+    bool GetPoseTransRequest::IsNullJSONData() const { return false; }
   } // namespace posture
 
 } // namespace lebai

@@ -56,9 +56,6 @@ cpack
  - TEST_ROBOT_IP: 测试程序的机器人IP地址，正确的设置该值用于单元测试 默认为127.0.0.1
  - BUILD_EXAMPLES: 是否编译示例程序 默认为ON
  - BUILD_DEB: 是否生成DEB包的构建 默认为OFF
- 
-
-
 
 
 ## 使用
@@ -69,10 +66,10 @@ build目录下会生成python的whl包，可以直接使用:
 ```python
 cd build/python/dist
 ## 安装
-pip3 install lebai-xxx.whl
+pip3 install pylebai-xxx.whl
 ### XXX取决于您的sdk版本，python版本，操作系统平台。
 ## 卸载
-pip3 uninstall lebai
+pip3 uninstall pylebai
 ```
 
 # 第三方库

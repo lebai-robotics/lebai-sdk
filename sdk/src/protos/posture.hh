@@ -367,22 +367,22 @@ public:
   virtual bool IsNullJSONData() const;  
 };
 
-class GetPoseMultiplyRequest : public JSONBase {
+class GetPoseTransRequest : public JSONBase {
  public:
   // Data
-  // base
-  void set_base(const Pose& pose);
-  const Pose& base() const;
-  Pose* mutable_base();
+  // from
+  void set_from(const Pose& pose);
+  const Pose& from() const;
+  Pose* mutable_from();
 
-  // target
-  void set_target(const Pose& refer);
-  const Pose & target() const;
-  Pose* mutable_target();
+  // from_to
+  void set_from_to(const Pose& refer);
+  const Pose & from_to() const;
+  Pose* mutable_from_to();
 
  protected:
-  Pose base_;
-  Pose target_;
+  Pose from_;
+  Pose from_to_;
 
  public:
   // These methods are used to serialize and deserialize the class.
