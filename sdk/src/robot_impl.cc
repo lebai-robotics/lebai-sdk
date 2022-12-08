@@ -100,45 +100,49 @@ namespace lebai
     return json_rpc_connector_->CallRpc( "resume","{}",nullptr);
   }
 
-  MotionIndex Robot::RobotImpl::moveJoint(const MoveRequest & req)
+  motion::MotionIndex Robot::RobotImpl::moveJoint(const motion::MoveRequest & req)
   {
     std::string resp;
     json_rpc_connector_->CallRpc("move_joint", req.ToJSONString(), &resp);
-    MotionIndex motion_resp;
+    motion::MotionIndex motion_resp;
     motion_resp.FromJSONString(resp);
     return motion_resp;
   }
-  MotionIndex Robot::RobotImpl::moveLinear(const MoveRequest & req)
+  motion::MotionIndex Robot::RobotImpl::moveLinear(const motion::MoveRequest & req)
   {
     std::string resp;
     json_rpc_connector_->CallRpc("move_linear", req.ToJSONString(), &resp);
-    MotionIndex motion_resp;
+    motion::MotionIndex motion_resp;
     motion_resp.FromJSONString(resp);
     return motion_resp;
   }
-  void Robot::RobotImpl::movePvat(const MovePvatRequest & req)
+  void Robot::RobotImpl::speedJoint(const motion::SpeedJRequest & req)
+  {
+    json_rpc_connector_->CallRpc("speed_joint",req.ToJSONString(),nullptr);
+  }
+  void Robot::RobotImpl::movePvat(const motion::MovePvatRequest & req)
   {
     json_rpc_connector_->CallRpc("move_pvat",req.ToJSONString(),nullptr);
   }
-  void Robot::RobotImpl::waitMove(const MotionIndex & req)
+  void Robot::RobotImpl::waitMove(const motion::MotionIndex & req)
   {
     std::string resp;
     json_rpc_connector_->CallRpc("wait_move",req.ToJSONString(),&resp);
     // std::cout<<"resp " << resp << std::endl;
   }
-  MotionIndex Robot::RobotImpl::getRunningMotion()
+  motion::MotionIndex Robot::RobotImpl::getRunningMotion()
   {
     std::string resp;
     json_rpc_connector_->CallRpc("get_running_motion","{}",&resp);
-    MotionIndex get_running_motion_resp;
+    motion::MotionIndex get_running_motion_resp;
     get_running_motion_resp.FromJSONString(resp);
     return get_running_motion_resp;
   }
-  GetMotionStateResponse Robot::RobotImpl::getMotionState(const MotionIndex & req)
+  motion::GetMotionStateResponse Robot::RobotImpl::getMotionState(const motion::MotionIndex & req)
   {
     std::string resp;
     json_rpc_connector_->CallRpc("get_motion_state",req.ToJSONString(),&resp);
-    GetMotionStateResponse get_motion_state_resp;
+    motion::GetMotionStateResponse get_motion_state_resp;
     get_motion_state_resp.FromJSONString(resp);
     return get_motion_state_resp;
   }
@@ -312,10 +316,10 @@ namespace lebai
     return get_inverse_kin_resp;
   }
 
-  posture::CartesianPose Robot::RobotImpl::getPoseMultiply(const posture::GetPoseMultiplyRequest & req)
+  posture::CartesianPose Robot::RobotImpl::getPoseTrans(const posture::GetPoseTransRequest & req)
   {
     std::string resp_str;
-    json_rpc_connector_->CallRpc("get_pose_multiply", req.ToJSONString(), &resp_str);
+    json_rpc_connector_->CallRpc("get_pose_trans", req.ToJSONString(), &resp_str);
     posture::CartesianPose resp;    
     resp.FromJSONString(resp_str);
     return resp;

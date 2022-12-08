@@ -4,6 +4,7 @@
 
 namespace lebai
 {
+  namespace motion {
   // MoveParam begin
   MoveParam::MoveParam()
   {
@@ -600,4 +601,221 @@ namespace lebai
   {
     return false;
   }
+
+  // SpeedParam begin
+  SpeedParam::SpeedParam()
+  {
+    
+  }
+  SpeedParam::SpeedParam(const SpeedParam & other)
+  {
+    *this = other;
+  }
+  SpeedParam & SpeedParam::operator = (const SpeedParam & other)
+  {
+    acc_.reset();
+    if(other.acc_)
+    {
+      acc_ = std::make_unique<double>(*other.acc_);
+    }
+    time_.reset();
+    if(other.time_)
+    {
+      time_ = std::make_unique<double>(*other.time_);
+    }
+    constrained_.reset();
+    if(other.constrained_)
+    {
+      constrained_ = std::make_unique<bool>(*other.constrained_);
+    }
+    return *this;
+  }
+  void SpeedParam::set_acc(double acc)
+  {
+    acc_ = std::make_unique<double>(acc);
+  } 
+	// double v() const;
+  double * SpeedParam::acc() const
+  {
+    return acc_.get();
+  }
+  double * SpeedParam::mutable_acc()
+  {
+    if(acc_ == nullptr)
+    {
+      acc_ = std::make_unique<double>();
+    }
+    return acc_.get();
+  }
+  void SpeedParam::set_time(double time)
+  {
+    time_ = std::make_unique<double>(time);
+  }
+  double * SpeedParam::time() const
+  {
+    return time_.get();
+  }
+  double * SpeedParam::mutable_time()
+  {
+    if(time_ == nullptr)
+    {
+      time_ = std::make_unique<double>();
+    }
+    return time_.get();
+  }
+  void SpeedParam::set_constrained(bool constrained)
+  {
+    if(constrained_ == nullptr)
+    {
+      constrained_ = std::make_unique<bool>();
+    }    
+    constrained_ = std::make_unique<bool>(constrained);
+  }
+  bool * SpeedParam::constrained() const
+  {
+    return constrained_.get();
+  }
+  bool * SpeedParam::mutable_constrained()
+  {
+    if(constrained_ == nullptr)
+    {
+      constrained_ = std::make_unique<bool>();
+    }
+    return constrained_.get();
+  }
+  
+  bool SpeedParam::Deserialize(const rapidjson::Value& obj)
+  {
+    if(obj.HasMember("acc"))
+    {
+      if(!acc_)
+      {
+        acc_ = std::make_unique<double>();
+        *acc_ = obj["acc"].GetDouble();
+      }
+    }
+    else
+    {
+      acc_.reset();
+    }
+    if(obj.HasMember("time"))
+    {
+      if(!time_)
+      {
+        time_ = std::make_unique<double>();
+        *time_ = obj["time"].GetDouble();
+      }
+    }
+    else
+    {
+      time_.reset();
+    }
+    if(obj.HasMember("constrained"))
+    {
+      if(!constrained_)
+      {
+        constrained_ = std::make_unique<bool>();
+        *constrained_ = obj["constrained"].GetBool();
+      }
+    }
+    else
+    {
+      constrained_.reset();
+    }      
+    return true;    
+  }
+
+  bool SpeedParam::Serialize(rapidjson::Writer<rapidjson::StringBuffer>* writer) const
+  {
+
+    writer->StartObject();
+    if(acc_)
+    {
+      writer->String("acc");
+      writer->Double(*acc_);
+    }
+    if(time_)
+    {
+      writer->String("time");
+      writer->Double(*time_);
+    }
+    if(constrained_)
+    {
+      writer->String("constrained");
+      writer->Bool(*constrained_);
+    }
+    writer->EndObject();
+    return true;
+  }
+  bool SpeedParam::IsNullJSONData() const
+  {
+    if(acc_ || time_ || constrained_)
+    {
+      return false;
+    }
+    return true;
+  }
+  void SpeedJRequest::set_speed(const posture::JointPose & speed)
+  {
+    speed_ = speed;
+  }
+  const posture::JointPose & SpeedJRequest::speed() const
+  {
+    return speed_;
+  }
+
+  posture::JointPose * SpeedJRequest::mutable_speed()
+  {
+    return &speed_;
+  }
+  void SpeedJRequest::set_param(const SpeedParam & param)
+  {
+    param_ = param;
+  }
+  const SpeedParam & SpeedJRequest::param() const
+  {
+    return param_;
+  }
+  SpeedParam * SpeedJRequest::mutable_param()
+  {
+    return &param_;
+  }
+	bool SpeedJRequest::Deserialize(const rapidjson::Value& obj)
+  {
+    if(obj.HasMember("speed"))
+    {
+      speed_.Deserialize(obj["speed"]);
+    }
+    if(obj.HasMember("param"))
+    {
+      param_.Deserialize(obj["param"]);
+    }
+    return true;      
+  }
+	bool SpeedJRequest::Serialize(rapidjson::Writer<rapidjson::StringBuffer>* writer) const
+  {
+    writer->StartObject();
+    if(!speed_.IsNullJSONData())
+    {
+      writer->String("speed");
+      speed_.Serialize(writer);
+    }
+    if(!param_.IsNullJSONData())
+    {
+      writer->String("param");
+      param_.Serialize(writer);
+    }
+    writer->EndObject();
+    return true;
+  }
+	bool SpeedJRequest::IsNullJSONData() const
+  {
+    if(speed_.IsNullJSONData() && param_.IsNullJSONData())
+    {
+      return true;
+    }
+    return false;
+  }
+  // MoveParam end
+  }  
 }

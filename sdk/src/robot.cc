@@ -86,12 +86,12 @@ void Robot::resume()
 
 int Robot::movej(const std::map<std::string, double> & joint_positions, double a, double v, double t, double r)
 {
-  MoveRequest move_req;
+  motion::MoveRequest move_req;
   move_req.mutable_param().set_acc(a);
   move_req.mutable_param().set_velocity(v);
   move_req.mutable_param().set_time(t);
   move_req.mutable_param().set_radius(r);
-  MotionIndex resp;
+  motion::MotionIndex resp;
   if(joint_positions.find("j1") != joint_positions.end() && 
   joint_positions.find("j2") != joint_positions.end() &&
   joint_positions.find("j3") != joint_positions.end() &&
@@ -116,7 +116,7 @@ int Robot::movej(const std::map<std::string, double> & joint_positions, double a
 
 int Robot::movej(const CartesianPose & cart_pose, double a, double v, double t, double r)
 {
-  MoveRequest move_req;
+  motion::MoveRequest move_req;
   move_req.mutable_param().set_acc(a);
   move_req.mutable_param().set_velocity(v);
   move_req.mutable_param().set_time(t);
@@ -127,19 +127,19 @@ int Robot::movej(const CartesianPose & cart_pose, double a, double v, double t, 
   move_req.mutable_pose().mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_z(cart_pose[3]);
   move_req.mutable_pose().mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_y(cart_pose[4]);
   move_req.mutable_pose().mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_x(cart_pose[5]);
-  MotionIndex resp = impl_->moveJoint(move_req);
+  motion::MotionIndex resp = impl_->moveJoint(move_req);
   return resp.id();
 }
 
 
 int Robot::movel(const std::map<std::string, double> & joint_positions, double a, double v, double t, double r)
 {
-  MoveRequest move_req;
+  motion::MoveRequest move_req;
   move_req.mutable_param().set_acc(a);
   move_req.mutable_param().set_velocity(v);
   move_req.mutable_param().set_time(t);
   move_req.mutable_param().set_radius(r);
-  MotionIndex resp;
+  motion::MotionIndex resp;
   if(joint_positions.find("j1") != joint_positions.end() && 
   joint_positions.find("j2") != joint_positions.end() &&
   joint_positions.find("j3") != joint_positions.end() &&
@@ -164,7 +164,7 @@ int Robot::movel(const std::map<std::string, double> & joint_positions, double a
 
 int Robot::movel(const CartesianPose & cart_pose, double a, double v, double t, double r)
 {
-  MoveRequest move_req;
+  motion::MoveRequest move_req;
   move_req.mutable_param().set_acc(a);
   move_req.mutable_param().set_velocity(v);
   move_req.mutable_param().set_time(t);
@@ -175,17 +175,17 @@ int Robot::movel(const CartesianPose & cart_pose, double a, double v, double t, 
   move_req.mutable_pose().mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_z(cart_pose[3]);
   move_req.mutable_pose().mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_y(cart_pose[4]);
   move_req.mutable_pose().mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_x(cart_pose[5]);
-  MotionIndex resp = impl_->moveLinear(move_req);
+  motion::MotionIndex resp = impl_->moveLinear(move_req);
   return resp.id();
 }
 
 void Robot::move_pvat(std::vector<double> p, std::vector<double> v, std::vector<double> a, double t)
 {
-  MovePvatRequest req;
-  std::vector<JointMove> joints;
+  motion::MovePvatRequest req;
+  std::vector<motion::JointMove> joints;
   for(int i = 0;i < p.size();i++)
   {
-    JointMove joint;
+    motion::JointMove joint;
     joint.set_pose(p[i]);
     joint.set_velocity(v[i]);
     joint.set_acc(a[i]);
@@ -198,33 +198,33 @@ void Robot::move_pvat(std::vector<double> p, std::vector<double> v, std::vector<
 
 void Robot::wait_move(unsigned int id)
 {
-  MotionIndex req;
+  motion::MotionIndex req;
   req.set_id(id);
   impl_->waitMove(req);
 }
 void Robot::wait_move()
 {
-  MotionIndex req;
+  motion::MotionIndex req;
   req.set_id(0);
   impl_->waitMove(req);
 }
 
 unsigned int Robot::get_running_motion()
 {
-  MotionIndex resp = impl_->getRunningMotion();
+  motion::MotionIndex resp = impl_->getRunningMotion();
   return resp.id();
 }
 
 std::string Robot::get_motion_state(unsigned int id)
 {
-  MotionIndex req;
+  motion::MotionIndex req;
   req.set_id(id);
-  GetMotionStateResponse resp = impl_->getMotionState(req);
+  motion::GetMotionStateResponse resp = impl_->getMotionState(req);
   switch(resp.state())
   {
-    case WAIT:return (std::string)"WAIT";
-    case RUNNING:return (std::string)"RUNNING";
-    case FINISHED:return (std::string)"FINISHED";
+    case motion::WAIT:return (std::string)"WAIT";
+    case motion::RUNNING:return (std::string)"RUNNING";
+    case motion::FINISHED:return (std::string)"FINISHED";
     default:return (std::string)"WAIT";
   }
 }
@@ -726,22 +726,22 @@ KinematicsInverseResp Robot::kinematics_inverse(const std::array<double, 6> & po
 
 std::array<double, 6> Robot::pose_times(const std::array<double, 6> & a, const std::array<double, 6> & b)
 {
-  posture::GetPoseMultiplyRequest req;
-  req.mutable_base()->mutable_cart()->mutable_position()->set_x(a[0]);
-  req.mutable_base()->mutable_cart()->mutable_position()->set_y(a[1]);
-  req.mutable_base()->mutable_cart()->mutable_position()->set_z(a[2]);
-  req.mutable_base()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_z(a[3]);
-  req.mutable_base()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_y(a[4]);
-  req.mutable_base()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_x(a[5]);
+  posture::GetPoseTransRequest req;
+  req.mutable_from()->mutable_cart()->mutable_position()->set_x(a[0]);
+  req.mutable_from()->mutable_cart()->mutable_position()->set_y(a[1]);
+  req.mutable_from()->mutable_cart()->mutable_position()->set_z(a[2]);
+  req.mutable_from()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_z(a[3]);
+  req.mutable_from()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_y(a[4]);
+  req.mutable_from()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_x(a[5]);
 
-  req.mutable_target()->mutable_cart()->mutable_position()->set_x(b[0]);
-  req.mutable_target()->mutable_cart()->mutable_position()->set_y(b[1]);
-  req.mutable_target()->mutable_cart()->mutable_position()->set_z(b[2]);
-  req.mutable_target()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_z(b[3]);
-  req.mutable_target()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_y(b[4]);
-  req.mutable_target()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_x(b[5]);
+  req.mutable_from_to()->mutable_cart()->mutable_position()->set_x(b[0]);
+  req.mutable_from_to()->mutable_cart()->mutable_position()->set_y(b[1]);
+  req.mutable_from_to()->mutable_cart()->mutable_position()->set_z(b[2]);
+  req.mutable_from_to()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_z(b[3]);
+  req.mutable_from_to()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_y(b[4]);
+  req.mutable_from_to()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_x(b[5]);
 
-  auto resp = impl_->getPoseMultiply(req);
+  auto resp = impl_->getPoseTrans(req);
   std::array<double, 6> pose;
   pose[0] = resp.position().x();
   pose[1] = resp.position().y();

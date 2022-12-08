@@ -227,7 +227,7 @@ namespace lebai
     EXPECT_TRUE(ki_resp.ok);
     kf_resp.pose = robot_.pose_times(kf_resp.pose, kf_resp.pose);
     kf_resp.pose = robot_.pose_inverse(kf_resp.pose);
-  }  
+  }
 }
 
 int main(int argc, char **argv)
