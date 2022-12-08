@@ -109,7 +109,7 @@ int main(int argc, char ** argv)
     joint_positions["j5"] = -60.0 / 180.0 * M_PI;
     joint_positions["j6"] = 0.0;
     robot.movel(joint_positions, 0.3, 1.0, 0.0, 0.0);
-  }
+  
   // movel with cartesian pose.
   {
     robot.movel({-0.296,-0.295,0.285,60.0 / 180.0 * M_PI,-5.0 / 180.0 * M_PI,81.0 / 180.0 * M_PI}, 1.0, 0.5, 0.0, 0.0);    

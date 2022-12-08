@@ -287,6 +287,7 @@ namespace lebai
      * @return 0 发送失败
      */    
     int movel(const CartesianPose & cart_pose, double a, double v, double t, double r);
+    // int speedj(const std::map<std::string, double> & joint_speeds, double a, double t , bool constrained = false);
     /**
      * @brief 伺服运动PVAT
      * 

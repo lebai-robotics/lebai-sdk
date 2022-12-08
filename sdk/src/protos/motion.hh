@@ -8,7 +8,9 @@
 #include <iostream>
 
 namespace lebai
-{  
+{
+	namespace motion 
+	{
   class MoveParam : public JSONBase
 	{
 	public:
@@ -169,4 +171,49 @@ namespace lebai
 		virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer>* writer) const;		
 		virtual bool IsNullJSONData() const;
 	};
+
+	class SpeedParam : public JSONBase
+	{
+	public:
+		SpeedParam();
+		SpeedParam(const SpeedParam & other);
+		SpeedParam & operator = (const SpeedParam & other);	
+		void set_acc(double duration);
+		double * acc() const;
+		double * mutable_acc();
+		void set_time(double time);
+		double * time() const;
+		double * mutable_time();
+		void set_constrained(bool constrained);
+		bool * constrained() const;
+		bool * mutable_constrained();
+		
+	protected:
+		std::unique_ptr<double> acc_ = nullptr;
+		std::unique_ptr<double> time_ = nullptr;
+		std::unique_ptr<bool> constrained_ = nullptr;
+	public:		
+		virtual bool Deserialize(const rapidjson::Value& obj);
+		virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer>* writer) const;		
+		virtual bool IsNullJSONData() const;
+	};
+
+	class SpeedJRequest : public JSONBase
+	{
+	public:
+		void set_speed(const posture::JointPose & speed);
+		const posture::JointPose & speed() const;
+		posture::JointPose * mutable_speed();
+		void set_param(const SpeedParam & param);
+		const SpeedParam & param() const;
+		SpeedParam * mutable_param();
+	protected:
+		posture::JointPose speed_;
+		SpeedParam param_;
+	public:		
+		virtual bool Deserialize(const rapidjson::Value& obj);
+		virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer>* writer) const;		
+		virtual bool IsNullJSONData() const;
+	};
+	}
 }
