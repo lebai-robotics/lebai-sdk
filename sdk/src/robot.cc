@@ -934,16 +934,36 @@ Robot::CartesianPose Robot::load_tcp(std::string name, std::string dir)
   db::LoadRequest req;
   req.set_name(name);
   req.set_dir(dir);
-  CartesianPose resp = impl_->loadTcp();
-  return resp;
+  const auto & pose = impl_->loadTcp();
+  CartesianPose cart_pose;
+  cart_pose[0] = pose.position().x();
+  cart_pose[1] = pose.position().y();
+  cart_pose[2] = pose.position().z();
+  if(pose.rotation().euler_zyx())
+  {
+    cart_pose[3] = pose.rotation().euler_zyx()->z();
+    cart_pose[4] = pose.rotation().euler_zyx()->y();
+    cart_pose[5] = pose.rotation().euler_zyx()->x();
+  }
+  return cart_pose;
 }
 Robot::CartesianPose Robot::load_tcp(std::string name)
 {
   db::LoadRequest req;
   req.set_name(name);
   req.set_dir((std::string)(""));
-  CartesianPose resp = impl_->loadTcp();
-  return resp;
+  const auto & pose = impl_->loadTcp();
+  CartesianPose cart_pose;
+  cart_pose[0] = pose.position().x();
+  cart_pose[1] = pose.position().y();
+  cart_pose[2] = pose.position().z();
+  if(pose.rotation().euler_zyx())
+  {
+    cart_pose[3] = pose.rotation().euler_zyx()->z();
+    cart_pose[4] = pose.rotation().euler_zyx()->y();
+    cart_pose[5] = pose.rotation().euler_zyx()->x();
+  }
+  return cart_pose;
 }
 
 }
