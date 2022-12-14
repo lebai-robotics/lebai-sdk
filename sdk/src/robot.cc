@@ -84,6 +84,11 @@ void Robot::resume()
   impl_->resume();
 }
 
+void Robot::reboot()
+{
+  impl_->reboot();
+}
+
 int Robot::movej(const std::map<std::string, double> & joint_positions, double a, double v, double t, double r)
 {
   motion::MoveRequest move_req;
@@ -923,6 +928,22 @@ int Robot::get_velocity_factor()
 {
   kinematic::KinFactor resp = impl_->getKinFactor();
   return resp.factor();
+}
+CartesianPose Robot::load_tcp(std::string name, std::string dir)
+{
+  db::LoadRequest req;
+  req.set_name(name);
+  req.set_dir(dir);
+  CartesianPose resp = impl_->loadTcp();
+  return resp;
+}
+CartesianPose Robot::load_tcp(std::string name)
+{
+  db::LoadRequest req;
+  req.set_name(name);
+  req.set_dir((std::string)(""));
+  CartesianPose resp = impl_->loadTcp();
+  return resp;
 }
 
 }

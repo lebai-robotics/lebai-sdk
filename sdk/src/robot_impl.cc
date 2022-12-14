@@ -100,6 +100,11 @@ namespace lebai
     return json_rpc_connector_->CallRpc( "resume","{}",nullptr);
   }
 
+  void Robot::RobotImpl::reboot()
+  {
+    return json_rpc_connector_->CallRpc("reboot","{}",nullptr);
+  }
+
   motion::MotionIndex Robot::RobotImpl::moveJoint(const motion::MoveRequest & req)
   {
     std::string resp;
@@ -446,6 +451,14 @@ namespace lebai
     std::string resp_str;
     json_rpc_connector_->CallRpc("get_kin_factor","{}",&resp_str);
     kinematic::KinFactor resp;
+    resp.FromJSONString(resp_str);
+    return resp;
+  }
+  posture::CartesianPose Robot::RobotImpl::loadTcp(const db::LoadRequest & req)
+  {
+    std::string resp_str;
+    json_rpc_connector_->CallRpc("get_tcp",req.ToJSONString(),&resp_str);
+    posture::CartesianPose resp;
     resp.FromJSONString(resp_str);
     return resp;
   }

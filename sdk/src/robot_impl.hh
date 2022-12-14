@@ -50,6 +50,7 @@ namespace lebai
       int endTeachMode();
       int pause();
       int resume();
+      void reboot();
       // // int movej(const std::vector<double> & p, double v, double a, double t, double r, bool relative);
       motion::MotionIndex moveJoint(const motion::MoveRequest & req);
       motion::MotionIndex moveLinear(const motion::MoveRequest & req);
@@ -103,6 +104,7 @@ namespace lebai
       posture::CartesianPose getTcp();
       void setKinFactor(const kinematic::KinFactor & req);
       kinematic::KinFactor getKinFactor();
+      posture::CartesianPose loadTcp(const db::LoadRequest & req);
 
       protected:
       std::unique_ptr<JSONRpcConnector> json_rpc_connector_;
