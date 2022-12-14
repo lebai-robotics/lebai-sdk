@@ -929,7 +929,7 @@ int Robot::get_velocity_factor()
   kinematic::KinFactor resp = impl_->getKinFactor();
   return resp.factor();
 }
-CartesianPose Robot::load_tcp(std::string name, std::string dir)
+Robot::CartesianPose Robot::load_tcp(std::string name, std::string dir)
 {
   db::LoadRequest req;
   req.set_name(name);
@@ -937,7 +937,7 @@ CartesianPose Robot::load_tcp(std::string name, std::string dir)
   CartesianPose resp = impl_->loadTcp();
   return resp;
 }
-CartesianPose Robot::load_tcp(std::string name)
+Robot::CartesianPose Robot::load_tcp(std::string name)
 {
   db::LoadRequest req;
   req.set_name(name);
