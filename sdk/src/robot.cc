@@ -975,7 +975,7 @@ void Robot::write_single_coil(std::string device, std::string addr, bool value)
   impl_->writeSingleCoil(req);
 }
 
-void Robot::wirte_multiple_coils(std::string device, std::sting addr, std::vector<bool> values)
+void Robot::wirte_multiple_coils(std::string device, std::string addr, std::vector<bool> values)
 {
   modbus::SetCoilsRequest req;
   req.set_device(device);
@@ -1027,7 +1027,7 @@ std::vector<unsigned int> Robot::read_holding_registers(std::string device, std:
   modbus::GetRegistersResponse resp = impl_->readHoldingRegisters(req);
   return resp.values();
 }
-std::vector<unsigned int> read_input_registers(std::string device, std::string addr, unsigned int num)
+std::vector<unsigned int> Robot::read_input_registers(std::string device, std::string addr, unsigned int num)
 {
   modbus::GetRegistersRequest req;
   req.set_device(device);

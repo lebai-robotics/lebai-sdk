@@ -854,7 +854,7 @@ namespace lebai
      * @param addr 寄存器地址
      * @param value 待设置的值 
     */
-    void wirte_single_coil(std::string device, std::sting addr, bool value);
+    void wirte_single_coil(std::string device, std::string addr, bool value);
 
     /**
      * @brief 写多个线圈
@@ -863,7 +863,7 @@ namespace lebai
      * @param addr 寄存器地址
      * @param values 待设置的值 
     */
-    void wirte_multiple_coils(std::string device, std::sting addr, std::vector<bool> values);
+    void wirte_multiple_coils(std::string device, std::string addr, std::vector<bool> values);
 
     /**
      * @brief 读线圈
