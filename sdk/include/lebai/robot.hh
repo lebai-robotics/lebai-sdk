@@ -24,12 +24,12 @@
 
 namespace lebai
 {
-  std::string version()
-  {
-    return (std::string)("1.0.8");
-  }
   namespace l_master
   {
+    std::string version()
+    {
+      return (std::string)("1.0.8");
+  }
   /**
    * @brief 运动学正解的返回值数据结构.
    * 
