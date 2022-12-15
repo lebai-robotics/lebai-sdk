@@ -2,13 +2,9 @@ name: page release
 run-name: ${{ github.actor }} released page
 on: 
   workflow_dispatch: 
-  push: 
-   branches:
-    - master
-  pull_request:
-   types:
-    - closed
-  
+  push:
+   tags:
+    - v1.*.*
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read

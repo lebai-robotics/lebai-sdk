@@ -1,0 +1,4 @@
+/**
+ * \brief           Prject version macro
+ */ 
+#define LEBAI_SDK_VERSION_STR "@PROJECT_VERSION@"

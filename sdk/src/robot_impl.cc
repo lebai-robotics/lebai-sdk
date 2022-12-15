@@ -100,6 +100,11 @@ namespace lebai
     return json_rpc_connector_->CallRpc( "resume","{}",nullptr);
   }
 
+  void Robot::RobotImpl::reboot()
+  {
+    json_rpc_connector_->CallRpc("reboot","{}",nullptr);
+  }
+
   motion::MotionIndex Robot::RobotImpl::moveJoint(const motion::MoveRequest & req)
   {
     std::string resp;
@@ -446,6 +451,62 @@ namespace lebai
     std::string resp_str;
     json_rpc_connector_->CallRpc("get_kin_factor","{}",&resp_str);
     kinematic::KinFactor resp;
+    resp.FromJSONString(resp_str);
+    return resp;
+  }
+  posture::CartesianPose Robot::RobotImpl::loadTcp(const db::LoadRequest & req)
+  {
+    std::string resp_str;
+    json_rpc_connector_->CallRpc("get_tcp",req.ToJSONString(),&resp_str);
+    posture::CartesianPose resp;
+    resp.FromJSONString(resp_str);
+    return resp;
+  }
+  void Robot::RobotImpl::writeSingleCoil(const modbus::SetCoilRequest & req)
+  {
+    json_rpc_connector_->CallRpc("write_single_coil",req.ToJSONString(),nullptr);
+  }
+  void Robot::RobotImpl::writeMultipleCoils(const modbus::SetCoilsRequest & req)
+  {
+    json_rpc_connector_->CallRpc("write_multiple_coils",req.ToJSONString(),nullptr);
+  }
+  modbus::GetCoilsResponse Robot::RobotImpl::readCoils(const modbus::GetCoilsRequest & req)
+  {
+    std::string resp_str;
+    json_rpc_connector_->CallRpc("read_coils",req.ToJSONString(),&resp_str);
+    modbus::GetCoilsResponse resp;
+    resp.FromJSONString(resp_str);
+    return resp;
+  }
+  modbus::GetCoilsResponse Robot::RobotImpl::readDiscreteInputs(const modbus::GetCoilsRequest & req)
+  {
+    std::string resp_str;
+    json_rpc_connector_->CallRpc("read_discrete_inputs",req.ToJSONString(),&resp_str);
+    modbus::GetCoilsResponse resp;
+    resp.FromJSONString(resp_str);
+    return resp;
+  }
+  void Robot::RobotImpl::writeSingleRegister(const modbus::SetRegisterRequest & req)
+  {
+    json_rpc_connector_->CallRpc("write_single_register",req.ToJSONString(),nullptr);
+  }
+  void Robot::RobotImpl::writeMultipleRegisters(const modbus::SetRegistersRequest & req)
+  {
+    json_rpc_connector_->CallRpc("write_multiple_registers",req.ToJSONString(),nullptr);
+  }
+  modbus::GetRegistersResponse Robot::RobotImpl::readInputRegisters(const modbus::GetRegistersRequest & req)
+  {
+    std::string resp_str;
+    json_rpc_connector_->CallRpc("read_input_registers",req.ToJSONString(),&resp_str);
+    modbus::GetRegistersResponse resp;
+    resp.FromJSONString(resp_str);
+    return resp;
+  }
+   modbus::GetRegistersResponse Robot::RobotImpl::readHoldingRegisters(const modbus::GetRegistersRequest & req)
+  {
+    std::string resp_str;
+    json_rpc_connector_->CallRpc("read_holding_registers",req.ToJSONString(),&resp_str);
+    modbus::GetRegistersResponse resp;
     resp.FromJSONString(resp_str);
     return resp;
   }

@@ -26,6 +26,7 @@ namespace lebai
 {
   namespace l_master
   {
+    std::string version();
   /**
    * @brief 运动学正解的返回值数据结构.
    * 
@@ -146,6 +147,10 @@ namespace lebai
     /** \defgroup FILE 文件系统
      *  \brief    文件系统相关的接口
     */
+    
+    /** \defgroup MODBUS modbus
+     *  \brief    modbus相关的接口
+    */
 
     /** \addtogroup STARTSTOP
      *  @{
@@ -197,6 +202,10 @@ namespace lebai
      * 
      */
     void resume();
+    /**
+     * @brief 重新启动机箱
+    */
+    void reboot();
     /** @}*/
 
 
@@ -770,54 +779,139 @@ namespace lebai
      *  @{
      */
     /**
-     *  \brief 设置工具中心点(TCP)坐标，坐标值相对于工具坐标系
+     *  @brief 设置工具中心点(TCP)坐标，坐标值相对于工具坐标系
      * 
-     *  \param tcp 参数为六元组，表示一个空间位置变换
+     *  @param tcp 参数为六元组，表示一个空间位置变换
     */
     void set_tcp(std::array<double, 6> tcp);
     /**
-     *  \brief 获取当前机器人工具中心点设置
+     *  @brief 获取当前机器人工具中心点设置
      * 
-     *  \return 当前机器人的工具中心点参数，为六元组
+     *  @return 当前机器人的工具中心点参数，为六元组
     */
     std::array<double, 6> get_tcp();
     /**
-     *  \brief 设置速度因子
+     *  @brief 设置速度因子
      * 
-     *  \param factor 速度因子百分比，范围0-100
+     *  @param factor 速度因子百分比，范围0-100
     */
     void set_velocity_factor(int factor);
     /**
-     *  \brief 获取当前的速度因子
+     *  @brief 获取当前的速度因子
      * 
-     *  \return 速度因子百分比
+     *  @return 速度因子百分比
     */
     int get_velocity_factor();
     /**
-     *  \brief 设置机器人末端负载
+     *  @brief 设置机器人末端负载
      *
-     *  \param mass 末端负载的质量(kg)
-     *  \param cog 质心相对于TCP坐标系的偏移
+     *  @param mass 末端负载的质量(kg)
+     *  @param cog 质心相对于TCP坐标系的偏移
      */
     void set_payload(double mass, std::map<std::string, double> cog);
     /**
-     *  \brief 获取末端负载设置
+     *  @brief 获取末端负载设置
      *
-     *  \return 由负载质量mass和负载偏移组成的元组
+     *  @return 由负载质量mass和负载偏移组成的元组
      */
     std::tuple<double, std::map<std::string, double>> get_payload();
     /**
-     *  \brief 设置机器人重力加速度方向
+     *  @brief 设置机器人重力加速度方向
      *
-     *  \param gravity 相对于机器人基座标的重力方向
+     *  @param gravity 相对于机器人基座标的重力方向
      */
     void set_gravity(std::map<std::string, double> gravity);
     /**
-     *  \brief 获取机器人重力加速度的方向
+     *  @brief 获取机器人重力加速度的方向
      *
-     *  \return 相对于机器人基座标的重力方向
+     *  @return 相对于机器人基座标的重力方向
      */
     std::map<std::string, double> get_gravity();
+    /**
+     * @brief 从资源库加载tcp
+     * 
+     * @param name 点位名称
+     * @param dir 点位目录
+    */
+    CartesianPose load_tcp(std::string name, std::string dir);
+    CartesianPose load_tcp(std::string name);
+
+    
+    /** @}*/
+
+
+    /** \addtogroup MODBUS
+     *  @{
+    */
+
+    /**
+     * @brief 写单个线圈
+     * 
+     * @param device 设备名称
+     * @param addr 寄存器地址
+     * @param value 待设置的值 
+    */
+    void write_single_coil(std::string device, std::string addr, bool value);
+
+    /**
+     * @brief 写多个线圈
+     * 
+     * @param device 设备名称
+     * @param addr 寄存器地址
+     * @param values 待设置的值 
+    */
+    void wirte_multiple_coils(std::string device, std::string addr, std::vector<bool> values);
+
+    /**
+     * @brief 读线圈
+     * 
+     * @param device 设备名称
+     * @param addr 寄存器地址
+     * @param num 连续数量
+    */
+    std::vector<bool> read_coils(std::string device, std::string addr, unsigned int num);
+    /**
+     * @brief 读离散输入
+     * 
+     * @param device 设备名称
+     * @param addr 寄存器地址
+     * @param num 连续数量
+    */
+    std::vector<bool> read_discrete_inputs(std::string device, std::string addr, unsigned int num);
+
+    /**
+     * @brief 写单个寄存器
+     * 
+     * @param device 设备名称
+     * @param addr 寄存器地址
+     * @param value 待设置的值
+    */
+    void write_single_register(std::string device, std::string addr, unsigned int value);
+    /**
+     * @brief 写多个寄存器
+     * 
+     * @param device 设备名称
+     * @param addr 寄存器地址
+     * @param values 待设置的值
+    */
+    void write_multiple_registers(std::string device, std::string addr, std::vector<unsigned int> values);
+
+    /**
+     * @brief 读保持寄存器
+     * 
+     * @param device 设备名称
+     * @param addr 寄存器地址
+     * @param num 连续数量
+    */
+    std::vector<unsigned int> read_holding_registers(std::string device, std::string addr, unsigned int num);
+    /**
+     * @brief 读输入寄存器
+     * 
+     * @param device 设备名称
+     * @param addr 寄存器地址
+     * @param num 连续数量
+    */
+    std::vector<unsigned int> read_input_registers(std::string device, std::string addr, unsigned int num);
     /** @}*/
   protected:
     std::unique_ptr<RobotImpl> impl_; /*!< 内部实现数据结构，用户无需关注. */

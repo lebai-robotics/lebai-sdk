@@ -18,12 +18,19 @@
 #include <memory>
 #include "robot_impl.hh"
 #include "protos/motion.hh"
+#include <lebai/config.hh>
+
 
 
 namespace lebai {
 
 namespace l_master
 {
+
+ std::string version()
+  {
+    return LEBAI_SDK_VERSION_STR ;
+ }
 
   
 
@@ -82,6 +89,11 @@ void Robot::pause()
 void Robot::resume()
 {
   impl_->resume();
+}
+
+void Robot::reboot()
+{
+  impl_->reboot();
 }
 
 int Robot::movej(const std::map<std::string, double> & joint_positions, double a, double v, double t, double r)
@@ -924,7 +936,113 @@ int Robot::get_velocity_factor()
   kinematic::KinFactor resp = impl_->getKinFactor();
   return resp.factor();
 }
+Robot::CartesianPose Robot::load_tcp(std::string name, std::string dir)
+{
+  db::LoadRequest req;
+  req.set_name(name);
+  req.set_dir(dir);
+  const auto & pose = impl_->loadTcp(req);
+  CartesianPose cart_pose;
+  cart_pose[0] = pose.position().x();
+  cart_pose[1] = pose.position().y();
+  cart_pose[2] = pose.position().z();
+  if(pose.rotation().euler_zyx())
+  {
+    cart_pose[3] = pose.rotation().euler_zyx()->z();
+    cart_pose[4] = pose.rotation().euler_zyx()->y();
+    cart_pose[5] = pose.rotation().euler_zyx()->x();
+  }
+  return cart_pose;
+}
+Robot::CartesianPose Robot::load_tcp(std::string name)
+{
+  db::LoadRequest req;
+  req.set_name(name);
+  req.set_dir((std::string)(""));
+  const auto & pose = impl_->loadTcp(req);
+  CartesianPose cart_pose;
+  cart_pose[0] = pose.position().x();
+  cart_pose[1] = pose.position().y();
+  cart_pose[2] = pose.position().z();
+  if(pose.rotation().euler_zyx())
+  {
+    cart_pose[3] = pose.rotation().euler_zyx()->z();
+    cart_pose[4] = pose.rotation().euler_zyx()->y();
+    cart_pose[5] = pose.rotation().euler_zyx()->x();
+  }
+  return cart_pose;
+}
 
+void Robot::write_single_coil(std::string device, std::string addr, bool value)
+{
+  modbus::SetCoilRequest req;
+  req.set_device(device);
+  req.set_pin(addr);
+  req.set_value(value);
+  impl_->writeSingleCoil(req);
+}
+
+void Robot::wirte_multiple_coils(std::string device, std::string addr, std::vector<bool> values)
+{
+  modbus::SetCoilsRequest req;
+  req.set_device(device);
+  req.set_pin(addr);
+  req.set_values(values);
+  impl_->writeMultipleCoils(req);
+}
+std::vector<bool> Robot::read_coils(std::string device, std::string addr, unsigned int num)
+{
+  modbus::GetCoilsRequest req;
+  req.set_device(device);
+  req.set_pin(addr);
+  req.set_count(num);
+  modbus::GetCoilsResponse resp = impl_->readCoils(req);
+  return resp.values();
+}
+std::vector<bool> Robot::read_discrete_inputs(std::string device, std::string addr, unsigned int num)
+{
+  modbus::GetCoilsRequest req;
+  req.set_device(device);
+  req.set_pin(addr);
+  req.set_count(num);
+  modbus::GetCoilsResponse resp = impl_->readDiscreteInputs(req);
+  return resp.values();
+}
+void Robot::write_single_register(std::string device, std::string addr, unsigned int value)
+{
+  modbus::SetRegisterRequest req;
+  req.set_device(device);
+  req.set_pin(addr);
+  req.set_value(value);
+  impl_->writeSingleRegister(req);
+}
+void Robot::write_multiple_registers(std::string device, std::string addr, std::vector<unsigned int> values)
+{
+  modbus::SetRegistersRequest req;
+  req.set_device(device);
+  req.set_pin(addr);
+  req.set_values(values);
+  impl_->writeMultipleRegisters(req);
+}
+
+std::vector<unsigned int> Robot::read_holding_registers(std::string device, std::string addr, unsigned int num)
+{
+  modbus::GetRegistersRequest req;
+  req.set_device(device);
+  req.set_pin(addr);
+  req.set_count(num);
+  modbus::GetRegistersResponse resp = impl_->readHoldingRegisters(req);
+  return resp.values();
+}
+std::vector<unsigned int> Robot::read_input_registers(std::string device, std::string addr, unsigned int num)
+{
+  modbus::GetRegistersRequest req;
+  req.set_device(device);
+  req.set_pin(addr);
+  req.set_count(num);
+  modbus::GetRegistersResponse resp = impl_->readInputRegisters(req);
+  return resp.values();
+}
 }
 
 }  // namespace l_master_sdk
