@@ -6,6 +6,7 @@ enable_language(CXX)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+configure_file("${PROJECT_SOURCE_DIR}/config.hh.in" "${PROJECT_SOURCE_DIR}/sdk/include/lebai/config.hh")
 
 include(GNUInstallDirs)
 add_subdirectory(sdk)

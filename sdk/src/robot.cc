@@ -18,6 +18,8 @@
 #include <memory>
 #include "robot_impl.hh"
 #include "protos/motion.hh"
+#include <lebai/config.hh>
+
 
 
 namespace lebai {
@@ -25,10 +27,11 @@ namespace lebai {
 namespace l_master
 {
 
-  std::string version()
+ std::string version()
   {
-    return (std::string)("1.0.8");
-  }
+    return LEBAI_SDK_VERSION_STR ;
+ }
+
   
 
 Robot::Robot(std::string ip, bool simulator)
