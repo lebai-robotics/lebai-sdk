@@ -966,6 +966,76 @@ Robot::CartesianPose Robot::load_tcp(std::string name)
   return cart_pose;
 }
 
+void Robot::write_single_coil(std::string device, std::string addr, bool value)
+{
+  modbus::SetCoilRequest req;
+  req.set_device(device);
+  req.set_pin(addr);
+  req.set_value(value);
+  impl_->writeSingleCoil(req);
+}
+
+void Robot::wirte_multiple_coils(std::string device, std::sting addr, std::vector<bool> values)
+{
+  modbus::SetCoilsRequest req;
+  req.set_device(device);
+  req.set_pin(addr);
+  req.set_values(values);
+  impl_->writeMultipleCoils(req);
+}
+std::vector<bool> Robot::read_coils(std::string device, std::string addr, unsigned int num)
+{
+  modbus::GetCoilsRequest req;
+  req.set_device(device);
+  req.set_pin(addr);
+  req.set_count(num);
+  modbus::GetCoilsResponse resp = impl_->readCoils(req);
+  return resp.values();
+}
+std::vector<bool> Robot::read_discrete_inputs(std::string device, std::string addr, unsigned int num)
+{
+  modbus::GetCoilsRequest req;
+  req.set_device(device);
+  req.set_pin(addr);
+  req.set_count(num);
+  modbus::GetCoilsResponse resp = impl_->readDiscreteInputs(req);
+  return resp.values();
+}
+void Robot::write_single_register(std::string device, std::string addr, unsigned int value)
+{
+  modbus::SetRegisterRequest req;
+  req.set_device(device);
+  req.set_pin(addr);
+  req.set_value(value);
+  impl_->writeSingleRegister(req);
+}
+void Robot::write_multiple_registers(std::string device, std::string addr, std::vector<unsigned int> values)
+{
+  modbus::SetRegistersRequest req;
+  req.set_device(device);
+  req.set_pin(addr);
+  req.set_values(values);
+  impl_->writeMultipleRegisters(req);
+}
+
+std::vector<unsigned int> Robot::read_holding_registers(std::string device, std::string addr, unsigned int num)
+{
+  modbus::GetRegistersRequest req;
+  req.set_device(device);
+  req.set_pin(addr);
+  req.set_count(num);
+  modbus::GetRegistersResponse resp = impl_->readHoldingRegisters(req);
+  return resp.values();
+}
+std::vector<unsigned int> read_input_registers(std::string device, std::string addr, unsigned int num)
+{
+  modbus::GetRegistersRequest req;
+  req.set_device(device);
+  req.set_pin(addr);
+  req.set_count(num);
+  modbus::GetRegistersResponse resp = impl_->readInputRegisters(req);
+  return resp.values();
+}
 }
 
 }  // namespace l_master_sdk

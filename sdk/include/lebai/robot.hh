@@ -150,6 +150,10 @@ namespace lebai
     /** \defgroup FILE 文件系统
      *  \brief    文件系统相关的接口
     */
+    
+    /** \defgroup MODBUS modbus
+     *  \brief    modbus相关的接口
+    */
 
     /** \addtogroup STARTSTOP
      *  @{
@@ -827,12 +831,90 @@ namespace lebai
      */
     std::map<std::string, double> get_gravity();
     /**
+     * @brief 从资源库加载tcp
      * 
+     * @param name 点位名称
+     * @param dir 点位目录
     */
     CartesianPose load_tcp(std::string name, std::string dir);
     CartesianPose load_tcp(std::string name);
 
     
+    /** @}*/
+
+
+    /** \addtogroup MODBUS
+     *  @{
+    */
+
+    /**
+     * @brief 写单个线圈
+     * 
+     * @param device 设备名称
+     * @param addr 寄存器地址
+     * @param value 待设置的值 
+    */
+    void wirte_single_coil(std::string device, std::sting addr, bool value);
+
+    /**
+     * @brief 写多个线圈
+     * 
+     * @param device 设备名称
+     * @param addr 寄存器地址
+     * @param values 待设置的值 
+    */
+    void wirte_multiple_coils(std::string device, std::sting addr, std::vector<bool> values);
+
+    /**
+     * @brief 读线圈
+     * 
+     * @param device 设备名称
+     * @param addr 寄存器地址
+     * @param num 连续数量
+    */
+    std::vector<bool> read_coils(std::string device, std::string addr, unsigned int num);
+    /**
+     * @brief 读离散输入
+     * 
+     * @param device 设备名称
+     * @param addr 寄存器地址
+     * @param num 连续数量
+    */
+    std::vector<bool> read_discrete_inputs(std::string device, std::string addr, unsigned int num);
+
+    /**
+     * @brief 写单个寄存器
+     * 
+     * @param device 设备名称
+     * @param addr 寄存器地址
+     * @param value 待设置的值
+    */
+    void write_single_register(std::string device, std::string addr, unsigned int value);
+    /**
+     * @brief 写多个寄存器
+     * 
+     * @param device 设备名称
+     * @param addr 寄存器地址
+     * @param values 待设置的值
+    */
+    void write_multiple_registers(std::string device, std::string addr, std::vector<unsigned int> values);
+
+    /**
+     * @brief 读保持寄存器
+     * 
+     * @param device 设备名称
+     * @param addr 寄存器地址
+     * @param num 连续数量
+    */
+    std::vector<unsigned int> read_holding_registers(std::string device, std::string addr, unsigned int num);
+    /**
+     * @brief 读输入寄存器
+     * 
+     * @param device 设备名称
+     * @param addr 寄存器地址
+     * @param num 连续数量
+    */
+    std::vector<unsigned int> read_input_registers(std::string device, std::string addr, unsigned int num);
     /** @}*/
   protected:
     std::unique_ptr<RobotImpl> impl_; /*!< 内部实现数据结构，用户无需关注. */

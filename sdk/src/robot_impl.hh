@@ -30,6 +30,7 @@
 #include "protos/file.hh"
 #include "protos/dynamic.hh"
 #include "protos/db.hh"
+#include "protos/modbus.hh"
 
 namespace lebai
 {
@@ -105,6 +106,15 @@ namespace lebai
       void setKinFactor(const kinematic::KinFactor & req);
       kinematic::KinFactor getKinFactor();
       posture::CartesianPose loadTcp(const db::LoadRequest & req);
+      void writeSingleCoil(const modbus::SetCoilRequest & req);
+      void writeMultipleCoils(const modbus::SetCoilsRequest & req);
+      modbus::GetCoilsResponse readCoils(const modbus::GetCoilsRequest & req);
+      modbus::GetCoilsResponse readDiscreteInputs(const modbus::GetCoilsRequest & req);
+      void writeSingleRegister(const modbus::SetRegisterRequest & req);
+      void writeMultipleRegisters(const modbus::SetRegistersRequest & req);
+      modbus::GetRegistersResponse readInputRegisters(const modbus::GetRegistersRequest & req);
+      modbus::GetRegistersResponse readHoldingRegisters(const modbus::GetRegistersRequest & req);
+
 
       protected:
       std::unique_ptr<JSONRpcConnector> json_rpc_connector_;
