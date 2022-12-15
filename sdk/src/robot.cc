@@ -25,6 +25,10 @@ namespace lebai {
 namespace l_master
 {
 
+  std::string version()
+  {
+    return (std::string)("1.0.8");
+  }
   
 
 Robot::Robot(std::string ip, bool simulator)

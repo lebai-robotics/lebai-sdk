@@ -26,10 +26,7 @@ namespace lebai
 {
   namespace l_master
   {
-    std::string version()
-    {
-      return (std::string)("1.0.8");
-  }
+    std::string version();
   /**
    * @brief 运动学正解的返回值数据结构.
    * 
