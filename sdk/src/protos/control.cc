@@ -489,5 +489,181 @@ namespace lebai
         {
             return &params_;
         }
+        bool Task::Deserialize(const rapidjson::Value &obj)
+        {
+            if(obj.HasMember("id"))
+            {
+                id_ = (unsigned int)(obj["id"].GetUint());
+            }
+            if(obj.HasMember("block_id"))
+            {
+                block_id_ = (std::string)(obj["block_id"].GetString());
+            }
+            if(obj.HasMember("state"))
+            {
+                std::string state = (std::string)(obj["state"].GetString());
+                if(state == "WAIT")
+                {
+                    state_ = TaskState::WAIT;
+                }else if(state == "RUNNING")
+                {
+                    state_ = TaskState::RUNNING;
+                }else if(state == "PAUSE")
+                {
+                    state_ = TaskState::PAUSE;
+                }else if(state == "SUCCESS")
+                {
+                    state_ = TaskState::SUCCESS;
+                }else if(state == "INTERRUPT")
+                {
+                    state_ = TaskState::INTERRUPT;
+                }else if(state == "FAIL")
+                {
+                    state_ = TaskState::FAIL;
+                }
+            }
+            if(obj.HasMember("loop_count"))
+            {
+                loopc_ = (unsigned int)(obj["loop_count"].GetUint());
+            }
+            if(obj.HasMember("loop_to"))
+            {
+                loopt_ = (unsigned int)(obj["loop_to"].GetUint());
+            }
+            if(obj.HasMember("is_parallel"))
+            {
+                is_parallel_ = bool(obj["is_parallel"].GetBool());
+            }
+            if(obj.HasMember("is_simu"))
+            {
+                is_simu_ = bool(obj["is_simu"].GetBool());
+            }
+            if(obj.HasMember("stdout"))
+            {
+                out_ = (std::string)(obj["stdout"].GetString());
+            }
+            if(obj.HasMember("started_at"))
+            {
+                started_at_ = (std::string)(obj["started_at"].GetString());
+            }
+            if(obj.HasMember("ended_at"))
+            {
+                ended_at_ = (std::string)(obj["ended_at"].GetString());
+            }
+            if(obj.HasMember("pause_at"))
+            {
+                pause_at_ = (std::string)(obj["pause_at"].GetString());
+            }
+            if(obj.HasMember("pre_pause"))
+            {
+                pre_pause_ = (unsigned int)(obj["pre_pause"].GetUint());
+            }
+            if(obj.HasMember("kind"))
+            {
+                std::string kind = (std::string)(obj["kind"].GetString());
+                if(kind == "LUA")
+                {
+                    kind_ = TaskKind::LUA;
+                }else if(kind == "APP")
+                {
+                    kind_ = TaskKind::APP;
+                }
+            }
+            if(obj.HasMember("dir"))
+            {
+                dir_ = (std::string)(obj["dir"].GetString());
+            }
+            if(obj.HasMember("name"))
+            {
+                name_ = (std::string)(obj["name"].GetString());
+            }
+            if(obj.HasMember("params"))
+            {
+                std::vector<std::string> params;
+                for(auto i = obj["params"].GetArray().Begin();i != obj["params"].GetArray().End();i++)
+                {
+                    params.push_back(i->GetString());
+                }
+                params_ = params;
+            }
+            return true;
+        }
+        bool Task::Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const
+        {
+            writer->StartObject();
+            writer->Key("id");
+            writer->Uint(id_);
+            writer->Key("block_id");
+            writer->String(block_id_.c_str());
+            writer->Key("state");
+            switch(state_)
+            {
+            case TaskState::WAIT:
+                writer->String("WAIT");
+                break;
+            case TaskState::RUNNING:
+                writer->String("RUNNING");
+                break;
+            case TaskState::PAUSE:
+                writer->String("PAUSE");
+                break;
+            case TaskState::SUCCESS:
+                writer->String("SUCCESS");
+                break;
+            case TaskState::INTERRUPT:
+                writer->String("INTERRUPT");
+                break;
+            case TaskState::FAIL:
+                writer->String("FAIL");
+                break;
+            default:
+                writer->String("nil");
+                break;
+            };
+            writer->Key("loop_count");
+            writer->Uint(loopc_);
+            writer->Key("loop_to");
+            writer->Uint(loopt_);
+            writer->Key("is_parallel");
+            writer->Bool(is_parallel_);
+            writer->Key("is_simu");
+            writer->Bool(is_simu_);
+            writer->Key("stdout");
+            writer->String(out_.c_str());
+            writer->Key("started_at");
+            writer->String(started_at_.c_str());
+            writer->Key("ended_at");
+            writer->String(ended_at_.c_str());
+            writer->Key("pause_at");
+            writer->String(pause_at_.c_str());
+            writer->Key("kind");
+            switch(kind_)
+            {
+                case TaskKind::APP:
+                    writer->String("APP");
+                    break;
+                case TaskKind::LUA:
+                    writer->String("LUA");
+                    break;
+            }
+            writer->Key("dir");
+            writer->String(dir_.c_str());
+            writer->Key("name");
+            writer->String(name_.c_str());
+            writer->Key("params");
+            writer->StartArray();
+            for(auto i:params_)
+            {
+                writer->String(i.c_str());
+            }
+            writer->EndArray();
+            writer->EndObject();
+            return true;
+
+        }
+        bool IsNullJSONData() const
+        {
+            return false;
+        }
     }
 }
