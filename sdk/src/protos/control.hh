@@ -98,6 +98,7 @@ namespace lebai
 
         class Task : public JSONBase
         {
+        public:
             void set_id(unsigned int id);
             unsigned int id();
             unsigned int * mutable_id();
