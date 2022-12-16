@@ -298,6 +298,14 @@ namespace lebai
   {
     json_rpc_connector_->CallRpc("cancel_task",req.ToJSONString(),nullptr);
   }
+  void Robot::RobotImpl::loadTask(const control::TaskIndex & req)
+  {
+    std::string resp_str;
+    json_rpc_connector_->CallRpc("load_task",req.ToJSONString(),nullptr);
+    control::Task resp;
+    resp.FromJSONString(resp_str);
+    return resp;
+  }
 
   posture::CartesianPose Robot::RobotImpl::getForwardKin(const posture::PoseRequest & req)
   {

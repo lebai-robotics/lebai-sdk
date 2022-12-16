@@ -649,6 +649,22 @@ void Robot::cancel_task(unsigned int id)
   req.set_id(id);
   impl_->cancelTask(req);
 }
+std::string Robot::get_task_state(unsigned int id)
+{
+  control::TaskIndex req;
+  req.set_id(id);
+  control::Task resp = impl_->loadTask(req);
+  switch(resp.state())
+  {
+    case 0:return "WAIT";break;
+    case 1:return "RUNNING";break;
+    case 2:return "PAUSE";break;
+    case 3:return "SUCCESS";break;
+    case 4:return "INTERRUPT";break;
+    case 5:return "FAIL";break;
+    default:return "Undefined State";
+  }
+}
 
 
 KinematicsForwardResp Robot::kinematics_forward(const std::map<std::string, double> & joint_positions)

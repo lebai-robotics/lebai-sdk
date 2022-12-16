@@ -96,7 +96,6 @@ namespace lebai
 			virtual bool IsNullJSONData() const;
         };
 
-        /*
         class Task : public JSONBase
         {
             void set_id(unsigned int id);
@@ -119,9 +118,9 @@ namespace lebai
             unsigned int loopt();
             unsigned int * mutable_loopt();
 
-            void set_is_main(bool is_main);
-            bool is_main();
-            bool * mutable_is_main();
+            void set_is_parallel(bool is_parallel);
+            bool is_parallel();
+            bool * mutable_is_parallel();
 
             void set_is_simu(bool is_simu);
             bool is_simu();
@@ -131,22 +130,61 @@ namespace lebai
             std::string out();
             std::string * mutable_out();
 
+            void set_started_at(std::string started_at);
+            std::string started_at();
+            std::string * mutable_started_at();
+
+            void set_ended_at(std::string ended_at);
+            std::string ended_at();
+            std::string * mutable_ended_at();
+
+            void set_pause_at(std::string pause_at);
+            std::string pause_at();
+            std::string * mutable_pause_at();
+
+            void set_pre_pause(unsigned int pre_pause);
+            unsigned int pre_pause();
+            unsigned int * mutable_pre_pause();
+
+            void set_kind(TaskKind kind);
+            TaskKind kind();
+            TaskKind * mutable_kind();
+
+            void set_dir(std::string dir);
+            std::string dir();
+            std::string * mutable_dir();
+
+            void set_name(std::string name);
+            std::string name();
+            std::string * mutable_name();
+
+            void set_params(std::vector<std::string> params);
+            std::vector<std::string> params();
+            std::vector<std::string> * mutable_params();
+
         protected:
             unsigned int id_;
             std::string block_id_;
             TaskState state_;
             unsigned int loopc_;
             unsigned int loopt_;
-            bool is_main_;
+            bool is_parallel_;
             bool is_simu_;
             std::string out_;
+            std::string started_at_;
+            std::string ended_at_;
+            std::string pause_at_;
+            unsigned int pre_pause_;
+            TaskKind kind_;
+            std::string dir_;
+            std::string name_;
+            std::vector<std::string> params_;
 
         public:
             virtual bool Deserialize(const rapidjson::Value &obj);
 			virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const;
 			virtual bool IsNullJSONData() const;
         };
-        */
 
         class PauseRequest : public JSONBase
         {

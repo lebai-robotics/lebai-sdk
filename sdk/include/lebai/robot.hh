@@ -659,9 +659,15 @@ namespace lebai
     /**
      * @brief 取消任务与运动
      * 
-     * @param id: 任务的ID
+     * @param id 任务的ID
     */
     void cancel_task(unsigned int id);
+    /**
+     * @brief 获取任务状态
+     * 
+     * @param id 任务的ID
+    */
+    std::string get_task_state(unsigned int id);
     /** @}*/
 
     /** \addtogroup ROBOTICS

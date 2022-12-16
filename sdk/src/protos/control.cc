@@ -282,5 +282,212 @@ namespace lebai
         {
             return false;
         }
+        void Task::set_id(unsigned int id)
+        {
+            id_ = id;
+        }
+        unsigned int Task::id()
+        {
+            return id_;
+        }
+        unsigned int *Task::mutable_id()
+        {
+            return &id_;
+        }
+
+        void Task::set_block_id(std::string block_id)
+        {
+            block_id_ = block_id;
+        }
+        std::string Task::block_id()
+        {
+            return block_id_;
+        }
+        std::string *Task::mutable_block_id()
+        {
+            return &block_id_;
+        }
+
+        void Task::set_state(TaskState state)
+        {
+            state_ = state;
+        }
+        TaskState Task::state()
+        {
+            return state_;
+        }
+        TaskState *Task::mutable_state()
+        {
+            return &state_;
+        }
+
+        void Task::set_loopc(unsigned int loopc)
+        {
+            loopc_ = loopc;
+        }
+        unsigned int Task::loopc()
+        {
+            return loopc_;
+        }
+        unsigned int *Task::mutable_loopc()
+        {
+            return &loopc_;
+        }
+
+        void Task::set_loopt(unsigned int loopt)
+        {
+            loopt_ = loopt;
+        }
+        unsigned int Task::loopt()
+        {
+            return loopt_;
+        }
+        unsigned int *Task::mutable_loopt()
+        {
+            return &loopt_;
+        }
+
+        void Task::set_is_parallel(bool is_parallel)
+        {
+            is_parallel_ = is_parallel;
+        }
+        bool Task::is_parallel()
+        {
+            return is_parallel_;
+        }
+        bool *Task::mutable_is_parallel()
+        {
+            return &is_parallel_;
+        }
+
+        void Task::set_is_simu(bool is_simu)
+        {
+            is_simu_ = is_simu;
+        }
+        bool Task::is_simu()
+        {
+            return is_simu_;
+        }
+        bool *Task::mutable_is_simu()
+        {
+            return &is_simu_;
+        }
+
+        void Task::set_out(std::string out)
+        {
+            out_ = out;
+        }
+        std::string Task::out()
+        {
+            return out_;
+        }
+        std::string *Task::mutable_out()
+        {
+            return &out_;
+        }
+
+        void Task::set_started_at(std::string started_at)
+        {
+            started_at_ = started_at;
+        }
+        std::string Task::started_at()
+        {
+            return started_at_;
+        }
+        std::string *Task::mutable_started_at()
+        {
+            return &started_at_;
+        }
+
+        void Task::set_ended_at(std::string ended_at)
+        {
+            ended_at_ = ended_at;
+        }
+        std::string Task::ended_at()
+        {
+            return ended_at_;
+        }
+        std::string *Task::mutable_ended_at()
+        {
+            return &ended_at_;
+        }
+
+        void Task::set_pause_at(std::string pause_at)
+        {
+            pause_at_ = pause_at;
+        }
+        std::string Task::pause_at()
+        {
+            return pause_at_;
+        }
+        std::string *Task::mutable_pause_at()
+        {
+            return &pause_at_;
+        }
+
+        void Task::set_pre_pause(unsigned int pre_pause)
+        {
+            pre_pause_ = pre_pause;
+        }
+        unsigned int Task::pre_pause()
+        {
+            return pre_pause_;
+        }
+        unsigned int *Task::mutable_pre_pause()
+        {
+            return &pre_pause_;
+        }
+
+        void Task::set_kind(TaskKind kind)
+        {
+            kind_ = kind;
+        }
+        TaskKind Task::kind()
+        {
+            return kind_;
+        }
+        TaskKind *Task::mutable_kind()
+        {
+            return &kind_;
+        }
+
+        void Task::set_dir(std::string dir)
+        {
+            dir_ = dir;
+        }
+        std::string Task::dir()
+        {
+            return dir_;
+        }
+        std::string *Task::mutable_dir()
+        {
+            return &dir_;
+        }
+
+        void Task::set_name(std::string name)
+        {
+            name_ = name;
+        }
+        std::string Task::name()
+        {
+            return name_;
+        }
+        std::string *Task::mutable_name()
+        {
+            return &name_;
+        }
+
+        void Task::set_params(std::vector<std::string> params)
+        {
+            params_ = params;
+        }
+        std::vector<std::string> Task::params()
+        {
+            return params_;
+        }
+        std::vector<std::string> *Task::mutable_params()
+        {
+            return &params_;
+        }
     }
 }
