@@ -298,7 +298,7 @@ namespace lebai
   {
     json_rpc_connector_->CallRpc("cancel_task",req.ToJSONString(),nullptr);
   }
-  void Robot::RobotImpl::loadTask(const control::TaskIndex & req)
+  control::Task Robot::RobotImpl::loadTask(const control::TaskIndex & req)
   {
     std::string resp_str;
     json_rpc_connector_->CallRpc("load_task",req.ToJSONString(),nullptr);
