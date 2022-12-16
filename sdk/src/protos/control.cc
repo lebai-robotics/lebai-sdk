@@ -661,7 +661,7 @@ namespace lebai
             return true;
 
         }
-        bool IsNullJSONData() const
+        bool Task::IsNullJSONData() const
         {
             return false;
         }
