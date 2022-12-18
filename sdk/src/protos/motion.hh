@@ -49,10 +49,10 @@ namespace lebai
 		// MoveRequest(const MoveRequest & other);
 		void set_param(const MoveParam & param);
 		const MoveParam & param() const;
-		MoveParam & mutable_param();
+		MoveParam * mutable_param();
 		void set_pose(const posture::Pose & pose);
 		const posture::Pose & pose() const;
-		posture::Pose & mutable_pose();
+		posture::Pose * mutable_pose();
 	protected:
 		MoveParam param_;
 		posture::Pose pose_;

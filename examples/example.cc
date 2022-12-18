@@ -45,76 +45,26 @@ int main(int argc, char ** argv)
   // Create robot instance
   lebai::l_master::Robot robot(ip, sim);
   std::this_thread::sleep_for(std::chrono::seconds(1));  
-  // try
-  // {
-  //   robot.start_sys();
-  //   auto jp = robot.get_actual_joint_positions();
-  //   for (auto&& j : jp)
-  //   {
-  //     std::cout << j.first<<" "<<j.second << std::endl;
-  //   }
-  // }
-  // catch(std::exception & e)
-  // {
-  //   std::cout<<"Exception: "<<e.what()<<std::endl;
-  // }
+  robot.movej({13.0/ 180.0 * M_PI, -52.0/ 180.0 * M_PI, 86.0/ 180.0 * M_PI, 8.0/ 180.0 * M_PI, -59.0/ 180.0 * M_PI, -11.0/ 180.0 * M_PI}, 1.0, 0.5, 0.0, 0.0);
+  // robot.wait_move();
+  // robot.movec({{"x", -0.282541}, {"y", -0.168246}, {"z", 0.265824}, {"rz", 1.27256}, {"ry", -0.206353}, {"rx", 0.937445}},
+  // {{"x", -0.255832}, {"y", 0.00270435}, {"z", 0.266642}, {"rz", 1.27293}, {"ry", -0.20805}, {"rx", 0.94485}},
+  //   0.0, 1.0, 0.5, 0.0, 0.0);
+// kinematics_forward: -0.282541, -0.168246, 0.265824, 1.27256, -0.206353, 0.937445
+// kinematics_forward: -0.255832, 0.00270435, 0.266642, 1.27293, -0.20805, 0.94485       
 
-  
-
-  
-  // {
-  //   std::array<double, 6> a = {1, 2, 0, 0, 0, 0};
-  //   std::array<double, 6> b = {0, 0, 3, 0, 0, 0};
-  //   auto c = robot.pose_inverse(a);
-  //   std::cout<<"pose_inverse: "<<c[0]<<", "<<c[1]<<", "<<c[2]<<", "<<c[3]<<", "<<c[4]<<", "<<c[5]<<std::endl;
-  //   a = {0, 0, 0, 1, 0, 0};
-  //   b = {0, 0, 0, 0, 0, 1};
-  //   c = robot.pose_times(a,b);
-  //   std::cout<<"pose_times: "<<c[0]<<", "<<c[1]<<", "<<c[2]<<", "<<c[3]<<", "<<c[4]<<", "<<c[5]<<std::endl;
-  //   auto d = robot.pose_inverse(a);
-  //   std::cout<<"pose_inverse: "<<d[0]<<", "<<d[1]<<", "<<d[2]<<", "<<d[3]<<", "<<d[4]<<", "<<d[5]<<std::endl;
-  //   return 0;
-  // }
-
-  robot.start_sys();
-  std::tuple<int,std::string> resp;
-  // Call json string api
-  // {    
-  //   std::string movej_req = "{\"param\":{\"velocity\":0.5},\"pose\":{\"joint\":{\"delta\":"
-  //   "{\"joint\":[-1.0,0.0,0.0,0.0,0.0,0.0]}}}}";
-  //   resp = robot.call("move_joint", movej_req);
-  // }
-  // movej with joint positions.
-  {    
-    std::map<std::string, double> joint_positions;
-    joint_positions["j1"] = 0.0;
-    joint_positions["j2"] = -60.0 / 180.0 * M_PI;
-    joint_positions["j3"] = 80.0 / 180.0 * M_PI;
-    joint_positions["j4"] = -10.0 / 180.0 * M_PI;
-    joint_positions["j5"] = -60.0 / 180.0 * M_PI;
-    joint_positions["j6"] = 0.0;
-    robot.movej(joint_positions, 1.0, 0.5, 0.0, 0.0);
-  }
-  // movej with cartesian pose.
+  auto fk_resp = robot.kinematics_forward({3.0/ 180.0 * M_PI, -48.0/ 180.0 * M_PI, 78.0/ 180.0 * M_PI, 9.0/ 180.0 * M_PI, -67.0/ 180.0 * M_PI, -3.0/ 180.0 * M_PI});
+  std::vector<double> jp = {3.0/ 180.0 * M_PI, -48.0/ 180.0 * M_PI, 78.0/ 180.0 * M_PI, 9.0/ 180.0 * M_PI, -67.0/ 180.0 * M_PI, -3.0/ 180.0 * M_PI};
+  std::cout<<"jp "<<jp[0]<<", "<<jp[1]<<", "<<jp[2]<<", "<<jp[3]<<", "<<jp[4]<<", "<<jp[5]<<std::endl;
+  std::cout<<"kinematics_forward: "<<fk_resp.pose["x"]<<", "<<fk_resp.pose["y"]<<", "<<fk_resp.pose["z"]<<", "<<fk_resp.pose["rx"]<<", "<<fk_resp.pose["ry"]<<", "<<fk_resp.pose["rz"]<<std::endl;
+  auto ik_resp = robot.kinematics_inverse(fk_resp.pose);
+  if(ik_resp.ok)
   {
-    robot.movej({-0.296,-0.295,0.285,60.0 / 180.0 * M_PI,-5.0 / 180.0 * M_PI,81.0 / 180.0 * M_PI}, 3.0, 1.0, 0.0, 0.0);    
+    std::cout<<"kinematics_inverse: "<<ik_resp.joint_positions[0]<<", "<<ik_resp.joint_positions[1]<<", "<<ik_resp.joint_positions[2]<<", "<<ik_resp.joint_positions[3]<<", "<<ik_resp.joint_positions[4]<<", "<<ik_resp.joint_positions[5]<<std::endl;
   }
-  // movel with joint positions.
-  {
-    std::map<std::string, double> joint_positions;
-    joint_positions["j1"] = 0.0;
-    joint_positions["j2"] = -60.0 / 180.0 * M_PI;
-    joint_positions["j3"] = 80.0 / 180.0 * M_PI;
-    joint_positions["j4"] = -10.0 / 180.0 * M_PI;
-    joint_positions["j5"] = -60.0 / 180.0 * M_PI;
-    joint_positions["j6"] = 0.0;
-    robot.movel(joint_positions, 0.3, 1.0, 0.0, 0.0);
-  }
-  
-  // movel with cartesian pose.
-  {
-    robot.movel({-0.296,-0.295,0.285,60.0 / 180.0 * M_PI,-5.0 / 180.0 * M_PI,81.0 / 180.0 * M_PI}, 1.0, 0.5, 0.0, 0.0);    
-  }
-
+  jp = {-28/ 180.0 * M_PI, -59.0/ 180.0 * M_PI, 96.0/ 180.0 * M_PI, -2.0/ 180.0 * M_PI, -92.0/ 180.0 * M_PI, 16.0/ 180.0 * M_PI};
+  std::cout<<"jp "<<jp[0]<<", "<<jp[1]<<", "<<jp[2]<<", "<<jp[3]<<", "<<jp[4]<<", "<<jp[5]<<std::endl;
+  fk_resp = robot.kinematics_forward(jp);
+  std::cout<<"kinematics_forward: "<<fk_resp.pose["x"]<<", "<<fk_resp.pose["y"]<<", "<<fk_resp.pose["z"]<<", "<<fk_resp.pose["rx"]<<", "<<fk_resp.pose["ry"]<<", "<<fk_resp.pose["rz"]<<std::endl;
   return 0;
 }

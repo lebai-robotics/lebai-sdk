@@ -21,7 +21,7 @@ if(WIN32)
 endif()
 set_target_properties(lebai-cpp PROPERTIES
   VERSION ${PROJECT_VERSION}
-  PUBLIC_HEADER "include/lebai/robot.hh;include/lebai/lebai.hh;include/lebai/discovery.hh"
+  PUBLIC_HEADER "include/lebai/robot.hh;include/lebai/lebai.hh;include/lebai/discovery.hh;include/lebai/config.hh"
   )
 add_library(${PROJECT_NAMESPACE}::lebai-cpp ALIAS lebai-cpp)
 

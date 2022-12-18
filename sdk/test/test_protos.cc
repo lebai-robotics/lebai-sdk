@@ -257,6 +257,36 @@ namespace lebai
 
 
   }
+  TEST_F(ProtosTest, TestMotion)
+  {
+    {
+      lebai::motion::MovecRequest req, req_check;
+      req.mutable_pose()->mutable_joint()->set_joint({1.0,2.0,3.0,4.0,5.0,6.0});
+      req.mutable_pose_via()->mutable_joint()->set_joint({0.1,0.2,0.3,0.4,0.5,0.6});
+      req.mutable_param()->set_acc(0.1);
+      req.mutable_param()->set_time(0.2);
+      req.mutable_param()->set_velocity(0.3);
+      req.set_rad(0.5);
+      auto json_str = req.ToJSONString();
+      req_check.FromJSONString(json_str);
+      EXPECT_NEAR(1.0, req_check.mutable_pose()->mutable_joint()->joint().at(0), 1e-6);
+      EXPECT_NEAR(2.0, req_check.mutable_pose()->mutable_joint()->joint().at(1), 1e-6);
+      EXPECT_NEAR(3.0, req_check.mutable_pose()->mutable_joint()->joint().at(2), 1e-6);
+      EXPECT_NEAR(4.0, req_check.mutable_pose()->mutable_joint()->joint().at(3), 1e-6);
+      EXPECT_NEAR(5.0, req_check.mutable_pose()->mutable_joint()->joint().at(4), 1e-6);
+      EXPECT_NEAR(6.0, req_check.mutable_pose()->mutable_joint()->joint().at(5), 1e-6);
+      EXPECT_NEAR(0.1, req_check.mutable_pose_via()->mutable_joint()->joint().at(0), 1e-6);
+      EXPECT_NEAR(0.2, req_check.mutable_pose_via()->mutable_joint()->joint().at(1), 1e-6);
+      EXPECT_NEAR(0.3, req_check.mutable_pose_via()->mutable_joint()->joint().at(2), 1e-6);
+      EXPECT_NEAR(0.4, req_check.mutable_pose_via()->mutable_joint()->joint().at(3), 1e-6);
+      EXPECT_NEAR(0.5, req_check.mutable_pose_via()->mutable_joint()->joint().at(4), 1e-6);
+      EXPECT_NEAR(0.6, req_check.mutable_pose_via()->mutable_joint()->joint().at(5), 1e-6);
+      EXPECT_NEAR(0.1, *req_check.mutable_param()->mutable_acc(), 1e-6);
+      EXPECT_NEAR(0.2, *req_check.mutable_param()->mutable_time(), 1e-6);
+      EXPECT_NEAR(0.3, *req_check.mutable_param()->mutable_velocity(), 1e-6);
+      EXPECT_NEAR(0.5, *req_check.mutable_rad(), 1e-6);
+    }
+  }  
 }
 
 int main(int argc, char **argv)
