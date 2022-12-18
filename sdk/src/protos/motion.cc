@@ -228,9 +228,9 @@ namespace lebai
   {
     return param_;
   }
-  MoveParam & MoveRequest::mutable_param()
+  MoveParam * MoveRequest::mutable_param()
   {
-    return param_;
+    return &param_;
   }
 
   void MoveRequest::set_pose(const posture::Pose & pose)
@@ -241,9 +241,9 @@ namespace lebai
   {
     return pose_;
   }
-  posture::Pose & MoveRequest::mutable_pose()
+  posture::Pose * MoveRequest::mutable_pose()
   {
-    return pose_;
+    return &pose_;
   }
   
   bool MoveRequest::Deserialize(const rapidjson::Value& obj)
@@ -353,7 +353,7 @@ namespace lebai
     }
     if(obj.HasMember("rad"))
     {
-      rad_ = obj.GetDouble();
+      rad_ = obj["rad"].GetDouble();
     }
     return true;
   }
@@ -375,11 +375,8 @@ namespace lebai
       writer->String("param");
       param_.Serialize(writer);
     }
-    if(rad_ != 0)
-    {
-      writer->String("rad");
-      writer->Double(rad_);
-    }
+    writer->String("rad");
+    writer->Double(rad_);
     writer->EndObject();
     return true;    
   }

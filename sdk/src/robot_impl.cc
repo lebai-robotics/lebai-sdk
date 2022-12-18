@@ -121,6 +121,22 @@ namespace lebai
     motion_resp.FromJSONString(resp);
     return motion_resp;
   }
+  motion::MotionIndex Robot::RobotImpl::moveCircular(const motion::MovecRequest & req)
+  {
+    std::string resp;
+    json_rpc_connector_->CallRpc("move_circular", req.ToJSONString(), &resp);
+    motion::MotionIndex motion_resp;
+    motion_resp.FromJSONString(resp);
+    return motion_resp;
+  }
+  motion::MotionIndex Robot::RobotImpl::towardJoint(const motion::MoveRequest & req)
+  {
+    std::string resp;    
+    json_rpc_connector_->CallRpc("toward_joint", req.ToJSONString(), &resp);
+    motion::MotionIndex motion_resp;
+    motion_resp.FromJSONString(resp);
+    return motion_resp;
+  }
   void Robot::RobotImpl::speedJoint(const motion::SpeedJRequest & req)
   {
     json_rpc_connector_->CallRpc("speed_joint",req.ToJSONString(),nullptr);
