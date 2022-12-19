@@ -55,7 +55,8 @@ namespace lebai
       // // int movej(const std::vector<double> & p, double v, double a, double t, double r, bool relative);
       motion::MotionIndex moveJoint(const motion::MoveRequest & req);
       motion::MotionIndex moveLinear(const motion::MoveRequest & req);
-      // motion::MotionIndex moveCircle(const motion::MovecRequest & req);
+      motion::MotionIndex moveCircular(const motion::MovecRequest & req);
+      motion::MotionIndex towardJoint(const motion::MoveRequest & req);
       void speedJoint(const motion::SpeedJRequest & req);
       void movePvat(const motion::MovePvatRequest & req);
       void waitMove(const motion::MotionIndex & req);

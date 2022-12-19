@@ -79,7 +79,7 @@
 };
 
 %template(CartArray) std::array<double, 6>;
-%template(JointMap) std::map<std::string, double>;
+%template(CartesianPose) std::map<std::string, double>;
 %template(UintVector) std::vector<unsigned int>;
 %template(StrVector) std::vector<std::string>;
 %template(IntVector) std::vector<int>;

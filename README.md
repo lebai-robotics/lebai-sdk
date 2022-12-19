@@ -1,3 +1,7 @@
+lebai-sdk的源代码仓库，可以用于控制乐白机械臂。
+
+[SDK在线文档](http://help.lebai.ltd/sdk/)
+
 
 # 从源代码构建安装
 

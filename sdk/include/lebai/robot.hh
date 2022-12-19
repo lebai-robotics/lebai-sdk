@@ -26,14 +26,25 @@ namespace lebai
 {
   namespace l_master
   {
-    std::string version();
+  /**
+   * @brief 获取当前SDK版本号
+   * 
+   * @return 返回版本号字符串
+   */
+  std::string version();
+  /**
+   * @brief CartesianPose是用来表示空间位姿的数据结构.
+   * 数据为字典数据，其中应当包括键为x,y,z,rz,ry,rx的数据.
+   * 
+   */
+  using CartesianPose = std::map<std::string, double>;  
   /**
    * @brief 运动学正解的返回值数据结构.
    * 
    */
   struct KinematicsForwardResp
   {
-    std::array<double, 6> pose = {{0.0, 0.0, 0.0, 0.0, 0.0, 0.0}}; /*!< 笛卡尔坐标位置，依次为 x, y, z, rz, ry, rx. */
+    CartesianPose pose; /*!< 笛卡尔坐标位置，依次为 x, y, z, rz, ry, rx. */
     bool ok = false;  /*!< 计算是否成功. */
   };
   /**
@@ -42,7 +53,7 @@ namespace lebai
    */
   struct KinematicsInverseResp
   {
-    std::map<std::string, double> joint_positions;  /*!< 机械臂关节位置的map数据，应当包括'j1','j2','j3','j4','j5','j6'六个关节的角度值.  */
+    std::vector<double> joint_positions;  /*!< 机械臂关节位置的map数据，应当包括'j1','j2','j3','j4','j5','j6'六个关节的角度值.  */
     bool ok = false;  /*!< 计算是否成功 */
   };  
   /**
@@ -72,12 +83,6 @@ namespace lebai
      * 
      */
     virtual ~Robot();
-    /**
-     * @brief CartesianPose是用来表示空间位姿的数据结构.
-     * 数据为一个包含六个数的数组，其数据排布为: x,y,z,rz,ry,rx.
-     * 
-     */
-    using CartesianPose = std::array<double, 6>;
     /**
      * 示例代码: 
      * 
@@ -136,7 +141,7 @@ namespace lebai
      *  \brief    信号量相关的接口.
     */
 
-    /** \defgroup PROGRAMCONTROL 程序控制.
+    /** \defgroup PROGRAM 程序控制.
      *  \brief    程序控制相关的接口.
     */
 
@@ -216,87 +221,126 @@ namespace lebai
     /**
      * 示例代码: 
      * 
-     *     std::map<std::string, double> joint_positions;
-     *     joint_positions["j1"] = 0.0;
-     *     joint_positions["j2"] = -60.0 / 180.0 * M_PI;
-     *     joint_positions["j3"] = 80.0 / 180.0 * M_PI;
-     *     joint_positions["j4"] = -10.0 / 180.0 * M_PI;
-     *     joint_positions["j5"] = -60.0 / 180.0 * M_PI;
-     *     joint_positions["j6"] = 0.0;
+     *     std::vector<double> joint_positions = {0.0, -60.0 / 180.0 * M_PI, 80.0 / 180.0 * M_PI, -10.0 / 180.0 * M_PI, -60.0 / 180.0 * M_PI, 0.0};
      *     robot.movej(joint_positions, 3.0, 1.0, 0.0, 0.0);
      * 
      * 
      * @brief   通过关节位置发送机械臂关节移动
      * @note  该接口为异步接口，仅向控制器内部的运动缓冲区写入一个关节移动即返回，不会等待运动结束.
-     * @param[in] joint_positions: 目标位置的关节map数据,应当包括"j1","j2","j3","j4","j5","j6"六个关节的角度值.
+     * @param[in] joint_positions: 目标位置的关节数据,为关节的角度值构成的数组.
      * @param[in] a: 加速度.
      * @param[in] v: 速度.
      * @param[in] t: 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
      * @param[in] r: 交融半径，设置为0，则无交融半径.
      * @return  >0 发送成功
-     * @return  0 发送失败
+     * @return  <=0 发送失败
      * 
      */
-    int movej(const std::map<std::string, double> & joint_positions, double a, double v, double t, double r);
+    int movej(const std::vector<double> & joint_positions, double a, double v, double t, double r);
     /**
      * 示例代码: 
      * 
-     *     robot.movej({-0.296,-0.295,0.285,60.0 / 180.0 * M_PI,-5.0 / 180.0 * M_PI,81.0 / 180.0 * M_PI}, 3.0, 1.0, 0.0, 0.0);
+     *     robot.movej({”x",-0.296},{"y",-0.295},{"z",0.285},{"rz",60.0 / 180.0 * M_PI},{"ry",-5.0 / 180.0 * M_PI},{"rx", 81.0 / 180.0 * M_PI}}, 3.0, 1.0, 0.0, 0.0);
      * 
      * 
      * @brief 通过坐标位置发送机械臂关节移动
      * @note 该接口为异步接口，仅向控制器内部的运动缓冲区写入一个关节移动即返回，不会等待运动结束.
-     * @param[in] cart_pose: 目标位置在机器人基座标系下的坐标数据(目前不支持在其它坐标系下的坐标数据)，CartesianPose = std::array<double,6>，数组大小为6，前三个数据为空间中的[x,y,z]点位，后三个数据是以欧拉ZYX形式的姿态数据[rz,ry,rx].
+     * @param[in] cart_pose: 目标位置在机器人基座标系下的坐标数据(目前不支持在其它坐标系下的坐标数据)，CartesianPose = std::map<std::string,double>，应当包括键为x,y,z,rz,ry,rx的值.
      * @param[in] a: 加速度
      * @param[in] v: 速度
      * @param[in] t: 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
      * @param[in] r: 交融半径，设置为0，则无交融半径.
      * @return >0 发送成功
-     * @return 0 发送失败
+     * @return <=0 发送失败
      */    
     int movej(const CartesianPose & cart_pose, double a, double v, double t, double r);
     /**
      * 示例代码: 
      * 
-     *     std::map<std::string, double> joint_positions;
-     *     joint_positions["j1"] = 0.0;
-     *     joint_positions["j2"] = -60.0 / 180.0 * M_PI;
-     *     joint_positions["j3"] = 80.0 / 180.0 * M_PI;
-     *     joint_positions["j4"] = -10.0 / 180.0 * M_PI;
-     *     joint_positions["j5"] = -60.0 / 180.0 * M_PI;
-     *     joint_positions["j6"] = 0.0;
+     *     std::vector<double> joint_positions = {0.0, -60.0 / 180.0 * M_PI, 80.0 / 180.0 * M_PI, -10.0 / 180.0 * M_PI, -60.0 / 180.0 * M_PI, 0.0};
      *     robot.movel(joint_positions, 3.0, 1.0, 0.0, 0.0);
      * 
      * 
      * @brief 通过关节位置发送机械臂直线移动
      * @note 该接口为异步接口，仅向控制器内部的运动缓冲区写入一个关节移动即返回，不会等待运动结束.
-     * @param[in] joint_positions: 目标位置的关节map数据，应当包括'j1','j2','j3','j4','j5','j6'六个关节的角度值.
+     * @param[in] joint_positions: 目标位置的关节数据,为关节的角度值构成的数组.
      * @param[in] a: 加速度
      * @param[in] v: 速度
      * @param[in] t: 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
      * @param[in] r: 交融半径，设置为0，则无交融半径.
      * @return >0 发送成功
-     * @return 0 发送失败
+     * @return <=0 发送失败
      */
-    int movel(const std::map<std::string, double> & joint_positions, double a, double v, double t, double r);
+    int movel(const std::vector<double> & joint_positions, double a, double v, double t, double r);
     /**
      * 示例代码: 
      * 
-     *     robot.movel({-0.296,-0.295,0.285,60.0 / 180.0 * M_PI,-5.0 / 180.0 * M_PI,81.0 / 180.0 * M_PI}, 3.0, 1.0, 0.0, 0.0);
+     *     robot.movel({”x",-0.296},{"y",-0.295},{"z",0.285},{"rz",60.0 / 180.0 * M_PI},{"ry",-5.0 / 180.0 * M_PI},{"rx", 81.0 / 180.0 * M_PI}}, 3.0, 1.0, 0.0, 0.0);
      * 
      * 
      * @brief 通过坐标位置发送机械臂直线移动
      * @note 该接口为异步接口，仅向控制器内部的运动缓冲区写入一个关节移动即返回，不会等待运动结束.
-     * @param cart_pose: 目标位置在机器人基座标系下的坐标数据(目前不支持在其它坐标系下的坐标数据)，CartesianPose = std::array<double,6>，数组大小为6，前三个数据为空间中的[x,y,z]点位，后三个数据是以欧拉ZYX形式的姿态数据[rz,ry,rx].
+     * @param cart_pose: 目标位置在机器人基座标系下的坐标数据(目前不支持在其它坐标系下的坐标数据)，CartesianPose = std::map<std::string,double>，应当包括键为x,y,z,rz,ry,rx的值.
      * @param a: 加速度
      * @param v: 速度
      * @param t: 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
      * @param r: 交融半径，设置为0，则无交融半径.
      * @return >0 发送成功
-     * @return 0 发送失败
+     * @return <=0 发送失败
      */    
     int movel(const CartesianPose & cart_pose, double a, double v, double t, double r);
-    // int speedj(const std::map<std::string, double> & joint_speeds, double a, double t , bool constrained = false);
+    /**
+     * 示例代码
+     * 
+     *     robot.movec({3.0/ 180.0 * M_PI, -48.0/ 180.0 * M_PI, 78.0/ 180.0 * M_PI, 9.0/ 180.0 * M_PI, -67.0/ 180.0 * M_PI, -3.0/ 180.0 * M_PI},
+     *     {-28/ 180.0 * M_PI, -59.0/ 180.0 * M_PI, 96.0/ 180.0 * M_PI, -2.0/ 180.0 * M_PI, -92.0/ 180.0 * M_PI, 16.0/ 180.0 * M_PI},
+     *     0.0, 1.0, 0.5, 0.0, 0.0);
+     * 
+     * @brief 通过关节位置发送机械臂圆弧运动     * 
+     * @param[in] joint_via 圆弧上途径点关节位置，为关节的角度值构成的数组.为圆上三点中的一点.
+     * @param[in] joint 圆弧目标点关节位置，为关节的角度值构成的数组.如果编程rad不为零，则为圆上三点中的一点.
+     * @param[in] rad 圆弧角度值，单位为弧度，如果为零，则走到目标点，正负值用来确定圆弧方向.
+     * @param[in] a 加速度
+     * @param[in] v 速度
+     * @param[in] t: 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
+     * @param[in] r: 交融半径，设置为0，则无交融半径.
+     * @return >0 发送成功
+     * @return <=0 发送失败
+     */
+    int movec(const std::vector<double> & joint_via, const std::vector<double> & joint, double rad, double a, double v, double t, double r);
+    /**
+     * 
+     * @brief 通过坐标位置发送机械臂圆弧运动     * 
+     * @param[in] cart_via 圆弧上途径点坐标位置，应当包括键为x,y,z,rz,ry,rx的值.为圆上三点中的一点.
+     * @param[in] cart 圆弧目标点坐标位置，应当包括键为x,y,z,rz,ry,rx的值.如果编程rad不为零，则为圆上三点中的一点.
+     * @param[in] rad 圆弧角度值，单位为弧度，如果为零，则走到目标点，正负值用来确定圆弧方向.
+     * @param[in] a 加速度
+     * @param[in] v 速度
+     * @param[in] t: 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
+     * @param[in] r: 交融半径，设置为0，则无交融半径.
+     * @return >0 发送成功
+     * @return <=0 发送失败
+     */    
+    int movec(const CartesianPose & cart_via, const CartesianPose & cart, double rad, double a, double v, double t, double r);
+    /**
+     * 示例代码: 
+     * 
+     *     std::vector<double> joint_positions = {0.0, -60.0 / 180.0 * M_PI, 80.0 / 180.0 * M_PI, -10.0 / 180.0 * M_PI, -60.0 / 180.0 * M_PI, 0.0};
+     *     robot.toawrdj(joint_positions, 3.0, 1.0, 0.0, 0.0);
+     * 
+     * 
+     * @brief   通过关节位置发送机械臂关节自由移动
+     * @note  该接口为异步接口，仅向控制器内部的运动缓冲区写入一个关节自由移动即返回，不会等待运动结束.
+     * @param[in] joint_positions: 目标位置的关节数据,为关节的角度值构成的数组.
+     * @param[in] a: 加速度.
+     * @param[in] v: 速度.
+     * @param[in] t: 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
+     * @param[in] r: 交融半径，设置为0，则无交融半径.
+     * @return  >0 发送成功
+     * @return  <=0 发送失败
+     * 
+     */
+    int towardj(const std::vector<double> & joint_positions, double a, double v, double t, double r);
     /**
      * @brief 伺服运动PVAT
      * 
@@ -364,15 +408,15 @@ namespace lebai
     /**
      * @brief 获取机械臂关节当前反馈位置 
      * 
-     * @return 关节反馈位置字典数据，包括'j1','j2','j3','j4','j5','j6'六个关节的角度值.
+     * @return 关节反馈位置数组，包括所有关节的角度值.
      */
-    std::map<std::string, double> get_actual_joint_positions();
+    std::vector<double> get_actual_joint_positions();
     /**
      * @brief 获取机械臂关节当前控制位置 
      * 
-     * @return 关节控制位置字典数据，包括'j1','j2','j3','j4','j5','j6'六个关节的角度值.
+     * @return 关节控制位置数组，包括所有关节的角度值.
      */
-    std::map<std::string, double> get_target_joint_positions();
+    std::vector<double> get_target_joint_positions();
     /**
      * @brief 获取机械臂关节当前反馈速度 
      * 
@@ -387,13 +431,13 @@ namespace lebai
      */
     std::vector<double> get_target_joint_speed();
     /**
-     * @brief 获取机械臂末端在机械臂基坐标系下的实际位姿
+     * @brief 获取机械臂末端在机械臂基坐标系下的实际位姿，CartesianPose = std::map<std::string,double>，应当包括键为x,y,z,rz,ry,rx的值.
      * 
      * @return CartesianPose 
      */
     CartesianPose get_actual_tcp_pose();
     /**
-     * @brief 获取机械臂末端在机械臂基坐标系下的控制位姿
+     * @brief 获取机械臂末端在机械臂基坐标系下的控制位姿，CartesianPose = std::map<std::string,double>，应当包括键为x,y,z,rz,ry,rx的值.
      * 
      * @return CartesianPose 
      */
@@ -609,7 +653,7 @@ namespace lebai
     void add_signal(unsigned int index,int value);
     /** @}*/
 
-    /** \addtogroup PROGRAMCONTROL
+    /** \addtogroup SCENE
      *  @{
     */
 
@@ -675,36 +719,36 @@ namespace lebai
      */
     /**
      * @brief 根据机械臂关节位置计算机器人末端位姿（位置的运动学正解）.
-     * @param joint_positions: 机械臂关节位置的字典数据，应当包括'j1','j2','j3','j4','j5','j6'六个关节的角度值.
+     * @param joint_positions: 机械臂关节位置的数组.
      * @return 返回计算结果 \ref KinematicsForwardResp "KinematicsForwardResp".
      *
      */
-    KinematicsForwardResp kinematics_forward(const std::map<std::string, double> & joint_positions);
+    KinematicsForwardResp kinematics_forward(const std::vector<double> & joint_positions);
     
     /**
      * @brief 根据机械臂的末端位姿计算关节位置（位置的运动学逆解）.
-     * @param pose: 机械臂末端位姿，依次为 x, y, z, rz, ry, rx.
-     * @param joint_init_positions: 机械臂关节初始位置, 以字典形式传入.
+     * @param pose: 机械臂末端位姿，应当包括键为x,y,z,rz,ry,rx的值.
+     * @param joint_init_positions: 机械臂关节初始位置, 以数组形式传入.
      * @return 返回计算结果 \ref KinematicsInverseResp "KinematicsInverseResp".
      */
-    KinematicsInverseResp kinematics_inverse(const std::array<double, 6> & pose, const std::map<std::string, double> & joint_init_positions = {});
+    KinematicsInverseResp kinematics_inverse(const CartesianPose & pose, const std::vector<double> & joint_init_positions = {});
     
     /**
      * @brief 位姿变换乘法（等价于对应的齐次坐标矩阵乘法）
      * 
-     * @param a: 位姿，依次为 x, y, z, rz, ry, rx.
-     * @param b: 位姿，依次为 x, y, z, rz, ry, rx.
-     * @return std::array<double, 6> 返回的位姿，依次为 x, y, z, rz, ry, rx.
+     * @param[in] a: 位姿，应当包括键为x,y,z,rz,ry,rx的值.
+     * @param[in] b: 位姿，应当包括键为x,y,z,rz,ry,rx的值.
+     * @return CartesianPose 返回的位姿，应当包括键为x,y,z,rz,ry,rx的值.
      */
-    std::array<double, 6> pose_times(const std::array<double, 6> & a, const std::array<double, 6> & b);
+    CartesianPose pose_times(const CartesianPose & a, const CartesianPose & b);
 
     /**
      * @brief 位姿变换的逆（等价于对应的齐次坐标矩的逆）
      * 
-     * @param in: 位姿，依次为 x, y, z, rz, ry, rx.
-     * @return std::array<double, 6> 返回位姿变换的逆，依次为 x, y, z, rz, ry, rx.
+     * @param in: 位姿，应当包括键为x,y,z,rz,ry,rx的值.
+     * @return CartesianPose 返回位姿变换的逆，应当包括键为x,y,z,rz,ry,rx的值.
      */    
-    std::array<double, 6> pose_inverse(const std::array<double, 6> & in);
+    CartesianPose pose_inverse(const CartesianPose & in);
     /** @}*/    
 
     /** \addtogroup FILE
@@ -839,10 +883,7 @@ namespace lebai
      * @param name 点位名称
      * @param dir 点位目录
     */
-    CartesianPose load_tcp(std::string name, std::string dir);
-    CartesianPose load_tcp(std::string name);
-
-    
+    CartesianPose load_tcp(std::string name, std::string dir = "");
     /** @}*/
 
 
