@@ -208,6 +208,14 @@ namespace lebai
     get_dio_resp.FromJSONString(resp);
     return get_dio_resp;    
   }
+  io::GetDioPinsResponse Robot::RobotImpl::getDIS(const io::GetDioPinsRequest &req)
+  {
+    std::string resp_str;
+    json_rpc_connector_->CallRpc("get_dis", req.ToJSONString(), &resp_str);
+    io::GetDioPinsResponse resp;
+    resp.FromJSONString(resp_str);
+    return resp;
+  }
   io::GetDioPinResponse Robot::RobotImpl::getDO(const io::GetDioPinRequest & req)
   {
     std::string resp;
@@ -215,6 +223,14 @@ namespace lebai
     io::GetDioPinResponse get_dio_resp;
     get_dio_resp.FromJSONString(resp);
     return get_dio_resp;    
+  }
+  io::GetDioPinsResponse Robot::RobotImpl::getDOS(const io::GetDioPinsRequest & req)
+  {
+    std::string resp_str;
+    json_rpc_connector_->CallRpc("get_dos", req.ToJSONString(), &resp_str);
+    io::GetDioPinsResponse resp;
+    resp.FromJSONString(resp_str);
+    return resp;
   }
 
   void Robot::RobotImpl::setDO(const io::SetDoPinRequest & req)
@@ -228,6 +244,30 @@ namespace lebai
     std::string resp;
     json_rpc_connector_->CallRpc("get_ai", req.ToJSONString(), &resp);
     io::GetAioPinResponse get_aio_resp;
+    get_aio_resp.FromJSONString(resp);
+    return get_aio_resp;
+  }
+  io::GetAioPinsResponse Robot::RobotImpl::getAIS(const io::GetAioPinsRequest & req)
+  {
+    std::string resp;
+    json_rpc_connector_->CallRpc("get_ais", req.ToJSONString(), &resp);
+    io::GetAioPinsResponse get_aio_resp;
+    get_aio_resp.FromJSONString(resp);
+    return get_aio_resp;
+  }
+  io::GetAioPinResponse Robot::RobotImpl::getAO(const io::GetAioPinRequest & req)
+  {
+    std::string resp;
+    json_rpc_connector_->CallRpc("get_ao", req.ToJSONString(), &resp);
+    io::GetAioPinResponse get_aio_resp;
+    get_aio_resp.FromJSONString(resp);
+    return get_aio_resp;
+  }
+  io::GetAioPinsResponse Robot::RobotImpl::getAOS(const io::GetAioPinsRequest & req)
+  {
+    std::string resp;
+    json_rpc_connector_->CallRpc("get_aos", req.ToJSONString(), &resp);
+    io::GetAioPinsResponse get_aio_resp;
     get_aio_resp.FromJSONString(resp);
     return get_aio_resp;
   }
