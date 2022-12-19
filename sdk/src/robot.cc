@@ -525,15 +525,15 @@ std::vector<double> Robot::get_target_joint_torques()
 void Robot::set_do(std::string device, unsigned int pin, unsigned int value)
 {
   io::SetDoPinRequest req;
-  if device == "ROBOT"
+  if(device == "ROBOT")
   {
     req.set_device(io::IoDevice::ROBOT);
   }
-  else if device == "FLANGE"
+  else if(device == "FLANGE")
   {
     req.set_device(io::IoDevice::FLANGE);
   }
-  else if device == "EXTRA" 
+  else if(device == "EXTRA")
   { 
     req.set_device(io::IoDevice::EXTRA); 
   }
@@ -546,15 +546,15 @@ unsigned int Robot::get_do(std::string device, unsigned int pin)
 {
   io::GetDioPinRequest req;
 
-  if device == "ROBOT"
+  if(device == "ROBOT")
   {
     req.set_device(io::IoDevice::ROBOT);
   }
-  else if device == "FLANGE"
+  else if(device == "FLANGE")
   {
     req.set_device(io::IoDevice::FLANGE);
   }
-  else if device == "EXTRA" 
+  else if(device == "EXTRA")
   { 
     req.set_device(io::IoDevice::EXTRA); 
   }
@@ -568,15 +568,15 @@ std::vector<unsigned int> Robot::get_dos(std::string device, unsigned int pin, u
 {
   io::GetDioPinsRequest req;
 
-  if device == "ROBOT"
+  if(device == "ROBOT")
   {
     req.set_device(io::IoDevice::ROBOT);
   }
-  else if device == "FLANGE"
+  else if(device == "FLANGE")
   {
     req.set_device(io::IoDevice::FLANGE);
   }
-  else if device == "EXTRA" 
+  else if(device == "EXTRA")
   { 
     req.set_device(io::IoDevice::EXTRA); 
   }
@@ -590,15 +590,15 @@ std::vector<unsigned int> Robot::get_dos(std::string device, unsigned int pin, u
 unsigned int Robot::get_di(std::string device, unsigned int pin)
 {
   io::GetDioPinRequest req;
-  if device == "ROBOT"
+  if(device == "ROBOT")
   {
     req.set_device(io::IoDevice::ROBOT);
   }
-  else if device == "FLANGE"
+  else if(device == "FLANGE")
   {
     req.set_device(io::IoDevice::FLANGE);
   }
-  else if device == "EXTRA" 
+  else if(device == "EXTRA")
   { 
     req.set_device(io::IoDevice::EXTRA); 
   }
@@ -611,15 +611,15 @@ unsigned int Robot::get_di(std::string device, unsigned int pin)
 std::vector<unsigned int> Robot::get_dis(std::string device, unsigned int pin, unsigned int num)
 {
   io::GetDioPinsRequest req;
-  if device == "ROBOT"
+  if(device == "ROBOT")
   {
     req.set_device(io::IoDevice::ROBOT);
   }
-  else if device == "FLANGE"
+  else if(device == "FLANGE")
   {
     req.set_device(io::IoDevice::FLANGE);
   }
-  else if device == "EXTRA" 
+  else if(device == "EXTRA")
   { 
     req.set_device(io::IoDevice::EXTRA); 
   }
@@ -632,15 +632,15 @@ std::vector<unsigned int> Robot::get_dis(std::string device, unsigned int pin, u
 void Robot::set_ao(std::string device, unsigned int pin, bool value)
 {
   io::SetAoPinRequest req;
-  if device == "ROBOT"
+  if(device == "ROBOT")
   {
     req.set_device(io::IoDevice::ROBOT);
   }
-  else if device == "FLANGE"
+  else if(device == "FLANGE")
   {
     req.set_device(io::IoDevice::FLANGE);
   }
-  else if device == "EXTRA" 
+  else if(device == "EXTRA")
   { 
     req.set_device(io::IoDevice::EXTRA); 
   }
@@ -652,15 +652,15 @@ void Robot::set_ao(std::string device, unsigned int pin, bool value)
 double Robot::get_ao(std::string device, unsigned int pin)
 {
   io::GetAioPinRequest req;
-  if device == "ROBOT"
+  if(device == "ROBOT")
   {
     req.set_device(io::IoDevice::ROBOT);
   }
-  else if device == "FLANGE"
+  else if(device == "FLANGE")
   {
     req.set_device(io::IoDevice::FLANGE);
   }
-  else if device == "EXTRA" 
+  else if(device == "EXTRA")
   { 
     req.set_device(io::IoDevice::EXTRA); 
   }
@@ -672,15 +672,15 @@ double Robot::get_ao(std::string device, unsigned int pin)
 std::vector<double> Robot::get_aos(std::string device, unsigned int pin, unsigned int num)
 {
   io::GetAioPinsRequest req;
-  if device == "ROBOT"
+  if(device == "ROBOT")
   {
     req.set_device(io::IoDevice::ROBOT);
   }
-  else if device == "FLANGE"
+  else if(device == "FLANGE")
   {
     req.set_device(io::IoDevice::FLANGE);
   }
-  else if device == "EXTRA" 
+  else if(device == "EXTRA")
   { 
     req.set_device(io::IoDevice::EXTRA); 
   }
@@ -693,15 +693,15 @@ std::vector<double> Robot::get_aos(std::string device, unsigned int pin, unsigne
 double Robot::get_ai(std::string device, unsigned int pin)
 {
   io::GetAioPinRequest req;
-  if device == "ROBOT"
+  if(device == "ROBOT")
   {
     req.set_device(io::IoDevice::ROBOT);
   }
-  else if device == "FLANGE"
+  else if(device == "FLANGE")
   {
     req.set_device(io::IoDevice::FLANGE);
   }
-  else if device == "EXTRA" 
+  else if(device == "EXTRA")
   { 
     req.set_device(io::IoDevice::EXTRA); 
   }
@@ -713,15 +713,15 @@ double Robot::get_ai(std::string device, unsigned int pin)
 std::vector<double> Robot::get_ais(std::string device, unsigned int pin, unsigned int num)
 {
   io::GetAioPinsRequest req;
-  if device == "ROBOT"
+  if(device == "ROBOT")
   {
     req.set_device(io::IoDevice::ROBOT);
   }
-  else if device == "FLANGE"
+  else if(device == "FLANGE")
   {
     req.set_device(io::IoDevice::FLANGE);
   }
-  else if device == "EXTRA" 
+  else if(device == "EXTRA")
   { 
     req.set_device(io::IoDevice::EXTRA); 
   }
