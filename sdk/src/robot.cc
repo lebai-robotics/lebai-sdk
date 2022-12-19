@@ -629,7 +629,7 @@ std::vector<unsigned int> Robot::get_dis(std::string device, unsigned int pin, u
   return resp.values();
 }
 
-void Robot::set_ao(std::string device, unsigned int pin, bool value)
+void Robot::set_ao(std::string device, unsigned int pin, double value)
 {
   io::SetAoPinRequest req;
   if(device == "ROBOT")

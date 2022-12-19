@@ -503,7 +503,7 @@ namespace lebai
      * @param pin: 端口，从 0 开始
      * @param value: 待设置的值
      */
-    void set_ao(std::string device, unsigned int pin, bool value);
+    void set_ao(std::string device, unsigned int pin, double value);
     /**
      * @brief 获取控制箱模拟输入
      * 

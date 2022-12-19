@@ -207,27 +207,24 @@ namespace lebai
   TEST_F(RobotTest, TestCabinetIO)
   {
     robot_.start_sys();
-    robot_.set_do(0, false);
-    robot_.set_do(0, static_cast<unsigned int>(1));
-    robot_.get_di(0);
-    robot_.set_ao(0, 0.2);
-    robot_.get_ai(0);
+    robot_.set_do("ROBOT",0, static_cast<unsigned int>(1));
+    robot_.get_di("ROBOT",0);
+    robot_.set_ao("ROBOT",0, 0.2);
+    robot_.get_ai("ROBOT",0);
   }
   TEST_F(RobotTest, TestFlangeIO)
   {
     robot_.start_sys();
-    robot_.get_flange_di(0);
-    robot_.set_flange_do(0, true);
-    robot_.set_flange_do(0, static_cast<unsigned int>(1));
+    robot_.get_di("FLANGE", 0);
+    robot_.set_do("FLANGE", 0, static_cast<unsigned int>(1));
   }
   TEST_F(RobotTest, TestExtraIO)
   {
     robot_.start_sys();
-    robot_.get_extra_di(0);
-    robot_.set_extra_do(0, true);
-    robot_.set_extra_do(0, static_cast<unsigned int>(1));
-    robot_.get_extra_ai(0);
-    robot_.set_extra_ao(0, 0.0);    
+    robot_.get_di("EXTRA", 0);
+    robot_.set_do("EXTRA", 0, static_cast<unsigned int>(1));
+    robot_.get_ai("EXTRA", 0);
+    robot_.set_ao("EXTRA", 0, 0.0);    
   }
   TEST_F(RobotTest, TestClaw)
   {
