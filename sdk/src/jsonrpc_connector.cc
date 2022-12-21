@@ -118,11 +118,11 @@ int JSONRpcConnector::CallRpc(const std::string & method, const std::string & re
   std::string jsonrpc_resp;
   jsonrpc_req = ToJSONRpcReqString(call_jsonrpc_id, method, req_data_str);
   // std::cout<<"jsonrpc_req id:"<<call_jsonrpc_id<<" "<<method<<"\n";
+  auto future = endpoint_.createFuture(id_, call_jsonrpc_id);
   if(!endpoint_.send(id_, jsonrpc_req))
   {
     throw std::runtime_error("Send Jsonrpc request failed!");
-  }
-  auto future = endpoint_.createFuture(id_, call_jsonrpc_id);
+  }  
   auto resq_data = future.get();
   if(resp_data_str)
   {
