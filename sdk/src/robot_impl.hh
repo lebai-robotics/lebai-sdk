@@ -67,9 +67,14 @@ namespace lebai
       system::PhyData getPhyData();
       kinematic::KinData getKinData();
       io::GetDioPinResponse getDI(const io::GetDioPinRequest & req);
+      io::GetDioPinsResponse getDIS(const io::GetDioPinsRequest & req);
       io::GetDioPinResponse getDO(const io::GetDioPinRequest & req);
+      io::GetDioPinsResponse getDOS(const io::GetDioPinsRequest & req);
       void setDO(const io::SetDoPinRequest & req);
       io::GetAioPinResponse getAI(const io::GetAioPinRequest & req);
+      io::GetAioPinsResponse getAIS(const io::GetAioPinsRequest & req);
+      io::GetAioPinResponse getAO(const io::GetAioPinRequest & req);
+      io::GetAioPinsResponse getAOS(const io::GetAioPinsRequest & req);
       void setAO(const io::SetAoPinRequest & req);
       void setClaw(const claw::SetClawRequest & req);
       void setLed(const led::LedData & req);
@@ -83,6 +88,7 @@ namespace lebai
       void pauseTask(const control::PauseRequest & req);
       void resumeTask(const control::TaskIndex & req);
       void cancelTask(const control::TaskIndex & req);
+      control::Task loadTask(const control::TaskIndex & req);
       claw::Claw getClaw();
       posture::CartesianPose getForwardKin(const posture::PoseRequest & req);
       posture::JointPose getInverseKin(const posture::GetInverseKinRequest & req);

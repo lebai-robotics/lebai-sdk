@@ -117,17 +117,9 @@ namespace lebai
      *  \brief    机械臂状态相关的接口.
      */
     
-    /** \defgroup CABINETIO 控制箱IO.
-     *  \brief    控制箱IO相关的接口.
-     */
-
-    /** \defgroup FLANGEIO 法兰IO.
-     *  \brief    法兰IO相关的接口.
-     */
-
-    /** \defgroup EXTRAIO 扩展IO.
-     *  \brief    扩展IO相关的接口.
-     */
+    /** \addtogroup IO Input and Output
+     *  \brief      IO相关的接口
+    */
 
     /** \defgroup CLAW 夹爪.
      *  \brief    夹爪相关的接口.
@@ -466,17 +458,44 @@ namespace lebai
     std::vector<double> get_target_joint_torques();
 
     /** @}*/
-    /** \addtogroup CABINETIO
+    /** \addtogroup IO
      *  @{
      */
-    
+    /**
+     * @brief 设置控制箱数字输出
+     * 
+     * @param pin 端口，从 0 开始
+     * @param value 待设置的值
+     */
+    void set_do(std::string device, unsigned int pin, unsigned int value);
+    /**
+     * @brief 获取控制箱数字输出
+     * 
+     * @param pin 端口，从 0 开始
+     * @return 返回输入数值
+     */
+    unsigned int get_do(std::string device, unsigned int pin);
+    /**
+     * @brief 获取控制箱数字输出
+     * 
+     * @param pin 端口，从 0 开始
+     * @return 返回输入数值
+     */
+    std::vector<unsigned int> get_dos(std::string device, unsigned int pin, unsigned int num);
     /**
      * @brief 获取控制箱数字输入
      * 
      * @param pin 端口，从 0 开始
      * @return 返回输入数值
      */
-    bool get_di(unsigned int pin);
+    unsigned int get_di(std::string device, unsigned int pin);
+    /**
+     * @brief 获取控制箱数字输入
+     * 
+     * @param pin 端口，从 0 开始
+     * @return 返回输入数值
+     */
+    std::vector<unsigned int> get_dis(std::string device, unsigned int pin, unsigned int num);
 
     /**
      * @brief 设置控制箱数字输出
@@ -484,101 +503,37 @@ namespace lebai
      * @param pin: 端口，从 0 开始
      * @param value: 待设置的值
      */
-    void set_do(unsigned int pin, bool value);
-    /**
-     * @brief 设置控制箱数字输出
-     * 
-     * @param pin 端口，从 0 开始
-     * @param value 待设置的值
-     */
-    void set_do(unsigned int pin, unsigned int value);
+    void set_ao(std::string device, unsigned int pin, double value);
     /**
      * @brief 获取控制箱模拟输入
      * 
      * @param pin: 端口，从 0 开始
      * @return 返回输入数值
      */
-    double get_ai(unsigned int pin);
-
+    double get_ao(std::string device, unsigned int pin);
     /**
-     * @brief 设置控制箱模拟输出
+     * @brief 获取控制箱模拟输入
      * 
      * @param pin: 端口，从 0 开始
-     * @param value: 待设置的值
+     * @return 返回输入数值
      */
-    void set_ao(unsigned int pin, double value);
+    std::vector<double> get_aos(std::string device, unsigned int pin, unsigned int num);
+    /**
+     * @brief 获取控制箱模拟输入
+     * 
+     * @param pin: 端口，从 0 开始
+     * @return 返回输入数值
+     */
+    double get_ai(std::string device, unsigned int pin);
+    /**
+     * @brief 获取控制箱模拟输入
+     * 
+     * @param pin: 端口，从 0 开始
+     * @return 返回输入数值
+     */
+    std::vector<double> get_ais(std::string device, unsigned int pin, unsigned int num);
     /** @}*/
 
-    /** \addtogroup FLANGEIO
-     *  @{
-     */
-    
-    /**
-     * @brief 获取法兰数字输入
-     * 
-     * @param pin: 端口，从 0 开始
-     * @return 返回输入数值
-     */
-    bool get_flange_di(unsigned int pin);
-
-    /**
-     * @brief 设置法兰数字输出
-     * 
-     * @param pin: 端口，从 0 开始
-     * @param value: 待设置的值
-     */
-    void set_flange_do(unsigned int pin, bool value);
-    /**
-     * @brief 设置法兰数字输出
-     * 
-     * @param pin: 端口，从 0 开始
-     * @param value: 待设置的值
-     */
-    void set_flange_do(unsigned int pin, unsigned int value);
-    /** @}*/
-
-    /** \addtogroup EXTRAIO
-     *  @{
-     */
-    
-    /**
-     * @brief 获取扩展数字输入
-     * 
-     * @param pin: 端口，从 0 开始
-     * @return 返回输入数值
-     */
-    bool get_extra_di(unsigned int pin);
-
-    /**
-     * @brief 设置扩展数字输出
-     * 
-     * @param pin: 端口，从 0 开始
-     * @param value: 待设置的值
-     */
-    void set_extra_do(unsigned int pin, bool value);
-    /**
-     * @brief 设置扩展数字输出
-     * 
-     * @param pin: 端口，从 0 开始
-     * @param value: 待设置的值
-     */
-    void set_extra_do(unsigned int pin, unsigned int value);
-    /**
-     * @brief 获取扩展模拟输入
-     * 
-     * @param pin: 端口，从 0 开始
-     * @return 返回输入数值
-     */
-    double get_extra_ai(unsigned int pin);
-
-    /**
-     * @brief 设置扩展模拟输出
-     * 
-     * @param pin 端口，从 0 开始
-     * @param value 待设置的值
-     */
-    void set_extra_ao(unsigned int pin, double value);    
-    /** @}*/ 
 
     /** \addtogroup CLAW
      *  @{
@@ -703,9 +658,15 @@ namespace lebai
     /**
      * @brief 取消任务与运动
      * 
-     * @param id: 任务的ID
+     * @param id 任务的ID
     */
     void cancel_task(unsigned int id);
+    /**
+     * @brief 获取任务状态
+     * 
+     * @param id 任务的ID
+    */
+    std::string get_task_state(unsigned int id);
     /** @}*/
 
     /** \addtogroup ROBOTICS

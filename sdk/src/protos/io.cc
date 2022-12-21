@@ -382,5 +382,449 @@ namespace lebai
       return false;
     }
 
+    void GetDioPinsRequest::set_device(IoDevice device)
+    {
+      device_ = device;
+    }
+    IoDevice GetDioPinsRequest::device() const
+    {
+      return device_;
+    }
+    IoDevice * GetDioPinsRequest::mutable_device()
+    {
+      return &device_;
+    }
+    void GetDioPinsRequest::set_pin(unsigned int pin)
+    {
+      pin_ = pin;
+    }
+    unsigned int GetDioPinsRequest::pin() const
+    {
+      return pin_;
+    }
+    unsigned int * GetDioPinsRequest::mutable_pin()
+    {
+      return &pin_;
+    }
+
+    void GetDioPinsRequest::set_count(unsigned int count)
+    {
+      count_ = count;
+    }
+    unsigned int GetDioPinsRequest::count() const
+    {
+      return count_;
+    }
+    unsigned int * GetDioPinsRequest::mutable_count()
+    {
+      return &count_;
+    }
+    // Deserialize
+    bool GetDioPinsRequest::Deserialize(const rapidjson::Value &obj)
+    {
+      if(obj.HasMember("device"))
+      {
+        std::string device_str = std::string(obj["device"].GetString());
+        if(device_str == "ROBOT")
+        {
+          device_ = ROBOT;
+        }
+        else if(device_str == "FLANGE")
+        {
+          device_ = FLANGE;
+        }
+        else if(device_str == "EXTRA")
+        {
+          device_ = EXTRA;
+        }
+      }
+      if(obj.HasMember("pin"))
+      {
+        pin_ = obj["pin"].GetUint();
+      }
+      if(obj.HasMember("count"))
+      {
+        count_ = obj["count"].GetUint();
+      }
+      return true;
+    }
+    // Serialize
+    bool GetDioPinsRequest::Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const
+    {
+      writer->StartObject();
+      writer->Key("device");
+      writer->Int(device_);
+      writer->Key("pin");
+      writer->Uint(pin_);
+      writer->Key("count");
+      writer->Uint(count_);
+      writer->EndObject();
+      return true;
+    }
+    // IsNullJSONData
+    bool GetDioPinsRequest::IsNullJSONData() const
+    {
+      return false;
+    }
+    void GetDioPinsResponse::set_values(std::vector<unsigned int> values)
+    {
+      values_ = values;
+    }
+    std::vector<unsigned int> GetDioPinsResponse::values() const
+    {
+      return values_;
+    }
+    std::vector<unsigned int> * GetDioPinsResponse::mutable_values()
+    {
+      return &values_;
+    }
+    // Deserialize
+    bool GetDioPinsResponse::Deserialize(const rapidjson::Value &obj)
+    {
+      if(obj.HasMember("values"))
+      {
+        std::vector<unsigned int> values;
+        for(auto i = obj["values"].GetArray().Begin();i != obj["values"].GetArray().End();i++)
+        {
+          values.push_back(i->GetUint());
+        }
+        values_ = values;
+      }
+      return true;
+    }
+    // Serialize
+    bool GetDioPinsResponse::Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const
+    {
+      writer->StartObject();
+      writer->Key("value");
+      writer->StartArray();
+      for(auto i:values_)
+      {
+        writer->Uint(i);
+      }
+      writer->EndArray();
+      writer->EndObject();
+      return true;
+    }
+    // IsNullJSONData
+    bool GetDioPinsResponse::IsNullJSONData() const
+    {
+      return false;
+    }
+
+    void SetDoPinsRequest::set_device(IoDevice device)
+    {
+      device_ = device;
+    }
+    IoDevice SetDoPinsRequest::device() const
+    {
+      return device_;
+    }
+    IoDevice * SetDoPinsRequest::mutable_device()
+    {
+      return &device_;
+    }
+    void SetDoPinsRequest::set_pin(unsigned int pin)
+    {
+      pin_ = pin;
+    }
+    unsigned int SetDoPinsRequest::pin() const
+    {
+      return pin_;
+    }
+    unsigned int * SetDoPinsRequest::mutable_pin()
+    {
+      return &pin_;
+    }
+    void SetDoPinsRequest::set_values(std::vector<unsigned int> values)
+    {
+      values_ = values;
+    }
+    std::vector<unsigned int> SetDoPinsRequest::values() const
+    {
+      return values_;
+    }
+    std::vector<unsigned int> * SetDoPinsRequest::mutable_values()
+    {
+      return &values_;
+    }
+    // Deserialize
+    bool SetDoPinsRequest::Deserialize(const rapidjson::Value &obj)
+    {
+      if(obj.HasMember("device"))
+      {
+        std::string device_str = std::string(obj["device"].GetString());
+        if(device_str == "ROBOT")
+        {
+          device_ = ROBOT;
+        }
+        else if(device_str == "FLANGE")
+        {
+          device_ = FLANGE;
+        }
+        else if(device_str == "EXTRA")
+        {
+          device_ = EXTRA;
+        }
+      }
+      if(obj.HasMember("pin"))
+      {
+        pin_ = obj["pin"].GetUint();
+      }
+      if(obj.HasMember("values"))
+      {
+        std::vector<unsigned int> values;
+        for(auto i = obj["values"].GetArray().Begin();i != obj["values"].GetArray().End();i++)
+        {
+          values.push_back(i->GetUint());
+        }
+        values_ = values;
+      }
+      return true;
+    }
+    // Serialize
+    bool SetDoPinsRequest::Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const
+    {
+      writer->StartObject();
+      writer->Key("device");
+      writer->Int(device_);
+      writer->Key("pin");
+      writer->Int(pin_);
+      writer->Key("value");
+      writer->StartArray();
+      for(auto i:values_)
+      {
+        writer->Uint(i);
+      }
+      writer->EndArray();
+      writer->EndObject();
+      return true;
+    }
+    // IsNullJSONData
+    bool SetDoPinsRequest::IsNullJSONData() const
+    {
+      return false;
+    }
+    void GetAioPinsRequest::set_device(IoDevice device)
+    {
+      device_ = device;
+    }
+    IoDevice GetAioPinsRequest::device() const
+    {
+      return device_;
+    }
+    IoDevice * GetAioPinsRequest::mutable_device()
+    {
+      return &device_;
+    }
+    void GetAioPinsRequest::set_pin(unsigned int pin)
+    {
+      pin_ = pin;
+    }
+    unsigned int GetAioPinsRequest::pin() const
+    {
+      return pin_;
+    }
+    unsigned int * GetAioPinsRequest::mutable_pin()
+    {
+      return &pin_;
+    }
+    void GetAioPinsRequest::set_count(unsigned int count)
+    {
+      count_ = count;
+    }
+    unsigned int GetAioPinsRequest::count() const
+    {
+      return count_;
+    }
+    unsigned int * GetAioPinsRequest::mutable_count()
+    {
+      return &count_;
+    }
+    // Deserialize
+    bool GetAioPinsRequest::Deserialize(const rapidjson::Value &obj)
+    {
+      if(obj.HasMember("device"))
+      {
+        std::string device_str = std::string(obj["device"].GetString());
+        if(device_str == "ROBOT")
+        {
+          device_ = ROBOT;
+        }
+        else if(device_str == "FLANGE")
+        {
+          device_ = FLANGE;
+        }
+        else if(device_str == "EXTRA")
+        {
+          device_ = EXTRA;
+        }
+      }
+      if(obj.HasMember("pin"))
+      {
+        pin_ = obj["pin"].GetUint();
+      }
+      if(obj.HasMember("count"))
+      {
+        count_ = obj["count"].GetUint();
+      }
+      return true;
+    }
+    // Serialize
+    bool GetAioPinsRequest::Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const
+    {
+      writer->StartObject();
+      writer->Key("device");
+      writer->Int(device_);
+      writer->Key("pin");
+      writer->Uint(pin_);
+      writer->Key("count");
+      writer->Uint(count_);
+      writer->EndObject();
+      return true;
+    }
+    // IsNullJSONData
+    bool GetAioPinsRequest::IsNullJSONData() const
+    {
+      return false;
+    }
+    void GetAioPinsResponse::set_values(std::vector<double> values)
+    {
+      values_ = values;
+    }
+    std::vector<double> GetAioPinsResponse::values() const
+    {
+      return values_;
+    }
+    std::vector<double> * GetAioPinsResponse::mutable_values()
+    {
+      return &values_;
+    }
+    // Deserialize
+    bool GetAioPinsResponse::Deserialize(const rapidjson::Value &obj)
+    {
+      if(obj.HasMember("values"))
+      {
+        std::vector<double> values;
+        for(auto i = obj["values"].GetArray().Begin();i != obj["values"].GetArray().End();i++)
+        {
+          values.push_back(i->GetDouble());
+        }
+        values_ = values;
+      }
+      return true;
+    }
+    // Serialize
+    bool GetAioPinsResponse::Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const
+    {
+      writer->StartObject();
+      writer->Key("values");
+      writer->StartArray();
+      for(auto i:values_)
+      {
+        writer->Double(i);
+      }
+      writer->EndArray();
+      writer->EndObject();
+      return true;
+    }
+    // IsNullJSONData
+    bool GetAioPinsResponse::IsNullJSONData() const
+    {
+      return false;
+    }
+    void SetAoPinsRequest::set_device(IoDevice device)
+    {
+      device_ = device;
+    }
+    IoDevice SetAoPinsRequest::device() const
+    {
+      return device_;
+    }
+    IoDevice * SetAoPinsRequest::mutable_device()
+    {
+      return &device_;
+    }
+    void SetAoPinsRequest::set_pin(unsigned int pin)
+    {
+      pin_ = pin;
+    }
+    unsigned int SetAoPinsRequest::pin() const
+    {
+      return pin_;
+    }
+    unsigned int * SetAoPinsRequest::mutable_pin()
+    {
+      return &pin_;
+    }
+    void SetAoPinsRequest::set_values(std::vector<double> values)
+    {
+      values_ = values;
+    }
+    std::vector<double> SetAoPinsRequest::values() const
+    {
+      return values_;
+    }
+    std::vector<double> * SetAoPinsRequest::mutable_values()
+    {
+      return &values_;
+    }
+    // Deserialize
+    bool SetAoPinsRequest::Deserialize(const rapidjson::Value &obj)
+    {
+      if(obj.HasMember("device"))
+      {
+        std::string device_str = std::string(obj["device"].GetString());
+        if(device_str == "ROBOT")
+        {
+          device_ = ROBOT;
+        }
+        else if(device_str == "FLANGE")
+        {
+          device_ = FLANGE;
+        }
+        else if(device_str == "EXTRA")
+        {
+          device_ = EXTRA;
+        }
+      }
+      if(obj.HasMember("pin"))
+      {
+        pin_ = obj["pin"].GetUint();
+      }
+      if(obj.HasMember("values"))
+      {
+        std::vector<double> values;
+        for(auto i = obj["values"].GetArray().Begin();i != obj["values"].GetArray().End();i++)
+        {
+          values.push_back(i->GetDouble());
+        }
+        values_ = values;
+      }
+      return true;
+    }
+    // Serialize
+    bool SetAoPinsRequest::Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const
+    {
+      writer->StartObject();
+      writer->Key("device");
+      writer->Int(device_);
+      writer->Key("pin");
+      writer->Int(pin_);
+      writer->Key("values");
+      writer->StartArray();
+      for(auto i:values_)
+      {
+        writer->Double(i);
+      }
+      writer->EndArray();
+      writer->EndObject();
+      return true;
+    }
+    // IsNullJSONData
+    bool SetAoPinsRequest::IsNullJSONData() const
+    {
+      return false;
+    }
   }
 }
