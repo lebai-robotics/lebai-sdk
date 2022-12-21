@@ -224,7 +224,11 @@ namespace lebai
     robot_.get_di("EXTRA", 0);
     robot_.set_do("EXTRA", 0, static_cast<unsigned int>(1));
     robot_.get_ai("EXTRA", 0);
-    robot_.set_ao("EXTRA", 0, 0.0);    
+    robot_.set_ao("EXTRA", 0, 0.0);
+    for(unsigned int  i = 0; i < 100; ++i)
+    {
+      robot_.get_di("EXTRA", 0);
+    }
   }
   TEST_F(RobotTest, TestClaw)
   {
