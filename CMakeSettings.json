@@ -28,11 +28,16 @@
         },
         {
           "name": "BUILD_PYTHON",
-          "value": "True",
+          "value": "False",
           "type": "BOOL"
         },
         {
           "name": "BUILD_TESTING",
+          "value": "True",
+          "type": "BOOL"
+        },
+        {
+          "name": "BUILD_DOTNET",
           "value": "True",
           "type": "BOOL"
         }
