@@ -979,7 +979,7 @@ void Robot::add_signal(unsigned int index,int value)
   impl_->addSignal(req);
 }
 
-unsigned int Robot::scene(const std::string &name,bool is_parallel,unsigned int loop_to,const std::string & dir,const std::vector<std::string> & params)
+unsigned int Robot::start_task(const std::string &name,bool is_parallel,unsigned int loop_to,const std::string & dir,const std::vector<std::string> & params)
 {
   control::StartTaskRequest req;
   req.set_name(name);
@@ -990,7 +990,7 @@ unsigned int Robot::scene(const std::string &name,bool is_parallel,unsigned int 
   control::TaskIndex resp = impl_->scene(req);
   return resp.id();
 }
-unsigned int Robot::scene(const std::string &name,bool is_parallel,unsigned int loop_to,const std::string & dir)
+unsigned int Robot::start_task(const std::string &name,bool is_parallel,unsigned int loop_to,const std::string & dir)
 {
   control::StartTaskRequest req;
   req.set_name(name);
@@ -1000,7 +1000,7 @@ unsigned int Robot::scene(const std::string &name,bool is_parallel,unsigned int 
   control::TaskIndex resp = impl_->scene(req);
   return resp.id();
 }
-unsigned int Robot::scene(const std::string &name)
+unsigned int Robot::start_task(const std::string &name)
 {
   control::StartTaskRequest req;
   req.set_name(name);
@@ -1041,12 +1041,12 @@ std::string Robot::get_task_state(unsigned int id)
   control::Task resp = impl_->loadTask(req);
   switch(resp.state())
   {
-    case 0:return "WAIT";break;
-    case 1:return "RUNNING";break;
-    case 2:return "PAUSE";break;
-    case 3:return "SUCCESS";break;
-    case 4:return "INTERRUPT";break;
-    case 5:return "FAIL";break;
+    case control::TaskState::WAIT:return "WAIT";break;
+    case control::TaskState::RUNNING:return "RUNNING";break;
+    case control::TaskState::PAUSE:return "PAUSE";break;
+    case control::TaskState::SUCCESS:return "SUCCESS";break;
+    case control::TaskState::INTERRUPT:return "INTERRUPT";break;
+    case control::TaskState::FAIL:return "FAIL";break;
     default:return "Undefined State";
   }
 }
