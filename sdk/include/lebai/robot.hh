@@ -117,8 +117,8 @@ namespace lebai
      *  \brief    机械臂状态相关的接口.
      */
     
-    /** \addtogroup IO Input and Output
-     *  \brief      IO相关的接口
+    /** \addtogroup IO 通用输入输出
+     *  \brief      通用输入输出相关的接口
     */
 
     /** \defgroup CLAW 夹爪.
@@ -394,7 +394,7 @@ namespace lebai
      *    11	 |   示教中	       |  机器人处于示教模式中
      *    12	 |   已停止	       |  机器人处于停止状态，非急停状态
      *  
-     * @note See state <a href="https://help.lebai.ltd/guide/basic.html#%E6%9C%BA%E5%99%A8%E4%BA%BA%E7%8A%B6%E6%80%81">here</a>.
+     * @note 查看 <a href="https://help.lebai.ltd/guide/basic.html#%E6%9C%BA%E5%99%A8%E4%BA%BA%E7%8A%B6%E6%80%81">具体信息</a>.
      */
     int get_robot_mode();
     /**
@@ -447,13 +447,13 @@ namespace lebai
     /**
      * @brief 获取机械臂关节当前反馈力矩
      * 
-     * @return * std::vector<double> 
+     * @return 关节当前反馈力矩
      */
     std::vector<double> get_actual_joint_torques();
     /**
      * @brief 获取机械臂关节当前控制力矩
      * 
-     * @return * std::vector<double> 
+     * @return 关节当前控制力矩
      */
     std::vector<double> get_target_joint_torques();
 
@@ -462,74 +462,88 @@ namespace lebai
      *  @{
      */
     /**
-     * @brief 设置控制箱数字输出
-     * 
+     * @brief 设置数字输出
+     * @param device 设备类型，以字符串形式传入，包括 `ROBOT`, `FLANGE`, `EXTRA`, `SHOULDER`, `FLANGE_BTN`
+     * 查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
      * @param pin 端口，从 0 开始
      * @param value 待设置的值
      */
     void set_do(std::string device, unsigned int pin, unsigned int value);
     /**
-     * @brief 获取控制箱数字输出
-     * 
+     * @brief 获取数字输出
+     * @param device 设备类型，以字符串形式传入，包括 `ROBOT`, `FLANGE`, `EXTRA`, `SHOULDER`, `FLANGE_BTN`
+     * 查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
      * @param pin 端口，从 0 开始
-     * @return 返回输入数值
+     * @return 返回数字输出数值
      */
     unsigned int get_do(std::string device, unsigned int pin);
     /**
-     * @brief 获取控制箱数字输出
-     * 
-     * @param pin 端口，从 0 开始
-     * @return 返回输入数值
+     * @brief 获取多个数字输出
+     * @param device 设备类型，以字符串形式传入，包括 `ROBOT`, `FLANGE`, `EXTRA`, `SHOULDER`, `FLANGE_BTN`
+     * 查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
+     * @param pin 起始数字输出端口，从 0 开始
+     * @param num 连续的数字输出个数
+     * @return 返回多个数字输出数值
      */
     std::vector<unsigned int> get_dos(std::string device, unsigned int pin, unsigned int num);
     /**
-     * @brief 获取控制箱数字输入
-     * 
+     * @brief 获取数字输入
+     * @param device 设备类型，以字符串形式传入，包括 `ROBOT`, `FLANGE`, `EXTRA`, `SHOULDER`, `FLANGE_BTN`
+     * 查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
      * @param pin 端口，从 0 开始
      * @return 返回输入数值
      */
     unsigned int get_di(std::string device, unsigned int pin);
     /**
-     * @brief 获取控制箱数字输入
-     * 
-     * @param pin 端口，从 0 开始
-     * @return 返回输入数值
+     * @brief 获取多个数字输入
+     * @param device 设备类型，以字符串形式传入，包括 `ROBOT`, `FLANGE`, `EXTRA`, `SHOULDER`, `FLANGE_BTN`
+     * 查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
+     * @param pin 起始数字输入端口，从 0 开始
+     * @param num 连续的数字输入个数
+     * @return 返回多个数字输入
      */
     std::vector<unsigned int> get_dis(std::string device, unsigned int pin, unsigned int num);
 
     /**
-     * @brief 设置控制箱数字输出
-     * 
-     * @param pin: 端口，从 0 开始
-     * @param value: 待设置的值
+     * @brief 设置模拟输出
+     * @param device 设备类型，以字符串形式传入，包括 `ROBOT`, `FLANGE`, `EXTRA`, `SHOULDER`, `FLANGE_BTN`
+     * 查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
+     * @param pin: 模拟输出端口，从 0 开始
+     * @param value: 待设置的模拟输出值
      */
     void set_ao(std::string device, unsigned int pin, double value);
     /**
-     * @brief 获取控制箱模拟输入
-     * 
+     * @brief 获取模拟输出
+     * @param device 设备类型，以字符串形式传入，包括 `ROBOT`, `FLANGE`, `EXTRA`, `SHOULDER`, `FLANGE_BTN`
+     * 查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
      * @param pin: 端口，从 0 开始
-     * @return 返回输入数值
+     * @return 返回模拟输入数值
      */
     double get_ao(std::string device, unsigned int pin);
     /**
-     * @brief 获取控制箱模拟输入
-     * 
-     * @param pin: 端口，从 0 开始
-     * @return 返回输入数值
+     * @brief 获取多个模拟输出
+     * @param device 设备类型，以字符串形式传入，包括 `ROBOT`, `FLANGE`, `EXTRA`, `SHOULDER`, `FLANGE_BTN`
+     * 查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
+     * @param pin: 起始模拟输出端口，从 0 开始
+     * @param num 连续的模拟输出个数
+     * @return 返回模拟输出数值
      */
     std::vector<double> get_aos(std::string device, unsigned int pin, unsigned int num);
     /**
-     * @brief 获取控制箱模拟输入
-     * 
+     * @brief 获取模拟输入
+     * @param device 设备类型，以字符串形式传入，包括 `ROBOT`, `FLANGE`, `EXTRA`, `SHOULDER`, `FLANGE_BTN`
+     * 查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
      * @param pin: 端口，从 0 开始
-     * @return 返回输入数值
+     * @return 返回模拟输入数值
      */
     double get_ai(std::string device, unsigned int pin);
     /**
-     * @brief 获取控制箱模拟输入
-     * 
-     * @param pin: 端口，从 0 开始
-     * @return 返回输入数值
+     * @brief 获取多个模拟输入
+     * @param device 设备类型，以字符串形式传入，包括 `ROBOT`, `FLANGE`, `EXTRA`, `SHOULDER`, `FLANGE_BTN`
+     * 查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>. 
+     * @param pin: 起始模拟输入端口，从 0 开始
+     * @param num 连续的模拟输入个数
+     * @return 返回多个模拟输入数值
      */
     std::vector<double> get_ais(std::string device, unsigned int pin, unsigned int num);
     /** @}*/

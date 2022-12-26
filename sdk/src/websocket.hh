@@ -80,6 +80,7 @@ namespace lebai
 
     void onMessage(websocketpp::connection_hdl, WSClient::message_ptr msg)
     {
+      std::lock_guard<std::mutex> guard(promises_map_mutex_);
       std::string message_str = msg->get_payload();
       int callback_jsonrpc_id;
       int error_code;
@@ -90,7 +91,7 @@ namespace lebai
         return;
       }
       else
-      {        
+      {
         if(promises_.find(callback_jsonrpc_id) != promises_.end())
         {
           if(ret == JSONRpcRespParseResult::kResult)
@@ -103,7 +104,9 @@ namespace lebai
             promises_[callback_jsonrpc_id]->set_value(std::make_tuple(error_code, resp_data_str));
             promises_.erase(callback_jsonrpc_id);
           }
-
+        }
+        else{
+          // Should not happen
         }
       }
     }
@@ -120,6 +123,7 @@ namespace lebai
 
     std::future<std::tuple<int, std::string>> createPromise(int rpc_id)
     {
+      std::lock_guard<std::mutex> guard(promises_map_mutex_);
       promises_[rpc_id] = std::make_unique<std::promise<std::tuple<int, std::string>>>();
       return promises_[rpc_id]->get_future();;
     }
@@ -137,6 +141,7 @@ namespace lebai
     std::string uri_;
     std::string server_;
     std::string error_reason_;
+    std::mutex promises_map_mutex_;
   };
 
   // std::ostream& operator<<(std::ostream& out, ConnectionMetadata const& data) {
