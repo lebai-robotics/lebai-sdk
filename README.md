@@ -2,9 +2,14 @@ lebai-sdk的源代码仓库，可以用于控制乐白机械臂。
 
 [SDK在线文档](http://help.lebai.ltd/sdk/)
 
+# 包管理直接安装
+
+python开发可以直接从[PyPI](https://pypi.org/project/pylebai/)安装。
+```
+pip install pylebai
+```
 
 # 从源代码构建安装
-
 
 ## Ubuntu&&Debian平台
 ### 依赖
@@ -56,6 +61,7 @@ cpack
 
  - BUILD_PYTHON: 是否编译python接口 默认为OFF
  - PYTHONPATH: PYTHON的安装目录
+ - BUILD_DOTNET: 是否编译.net接口 默认为OFF（请先安装好dotnet的开发环境）
  - BUILD_TESTING: 是否编译C++测试程序 默认为ON 
  - TEST_ROBOT_IP: 测试程序的机器人IP地址，正确的设置该值用于单元测试 默认为127.0.0.1
  - BUILD_EXAMPLES: 是否编译示例程序 默认为ON
