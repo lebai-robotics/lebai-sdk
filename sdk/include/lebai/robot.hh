@@ -621,7 +621,7 @@ namespace lebai
       * @param dir: 调用场景所在的文件夹名
       * @param params: 其他参数
     */
-    unsigned int scene(const std::string &name,bool is_main,unsigned int loop_to,const std::string &dir,const std::vector<std::string> & params);
+    unsigned int start_task(const std::string &name,bool is_main,unsigned int loop_to,const std::string &dir,const std::vector<std::string> & params);
     /**
       * @brief 调用场景
       * 
@@ -630,13 +630,13 @@ namespace lebai
       * @param loop_to: 循环次数（默认0永久循环）
       * @param dir: 调用场景所在的文件夹名
     */
-    unsigned int scene(const std::string &name,bool is_main,unsigned int loop_to,const std::string &dir);
+    unsigned int start_task(const std::string &name,bool is_main,unsigned int loop_to,const std::string &dir);
     /**
       * @brief 调用场景
       * 
       * @param name: 调用场景的名字
     */
-    unsigned int scene(const std::string &name);
+    unsigned int start_task(const std::string &name);
     /**
      * @brief 查询任务列表
     */
