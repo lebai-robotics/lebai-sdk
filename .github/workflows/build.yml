@@ -97,4 +97,4 @@ jobs:
        - name: upload Nuget
          run: |
           cd ./build/dotnet/packages
-          dotnet nuget push lebai.1.0.*.nupkg --api-key ${{ secrets.NUGET-KEY}}
+          dotnet nuget push lebai.1.0.*.nupkg --api-key ${{ secrets.NUGET_KEY }}
