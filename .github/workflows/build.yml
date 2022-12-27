@@ -72,7 +72,7 @@ jobs:
      - name: test
        run: cmake --build build --target test
 
-  pypi: 
+  nuget: 
      runs-on: ubuntu-latest
      steps:
        - name: Checkout
@@ -94,7 +94,7 @@ jobs:
        - name: build
          run: cmake --build build
           
-       - name: upload Pypi
+       - name: upload Nuget
          run: |
           cd ./build/dotnet/packages
-          dotnet nuget push lebai.1.0.*.nupkg --api-key ${{ secrets.NUGET-KEY}} --source https://api.nuget.org/v3/index.json
+          dotnet nuget push lebai.1.0.*.nupkg --api-key ${{ secrets.NUGET-KEY}}
