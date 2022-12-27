@@ -82,7 +82,7 @@ jobs:
          uses: actions/setup-dotnet@v3.0.3
        
        - name: install dependencies
-       - run: |
+         run: |
           sudo apt install build-essential python3-pip dpkg-dev
           sudo apt install build-essential python3-pip dpkg-dev
           sudo pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
