@@ -76,6 +76,9 @@ message(STATUS "Build Python: ${BUILD_PYTHON}")
 option(BUILD_DOTNET "Build .NET Library" OFF)
 message(STATUS "Build .Net: ${BUILD_DOTNET}")
 
+option(BUILD_JAVA "Build Java Library" OFF)
+message(STATUS "Build Java: ${BUILD_JAVA}")
+
 if(BUILD_PYTHON)
   if(DEFINED PYTHONPATH)
     message(STATUS "Python path: ${PYTHONPATH}")
@@ -115,6 +118,12 @@ if(BUILD_DOTNET)
   message(STATUS ".Net: Use .Net 6.0 LTS support: ${USE_DOTNET_6}")
 endif()
 include(dotnet)
+
+if(BUILD_JAVA)
+  option(SKIP_GPG "Skip gpg sign" ON)
+  message(STATUS "Maven skip GPG sign: ${SKIP_GPG}")
+endif()
+include(java)
 
 
 # add_subdirectory(tests)
