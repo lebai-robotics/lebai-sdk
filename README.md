@@ -18,6 +18,7 @@ pip install pylebai
 - swig >= 4.0
 - python3 >= 3.5 (可选,如果需要生成python的接口库)
 - doxygen (可选,如果需要C++文档)
+- jdk, maven(可选,如果需要生成java的接口库)
 
 相对旧的发行版系统cmake和swig版本过低，不能使用，可以通过pip安装较新的版本:
 ```bash
@@ -61,7 +62,8 @@ cpack
 
  - BUILD_PYTHON: 是否编译python接口 默认为OFF
  - PYTHONPATH: PYTHON的安装目录
- - BUILD_DOTNET: 是否编译.net接口 默认为OFF（请先安装好dotnet的开发环境）
+ - BUILD_DOTNET: 是否编译.NET接口 默认为OFF（请先安装好.NET的开发环境）
+ - BUILD_JAVA: 是否编译JAVA接口 默认为OFF（请先安装好JDK和Maven）
  - BUILD_TESTING: 是否编译C++测试程序 默认为ON 
  - TEST_ROBOT_IP: 测试程序的机器人IP地址，正确的设置该值用于单元测试 默认为127.0.0.1
  - BUILD_EXAMPLES: 是否编译示例程序 默认为ON
