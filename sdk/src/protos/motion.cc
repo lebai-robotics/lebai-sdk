@@ -222,8 +222,7 @@ namespace lebai
   void MoveRequest::set_param(const MoveParam & param)
   {
     param_ = param;
-  }
-	// double v() const;
+  }	
   const MoveParam & MoveRequest::param() const
   {
     return param_;
@@ -283,7 +282,7 @@ namespace lebai
     }
     return false;
   }
-  // MoveParam end
+  // MoveRequest end
 
   // pose_via_
   void MovecRequest::set_pose_via(const posture::Pose & pose)
