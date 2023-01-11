@@ -271,7 +271,7 @@ namespace lebai
     get_aio_resp.FromJSONString(resp);
     return get_aio_resp;
   }
-  io::SetDioRequest Robot::RobotImpl::setDio(const io::SetDioResponse &req)
+  io::SetDioResponse Robot::RobotImpl::setDio(const io::SetDioRequest &req)
   {
     std::string resp;
     json_rpc_connector_->CallRpc("set_dio", req.ToJSONString(), &resp);
@@ -279,7 +279,7 @@ namespace lebai
     resp_.FromJSONString(resp);
     return resp_;
   }
-  io::SetDioModeRequest Robot::RobotImpl::setDioMode(const io::SetDioModeResponse &req)
+  io::SetDioModeResponse Robot::RobotImpl::setDioMode(const io::SetDioModeRequest &req)
   {
     std::string resp;
     json_rpc_connector_->CallRpc("set_dio_mode", req.ToJSONString(), &resp);
@@ -287,7 +287,7 @@ namespace lebai
     resp_.FromJSONString(resp);
     return resp_;
   }
-  io::GetDiosRequest Robot::RobotImpl::getDios(const io::GetDiosResponse &req)
+  io::GetDiosResponse Robot::RobotImpl::getDios(const io::GetDiosRequest &req)
   {
     std::string resp;
     json_rpc_connector_->CallRpc("get_dios", req.ToJSONString(), &resp);
@@ -295,7 +295,7 @@ namespace lebai
     resp_.FromJSONString(resp);
     return resp_;
   }
-  io::GetDiosModeRequest Robot::RobotImpl::getDiosMode(const io::GetDiosModeResponse &req)
+  io::GetDiosModeResponse Robot::RobotImpl::getDiosMode(const io::GetDiosModeRequest &req)
   {
     std::string resp;
     json_rpc_connector_->CallRpc("get_dios_mode", req.ToJSONString(), &resp);
