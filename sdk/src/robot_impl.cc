@@ -275,7 +275,7 @@ namespace lebai
   {
     std::string resp;
     json_rpc_connector_->CallRpc("set_dio", req.ToJSONString(), &resp);
-    io::SetDioRequest resp_;
+    io::SetDioResponse resp_;
     resp_.FromJSONString(resp);
     return resp_;
   }
