@@ -826,5 +826,369 @@ namespace lebai
     {
       return false;
     }
+
+    void SetDioModeRequest::set_pin(unsigned int pin)
+    {
+      pin_ = pin;
+    }
+    unsigned int SetDioModeRequest::pin() const
+    {
+      return pin_;
+    }
+    unsigned int *SetDioModeRequest::mutable_pin()
+    {
+      return &pin_;
+    }
+
+    void SetDioModeRequest::set_value(bool value)
+    {
+      value_ = value;
+    }
+    bool SetDioModeRequest::value() const
+    {
+      return value_;
+    }
+    bool *SetDioModeRequest::mutable_value()
+    {
+      return &value_;
+    }
+
+    bool SetDioModeRequest::Deserialize(const rapidjson::Value &obj)
+    {
+      if(obj.HasMember("pin"))
+      {
+        pin_ = obj["pin"].GetUint();
+      }
+      if(obj.HasMember("value"))
+      {
+        value_ = obj["value"].GetBool();
+      }
+      return true;
+    }
+    bool SetDioModeRequest::Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const
+    {
+      writer->StartObject();
+      writer->Key("pin");
+      writer->Uint(pin_);
+      writer->Key("value");
+      writer->Bool(value_);
+      writer->EndObject();
+      return true;
+    }
+    bool SetDioModeRequest::IsNullJSONData() const
+    {
+      return false;
+    }
+
+    void SetDioModeResponse::set_success(bool success)
+    {
+      success_ = success;
+    }
+    bool SetDioModeResponse::success() const
+    {
+      return success_;
+    }
+    bool *SetDioModeResponse::mutable_success()
+    {
+      return &success_;
+    }
+    bool SetDioModeResponse::Deserialize(const rapidjson::Value &obj)
+    {
+      if(obj.HasMember("success"))
+      {
+        success_ = success;
+      }
+      return true;
+    }
+    bool SetDioModeResponse::Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const
+    {
+      writer->StartObject();
+      writer->Key("success");
+      writer->Bool(success_);
+      writer->EndObject();
+      return true;
+    }
+    bool SetDioModeResponse::IsNullJSONData() const
+    {
+      return false;
+    }
+
+    void SetDioRequest::set_pin(unsigned int pin)
+    {
+      pin_ = pin;
+    }
+    unsigned int SetDioRequest::pin() const
+    {
+      return pin_;
+    }
+    unsigned int *SetDioRequest::mutable_pin()
+    {
+      return &pin_;
+    }
+
+    void SetDioRequest::set_value(bool value)
+    {
+      value_ = value;
+    }
+    bool SetDioRequest::value() const
+    {
+      return value_;
+    }
+    bool *SetDioRequest::mutable_value()
+    {
+      return &value_;
+    }
+
+    bool SetDioRequest::Deserialize(const rapidjson::Value &obj)
+    {
+      if(obj.HasMember("pin"))
+      {
+        pin_ = obj["pin"].GetUint();
+      }
+      if(obj.HasMember("value"))
+      {
+        value_ = obj["value"].GetBool();
+      }
+      return true;
+    }
+    bool SetDioRequest::Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const
+    {
+      writer->StartObject();
+      writer->Key("pin");
+      writer->Uint(pin_);
+      writer->Key("value");
+      writer->Bool(value_);
+      writer->EndObject();
+      return true;
+    }
+    bool SetDioRequest::IsNullJSONData() const
+    {
+      return false;
+    }
+
+    void SetDioResponse::set_success(bool success)
+    {
+      success_ = success;
+    }
+    bool SetDioResponse::success() const
+    {
+      return success_;
+    }
+    bool *SetDioResponse::mutable_success()
+    {
+      return &success_;
+    }
+    bool SetDioResponse::Deserialize(const rapidjson::Value &obj)
+    {
+      if(obj.HasMember("success"))
+      {
+        success_ = success;
+      }
+      return true;
+    }
+    bool SetDioResponse::Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const
+    {
+      writer->StartObject();
+      writer->Key("success");
+      writer->Bool(success_);
+      writer->EndObject();
+      return true;
+    }
+    bool SetDioResponse::IsNullJSONData() const
+    {
+      return false;
+    }
+
+    void GetDiosRequest::set_pin(unsigned int pin)
+    {
+      pin_ = pin;
+    }
+    unsigned int GetDiosRequest::pin() const
+    {
+      return pin_;
+    }
+    unsigned int *GetDiosRequest::mutable_pin()
+    {
+      return &pin_;
+    }
+
+    void GetDiosRequest::set_count(unsigned int count)
+    {
+      count_ = count;
+    }
+    unsigned int GetDiosRequest::count() const
+    {
+      return count_;
+    }
+    unsigned int *GetDiosRequest::mutable_count()
+    {
+      return &count_;
+    }
+
+    bool GetDiosRequest::Deserialize(const rapidjson::Value &obj)
+    {
+      if(obj.HasMember("pin"))
+      {
+        pin_ = obj["pin"].GetUint();
+      }
+      if(obj.HasMember("count"))
+      {
+        count_ = obj["count"].GetUint();
+      }
+      return true;
+    }
+    bool GetDiosRequest::Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const
+    {
+      writer->StartObject();
+      writer->Key("pin");
+      writer->Uint(pin_);
+      writer->Key("count");
+      writer->Uint(count_);
+      writer->EndObject();
+      return true;
+    }
+    bool GetDiosRequest::IsNullJSONData() const
+    {
+      return false;
+    }
+
+    void GetDiosResponse::set_values(std::vector<bool> values)
+    {
+      values_ = values;
+    }
+    std::vector<bool> GetDiosResponse::values() const
+    {
+      return values_;
+    }
+    std::vector<bool> *GetDiosResponse::mutable_values()
+    {
+      return &values_;
+    }
+    bool GetDiosResponse::Deserialize(const rapidjson::Value &obj)
+    {
+      if(obj.HasMember("values"))
+      {
+        std::vector<bool> values;
+        for(auto i = obj["values"].GetArray().Begin();i != obj["values"].GetArray().End();i++)
+        {
+          values.push_back(i->GetBool());
+        }
+        values_ = values;
+      }
+      return true;
+    }
+    bool GetDiosResponse::Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const
+    {
+      writer->StartObject();
+      writer->Key("values");
+      writer->StartArray();
+      for(auto i:values_)
+      {
+        writer->Bool(i);
+      }
+      writer->EndArray();
+      writer->EndObject();
+      return true;
+    }
+    bool GetDiosResponse::IsNullJSONData() const
+    {
+      return false;
+    }
+
+    void GetDiosModeRequest::set_pin(unsigned int pin)
+    {
+      pin_ = pin;
+    }
+    unsigned int GetDiosModeRequest::pin() const
+    {
+      return pin_;
+    }
+    unsigned int *GetDiosModeRequest::mutable_pin()
+    {
+      return &pin_;
+    }
+
+    void GetDiosModeRequest::set_count(unsigned int count)
+    {
+      count_ = count;
+    }
+    unsigned int GetDiosModeRequest::count() const
+    {
+      return count_;
+    }
+    unsigned int *GetDiosModeRequest::mutable_count()
+    {
+      return &count_;
+    }
+
+    bool GetDiosModeRequest::Deserialize(const rapidjson::Value &obj)
+    {
+      if(obj.HasMember("pin"))
+      {
+        pin_ = obj["pin"].GetUint();
+      }
+      if(obj.HasMember("count"))
+      {
+        count_ = obj["count"].GetUint();
+      }
+      return true;
+    }
+    bool GetDiosModeRequest::Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const
+    {
+      writer->StartObject();
+      writer->Key("pin");
+      writer->Uint(pin_);
+      writer->Key("count");
+      writer->Uint(count_);
+      writer->EndObject();
+      return true;
+    }
+    bool GetDiosModeRequest::IsNullJSONData() const
+    {
+      return false;
+    }
+
+    void GetDiosModeResponse::set_values(std::vector<bool> values)
+    {
+      values_ = values;
+    }
+    std::vector<bool> GetDiosModeResponse::values() const
+    {
+      return values_;
+    }
+    std::vector<bool> *GetDiosModeResponse::mutable_values()
+    {
+      return &values_;
+    }
+    bool GetDiosModeResponse::Deserialize(const rapidjson::Value &obj)
+    {
+      if(obj.HasMember("values"))
+      {
+        std::vector<bool> values;
+        for(auto i = obj["values"].GetArray().Begin();i != obj["values"].GetArray().End();i++)
+        {
+          values.push_back(i->GetBool());
+        }
+        values_ = values;
+      }
+      return true;
+    }
+    bool GetDiosModeResponse::Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const
+    {
+      writer->StartObject();
+      writer->Key("values");
+      writer->StartArray();
+      for(auto i:values_)
+      {
+        writer->Bool(i);
+      }
+      writer->EndArray();
+      writer->EndObject();
+      return true;
+    }
+    bool GetDiosModeResponse::IsNullJSONData() const
+    {
+      return false;
+    }
   }
 }

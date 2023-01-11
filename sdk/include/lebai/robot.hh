@@ -546,6 +546,34 @@ namespace lebai
      * @return 返回多个模拟输入数值
      */
     std::vector<double> get_ais(std::string device, unsigned int pin, unsigned int num);
+    /**
+     * @brief 设置数字端口输出值
+     * @param pin: 端口号，从 0 开始
+     * @param value: 待设置的模拟输出值
+     * @return 若设置成功为true,若当前此端口为输入模式则为false
+     */
+    bool set_dio(unsigned int pin, bool value);
+    /**
+     * @brief 设置数字端口模式
+     * @param pin: 端口号，从 0 开始
+     * @param value 设置的值，false为输入模式，true为输出模式
+     * @return 返回是否成功
+     */
+    bool set_dio_mode(unsigned int pin, bool value);
+    /**
+     * @brief 获取数字端口输出值
+     * @param pin: 端口号，从 0 开始
+     * @param count: 查询的连续端口数
+     * @return 从pin开始的连续count个端口的当前值
+     */
+    bool get_dios(unsigned int pin, unsigned int count);
+    /**
+     * @brief 获取数字端口模式
+     * @param pin: 端口号，从 0 开始
+     * @param count:查询的连续端口数
+     * @return 从pin开始的连续count个端口的当前模式
+     */
+    bool get_dios_mode(unsigned int pin, unsigned int count);
     /** @}*/
 
 
