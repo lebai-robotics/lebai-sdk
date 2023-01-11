@@ -566,14 +566,14 @@ namespace lebai
      * @param count: 查询的连续端口数
      * @return 从pin开始的连续count个端口的当前值
      */
-    bool get_dios(unsigned int pin, unsigned int count);
+    std::vector<bool> get_dios(unsigned int pin, unsigned int count);
     /**
      * @brief 获取数字端口模式
      * @param pin: 端口号，从 0 开始
      * @param count:查询的连续端口数
      * @return 从pin开始的连续count个端口的当前模式
      */
-    bool get_dios_mode(unsigned int pin, unsigned int count);
+    std::vector<bool> get_dios_mode(unsigned int pin, unsigned int count);
     /** @}*/
 
 
