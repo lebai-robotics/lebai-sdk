@@ -66,6 +66,14 @@ else()
   endforeach()
 endif()
 
+option(ENABLE_TSAN "Enable thread sanitier" ON)
+if(UNIX)   
+  if(ENABLE_TSAN)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread -g")
+    set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} -fsanitize=thread")
+  endif()
+endif()
+
 # By default only the C++ library is built.
 option(BUILD_CXX "Build C++ library" ON)
 message(STATUS "Build C++ library: ${BUILD_CXX}")
@@ -134,11 +142,10 @@ add_subdirectory(examples)
 
 
 
-find_package(Doxygen QUIET)
-option(BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen)" ${DOXYGEN_FOUND})
+option(BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen)" ON)
 
 if(BUILD_DOCUMENTATION)
-    # find_package(Doxygen)
+    find_package(Doxygen)
     if(NOT DOXYGEN_FOUND)
         message(FATAL_ERROR "Doxygen is needed to build the documentation.")
     endif()

@@ -471,7 +471,7 @@ std::vector<double> Robot::get_target_joint_speed()
 
 CartesianPose Robot::get_actual_tcp_pose()
 {
-  const auto & pose = impl_->getKinData().actual_tcp_pose();
+  auto pose = impl_->getKinData().actual_tcp_pose();
   CartesianPose cart_pose;
   cart_pose["x"] = pose.position().x();
   cart_pose["y"] = pose.position().y();
@@ -486,7 +486,7 @@ CartesianPose Robot::get_actual_tcp_pose()
 }
 CartesianPose Robot::get_target_tcp_pose()
 {
-  const auto & pose = impl_->getKinData().target_tcp_pose();
+  auto pose = impl_->getKinData().target_tcp_pose();
   CartesianPose cart_pose;
   cart_pose["x"] = pose.position().x();
   cart_pose["y"] = pose.position().y();

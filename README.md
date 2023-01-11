@@ -85,6 +85,7 @@ cpack
  - TEST_ROBOT_IP: 测试程序的机器人IP地址，正确的设置该值用于单元测试 默认为127.0.0.1
  - BUILD_EXAMPLES: 是否编译示例程序 默认为ON
  - BUILD_DEB: 是否生成DEB包的构建 默认为OFF
+ - ENABLE_TSAN: 编译是否启用Thread sanitizer检查 默认为OFF
 
 ## 使用
 您可以通过docs目录下的文档了解更多各语言的信息。
