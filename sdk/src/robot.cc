@@ -746,7 +746,7 @@ bool Robot::set_dio_mode(unsigned int pin, bool value)
   io::SetDioModeResponse resp = impl_->setDioMode(req);
   return resp.success();
 }
-bool Robot::get_dios(unsigned int pin, unsigned int count)
+std::vector<bool> Robot::get_dios(unsigned int pin, unsigned int count)
 {
   io::GetDiosRequest req;
   req.set_pin(pin);
@@ -754,13 +754,13 @@ bool Robot::get_dios(unsigned int pin, unsigned int count)
   io::GetDiosResponse resp = impl_->getDios(req);
   return resp.values();
 }
-bool Robot::get_dios_mode(unsigned int pin, unsigned int count)
+std::vector<bool> Robot::get_dios_mode(unsigned int pin, unsigned int count)
 {
   io::GetDiosModeRequest req;
   req.set_pin(pin);
   req.set_count(count);
   io::GetDiosModeResponse resp = impl_->getDiosMode(req);
-  return resp.values()
+  return resp.values();
 }
 
 // bool Robot::get_robot_di(unsigned int pin)
