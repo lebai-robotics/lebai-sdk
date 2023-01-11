@@ -282,7 +282,7 @@ namespace lebai
 			unsigned int pin() const;
 			unsigned int *mutable_pin();
 
-			void set_values(std::vector<double> pin);
+			void set_values(std::vector<double> values);
 			std::vector<double> values() const;
 			std::vector<double> *mutable_values();
 
@@ -297,5 +297,158 @@ namespace lebai
 			virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const;
 			virtual bool IsNullJSONData() const;
 		};
+
+		class SetDioModeRequest : public JSONBase
+		{
+		public:
+			void set_pin(unsigned int pin);
+			unsigned int pin() const;
+			unsigned int *mutable_pin();
+
+			void set_value(bool value);
+			bool value() const;
+			bool *mutable_value();
+
+		protected:
+			unsigned int pin_;
+			bool value_;
+			// These methods are used to serialize and deserialize the class.
+			// They will not be wrapped in the SDK.
+		public:
+			virtual bool Deserialize(const rapidjson::Value &obj);
+			virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const;
+			virtual bool IsNullJSONData() const;
+		};
+
+		class SetDioModeResponse : public JSONBase
+		{
+		public:
+			void set_success(bool success);
+			bool success() const;
+			bool *mutable_success();
+
+		protected:
+			bool success_;
+			// These methods are used to serialize and deserialize the class.
+			// They will not be wrapped in the SDK.
+		public:
+			virtual bool Deserialize(const rapidjson::Value &obj);
+			virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const;
+			virtual bool IsNullJSONData() const;
+		};
+
+		class SetDioRequest : public JSONBase
+		{
+		public:
+			void set_pin(unsigned int pin);
+			unsigned int pin() const;
+			unsigned int *mutable_pin();
+
+			void set_value(bool value);
+			bool value() const;
+			bool *mutable_value();
+
+		protected:
+			unsigned int pin_;
+			bool value_;
+			// These methods are used to serialize and deserialize the class.
+			// They will not be wrapped in the SDK.
+		public:
+			virtual bool Deserialize(const rapidjson::Value &obj);
+			virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const;
+			virtual bool IsNullJSONData() const;
+		};
+
+		class SetDioResponse : public JSONBase
+		{
+		public:
+			void set_success(bool success);
+			bool success() const;
+			bool *mutable_success();
+
+		protected:
+			bool success_;
+			// These methods are used to serialize and deserialize the class.
+			// They will not be wrapped in the SDK.
+		public:
+			virtual bool Deserialize(const rapidjson::Value &obj);
+			virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const;
+			virtual bool IsNullJSONData() const;
+		};
+
+		class GetDiosRequest : public JSONBase
+		{
+		public:
+			void set_pin(unsigned int pin);
+			unsigned int pin() const;
+			unsigned int *mutable_pin();
+
+			void set_count(unsigned int count);
+			unsigned int count() const;
+			unsigned int *mutable_count();
+		protected:
+			unsigned int pin_;
+			unsigned int count_;
+			// These methods are used to serialize and deserialize the class.
+			// They will not be wrapped in the SDK.
+		public:
+			virtual bool Deserialize(const rapidjson::Value &obj);
+			virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const;
+			virtual bool IsNullJSONData() const;
+		};
+		class GetDiosResponse : public JSONBase
+		{
+		public:
+			void set_values(std::vector<bool> pin);
+			std::vector<bool> values() const;
+			std::vector<bool> *mutable_values();
+
+		protected:
+			std::vector<bool> values_;
+			// These methods are used to serialize and deserialize the class.
+			// They will not be wrapped in the SDK.
+		public:
+			virtual bool Deserialize(const rapidjson::Value &obj);
+			virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const;
+			virtual bool IsNullJSONData() const;
+		};
+
+		class GetDiosModeRequest : public JSONBase
+		{
+		public:
+			void set_pin(unsigned int pin);
+			unsigned int pin() const;
+			unsigned int *mutable_pin();
+
+			void set_count(unsigned int count);
+			unsigned int count() const;
+			unsigned int *mutable_count();
+		protected:
+			unsigned int pin_;
+			unsigned int count_;
+			// These methods are used to serialize and deserialize the class.
+			// They will not be wrapped in the SDK.
+		public:
+			virtual bool Deserialize(const rapidjson::Value &obj);
+			virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const;
+			virtual bool IsNullJSONData() const;
+		};
+		class GetDiosModeResponse : public JSONBase
+		{
+		public:
+			void set_values(std::vector<bool> pin);
+			std::vector<bool> values() const;
+			std::vector<bool> *mutable_values();
+
+		protected:
+			std::vector<bool> values_;
+			// These methods are used to serialize and deserialize the class.
+			// They will not be wrapped in the SDK.
+		public:
+			virtual bool Deserialize(const rapidjson::Value &obj);
+			virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const;
+			virtual bool IsNullJSONData() const;
+		};
+
 	}
 }
