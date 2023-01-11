@@ -896,7 +896,7 @@ namespace lebai
     {
       if(obj.HasMember("success"))
       {
-        success_ = success;
+        success_ = obj["success"].GetBool();
       }
       return true;
     }
@@ -982,7 +982,7 @@ namespace lebai
     {
       if(obj.HasMember("success"))
       {
-        success_ = success;
+        success_ = obj["success"].GetBool();
       }
       return true;
     }
