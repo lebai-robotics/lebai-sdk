@@ -1,4 +1,4 @@
-name: page release
+name: release
 run-name: ${{ github.actor }} released page
 on: 
   workflow_dispatch: 

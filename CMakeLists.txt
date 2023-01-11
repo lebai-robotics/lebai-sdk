@@ -7,7 +7,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 option(CMAKE_EXPORT_COMPILE_COMMANDS "Export compile command" TRUE)
 
-project(lebai VERSION 1.0.11 LANGUAGES CXX)
+project(lebai VERSION 1.0.12 LANGUAGES CXX)
 set(PROJECT_NAMESPACE lebai)
 message(STATUS "${PROJECT_NAME} version: ${PROJECT_VERSION}")
 # message(STATUS "major: ${PROJECT_VERSION_MAJOR}")
@@ -75,6 +75,9 @@ message(STATUS "Build Python: ${BUILD_PYTHON}")
 option(BUILD_DOTNET "Build .NET Library" OFF)
 message(STATUS "Build .Net: ${BUILD_DOTNET}")
 
+option(BUILD_JAVA "Build Java Library" OFF)
+message(STATUS "Build Java: ${BUILD_JAVA}")
+
 if(BUILD_PYTHON)
   if(DEFINED PYTHONPATH)
     message(STATUS "Python path: ${PYTHONPATH}")
@@ -114,6 +117,12 @@ if(BUILD_DOTNET)
   message(STATUS ".Net: Use .Net 6.0 LTS support: ${USE_DOTNET_6}")
 endif()
 include(dotnet)
+
+if(BUILD_JAVA)
+  option(SKIP_GPG "Skip gpg sign" ON)
+  message(STATUS "Maven skip GPG sign: ${SKIP_GPG}")
+endif()
+include(java)
 
 
 # add_subdirectory(tests)

@@ -18,6 +18,7 @@
  * # Python
  * 查看 \ref doc/python.md 来获取使用python相关的内容。
  * 
- * 
+ * # Develop
+ * 如果需要开发sdk，添加新的功能，可以参考 \ref doc/develop.md 。
  */
 

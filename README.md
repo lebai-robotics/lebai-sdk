@@ -1,5 +1,16 @@
 lebai-sdk的源代码仓库，可以用于控制乐白机械臂。
 
+| OS     | C++ | Python | C# | Java |
+|:-------|-----|--------|----|------| 
+| Linux  | [![Status][cpp_linux_svg]][cpp_linux_link] | [![Status][python_linux_svg]][python_linux_link] | TODO | TODO |
+| Windows | TODO | TODO | TODO | TODO |
+
+[cpp_linux_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_cpp_release.yml/badge.svg
+[cpp_linux_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_cpp_release.yml
+[python_linux_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_python_release.yml/badge.svg
+[python_linux_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_python_release.yml
+
+
 [SDK在线文档](http://help.lebai.ltd/sdk/)
 
 # 包管理直接安装
@@ -8,6 +19,12 @@ python开发可以直接从[PyPI](https://pypi.org/project/pylebai/)安装。
 ```
 pip install pylebai
 ```
+目前支持的Python版本有
+- `3.6`
+- `3.7`
+- `3.8`
+- `3.9`
+- `3.10`
 
 # 从源代码构建安装
 
@@ -18,6 +35,7 @@ pip install pylebai
 - swig >= 4.0
 - python3 >= 3.5 (可选,如果需要生成python的接口库)
 - doxygen (可选,如果需要C++文档)
+- jdk, maven(可选,如果需要生成java的接口库)
 
 相对旧的发行版系统cmake和swig版本过低，不能使用，可以通过pip安装较新的版本:
 ```bash
@@ -61,12 +79,12 @@ cpack
 
  - BUILD_PYTHON: 是否编译python接口 默认为OFF
  - PYTHONPATH: PYTHON的安装目录
- - BUILD_DOTNET: 是否编译.net接口 默认为OFF（请先安装好dotnet的开发环境）
+ - BUILD_DOTNET: 是否编译.NET接口 默认为OFF（请先安装好.NET的开发环境）
+ - BUILD_JAVA: 是否编译JAVA接口 默认为OFF（请先安装好JDK和Maven）
  - BUILD_TESTING: 是否编译C++测试程序 默认为ON 
  - TEST_ROBOT_IP: 测试程序的机器人IP地址，正确的设置该值用于单元测试 默认为127.0.0.1
  - BUILD_EXAMPLES: 是否编译示例程序 默认为ON
  - BUILD_DEB: 是否生成DEB包的构建 默认为OFF
-
 
 ## 使用
 您可以通过docs目录下的文档了解更多各语言的信息。
