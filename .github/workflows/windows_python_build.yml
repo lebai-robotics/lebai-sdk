@@ -1,5 +1,5 @@
-name: Windows cpp build
-run-name: ${{ github.actor }} Windows cpp build
+name: Windows python build
+run-name: ${{ github.actor }} Windows python build
 on: 
   workflow_dispatch: 
   pull_request: 
@@ -11,7 +11,7 @@ permissions:
   pull-requests: read
 
 jobs: 
-  windows_cpp_build:
+  windows_cpp_pr_build:
     runs-on: windows-latest 
     steps: 
       - name: Checkout

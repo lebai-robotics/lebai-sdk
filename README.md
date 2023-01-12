@@ -1,4 +1,4 @@
-lebai-sdk的源代码仓库，可以用于控制乐白机械臂。
+lebai-sdk的源代码仓库，可以用于控制乐白机械臂.
 
 | OS     | C++ | Python | C# | Java |
 |:-------|-----|--------|----|------| 
@@ -15,7 +15,7 @@ lebai-sdk的源代码仓库，可以用于控制乐白机械臂。
 
 # 包管理直接安装
 
-python开发可以直接从[PyPI](https://pypi.org/project/pylebai/)安装。
+python开发可以直接从[PyPI](https://pypi.org/project/pylebai/)安装.
 ```
 pip install pylebai
 ```
@@ -41,9 +41,9 @@ pip install pylebai
 ```bash
 sudo apt install build-essential python3-pip dpkg-dev
 sudo pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
-# 如果需要生成文档，还需要安装doxygen。
+# 如果需要生成文档，还需要安装doxygen
 sudo apt install doxygen graphviz
-# 如果需要生成python的wrapper包。
+# 如果需要生成python的wrapper包
 sudo apt install python3-dev
 ```
 
@@ -69,9 +69,9 @@ cpack
 
 安装python库时，选择 `Download debug binaries`
 
-在Visual Studio中载入CMake工程，即可以生成构建运行测试等。
+在Visual Studio中载入CMake工程，即可以生成构建运行测试等.
 
-目前Windows平台下python的binding部分还存在问题无法工作。
+目前Windows平台下python的binding部分还存在问题无法工作.
 
 
 
@@ -88,7 +88,7 @@ cpack
  - ENABLE_TSAN: 编译是否启用Thread sanitizer检查 默认为OFF
 
 ## 使用
-您可以通过docs目录下的文档了解更多各语言的信息。
+您可以通过docs目录下的文档了解更多各语言的信息.
 
 ### Python
 build目录下会生成python的whl包，可以直接使用:
@@ -96,7 +96,7 @@ build目录下会生成python的whl包，可以直接使用:
 cd build/python/dist
 ## 安装
 pip3 install pylebai-xxx.whl
-### XXX取决于您的sdk版本，python版本，操作系统平台。
+### XXX取决于您的sdk版本，python版本，操作系统平台.
 ## 卸载
 pip3 uninstall pylebai
 ```
