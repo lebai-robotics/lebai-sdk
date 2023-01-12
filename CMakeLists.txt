@@ -143,13 +143,12 @@ message(STATUS "Build examples: ${BUILD_EXAMPLES}")
 add_subdirectory(examples)
 
 
-
-option(BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen)" ON)
+find_package(Doxygen)
+option(BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen)" ${DOXYGEN_FOUND})
 
 if(BUILD_DOCUMENTATION)
-    find_package(Doxygen)
-    if(NOT DOXYGEN_FOUND)
-        message(FATAL_ERROR "Doxygen is needed to build the documentation.")
+    if(NOT DOXYGEN_FOUND)      
+      message(FATAL_ERROR "Doxygen is needed to build the documentation.")
     endif()
 
     set(doxyfile_in ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile  )
