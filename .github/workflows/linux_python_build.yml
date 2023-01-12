@@ -1,0 +1,40 @@
+name: Linux python build
+run-name: ${{ github.actor }} Linux python build
+on: 
+  workflow_dispatch: 
+  pull_request: 
+jobs: 
+  linux_python_build: 
+    runs-on: ubuntu-latest
+    container: quay.io/pypa/manylinux2010_x86_64
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+        
+      - run: for PYBIN in /opt/python/*/bin;do "${PYBIN}/pip" install -r requirements.txt; done;
+      - run: /opt/python/cp310-cp310/bin/pip install twine==2.0.0
+
+      - name: configure
+        run: cmake -S. -Bbuild -DBUILD_PYTHON=ON
+
+      - name: build
+        run: cmake --build build
+
+      - name: create-whl-dir
+        run: mkdir -p whl
+
+      - name: build with python
+        run: for PY in /opt/python/*;do
+        rm -rf build;
+        cmake -S. -Bbuild -DBUILD_PYTHON=ON -DPYTHONPATH=${PY};
+        cmake --build build;
+        cp build/python/dist/*.whl whl/;
+        done;
+        
+      - name: repair
+        run: for PYWHL in whl/*.whl;do
+        auditwheel repair ${PYWHL};
+        done;
+        
+      - name: list Pypi
+        run: ls wheelhouse/*
