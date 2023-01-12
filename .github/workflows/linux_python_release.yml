@@ -30,16 +30,16 @@ jobs:
         run: mkdir -p wh
       - name: build with python
         run: for PY in /opt/python/*;do
-        rm -rf build;
-        cmake -S. -Bbuild -DBUILD_PYTHON=ON -DPYTHONPATH=${PY};
-        cmake --build build;
-        cp build/python/dist/*.whl whl/;
-        done;
+          rm -rf build;
+          cmake -S. -Bbuild -DBUILD_PYTHON=ON -DPYTHONPATH=${PY};
+          cmake --build build;
+          cp build/python/dist/*.whl whl/;
+          done;
         
       - name: repair
         run: for PYWHL in whl/*.whl;do
-        auditwheel repair ${PYWHL};
-        done;
+          auditwheel repair ${PYWHL};
+          done;
         
       - name: upload Pypi
         run: /opt/python/cp310-cp310/bin/twine upload -u ${{ secrets.USRNAME }} -p ${{ secrets.PASSWD }} wheelhouse/*.whl
