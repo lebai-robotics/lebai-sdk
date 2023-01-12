@@ -48,7 +48,7 @@ jobs:
        run: pip3 install -r requirements.txt
 
      - name: configure
-       run: cmake -S. -Bbuild -DBUILD_TESTING=ON
+       run: cmake -S. -Bbuild -DBUILD_TESTING=ON -DBUILD_DOCUMENTATION=ON
 
      - name: build
        run: cmake --build build

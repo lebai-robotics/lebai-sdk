@@ -1,9 +1,9 @@
-name: Building and checking
-run-name: ${{ github.actor }} Building
+name: build
+run-name: ${{ github.actor }} build
 on: 
   workflow_dispatch: 
-  push: 
-  pull_request: 
+  # push: 
+  # pull_request: 
   
 jobs: 
   build: 
@@ -31,7 +31,7 @@ jobs:
         run: pip3 install -r requirements.txt
 
       - name: configure
-        run: cmake -S. -Bbuild -DBUILD_PYTHON=ON -DBUILD_DEB=ON
+        run: cmake -S. -Bbuild -DBUILD_PYTHON=ON -DBUILD_DEB=ON -DBUILD_DOCUMENTATION=ON
 
       - name: build
         run: cmake --build build
