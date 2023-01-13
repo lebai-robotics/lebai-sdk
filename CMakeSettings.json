@@ -28,7 +28,7 @@
         },
         {
           "name": "BUILD_PYTHON",
-          "value": "False",
+          "value": "True",
           "type": "BOOL"
         },
         {
@@ -38,7 +38,12 @@
         },
         {
           "name": "BUILD_DOTNET",
-          "value": "True",
+          "value": "False",
+          "type": "BOOL"
+        },
+        {
+          "name": "BUILD_DOCUMENTATION",
+          "value": "False",
           "type": "BOOL"
         }
       ]

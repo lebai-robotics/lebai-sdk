@@ -1,48 +1,32 @@
-name: build
-run-name: ${{ github.actor }} build
+name: Linux cpp build
+run-name: ${{ github.actor }} Linux cpp build
 on: 
   workflow_dispatch: 
-  # push: 
-  # pull_request: 
-  
+  pull_request: 
 jobs: 
-  build: 
-    strategy:
-     matrix:
-      py-version: [ 3.7, 3.9, 3.11 ]
-      os-version: [ ubuntu-latest ]
+  linux_cpp_build: 
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
-    runs-on: ${{ matrix.os-version }}
+    runs-on: ubuntu-latest
     steps: 
       - name: Checkout
         uses: actions/checkout@v3
-        
-      - name: check python version
-        uses: actions/setup-python@v4.3.0
-        with: 
-         python-version: ${{ matrix.py-version }}
 
-      - name: install component
+      - name: install components
         run: sudo apt-get install -y build-essential doxygen graphviz python3-pip python3-dev
 
       - name: install dependencies
         run: pip3 install -r requirements.txt
 
       - name: configure
-        run: cmake -S. -Bbuild -DBUILD_PYTHON=ON -DBUILD_DEB=ON -DBUILD_DOCUMENTATION=ON
+        run: cmake -S. -Bbuild -DBUILD_DEB=ON
 
       - name: build
         run: cmake --build build
-        
-      - name: upload .whl
-        uses: actions/upload-artifact@v3
-        with: 
-         path: ./build/python/dist/*.whl
-  
-  test:
-   needs: build
+ 
+  linux_cpp_test:
+   needs: linux_cpp_build
    runs-on: ubuntu-latest
    container: registry.cn-shanghai.aliyuncs.com/lebai/l-master:latest
    steps: 
@@ -57,14 +41,14 @@ jobs:
      - name: Checkout
        uses: actions/checkout@v3
 
-     - name: install component
+     - name: install components
        run: apt-get install -y build-essential doxygen graphviz python3-pip python3-dev
 
      - name: install dependencies
        run: pip3 install -r requirements.txt
 
      - name: configure
-       run: cmake -S. -Bbuild -DBUILD_TESTING=ON
+       run: cmake -S. -Bbuild -DBUILD_TESTING=ON -DBUILD_DOCUMENTATION=ON
 
      - name: build
        run: cmake --build build

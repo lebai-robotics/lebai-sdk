@@ -9,6 +9,7 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 configure_file("${PROJECT_SOURCE_DIR}/sdk/config.hh.in" "${PROJECT_SOURCE_DIR}/sdk/include/lebai/config.hh")
 
 include(GNUInstallDirs)
+
 add_subdirectory(sdk)
 # Install
 install(EXPORT ${PROJECT_NAME}Targets

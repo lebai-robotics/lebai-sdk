@@ -20,7 +20,7 @@ endif()
 # Find Python 3
 
 find_package(Python3 REQUIRED COMPONENTS Interpreter Development.Module)
-list(APPEND CMAKE_SWIG_FLAGS  "-threads" "-py3" "-DPY3")
+list(APPEND CMAKE_SWIG_FLAGS "-threads" "-py3" "-DPY3")
 
 # Find if the python module is available,
 # otherwise install it (PACKAGE_NAME) to the Python3 user install directory.

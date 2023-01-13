@@ -25,7 +25,7 @@ namespace lebai
   namespace zeroconf
   {
   /**
-   * \brief Lebai机械臂控制器的信息数据结构
+   * \brief Lebai机械臂控制器的信息数据结构.
    * 
    */
   class ControllerInfo
@@ -48,7 +48,7 @@ namespace lebai
   };
     
   /**
-   *  @brief 自动发现局域网内lebai机械臂。
+   *  @brief 自动发现局域网内lebai机械臂.
    *
    */
   class Discovery
@@ -71,14 +71,14 @@ namespace lebai
     virtual ~Discovery();
 
     /**
-     * @brief 获取局域网内lebai机械臂的信息数据,可以用来自动发现局域网内的所有机械臂控制器
+     * @brief 获取局域网内lebai机械臂的信息数据,可以用来自动发现局域网内的所有机械臂控制器.
      * 
-     * @return std::vector<std::string> 所有的机械臂的信息数据
+     * @return std::vector<std::string> 所有的机械臂的信息数据.
      */
     std::vector<ControllerInfo> resolve();
 
   protected:
-    std::unique_ptr<DiscoveryImpl> impl_; /*!< 内部实现数据结构，用户无需关注。 */
+    std::unique_ptr<DiscoveryImpl> impl_; /*!< 内部实现数据结构，用户无需关注. */
   };
   }
 
