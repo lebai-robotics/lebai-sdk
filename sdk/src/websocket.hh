@@ -35,6 +35,7 @@
 #include <websocketpp/config/asio_no_tls_client.hpp>
 #include "protos/utils.hh"
 
+
 namespace lebai
 {
   typedef websocketpp::client<websocketpp::config::asio_client> WSClient;
@@ -53,14 +54,15 @@ namespace lebai
 
     void onOpen(WSClient *c, websocketpp::connection_hdl hdl)
     {
+      std::lock_guard<std::mutex> guard(status_mutex_);
       status_ = "Open";
-
       WSClient::connection_ptr con = c->get_con_from_hdl(hdl);
       server_ = con->get_response_header("Server");
     }
 
     void onFail(WSClient *c, websocketpp::connection_hdl hdl)
     {
+      std::lock_guard<std::mutex> guard(status_mutex_);
       status_ = "Failed";
       WSClient::connection_ptr con = c->get_con_from_hdl(hdl);
       server_ = con->get_response_header("Server");
@@ -69,6 +71,7 @@ namespace lebai
 
     void onClose(WSClient *c, websocketpp::connection_hdl hdl)
     {
+      std::lock_guard<std::mutex> guard(status_mutex_);
       status_ = "Closed";
       WSClient::connection_ptr con = c->get_con_from_hdl(hdl);
       std::stringstream s;
@@ -115,7 +118,10 @@ namespace lebai
 
     int getID() const { return id_; }
 
-    std::string getStatus() const { return status_; }
+    std::string getStatus() {
+      std::lock_guard<std::mutex> guard(status_mutex_);
+      return status_; 
+    }
 
     // void record_sent_message(std::string message) {
     //   m_messages.push_back(">> " + message);
@@ -142,6 +148,7 @@ namespace lebai
     std::string server_;
     std::string error_reason_;
     std::mutex promises_map_mutex_;
+    std::mutex status_mutex_;
   };
 
   // std::ostream& operator<<(std::ostream& out, ConnectionMetadata const& data) {
@@ -259,7 +266,6 @@ namespace lebai
 
     bool send(int id, std::string message)
     {
-
       websocketpp::lib::error_code ec;
 
       ConList::iterator metadata_it = connection_list_.find(id);

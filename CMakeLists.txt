@@ -53,6 +53,8 @@ else()
   add_compile_definitions(NOMINMAX)
   add_compile_definitions(_DEBUG)   
   add_compile_definitions(_WEBSOCKETPP_CPP11_RANDOM_DEVICE_)
+  add_compile_options("$<$<C_COMPILER_ID:MSVC>:/utf-8>")
+  add_compile_options("$<$<CXX_COMPILER_ID:MSVC>:/utf-8>")
   set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
   set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
   set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR})
@@ -63,6 +65,14 @@ else()
     set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_BINARY_DIR}/${OutputConfig}/${CMAKE_INSTALL_BINDIR})
     set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG} ${CMAKE_BINARY_DIR}/${OutputConfig}/${CMAKE_INSTALL_BINDIR})
   endforeach()
+endif()
+
+option(ENABLE_TSAN "Enable thread sanitier" OFF)
+if(UNIX)
+  if(ENABLE_TSAN)
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -fsanitize=thread -g")
+    set(CMAKE_LINKER_FLAGS "${CMAKE_LINKER_FLAGS} -fsanitize=thread")
+  endif()
 endif()
 
 # By default only the C++ library is built.
@@ -132,14 +142,12 @@ message(STATUS "Build examples: ${BUILD_EXAMPLES}")
 add_subdirectory(examples)
 
 
+find_package(Doxygen)
+option(BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen)" OFF)
 
-find_package(Doxygen QUIET)
-option(BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen)" ${DOXYGEN_FOUND})
-
-if(BUILD_DOCUMENTATION)
-    # find_package(Doxygen)
-    if(NOT DOXYGEN_FOUND)
-        message(FATAL_ERROR "Doxygen is needed to build the documentation.")
+if(BUILD_DOCUMENTATION AND DOXYGEN_FOUND)
+    if(NOT DOXYGEN_FOUND)      
+      message(FATAL_ERROR "Doxygen is needed to build the documentation.")
     endif()
 
     set(doxyfile_in ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile  )
