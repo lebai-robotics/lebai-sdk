@@ -27,7 +27,7 @@ jobs:
       - name: build
         run: cmake --build build
       - name: create-whl-dir
-        run: mkdir -p wh
+        run: mkdir -p whl
       - name: build with python
         run: for PY in /opt/python/*;do
           rm -rf build;

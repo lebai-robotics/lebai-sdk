@@ -1,5 +1,5 @@
 name: Linux cpp release
-run-name: ${{ github.actor }} released page
+run-name: ${{ github.actor }} Linux cpp release
 on: 
   workflow_dispatch: 
   push:
