@@ -89,10 +89,12 @@ option(BUILD_JAVA "Build Java Library" OFF)
 message(STATUS "Build Java: ${BUILD_JAVA}")
 
 if(BUILD_PYTHON)
-  if(DEFINED PYTHONPATH)
-    message(STATUS "Python path: ${PYTHONPATH}")
-    set(Python3_ROOT_DIR ${PYTHONPATH})
-  endif()
+  option(FETCH_PYTHON_DEPS "Install python required modules if not available" ON)
+  message(STATUS "Python fetch dependencies: ${FETCH_PYTHON_DEPS}")
+  # if(DEFINED PYTHONPATH)
+  #   message(STATUS "Python path: ${PYTHONPATH}")
+  #   set(Python3_ROOT_DIR ${PYTHONPATH})
+  # endif()
 endif()
 
 # Disable CTest targets
