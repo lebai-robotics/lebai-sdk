@@ -1,13 +1,5 @@
 # TODO
 
-## v1.0.9
-
-- [x] SDK版本  
-- [x] 系统控制-reboot  
-- [x] 配置-从资源库加载TCP  
-- [x] 位置-从资源库加载路点位姿  
-- [x] 运动-关节跟随运动  
-- [x] 运动-圆弧运动
-- [x] ModBus
-- [x] 把IO相关的API整合一致（类型通过参数传入）
-- [x] 获取任务状态
+- [] 把workflow拆分成平台+语言的结构，分成build和release
+- [] Windows平台python不能运行（GIL锁）的问题 
+- [] Python, C#, C++的测试程序

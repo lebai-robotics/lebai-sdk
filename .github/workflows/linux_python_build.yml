@@ -1,33 +1,28 @@
-name: Linux python release
-run-name: ${{ github.actor }} Linux python release
+name: Linux python build
+run-name: ${{ github.actor }} Linux python build
 on: 
   workflow_dispatch: 
-  push:
-   tags:
-    - v1.*.*
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-  pull-requests: read
-
+  pull_request: 
 jobs: 
-  linux_python_build_and_release: 
+  linux_python_build: 
     runs-on: ubuntu-latest
     container: quay.io/pypa/manylinux2010_x86_64
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-        
+      
       - run: for PYBIN in /opt/python/*/bin;do "${PYBIN}/pip" install -r requirements.txt; done;
-      - run: /opt/python/cp310-cp310/bin/pip install twine==2.0.
+      - run: /opt/python/cp310-cp310/bin/pip install twine==2.0.0
+
       - name: configure
         run: cmake -S. -Bbuild -DBUILD_PYTHON=ON
+
       - name: build
         run: cmake --build build
+
       - name: create-whl-dir
-        run: mkdir -p wh
+        run: mkdir -p whl
+
       - name: build with python
         run: for PY in /opt/python/*;do
           rm -rf build;
@@ -41,5 +36,5 @@ jobs:
           auditwheel repair ${PYWHL};
           done;
         
-      - name: upload Pypi
-        run: /opt/python/cp310-cp310/bin/twine upload -u ${{ secrets.USRNAME }} -p ${{ secrets.PASSWD }} wheelhouse/*.whl
+      - name: list Pypi
+        run: ls wheelhouse/*

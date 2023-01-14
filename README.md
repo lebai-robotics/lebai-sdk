@@ -1,21 +1,23 @@
-lebai-sdk的源代码仓库，可以用于控制乐白机械臂。
+lebai-sdk的源代码仓库，可以用于控制乐白机械臂.
 
 | OS     | C++ | Python | C# | Java |
 |:-------|-----|--------|----|------| 
-| Linux  | [![Status][cpp_linux_svg]][cpp_linux_link] | [![Status][python_linux_svg]][python_linux_link] | TODO | TODO |
+| Linux  | [![Status][cpp_linux_svg]][cpp_linux_link] | [![Status][python_linux_svg]][python_linux_link] | [![Status][dotnet_linux_svg]][dotnet_linux_link] | TODO |
 | Windows | TODO | TODO | TODO | TODO |
 
 [cpp_linux_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_cpp_release.yml/badge.svg
 [cpp_linux_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_cpp_release.yml
 [python_linux_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_python_release.yml/badge.svg
 [python_linux_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_python_release.yml
+[dotnet_linux_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_dotnet_release.yml/badge.svg
+[dotnet_linux_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_dotnet_release.yml
 
 
 [SDK在线文档](http://help.lebai.ltd/sdk/)
 
 # 包管理直接安装
 
-python开发可以直接从[PyPI](https://pypi.org/project/pylebai/)安装。
+python开发可以直接从[PyPI](https://pypi.org/project/pylebai/)安装.
 ```
 pip install pylebai
 ```
@@ -41,9 +43,9 @@ pip install pylebai
 ```bash
 sudo apt install build-essential python3-pip dpkg-dev
 sudo pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
-# 如果需要生成文档，还需要安装doxygen。
+# 如果需要生成文档，还需要安装doxygen
 sudo apt install doxygen graphviz
-# 如果需要生成python的wrapper包。
+# 如果需要生成python的wrapper包
 sudo apt install python3-dev
 ```
 
@@ -69,9 +71,9 @@ cpack
 
 安装python库时，选择 `Download debug binaries`
 
-在Visual Studio中载入CMake工程，即可以生成构建运行测试等。
+在Visual Studio中载入CMake工程，即可以生成构建运行测试等.
 
-目前Windows平台下python的binding部分还存在问题无法工作。
+目前Windows平台下python的binding部分还存在问题无法工作.
 
 
 
@@ -85,9 +87,10 @@ cpack
  - TEST_ROBOT_IP: 测试程序的机器人IP地址，正确的设置该值用于单元测试 默认为127.0.0.1
  - BUILD_EXAMPLES: 是否编译示例程序 默认为ON
  - BUILD_DEB: 是否生成DEB包的构建 默认为OFF
+ - ENABLE_TSAN: 编译是否启用Thread sanitizer检查 默认为OFF
 
 ## 使用
-您可以通过docs目录下的文档了解更多各语言的信息。
+您可以通过docs目录下的文档了解更多各语言的信息.
 
 ### Python
 build目录下会生成python的whl包，可以直接使用:
@@ -95,7 +98,7 @@ build目录下会生成python的whl包，可以直接使用:
 cd build/python/dist
 ## 安装
 pip3 install pylebai-xxx.whl
-### XXX取决于您的sdk版本，python版本，操作系统平台。
+### XXX取决于您的sdk版本，python版本，操作系统平台.
 ## 卸载
 pip3 uninstall pylebai
 ```

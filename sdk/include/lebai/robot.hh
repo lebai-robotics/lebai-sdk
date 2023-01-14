@@ -273,12 +273,12 @@ namespace lebai
      * @brief 通过坐标位置发送机械臂直线移动
      * @note 该接口为异步接口，仅向控制器内部的运动缓冲区写入一个关节移动即返回，不会等待运动结束.
      * @param cart_pose: 目标位置在机器人基座标系下的坐标数据(目前不支持在其它坐标系下的坐标数据)，CartesianPose = std::map<std::string,double>，应当包括键为x,y,z,rz,ry,rx的值.
-     * @param a: 加速度
-     * @param v: 速度
+     * @param a: 加速度.
+     * @param v: 速度.
      * @param t: 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
      * @param r: 交融半径，设置为0，则无交融半径.
-     * @return >0 发送成功
-     * @return <=0 发送失败
+     * @return >0 发送成功.
+     * @return <=0 发送失败.
      */    
     int movel(const CartesianPose & cart_pose, double a, double v, double t, double r);
     /**
@@ -288,16 +288,16 @@ namespace lebai
      *     {-28/ 180.0 * M_PI, -59.0/ 180.0 * M_PI, 96.0/ 180.0 * M_PI, -2.0/ 180.0 * M_PI, -92.0/ 180.0 * M_PI, 16.0/ 180.0 * M_PI},
      *     0.0, 1.0, 0.5, 0.0, 0.0);
      * 
-     * @brief 通过关节位置发送机械臂圆弧运动     * 
+     * @brief 通过关节位置发送机械臂圆弧运动. 
      * @param[in] joint_via 圆弧上途径点关节位置，为关节的角度值构成的数组.为圆上三点中的一点.
      * @param[in] joint 圆弧目标点关节位置，为关节的角度值构成的数组.如果编程rad不为零，则为圆上三点中的一点.
      * @param[in] rad 圆弧角度值，单位为弧度，如果为零，则走到目标点，正负值用来确定圆弧方向.
-     * @param[in] a 加速度
-     * @param[in] v 速度
+     * @param[in] a 加速度.
+     * @param[in] v 速度.
      * @param[in] t: 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
      * @param[in] r: 交融半径，设置为0，则无交融半径.
-     * @return >0 发送成功
-     * @return <=0 发送失败
+     * @return >0 发送成功.
+     * @return <=0 发送失败.
      */
     int movec(const std::vector<double> & joint_via, const std::vector<double> & joint, double rad, double a, double v, double t, double r);
     /**
@@ -306,12 +306,12 @@ namespace lebai
      * @param[in] cart_via 圆弧上途径点坐标位置，应当包括键为x,y,z,rz,ry,rx的值.为圆上三点中的一点.
      * @param[in] cart 圆弧目标点坐标位置，应当包括键为x,y,z,rz,ry,rx的值.如果编程rad不为零，则为圆上三点中的一点.
      * @param[in] rad 圆弧角度值，单位为弧度，如果为零，则走到目标点，正负值用来确定圆弧方向.
-     * @param[in] a 加速度
-     * @param[in] v 速度
+     * @param[in] a 加速度.
+     * @param[in] v 速度.
      * @param[in] t: 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
      * @param[in] r: 交融半径，设置为0，则无交融半径.
-     * @return >0 发送成功
-     * @return <=0 发送失败
+     * @return >0 发送成功.
+     * @return <=0 发送失败.
      */    
     int movec(const CartesianPose & cart_via, const CartesianPose & cart, double rad, double a, double v, double t, double r);
     /**
@@ -321,50 +321,50 @@ namespace lebai
      *     robot.toawrdj(joint_positions, 3.0, 1.0, 0.0, 0.0);
      * 
      * 
-     * @brief   通过关节位置发送机械臂关节自由移动
+     * @brief   通过关节位置发送机械臂关节自由移动.
      * @note  该接口为异步接口，仅向控制器内部的运动缓冲区写入一个关节自由移动即返回，不会等待运动结束.
      * @param[in] joint_positions: 目标位置的关节数据,为关节的角度值构成的数组.
      * @param[in] a: 加速度.
      * @param[in] v: 速度.
      * @param[in] t: 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
      * @param[in] r: 交融半径，设置为0，则无交融半径.
-     * @return  >0 发送成功
-     * @return  <=0 发送失败
+     * @return  >0 发送成功.
+     * @return  <=0 发送失败.
      * 
      */
     int towardj(const std::vector<double> & joint_positions, double a, double v, double t, double r);
     /**
      * @brief 伺服运动PVAT
      * 
-     * @param p 关节位置，或者坐标位置（将通过运动学反解转为关节位置）
-     * @param v 每个关节的速度 (rad/s)。如该值为数字，则表示所有关节速度相同。
-     * @param a 每个关节的加速度 (rad/s2)。如该值为数字，则表示所有关节加速度相同。
+     * @param p 关节位置，或者坐标位置（将通过运动学反解转为关节位置）.
+     * @param v 每个关节的速度 (rad/s)。如该值为数字，则表示所有关节速度相同.
+     * @param a 每个关节的加速度 (rad/s2)。如该值为数字，则表示所有关节加速度相同.
      * @param t 运动时间 (s)
     */
     void move_pvat(std::vector<double> p, std::vector<double> v, std::vector<double> a, double t);
     /**
-     * @brief 等待运动完成
+     * @brief 等待运动完成.
      * 
-     * @param id 指定运动的id(0为等待全部任务)
+     * @param id 指定运动的id(0为等待全部任务).
     */
     void wait_move(unsigned int id);
     /**
-     * @brief 等待所有运动完成
+     * @brief 等待所有运动完成.
      * 
     */    
     void wait_move();
     /**
-     * @brief 查询当前正在运动的MotionId(无运动时返回上次MotionId) 
+     * @brief 查询当前正在运动的MotionId(无运动时返回上次MotionId).
     */
     unsigned int get_running_motion();
     /**
-     * @brief 查询指定MotionId的运动状态
+     * @brief 查询指定MotionId的运动状态.
      * 
-     * @param id 指定的运动id 
+     * @param id 指定的运动id.
     */
     std::string get_motion_state(unsigned int id);
     /**
-     * @brief 停止所有运动
+     * @brief 停止所有运动.
     */
     void stop_move();
     /** @}*/
@@ -698,15 +698,15 @@ namespace lebai
     */
     void resume_task(unsigned int id);
     /**
-     * @brief 取消任务与运动
+     * @brief 取消任务与运动.
      * 
-     * @param id 任务的ID
+     * @param id 任务的ID.
     */
     void cancel_task(unsigned int id);
     /**
-     * @brief 获取任务状态
+     * @brief 获取任务状态.
      * 
-     * @param id 任务的ID
+     * @param id 任务的ID.
     */
     std::string get_task_state(unsigned int id);
     /** @}*/
@@ -763,10 +763,10 @@ namespace lebai
     /**
      * @brief 重命名文件
      * 
-     * @param from_dir: 源文件所在的文件夹
-     * @param from_name: 源文件名称
-     * @param to_dir: 目标文件文件夹
-     * @param to_name: 目标文件文件名
+     * @param from_dir: 源文件所在的文件夹.
+     * @param from_name: 源文件名称.
+     * @param to_dir: 目标文件文件夹.
+     * @param to_name: 目标文件文件名.
     */
     void rename_file(const std::string &from_dir,const std::string &from_name,const std::string &to_dir,const std::string &to_name);
     
@@ -781,42 +781,42 @@ namespace lebai
     std::tuple<bool,std::string> load_file(const std::string &dir,const std::string &name);
     
     /**
-     * @brief 查询文件列表
+     * @brief 查询文件列表.
      * 
-     * @param dir: 文件的目录
-     * @param prefix: 前缀
-     * @param suffix: 后缀
+     * @param dir: 文件的目录.
+     * @param prefix: 前缀.
+     * @param suffix: 后缀.
      * 
-     * @return 文件列表
+     * @return 文件列表.
     */
     std::vector<std::tuple<bool,std::string>> load_file_list(const std::string &dir,const std::string &prefix,const std::string &suffix);
     /**
-     * @brief 将文件从文件系统中压缩到zip文件
+     * @brief 将文件从文件系统中压缩到zip文件.
      * 
-     * @param from_dir 源文件的目录
-     * @param files 源文件的文件名
-     * @param to_dir  压缩后文件的路径
-     * @param name 压缩后文件的名称
+     * @param from_dir 源文件的目录.
+     * @param files 源文件的文件名.
+     * @param to_dir  压缩后文件的路径.
+     * @param name 压缩后文件的名称.
     */
     // void zip(const std::string &from_dir, std::vector<std::string> files, const std::string &to_dir, const std::string &name);
     // /**
-    //  *  @brief 将zip文件解压到文件系统
+    //  *  @brief 将zip文件解压到文件系统.
     //  *
-    //  * @param from_dir zip文件的路径
-    //  * @param name zip文件的名称
-    //  * @param files zip文件内的文件名
-    //  * @param to_dir  解压到的路径
+    //  * @param from_dir zip文件的路径.
+    //  * @param name zip文件的名称.
+    //  * @param files zip文件内的文件名.
+    //  * @param to_dir  解压到的路径.
     //  */
     // void unzip(const std::string &from_dir, const std::string &name, std::vector<std::string> files, const std::string &to_dir);
     // /**
-    //  * @brief 查询文件列表
+    //  * @brief 查询文件列表.
     //  *
-    //  * @brief 目标zip文件名
-    //  * @param dir 文件的目录
-    //  * @param prefix 前缀
-    //  * @param suffix 后缀
+    //  * @brief 目标zip文件名.
+    //  * @param dir 文件的目录.
+    //  * @param prefix 前缀.
+    //  * @param suffix 后缀.
     //  *
-    //  * @return 文件列表
+    //  * @return 文件列表.
     //  */
     // //std::vector<std::tuple<bool,string>> load_zip_list(const std::string &zip,const std::string &dir,const std::string &prefix,const std::string &suffix);
 
@@ -826,59 +826,59 @@ namespace lebai
      *  @{
      */
     /**
-     *  @brief 设置工具中心点(TCP)坐标，坐标值相对于工具坐标系
+     *  @brief 设置工具中心点(TCP)坐标，坐标值相对于工具坐标系.
      * 
-     *  @param tcp 参数为六元组，表示一个空间位置变换
+     *  @param tcp 参数为六元组，表示一个空间位置变换.
     */
     void set_tcp(std::array<double, 6> tcp);
     /**
-     *  @brief 获取当前机器人工具中心点设置
+     *  @brief 获取当前机器人工具中心点设置.
      * 
-     *  @return 当前机器人的工具中心点参数，为六元组
+     *  @return 当前机器人的工具中心点参数，为六元组.
     */
     std::array<double, 6> get_tcp();
     /**
-     *  @brief 设置速度因子
+     *  @brief 设置速度因子.
      * 
-     *  @param factor 速度因子百分比，范围0-100
+     *  @param factor 速度因子百分比，范围0-100.
     */
     void set_velocity_factor(int factor);
     /**
-     *  @brief 获取当前的速度因子
+     *  @brief 获取当前的速度因子.
      * 
-     *  @return 速度因子百分比
+     *  @return 速度因子百分比.
     */
     int get_velocity_factor();
     /**
-     *  @brief 设置机器人末端负载
+     *  @brief 设置机器人末端负载.
      *
-     *  @param mass 末端负载的质量(kg)
-     *  @param cog 质心相对于TCP坐标系的偏移
+     *  @param mass 末端负载的质量(kg).
+     *  @param cog 质心相对于TCP坐标系的偏移.
      */
     void set_payload(double mass, std::map<std::string, double> cog);
     /**
-     *  @brief 获取末端负载设置
+     *  @brief 获取末端负载设置.
      *
-     *  @return 由负载质量mass和负载偏移组成的元组
+     *  @return 由负载质量mass和负载偏移组成的元组.
      */
     std::tuple<double, std::map<std::string, double>> get_payload();
     /**
-     *  @brief 设置机器人重力加速度方向
+     *  @brief 设置机器人重力加速度方向.
      *
-     *  @param gravity 相对于机器人基座标的重力方向
+     *  @param gravity 相对于机器人基座标的重力方向.
      */
     void set_gravity(std::map<std::string, double> gravity);
     /**
-     *  @brief 获取机器人重力加速度的方向
+     *  @brief 获取机器人重力加速度的方向.
      *
-     *  @return 相对于机器人基座标的重力方向
+     *  @return 相对于机器人基座标的重力方向.
      */
     std::map<std::string, double> get_gravity();
     /**
-     * @brief 从资源库加载tcp
+     * @brief 从资源库加载tcp.
      * 
-     * @param name 点位名称
-     * @param dir 点位目录
+     * @param name 点位名称.
+     * @param dir 点位目录.
     */
     CartesianPose load_tcp(std::string name, std::string dir = "");
     /** @}*/
@@ -889,54 +889,54 @@ namespace lebai
     */
 
     /**
-     * @brief 写单个线圈
+     * @brief 写单个线圈.
      * 
-     * @param device 设备名称
-     * @param addr 寄存器地址
-     * @param value 待设置的值 
+     * @param device 设备名称.
+     * @param addr 寄存器地址.
+     * @param value 待设置的值.
     */
     void write_single_coil(std::string device, std::string addr, bool value);
 
     /**
      * @brief 写多个线圈
      * 
-     * @param device 设备名称
-     * @param addr 寄存器地址
-     * @param values 待设置的值 
+     * @param device 设备名称.
+     * @param addr 寄存器地址.
+     * @param values 待设置的值.
     */
     void wirte_multiple_coils(std::string device, std::string addr, std::vector<bool> values);
 
     /**
      * @brief 读线圈
      * 
-     * @param device 设备名称
-     * @param addr 寄存器地址
-     * @param num 连续数量
+     * @param device 设备名称.
+     * @param addr 寄存器地址.
+     * @param num 连续数量.
     */
     std::vector<bool> read_coils(std::string device, std::string addr, unsigned int num);
     /**
      * @brief 读离散输入
      * 
-     * @param device 设备名称
-     * @param addr 寄存器地址
-     * @param num 连续数量
+     * @param device 设备名称.
+     * @param addr 寄存器地址.
+     * @param num 连续数量.
     */
     std::vector<bool> read_discrete_inputs(std::string device, std::string addr, unsigned int num);
 
     /**
      * @brief 写单个寄存器
      * 
-     * @param device 设备名称
-     * @param addr 寄存器地址
-     * @param value 待设置的值
+     * @param device 设备名称.
+     * @param addr 寄存器地址.
+     * @param value 待设置的值.
     */
     void write_single_register(std::string device, std::string addr, unsigned int value);
     /**
      * @brief 写多个寄存器
      * 
-     * @param device 设备名称
-     * @param addr 寄存器地址
-     * @param values 待设置的值
+     * @param device 设备名称.
+     * @param addr 寄存器地址.
+     * @param values 待设置的值.
     */
     void write_multiple_registers(std::string device, std::string addr, std::vector<unsigned int> values);
 
