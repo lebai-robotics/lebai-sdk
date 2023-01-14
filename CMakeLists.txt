@@ -18,7 +18,7 @@ get_property(isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
 if(isMultiConfig)
   if(NOT CMAKE_CONFIGURATION_TYPES)
     set(CMAKE_CONFIGURATION_TYPES "Release;Debug" CACHE STRING
-    "Choose the type of builds, options are: Debug Release RelWithDebInfo MinSizeRel. (default: Release;Debug)"
+    "Choose the type ofgi builds, options are: Debug Release RelWithDebInfo MinSizeRel. (default: Release;Debug)"
     FORCE)
   endif()
   message(STATUS "Configuration types: ${CMAKE_CONFIGURATION_TYPES}")

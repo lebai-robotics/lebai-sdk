@@ -2,13 +2,15 @@ lebai-sdk的源代码仓库，可以用于控制乐白机械臂.
 
 | OS     | C++ | Python | C# | Java |
 |:-------|-----|--------|----|------| 
-| Linux  | [![Status][cpp_linux_svg]][cpp_linux_link] | [![Status][python_linux_svg]][python_linux_link] | TODO | TODO |
+| Linux  | [![Status][cpp_linux_svg]][cpp_linux_link] | [![Status][python_linux_svg]][python_linux_link] | [![Status][dotnet_linux_svg]][dotnet_linux_link] | TODO |
 | Windows | TODO | TODO | TODO | TODO |
 
 [cpp_linux_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_cpp_release.yml/badge.svg
 [cpp_linux_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_cpp_release.yml
 [python_linux_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_python_release.yml/badge.svg
 [python_linux_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_python_release.yml
+[dotnet_linux_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_dotnet_release.yml/badge.svg
+[dotnet_linux_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_dotnet_release.yml
 
 
 [SDK在线文档](http://help.lebai.ltd/sdk/)
