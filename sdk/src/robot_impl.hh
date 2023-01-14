@@ -75,6 +75,10 @@ namespace lebai
       io::GetAioPinsResponse getAIS(const io::GetAioPinsRequest & req);
       io::GetAioPinResponse getAO(const io::GetAioPinRequest & req);
       io::GetAioPinsResponse getAOS(const io::GetAioPinsRequest & req);
+      io::SetDioResponse setDio(const io::SetDioRequest & req);
+      io::SetDioModeResponse setDioMode(const io::SetDioModeRequest & req);
+      io::GetDiosResponse getDios(const io::GetDiosRequest & req);
+      io::GetDiosModeResponse getDiosMode(const io::GetDiosModeRequest & req);
       void setAO(const io::SetAoPinRequest & req);
       void setClaw(const claw::SetClawRequest & req);
       void setLed(const led::LedData & req);

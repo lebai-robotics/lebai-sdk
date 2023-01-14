@@ -730,6 +730,38 @@ std::vector<double> Robot::get_ais(std::string device, unsigned int pin, unsigne
   io::GetAioPinsResponse resp = impl_->getAIS(req);
   return resp.values();
 }
+bool Robot::set_dio(unsigned int pin, bool value)
+{
+  io::SetDioRequest req;
+  req.set_pin(pin);
+  req.set_value(value);
+  io::SetDioResponse resp = impl_->setDio(req);
+  return resp.success();
+}
+bool Robot::set_dio_mode(unsigned int pin, bool value)
+{
+  io::SetDioModeRequest req;
+  req.set_pin(pin);
+  req.set_value(value);
+  io::SetDioModeResponse resp = impl_->setDioMode(req);
+  return resp.success();
+}
+std::vector<bool> Robot::get_dios(unsigned int pin, unsigned int count)
+{
+  io::GetDiosRequest req;
+  req.set_pin(pin);
+  req.set_count(count);
+  io::GetDiosResponse resp = impl_->getDios(req);
+  return resp.values();
+}
+std::vector<bool> Robot::get_dios_mode(unsigned int pin, unsigned int count)
+{
+  io::GetDiosModeRequest req;
+  req.set_pin(pin);
+  req.set_count(count);
+  io::GetDiosModeResponse resp = impl_->getDiosMode(req);
+  return resp.values();
+}
 
 // bool Robot::get_robot_di(unsigned int pin)
 // {
