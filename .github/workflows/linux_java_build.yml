@@ -1,0 +1,22 @@
+name: Linux java build
+run-name: ${{ github.actor }} Linux java build
+on: 
+  workflow_dispatch: 
+  pull_request: 
+jobs: 
+  linux_java_build: 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+
+      - uses: actions/setup-java@v1
+        with:
+          java-version: '11'
+
+      - name: configure
+        run: cmake -S. -Bbuild -DBUILD_JAVA=ON
+
+      - name: build
+        run: cmake --build build
+
