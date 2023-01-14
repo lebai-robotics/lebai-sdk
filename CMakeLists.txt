@@ -143,7 +143,7 @@ add_subdirectory(examples)
 
 
 find_package(Doxygen)
-option(BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen)" OFF)
+option(BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen)" ON)
 
 if(BUILD_DOCUMENTATION AND DOXYGEN_FOUND)
     if(NOT DOXYGEN_FOUND)      
