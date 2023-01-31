@@ -31,7 +31,7 @@ jobs:
       - name: build with python
         run: for PY in /opt/python/*;do
           rm -rf build;
-          cmake -S. -Bbuild -DBUILD_PYTHON=ON;
+          cmake -S. -Bbuild -DBUILD_PYTHON=ON -DPYTHONPATH=${PY};
           cmake --build build;
           cp build/python/dist/*.whl whl/;
           done;
