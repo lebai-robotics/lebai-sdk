@@ -8,26 +8,21 @@ on:
 jobs: 
   linux_dotnet_build_and_release: 
     runs-on: ubuntu-latest
-    container: bitnami/dotnet-sdk
+    container: quay.io/pypa/manylinux2010_x86_64
     steps:
       - name: Checkout
         uses: actions/checkout@v1
       
-      - name: Setup .NET Core 3.1
-        uses: actions/setup-dotnet@v1
-
-      - name: Setup .NET 6.0
-        uses: actions/setup-dotnet@v1
-        with:
-          dotnet-version: 6.0.x
-
-      - name: Check dotnet
-        run: dotnet --info
-      
       - run: |
           apt-get update
-          apt-get install -y python3-pip
+          apt-get install -y python3-pip wget
+          wget https://dot.net/v1/dotnet-install.sh
+          chmod +x ./dotnet-install.sh
+          ./dotnet-install.sh
           pip install -r requirements.txt
+          
+      - name: Check dotnet
+        run: dotnet --info
       
       - name: configure
         run: cmake -S. -Bbuild -DBUILD_DOTNET=ON
