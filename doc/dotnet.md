@@ -1,6 +1,5 @@
 # .net平台应用文档
 
-**目前.net仅支持linux平台，windows平台还存在问题.**
 
 [Nuget包地址](https://www.nuget.org/packages/lebai/)
 
