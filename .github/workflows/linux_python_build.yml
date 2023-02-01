@@ -14,19 +14,13 @@ jobs:
       - run: for PYBIN in /opt/python/*/bin;do "${PYBIN}/pip" install -r requirements.txt; done;
       - run: /opt/python/cp310-cp310/bin/pip install twine==2.0.0
 
-      - name: configure
-        run: cmake -S. -Bbuild -DBUILD_PYTHON=ON
-
-      - name: build
-        run: cmake --build build
-
       - name: create-whl-dir
         run: mkdir -p whl
 
       - name: build with python
         run: for PY in /opt/python/*;do
           rm -rf build;
-          cmake -S. -Bbuild -DBUILD_PYTHON=ON;
+          cmake -S. -Bbuild -DBUILD_PYTHON=ON -DPYTHONPATH=${PY};
           cmake --build build;
           cp build/python/dist/*.whl whl/;
           done;
