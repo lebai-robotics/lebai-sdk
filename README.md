@@ -3,7 +3,7 @@ lebai-sdk的源代码仓库，可以用于控制乐白机械臂.
 | OS     | C++ | Python | C# | Java |
 |:-------|-----|--------|----|------| 
 | Linux  | [![Status][cpp_linux_svg]][cpp_linux_link] | [![Status][python_linux_svg]][python_linux_link] | [![Status][dotnet_linux_svg]][dotnet_linux_link] | TODO |
-| Windows | TODO | TODO | ![Status][dotnet_windows_svg][dotnet_windows_link] | TODO |
+| Windows | TODO | TODO | [![Status][dotnet_windows_svg]][dotnet_windows_link] | TODO |
 
 **上图中显示TODO的地方表示该平台该语言的实现还存在问题，没有完全测试通过，后续会陆续完成。**
 
