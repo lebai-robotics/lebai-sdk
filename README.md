@@ -3,7 +3,7 @@ lebai-sdk的源代码仓库，可以用于控制乐白机械臂.
 | OS     | C++ | Python | C# | Java |
 |:-------|-----|--------|----|------| 
 | Linux  | [![Status][cpp_linux_svg]][cpp_linux_link] | [![Status][python_linux_svg]][python_linux_link] | [![Status][dotnet_linux_svg]][dotnet_linux_link] | TODO |
-| Windows | TODO | TODO | TODO | TODO |
+| Windows | TODO | TODO | ![Status][dotnet_windows_svg][dotnet_windows_link] | TODO |
 
 **上图中显示TODO的地方表示该平台该语言的实现还存在问题，没有完全测试通过，后续会陆续完成。**
 
@@ -13,6 +13,8 @@ lebai-sdk的源代码仓库，可以用于控制乐白机械臂.
 [python_linux_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_python_release.yml
 [dotnet_linux_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_dotnet_release.yml/badge.svg
 [dotnet_linux_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_dotnet_release.yml
+[dotnet_windows_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/windows_dotnet_release.yml/badge.svg
+[dotnet_windows_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/windows_dotnet_release.yml
 
 [SDK在线文档](http://help.lebai.ltd/sdk/)中包含了lua语言的接口（本项目参考了lua语言进行接口设置，但是本项目和lua语言的接口无直接关系）
 
@@ -39,8 +41,6 @@ python开发可以直接从[PyPI](https://pypi.org/project/pylebai/)安装.
 
 ## .net
 .net平台开发可以直接从[Nuget](https://www.nuget.org/packages/lebai/)安装，使用C#进行开发.
-
-**目前.net仅支持linux平台，windows平台还存在问题.**
 
 ```
 dotnet add package lebai
