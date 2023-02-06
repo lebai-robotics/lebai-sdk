@@ -31,7 +31,7 @@ jobs:
 
           # Mount the artifacts directory as /artifacts in the container
           dockerRunArgs: |
-            --volume "${PWD}:/root"
+            --volume "${PWD}:/root/sdk"
 
           # The shell to run commands with in the container
           shell: /bin/sh
@@ -45,9 +45,11 @@ jobs:
           install: |
             apt-get update -y
             apt-get install -y build-essential doxygen graphviz python3-pip python3-dev
-            pip3 install -r requirements.txt
+            
 
           # Produce a binary artifact and place it in the mounted volume
           run: |
+            cd /root/sdk
+            pip3 install -r requirements.txt
             cmake -S. -Bbuild -DBUILD_DEB=ON
             cmake --build build
