@@ -1,4 +1,4 @@
-name: Linux aach64 cpp build
+name: Linux aarch64 cpp build
 run-name: ${{ github.actor }} Linux cpp build
 on: 
   workflow_dispatch: 
@@ -19,7 +19,7 @@ jobs:
         name: Build artifact
         id: build
         with:
-          arch: aach64
+          arch: aarch64
           distro: ubuntu_latest
 
           # Not required, but speeds up builds
