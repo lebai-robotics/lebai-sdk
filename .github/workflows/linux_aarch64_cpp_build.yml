@@ -4,7 +4,7 @@ on:
   workflow_dispatch: 
   pull_request: 
   push:
-    branch: master
+    branches: master
 jobs: 
   linux_cpp_build: 
     environment:
@@ -20,7 +20,7 @@ jobs:
         id: build
         with:
           arch: aach64
-          distro: ubuntu-latest
+          distro: ubuntu_latest
 
           # Not required, but speeds up builds
           githubToken: ${{ github.token }}
