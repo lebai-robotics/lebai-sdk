@@ -1,0 +1,28 @@
+name: Linux dotnet build
+run-name: ${{ github.actor }} Linux dotnet build
+on: 
+  workflow_dispatch: 
+  pull_request: 
+jobs: 
+  linux_dotnet_build: 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      
+      - name: Setup .NET Core 3.1
+        uses: actions/setup-dotnet@v3.0.3
+
+      - name: Setup .NET 6.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+
+      - name: Check dotnet
+        run: dotnet --info
+
+      - name: configure
+        run: cmake -S. -Bbuild -DBUILD_DOTNET=ON
+
+      - name: build
+        run: cmake --build build

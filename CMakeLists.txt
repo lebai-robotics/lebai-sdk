@@ -7,7 +7,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 option(CMAKE_EXPORT_COMPILE_COMMANDS "Export compile command" TRUE)
 
-project(lebai VERSION 1.0.13 LANGUAGES CXX)
+project(lebai VERSION 1.0.17 LANGUAGES CXX)
 set(PROJECT_NAMESPACE lebai)
 message(STATUS "${PROJECT_NAME} version: ${PROJECT_VERSION}")
 # message(STATUS "major: ${PROJECT_VERSION_MAJOR}")
@@ -18,7 +18,7 @@ get_property(isMultiConfig GLOBAL PROPERTY GENERATOR_IS_MULTI_CONFIG)
 if(isMultiConfig)
   if(NOT CMAKE_CONFIGURATION_TYPES)
     set(CMAKE_CONFIGURATION_TYPES "Release;Debug" CACHE STRING
-    "Choose the type of builds, options are: Debug Release RelWithDebInfo MinSizeRel. (default: Release;Debug)"
+    "Choose the type ofgi builds, options are: Debug Release RelWithDebInfo MinSizeRel. (default: Release;Debug)"
     FORCE)
   endif()
   message(STATUS "Configuration types: ${CMAKE_CONFIGURATION_TYPES}")
@@ -89,10 +89,12 @@ option(BUILD_JAVA "Build Java Library" OFF)
 message(STATUS "Build Java: ${BUILD_JAVA}")
 
 if(BUILD_PYTHON)
-  if(DEFINED PYTHONPATH)
-    message(STATUS "Python path: ${PYTHONPATH}")
-    set(Python3_ROOT_DIR ${PYTHONPATH})
-  endif()
+  option(FETCH_PYTHON_DEPS "Install python required modules if not available" ON)
+  message(STATUS "Python fetch dependencies: ${FETCH_PYTHON_DEPS}")
+   if(DEFINED PYTHONPATH)
+     message(STATUS "Python path: ${PYTHONPATH}")
+     set(Python3_ROOT_DIR ${PYTHONPATH})
+   endif()
 endif()
 
 # Disable CTest targets
@@ -143,7 +145,7 @@ add_subdirectory(examples)
 
 
 find_package(Doxygen)
-option(BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen)" OFF)
+option(BUILD_DOCUMENTATION "Create and install the HTML based API documentation (requires Doxygen)" ON)
 
 if(BUILD_DOCUMENTATION AND DOXYGEN_FOUND)
     if(NOT DOXYGEN_FOUND)      

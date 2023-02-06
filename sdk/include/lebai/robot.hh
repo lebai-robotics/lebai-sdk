@@ -141,12 +141,16 @@ namespace lebai
      *  \brief    机器人计算相关的接口.
      */       
 
-    /** \defgroup FILE 文件系统
-     *  \brief    文件系统相关的接口
+    /** \defgroup FILE 文件系统.
+     *  \brief    文件系统相关的接口.
     */
     
-    /** \defgroup MODBUS modbus
-     *  \brief    modbus相关的接口
+    /** \defgroup MODBUS modbus.
+     *  \brief    modbus相关的接口.
+    */
+
+    /** \defgroup SCENE 场景.
+     *  \brief    场景相关的接口.
     */
 
     /** \addtogroup STARTSTOP

@@ -15,16 +15,7 @@ target_include_directories(l_master
   )
 set_property(TARGET l_master PROPERTY SWIG_USE_TARGET_INCLUDE_DIRECTORIES ON)
 
-# note: macOS is APPLE and also UNIX !
-if(APPLE)
-  set_target_properties(l_master PROPERTIES
-    SUFFIX ".so"
-    INSTALL_RPATH "@loader_path;@loader_path/../../${PYTHON_PROJECT}/.libs"
-    )
-  set_property(TARGET l_master APPEND PROPERTY
-    LINK_FLAGS "-flat_namespace -undefined suppress"
-    )
-elseif(UNIX)
+if(UNIX)
   set_target_properties(l_master PROPERTIES
     INSTALL_RPATH "$ORIGIN:$ORIGIN/../${PYTHON_PROJECT}/.libs"
     )
@@ -58,16 +49,7 @@ target_include_directories(zeroconf
   )
 set_property(TARGET zeroconf PROPERTY SWIG_USE_TARGET_INCLUDE_DIRECTORIES ON)
 
-# note: macOS is APPLE and also UNIX !
-if(APPLE)
-  set_target_properties(zeroconf PROPERTIES
-    SUFFIX ".so"
-    INSTALL_RPATH "@loader_path;@loader_path/../../${PYTHON_PROJECT}/.libs"
-    )
-  set_property(TARGET zeroconf APPEND PROPERTY
-    LINK_FLAGS "-flat_namespace -undefined suppress"
-    )
-elseif(UNIX)
+if(UNIX)
   set_target_properties(zeroconf PROPERTIES
     INSTALL_RPATH "$ORIGIN:$ORIGIN/../${PYTHON_PROJECT}/.libs"
     )
