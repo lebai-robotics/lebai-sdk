@@ -145,7 +145,7 @@ int Robot::movej(const CartesianPose & cart_pose, double a, double v, double t, 
   }
   if(cart_pose.find("rx") != cart_pose.end())
   {
-    move_req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_z(cart_pose.at("rx"));
+    move_req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_x(cart_pose.at("rx"));
   }
   else
   {    
@@ -161,7 +161,7 @@ int Robot::movej(const CartesianPose & cart_pose, double a, double v, double t, 
   }
   if(cart_pose.find("rz") != cart_pose.end())
   {
-    move_req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_x(cart_pose.at("rz"));
+    move_req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_z(cart_pose.at("rz"));
   }
   else
   {    
@@ -220,7 +220,7 @@ int Robot::movel(const CartesianPose & cart_pose, double a, double v, double t, 
   }
   if(cart_pose.find("rx") != cart_pose.end())
   {
-    move_req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_z(cart_pose.at("rx"));
+    move_req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_x(cart_pose.at("rx"));
   }
   else
   {    
@@ -236,7 +236,7 @@ int Robot::movel(const CartesianPose & cart_pose, double a, double v, double t, 
   }
   if(cart_pose.find("rz") != cart_pose.end())
   {
-    move_req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_x(cart_pose.at("rz"));
+    move_req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_z(cart_pose.at("rz"));
   }
   else
   {    
@@ -299,7 +299,7 @@ int Robot::movec(const CartesianPose & cart_via, const CartesianPose & cart, dou
   }
   if(cart_via.find("rx") != cart_via.end())
   {
-    move_req.mutable_pose_via()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_z(cart_via.at("rx"));
+    move_req.mutable_pose_via()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_x(cart_via.at("rx"));
   }
   else
   {    
@@ -315,7 +315,7 @@ int Robot::movec(const CartesianPose & cart_via, const CartesianPose & cart, dou
   }
   if(cart_via.find("rz") != cart_via.end())
   {
-    move_req.mutable_pose_via()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_x(cart_via.at("rz"));
+    move_req.mutable_pose_via()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_z(cart_via.at("rz"));
   }
   else
   {    
@@ -347,7 +347,7 @@ int Robot::movec(const CartesianPose & cart_via, const CartesianPose & cart, dou
   }
   if(cart.find("rx") != cart.end())
   {
-    move_req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_z(cart.at("rx"));
+    move_req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_x(cart.at("rx"));
   }
   else
   {    
@@ -363,7 +363,7 @@ int Robot::movec(const CartesianPose & cart_via, const CartesianPose & cart, dou
   }
   if(cart.find("rz") != cart.end())
   {
-    move_req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_x(cart.at("rz"));
+    move_req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_z(cart.at("rz"));
   }
   else
   {    
@@ -478,9 +478,9 @@ CartesianPose Robot::get_actual_tcp_pose()
   cart_pose["z"] = pose.position().z();
   if(pose.rotation().euler_zyx())
   {
-    cart_pose["rz"] = pose.rotation().euler_zyx()->x();
+    cart_pose["rz"] = pose.rotation().euler_zyx()->z();
     cart_pose["ry"] = pose.rotation().euler_zyx()->y();
-    cart_pose["rx"] = pose.rotation().euler_zyx()->z();
+    cart_pose["rx"] = pose.rotation().euler_zyx()->x();
   }
   return cart_pose;
 }
@@ -493,9 +493,9 @@ CartesianPose Robot::get_target_tcp_pose()
   cart_pose["z"] = pose.position().z();
   if(pose.rotation().euler_zyx())
   {
-    cart_pose["rz"] = pose.rotation().euler_zyx()->x();
+    cart_pose["rz"] = pose.rotation().euler_zyx()->z();
     cart_pose["ry"] = pose.rotation().euler_zyx()->y();
-    cart_pose["rx"] = pose.rotation().euler_zyx()->z();
+    cart_pose["rx"] = pose.rotation().euler_zyx()->x();
   }
   return cart_pose;
 }
@@ -1096,9 +1096,9 @@ KinematicsForwardResp Robot::kinematics_forward(const std::vector<double> & join
   kf_resp.pose["x"] = resp.position().x();
   kf_resp.pose["y"] = resp.position().y();
   kf_resp.pose["z"] = resp.position().z();
-  kf_resp.pose["rz"] = resp.rotation().euler_zyx()->x();
+  kf_resp.pose["rz"] = resp.rotation().euler_zyx()->z();
   kf_resp.pose["ry"] = resp.rotation().euler_zyx()->y();
-  kf_resp.pose["rx"] = resp.rotation().euler_zyx()->z();
+  kf_resp.pose["rx"] = resp.rotation().euler_zyx()->x();
   kf_resp.ok = true;
   return kf_resp;
 }
@@ -1140,9 +1140,9 @@ KinematicsInverseResp Robot::kinematics_inverse(const CartesianPose & pose, cons
   req.mutable_pose()->mutable_cart()->mutable_position()->set_x(x);
   req.mutable_pose()->mutable_cart()->mutable_position()->set_y(y);
   req.mutable_pose()->mutable_cart()->mutable_position()->set_z(z);
-  req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_x(rz);
+  req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_z(rz);
   req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_y(ry);
-  req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_z(rx);
+  req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_x(rx);
   
   for(auto && p: joint_init_positions)
   {
@@ -1442,9 +1442,9 @@ std::array<double, 6> Robot::get_tcp()
   ret[0] = resp.position().x();
   ret[1] = resp.position().y();
   ret[2] = resp.position().z();
-  ret[3] = resp.rotation().euler_zyx()->x();
+  ret[3] = resp.rotation().euler_zyx()->z();
   ret[4] = resp.rotation().euler_zyx()->y();
-  ret[5] = resp.rotation().euler_zyx()->z();
+  ret[5] = resp.rotation().euler_zyx()->x();
   return ret;
 }
 
