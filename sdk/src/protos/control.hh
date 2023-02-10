@@ -225,7 +225,7 @@ namespace lebai
             virtual bool Deserialize(const rapidjson::Value &obj);
 			virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const;
 			virtual bool IsNullJSONData() const;
-        }
+        };
 
         class HookResponse : public JSONBase
         {
@@ -245,6 +245,6 @@ namespace lebai
             virtual bool Deserialize(const rapidjson::Value &obj);
 			virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const;
 			virtual bool IsNullJSONData() const;
-        }
+        };
     }
 }

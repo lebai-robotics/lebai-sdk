@@ -962,11 +962,11 @@ unsigned int Robot::exec_hook(unsigned int id)
   control::Exec req;
   req.set_id(id);
   control::HookResponse resp = impl_->execHook(req);
-  if !resp.success()
+  if(!resp.success())
   {
     return 0;
   }
-  return (unsigned int)(resp.error())
+  return atoi(resp.error().c_str());
 }
 std::string Robot::get_task_state(unsigned int id)
 {
