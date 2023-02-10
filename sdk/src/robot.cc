@@ -749,26 +749,6 @@ void Robot::set_dio_mode(std::string device,unsigned int pin, bool value)
   req.set_value(value);
   impl_->setDioMode(req);
 }
-std::vector<bool> Robot::get_dios(std::string device,unsigned int pin, unsigned int count)
-{
-  io::GetDiosRequest req;
-  if(device == "ROBOT")
-  {
-    req.set_device(io::IoDevice::ROBOT);
-  }
-  else if(device == "FLANGE")
-  {
-    req.set_device(io::IoDevice::FLANGE);
-  }
-  else if(device == "EXTRA")
-  { 
-    req.set_device(io::IoDevice::EXTRA); 
-  }
-  req.set_pin(pin);
-  req.set_count(count);
-  io::GetDiosResponse resp = impl_->getDios(req);
-  return resp.values();
-}
 std::vector<bool> Robot::get_dios_mode(std::string device,unsigned int pin, unsigned int count)
 {
   io::GetDiosModeRequest req;

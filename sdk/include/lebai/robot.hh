@@ -558,13 +558,6 @@ namespace lebai
      */
     void set_dio_mode(std::string device,unsigned int pin, bool value);
     /**
-     * @brief 获取数字端口输出值
-     * @param pin: 端口号，从 0 开始
-     * @param count: 查询的连续端口数
-     * @return 从pin开始的连续count个端口的当前值
-     */
-    std::vector<bool> get_dios(std::string device,unsigned int pin, unsigned int count);
-    /**
      * @brief 获取数字端口模式
      * @param pin: 端口号，从 0 开始
      * @param count:查询的连续端口数
