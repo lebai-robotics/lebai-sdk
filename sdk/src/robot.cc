@@ -957,6 +957,17 @@ void Robot::cancel_task(unsigned int id)
   req.set_id(id);
   impl_->cancelTask(req);
 }
+unsigned int Robot::exec_hook(unsigned int id)
+{
+  control::Exec req;
+  req.set_id(id);
+  control::HookResponse resp = impl_->execHook(req);
+  if !resp.success()
+  {
+    return 0;
+  }
+  return (unsigned int)(resp.error())
+}
 std::string Robot::get_task_state(unsigned int id)
 {
   control::TaskIndex req;

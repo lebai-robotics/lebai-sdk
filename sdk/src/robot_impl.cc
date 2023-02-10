@@ -366,6 +366,14 @@ namespace lebai
   {
     json_rpc_connector_->CallRpc("cancel_task",req.ToJSONString(),nullptr);
   }
+  control::HookResponse Robot::RobotImpl::execHook(const control::Exec &req)
+  {
+    std::string resp;
+    json_rpc_connector_->CallRpc("exec_hook",req.ToJSONString(),&resp);
+    control::HookResponse hook_resp;
+    hook_resp.FromJSONString(resp);
+    return hook_resp;
+  }
   control::Task Robot::RobotImpl::loadTask(const control::TaskIndex & req)
   {
     std::string resp_str;

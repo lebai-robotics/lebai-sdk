@@ -694,6 +694,12 @@ namespace lebai
     */
     void cancel_task(unsigned int id);
     /**
+     * @brief 根据已设置的Hook执行对应场景
+     *
+     * @param id 任务的ID.
+     */
+    unsigned int exec_hook(unsigned int id);
+    /**
      * @brief 获取任务状态.
      * 
      * @param id 任务的ID.

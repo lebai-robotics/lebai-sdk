@@ -90,6 +90,7 @@ namespace lebai
       void pauseTask(const control::PauseRequest & req);
       void resumeTask(const control::TaskIndex & req);
       void cancelTask(const control::TaskIndex & req);
+      control::HookResponse execHook(const control::Exec & req);
       control::Task loadTask(const control::TaskIndex & req);
       claw::Claw getClaw();
       posture::CartesianPose getForwardKin(const posture::PoseRequest & req);
