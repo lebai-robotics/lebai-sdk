@@ -273,7 +273,7 @@ namespace lebai
   }
   void Robot::RobotImpl::setDioMode(const io::SetDioModeRequest &req)
   {
-    json_rpc_connector_->CallRpc("set_dio_mode", req.ToJSONString());
+    json_rpc_connector_->CallRpc("set_dio_mode", req.ToJSONString(),nullptr);
   }
   io::GetDiosModeResponse Robot::RobotImpl::getDiosMode(const io::GetDiosModeRequest &req)
   {
