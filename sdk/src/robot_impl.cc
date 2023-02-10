@@ -271,21 +271,9 @@ namespace lebai
     get_aio_resp.FromJSONString(resp);
     return get_aio_resp;
   }
-  io::SetDioResponse Robot::RobotImpl::setDio(const io::SetDioRequest &req)
+  void Robot::RobotImpl::setDioMode(const io::SetDioModeRequest &req)
   {
-    std::string resp;
-    json_rpc_connector_->CallRpc("set_dio", req.ToJSONString(), &resp);
-    io::SetDioResponse resp_;
-    resp_.FromJSONString(resp);
-    return resp_;
-  }
-  io::SetDioModeResponse Robot::RobotImpl::setDioMode(const io::SetDioModeRequest &req)
-  {
-    std::string resp;
     json_rpc_connector_->CallRpc("set_dio_mode", req.ToJSONString(), &resp);
-    io::SetDioModeResponse resp_;
-    resp_.FromJSONString(resp);
-    return resp_;
   }
   io::GetDiosResponse Robot::RobotImpl::getDios(const io::GetDiosRequest &req)
   {

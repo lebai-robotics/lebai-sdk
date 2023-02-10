@@ -730,154 +730,65 @@ std::vector<double> Robot::get_ais(std::string device, unsigned int pin, unsigne
   io::GetAioPinsResponse resp = impl_->getAIS(req);
   return resp.values();
 }
-bool Robot::set_dio(unsigned int pin, bool value)
-{
-  io::SetDioRequest req;
-  req.set_pin(pin);
-  req.set_value(value);
-  io::SetDioResponse resp = impl_->setDio(req);
-  return resp.success();
-}
-bool Robot::set_dio_mode(unsigned int pin, bool value)
+void Robot::set_dio_mode(std::string device,unsigned int pin, bool value)
 {
   io::SetDioModeRequest req;
+  if(device == "ROBOT")
+  {
+    req.set_device(io::IoDevice::ROBOT);
+  }
+  else if(device == "FLANGE")
+  {
+    req.set_device(io::IoDevice::FLANGE);
+  }
+  else if(device == "EXTRA")
+  { 
+    req.set_device(io::IoDevice::EXTRA); 
+  }
   req.set_pin(pin);
   req.set_value(value);
-  io::SetDioModeResponse resp = impl_->setDioMode(req);
-  return resp.success();
+  impl_->setDioMode(req);
 }
-std::vector<bool> Robot::get_dios(unsigned int pin, unsigned int count)
+std::vector<bool> Robot::get_dios(std::string device,unsigned int pin, unsigned int count)
 {
   io::GetDiosRequest req;
+  if(device == "ROBOT")
+  {
+    req.set_device(io::IoDevice::ROBOT);
+  }
+  else if(device == "FLANGE")
+  {
+    req.set_device(io::IoDevice::FLANGE);
+  }
+  else if(device == "EXTRA")
+  { 
+    req.set_device(io::IoDevice::EXTRA); 
+  }
   req.set_pin(pin);
   req.set_count(count);
   io::GetDiosResponse resp = impl_->getDios(req);
   return resp.values();
 }
-std::vector<bool> Robot::get_dios_mode(unsigned int pin, unsigned int count)
+std::vector<bool> Robot::get_dios_mode(std::string device,unsigned int pin, unsigned int count)
 {
   io::GetDiosModeRequest req;
+  if(device == "ROBOT")
+  {
+    req.set_device(io::IoDevice::ROBOT);
+  }
+  else if(device == "FLANGE")
+  {
+    req.set_device(io::IoDevice::FLANGE);
+  }
+  else if(device == "EXTRA")
+  { 
+    req.set_device(io::IoDevice::EXTRA); 
+  }
   req.set_pin(pin);
   req.set_count(count);
   io::GetDiosModeResponse resp = impl_->getDiosMode(req);
   return resp.values();
 }
-
-// bool Robot::get_robot_di(unsigned int pin)
-// {
-//   io::GetDioPinRequest req;
-//   req.set_pin(pin);
-//   req.set_device(io::IoDevice::ROBOT);
-//   auto resp = impl_->getDI(req);
-//   return resp.value() ? true : false;
-// }
-
-// void Robot::set_robot_do(unsigned int pin, bool value)
-// {
-//   io::SetDoPinRequest req;
-//   req.set_pin(pin);
-//   req.set_value(value);
-//   req.set_device(io::IoDevice::ROBOT);
-//   impl_->setDO(req);
-// }
-
-// void Robot::set_robot_do(unsigned int pin, unsigned int value)
-// {
-//   io::SetDoPinRequest req;
-//   req.set_pin(pin);
-//   req.set_value(value);
-//   req.set_device(io::IoDevice::ROBOT);
-//   impl_->setDO(req);  
-// }
-
-// double Robot::get_robot_ai(unsigned int pin)
-// {
-//   io::GetAioPinRequest req;
-//   req.set_pin(pin);
-//   req.set_device(io::IoDevice::ROBOT);
-//   auto resp = impl_->getAI(req);
-//   return resp.value();
-// }
-
-// void Robot::set_robot_ao(unsigned int pin, double value)
-// {
-//   io::SetAoPinRequest req;
-//   req.set_pin(pin);
-//   req.set_value(value);
-//   req.set_device(io::IoDevice::ROBOT);
-//   impl_->setAO(req);
-// }
-
-
-// bool Robot::get_flange_di(unsigned int pin)
-// {
-//   io::GetDioPinRequest req;
-//   req.set_pin(pin);
-//   req.set_device(io::IoDevice::FLANGE);
-//   auto resp = impl_->getDI(req);
-//   return resp.value() ? true : false;
-// }
-
-// void Robot::set_flange_do(unsigned int pin, bool value)
-// {
-//   io::SetDoPinRequest req;
-//   req.set_pin(pin);
-//   req.set_value(value);
-//   req.set_device(io::IoDevice::FLANGE);
-//   impl_->setDO(req);
-// }
-// void Robot::set_flange_do(unsigned int pin, unsigned int value)
-// {
-//   io::SetDoPinRequest req;
-//   req.set_pin(pin);
-//   req.set_value(value);
-//   req.set_device(io::IoDevice::FLANGE);
-//   impl_->setDO(req);
-// }
-
-// bool Robot::get_extra_di(unsigned int pin)
-// {
-//   io::GetDioPinRequest req;
-//   req.set_pin(pin);
-//   req.set_device(io::IoDevice::EXTRA);
-//   auto resp = impl_->getDI(req);
-//   return resp.value() ? true : false;
-// }
-
-// void Robot::set_extra_do(unsigned int pin, bool value)
-// {
-//   io::SetDoPinRequest req;
-//   req.set_pin(pin);
-//   req.set_value(value);
-//   req.set_device(io::IoDevice::EXTRA);
-//   impl_->setDO(req);
-// }
-// void Robot::set_extra_do(unsigned int pin, unsigned int value)
-// {
-//   io::SetDoPinRequest req;
-//   req.set_pin(pin);
-//   req.set_value(value);
-//   req.set_device(io::IoDevice::EXTRA);
-//   impl_->setDO(req);
-// }
-
-// double Robot::get_extra_ai(unsigned int pin)
-// {
-//   io::GetAioPinRequest req;
-//   req.set_pin(pin);
-//   req.set_device(io::IoDevice::EXTRA);
-//   auto resp = impl_->getAI(req);
-//   return resp.value();
-// }
-
-// void Robot::set_extra_ao(unsigned int pin, double value)
-// {
-//   io::SetAoPinRequest req;
-//   req.set_pin(pin);
-//   req.set_value(value);
-//   req.set_device(io::IoDevice::EXTRA);
-//   impl_->setAO(req);
-// }
 
 void Robot::set_claw(double force, double amplitude)
 {
