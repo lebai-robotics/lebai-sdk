@@ -1428,9 +1428,9 @@ void Robot::set_tcp(std::array<double, 6> tcp)
   pos.set_z(tcp[2]);
   req.set_position(pos);
   posture::Position p;
-  p.set_x(tcp[3]);
+  p.set_z(tcp[3]);
   p.set_y(tcp[4]);
-  p.set_z(tcp[5]);
+  p.set_x(tcp[5]);
   rot.set_euler_zyx(p);
   req.set_rotation(rot);
   impl_->setTcp(req);
