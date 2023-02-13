@@ -11,8 +11,19 @@ target_include_directories(l_master
   PRIVATE
   ${PROJECT_SOURCE_DIR}/sdk/include
   ${PROJECT_SOURCE_DIR}/sdk/src
-  ${Python3_INCLUDE_DIRS}
+)
+if(BUILD_PYTHON)
+  target_include_directories(l_master
+    PRIVATE
+    ${Python3_INCLUDE_DIRS}
   )
+elseif(BUILD_PYTHON2)
+  target_include_directories(l_master
+    PRIVATE
+    ${Python2_INCLUDE_DIRS}
+  )
+endif()
+
 set_property(TARGET l_master PROPERTY SWIG_USE_TARGET_INCLUDE_DIRECTORIES ON)
 
 if(UNIX)
@@ -27,7 +38,7 @@ target_link_libraries(l_master PRIVATE ${PROJECT_NAMESPACE}::lebai-cpp)
 # i.e. we can't use: $<$<PLATFORM_ID:Windows>:${PYTHON_LIBRARIES}>
 # see: https://cmake.org/cmake/help/git-stage/command/target_link_libraries.html#command:target_link_libraries
 if(MSVC)
-  target_link_libraries(l_master PRIVATE ${Python3_LIBRARIES})
+  target_link_libraries(l_master PRIVATE ${Python2_LIBRARIES} ${Python3_LIBRARIES})
 endif()
 
 
@@ -45,8 +56,18 @@ target_include_directories(zeroconf
   ${PROJECT_SOURCE_DIR}/sdk/include
   ${PROJECT_SOURCE_DIR}/sdk/include/zeroconf
   ${PROJECT_SOURCE_DIR}/sdk/src
-  ${Python3_INCLUDE_DIRS}
+)
+if(BUILD_PYTHON)
+  target_include_directories(zeroconf
+    PRIVATE
+    ${Python3_INCLUDE_DIRS}
   )
+elseif(BUILD_PYTHON2)
+  target_include_directories(zeroconf
+    PRIVATE
+    ${Python2_INCLUDE_DIRS}
+  )
+endif()
 set_property(TARGET zeroconf PROPERTY SWIG_USE_TARGET_INCLUDE_DIRECTORIES ON)
 
 if(UNIX)
@@ -61,5 +82,5 @@ target_link_libraries(zeroconf PRIVATE ${PROJECT_NAMESPACE}::lebai-cpp)
 # i.e. we can't use: $<$<PLATFORM_ID:Windows>:${PYTHON_LIBRARIES}>
 # see: https://cmake.org/cmake/help/git-stage/command/target_link_libraries.html#command:target_link_libraries
 if(MSVC)
-  target_link_libraries(zeroconf PRIVATE ${Python3_LIBRARIES})
+  target_link_libraries(zeroconf PRIVATE ${Python2_LIBRARIES} ${Python3_LIBRARIES})
 endif()

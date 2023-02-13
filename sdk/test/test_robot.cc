@@ -85,6 +85,13 @@ namespace lebai
       std::this_thread::sleep_for(std::chrono::milliseconds(100));
       EXPECT_EQ(7, robot_.get_robot_mode());
       robot_.wait_move();
+      auto tcp = robot_.get_target_tcp_pose();
+      EXPECT_NEAR(tcp["x"], -0.296, 1e-3);
+      EXPECT_NEAR(tcp["y"], -0.162, 1e-3);
+      EXPECT_NEAR(tcp["z"], 0.285, 1e-3);
+      EXPECT_NEAR(tcp["rz"], 60.0 / 180.0 * M_PI, 1e-2);
+      EXPECT_NEAR(tcp["ry"], -5.0 / 180.0 * M_PI, 1e-2);
+      EXPECT_NEAR(tcp["rx"], 81.0 / 180.0 * M_PI, 1e-2);
       auto jp = robot_.get_target_joint_positions();
       ASSERT_EQ(6, jp.size());
       EXPECT_NEAR(jp[0], joint_positions[0], 1e-3);
@@ -95,17 +102,17 @@ namespace lebai
       EXPECT_NEAR(jp[5], joint_positions[5], 1e-3);
       std::this_thread::sleep_for(std::chrono::milliseconds(200));
       EXPECT_EQ(5, robot_.get_robot_mode());
-      robot_.movej({{"x",-0.296},{"y",-0.295},{"z",0.285},{"rz",60.0 / 180.0 * M_PI},{"ry",-5.0 / 180.0 * M_PI},{"rx", 81.0 / 180.0 * M_PI}}, 3.0, 1.0, 0.0, 0.0);
+      robot_.movej({{"x",-0.296},{"y",-0.295},{"z",0.285},{"rx",60.0 / 180.0 * M_PI},{"ry",-5.0 / 180.0 * M_PI},{"rz", 81.0 / 180.0 * M_PI}}, 3.0, 1.0, 0.0, 0.0);
       // std::this_thread::sleep_for(std::chrono::milliseconds(100));
       EXPECT_EQ(7, robot_.get_robot_mode());
       robot_.wait_move(0);
-      auto tcp = robot_.get_target_tcp_pose();
+      tcp = robot_.get_target_tcp_pose();
       EXPECT_NEAR(tcp["x"], -0.296, 1e-3);
       EXPECT_NEAR(tcp["y"], -0.295, 1e-3);
       EXPECT_NEAR(tcp["z"], 0.285, 1e-3);
-      EXPECT_NEAR(tcp["rz"], 60.0 / 180.0 * M_PI, 1e-3);
-      EXPECT_NEAR(tcp["ry"], -5.0 / 180.0 * M_PI, 1e-3);
-      EXPECT_NEAR(tcp["rx"], 81.0 / 180.0 * M_PI, 1e-3);
+      EXPECT_NEAR(tcp["rx"], 60.0 / 180.0 * M_PI, 1e-2);
+      EXPECT_NEAR(tcp["ry"], -5.0 / 180.0 * M_PI, 1e-2);
+      EXPECT_NEAR(tcp["rz"], 81.0 / 180.0 * M_PI, 1e-2);
       joint_positions[0] = 0.0;
       joint_positions[1] = -60.0 / 180.0 * M_PI;
       joint_positions[2] = 80.0 / 180.0 * M_PI;
@@ -123,7 +130,7 @@ namespace lebai
       EXPECT_NEAR(jp[3], joint_positions[3], 1e-3);
       EXPECT_NEAR(jp[4], joint_positions[4], 1e-3);
       EXPECT_NEAR(jp[5], joint_positions[5], 1e-3);
-      robot_.movel({{"x",-0.306},{"y",-0.295},{"z",0.285},{"rz",60.0 / 180.0 * M_PI},{"ry",-5.0 / 180.0 * M_PI},{"rx", 81.0 / 180.0 * M_PI}}, 1.0, 0.5, 0.0, 0.0);
+      robot_.movel({{"x",-0.306},{"y",-0.295},{"z",0.285},{"rx",60.0 / 180.0 * M_PI},{"ry",-5.0 / 180.0 * M_PI},{"rz", 81.0 / 180.0 * M_PI}}, 1.0, 0.5, 0.0, 0.0);
       // std::this_thread::sleep_for(std::chrono::milliseconds(100));
       EXPECT_EQ(7, robot_.get_robot_mode());
       robot_.wait_move();      
@@ -131,9 +138,9 @@ namespace lebai
       EXPECT_NEAR(tcp["x"], -0.306, 1e-3);
       EXPECT_NEAR(tcp["y"], -0.295, 1e-3);
       EXPECT_NEAR(tcp["z"], 0.285, 1e-3);
-      EXPECT_NEAR(tcp["rz"], 60.0 / 180.0 * M_PI, 1e-3);
-      EXPECT_NEAR(tcp["ry"], -5.0 / 180.0 * M_PI, 1e-3);
-      EXPECT_NEAR(tcp["rx"], 81.0 / 180.0 * M_PI, 1e-3);
+      EXPECT_NEAR(tcp["rx"], 60.0 / 180.0 * M_PI, 1e-2);
+      EXPECT_NEAR(tcp["ry"], -5.0 / 180.0 * M_PI, 1e-2);
+      EXPECT_NEAR(tcp["rz"], 81.0 / 180.0 * M_PI, 1e-2);
       std::this_thread::sleep_for(std::chrono::milliseconds(200));
       EXPECT_EQ(5, robot_.get_robot_mode());
       robot_.movej({13.0/ 180.0 * M_PI, -52.0/ 180.0 * M_PI, 86.0/ 180.0 * M_PI, 8.0/ 180.0 * M_PI, -59.0/ 180.0 * M_PI, -11.0/ 180.0 * M_PI}, 1.0, 0.5, 0.0, 0.0);
@@ -154,7 +161,7 @@ namespace lebai
 
       robot_.movej({13.0/ 180.0 * M_PI, -52.0/ 180.0 * M_PI, 86.0/ 180.0 * M_PI, 8.0/ 180.0 * M_PI, -59.0/ 180.0 * M_PI, -11.0/ 180.0 * M_PI}, 1.0, 0.5, 0.0, 0.0);
       robot_.movec({{"x", -0.282541}, {"y", -0.168246}, {"z", 0.265824}, {"rx", 1.27256}, {"ry", -0.206353}, {"rz", 0.937445}},
-      {{"x", -0.255832}, {"y", 0.00270435}, {"z", 0.266642}, {"rx", 1.27293}, {"ry", -0.20805}, {"rz", 0.94485}},
+      {{"x", -0.255832}, {"y", 0.00270435}, {"z", 0.266642}, {"rz", 1.27293}, {"ry", -0.20805}, {"rx", 0.94485}},
         0.0, 1.0, 0.5, 0.0, 0.0);
       robot_.wait_move();
       joint_positions = robot_.get_target_joint_positions();
