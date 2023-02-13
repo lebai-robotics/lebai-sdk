@@ -1,6 +1,9 @@
 # .net平台应用文档
 
+<<<<<<< HEAD
 **目前.net仅支持linux平台，windows平台还存在问题.**
+=======
+>>>>>>> eaa388d5ed4303d406026c6b7d2b632bd30a6374
 
 [Nuget包地址](https://www.nuget.org/packages/lebai/)
 
