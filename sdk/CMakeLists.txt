@@ -25,7 +25,7 @@ set_target_properties(lebai-cpp PROPERTIES
   )
 add_library(${PROJECT_NAMESPACE}::lebai-cpp ALIAS lebai-cpp)
 
-
+option(BUILD_TESTING "Build test" ON)
 if(BUILD_TESTING)
   add_subdirectory(test)
 endif()
