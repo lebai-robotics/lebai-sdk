@@ -1,6 +1,5 @@
 using System;
 using lebai.l_master;
-
 namespace lebai.app
 {
     class Program
@@ -8,7 +7,7 @@ namespace lebai.app
         static void Main(string[] args)
         {
             Console.WriteLine($"Enter example");
-            Robot robot = new Robot("192.168.1.100", true);
+            Robot robot = new Robot("127.0.0.1", true);
             robot.stop_sys();
             Console.WriteLine($"stop...");
             robot.start_sys();

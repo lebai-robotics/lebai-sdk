@@ -223,11 +223,11 @@ namespace lebai
      * 
      * @brief   通过关节位置发送机械臂关节移动
      * @note  该接口为异步接口，仅向控制器内部的运动缓冲区写入一个关节移动即返回，不会等待运动结束.
-     * @param[in] joint_positions: 目标位置的关节数据,为关节的角度值构成的数组.
-     * @param[in] a: 加速度.
-     * @param[in] v: 速度.
-     * @param[in] t: 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
-     * @param[in] r: 交融半径，设置为0，则无交融半径.
+     * @param[in] joint_positions 目标位置的关节数据,为关节的角度值构成的数组.
+     * @param[in] a 加速度
+     * @param[in] v 速度
+     * @param[in] t 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
+     * @param[in] r 交融半径，设置为0，则无交融半径.
      * @return  >0 发送成功
      * @return  <=0 发送失败
      * 
@@ -241,11 +241,11 @@ namespace lebai
      * 
      * @brief 通过坐标位置发送机械臂关节移动
      * @note 该接口为异步接口，仅向控制器内部的运动缓冲区写入一个关节移动即返回，不会等待运动结束.
-     * @param[in] cart_pose: 目标位置在机器人基座标系下的坐标数据(目前不支持在其它坐标系下的坐标数据)，CartesianPose = std::map<std::string,double>，应当包括键为x,y,z,rz,ry,rx的值.
-     * @param[in] a: 加速度
-     * @param[in] v: 速度
-     * @param[in] t: 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
-     * @param[in] r: 交融半径，设置为0，则无交融半径.
+     * @param[in] cart_pose 目标位置在机器人基座标系下的坐标数据(目前不支持在其它坐标系下的坐标数据)，CartesianPose = std::map<std::string,double>，应当包括键为x,y,z,rz,ry,rx的值.
+     * @param[in] a 加速度.
+     * @param[in] v 速度.
+     * @param[in] t 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
+     * @param[in] r 交融半径，设置为0，则无交融半径.
      * @return >0 发送成功
      * @return <=0 发送失败
      */    
@@ -260,10 +260,10 @@ namespace lebai
      * @brief 通过关节位置发送机械臂直线移动
      * @note 该接口为异步接口，仅向控制器内部的运动缓冲区写入一个关节移动即返回，不会等待运动结束.
      * @param[in] joint_positions: 目标位置的关节数据,为关节的角度值构成的数组.
-     * @param[in] a: 加速度
-     * @param[in] v: 速度
-     * @param[in] t: 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
-     * @param[in] r: 交融半径，设置为0，则无交融半径.
+     * @param[in] a 加速度.
+     * @param[in] v 速度.
+     * @param[in] t 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
+     * @param[in] r 交融半径，设置为0，则无交融半径.
      * @return >0 发送成功
      * @return <=0 发送失败
      */
@@ -276,11 +276,11 @@ namespace lebai
      * 
      * @brief 通过坐标位置发送机械臂直线移动
      * @note 该接口为异步接口，仅向控制器内部的运动缓冲区写入一个关节移动即返回，不会等待运动结束.
-     * @param cart_pose: 目标位置在机器人基座标系下的坐标数据(目前不支持在其它坐标系下的坐标数据)，CartesianPose = std::map<std::string,double>，应当包括键为x,y,z,rz,ry,rx的值.
-     * @param a: 加速度.
-     * @param v: 速度.
-     * @param t: 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
-     * @param r: 交融半径，设置为0，则无交融半径.
+     * @param cart_pose 目标位置在机器人基座标系下的坐标数据(目前不支持在其它坐标系下的坐标数据)，CartesianPose = std::map<std::string,double>，应当包括键为x,y,z,rz,ry,rx的值.
+     * @param a 加速度.
+     * @param v 速度.
+     * @param t 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
+     * @param r 交融半径，设置为0，则无交融半径.
      * @return >0 发送成功.
      * @return <=0 发送失败.
      */    
@@ -559,7 +559,7 @@ namespace lebai
     bool set_dio(unsigned int pin, bool value);
     /**
      * @brief 设置数字端口模式
-     * @param pin: 端口号，从 0 开始
+     * @param pin 端口号，从 0 开始
      * @param value 设置的值，false为输入模式，true为输出模式
      * @return 返回是否成功
      */
@@ -573,8 +573,8 @@ namespace lebai
     std::vector<bool> get_dios(unsigned int pin, unsigned int count);
     /**
      * @brief 获取数字端口模式
-     * @param pin: 端口号，从 0 开始
-     * @param count:查询的连续端口数
+     * @param pin 端口号，从 0 开始
+     * @param count 查询的连续端口数
      * @return 从pin开始的连续count个端口的当前模式
      */
     std::vector<bool> get_dios_mode(unsigned int pin, unsigned int count);
@@ -587,8 +587,8 @@ namespace lebai
     /**
      * @brief 设置夹爪力度（力控）和幅度（位控）.如果在闭合过程中抓取到物体，则不再继续闭合以避免夹坏物体，判断的准则为这里设置的力的大小.
      * 
-     * @param force: 力度（0-100）
-     * @param amplitude: 张合幅度（0-100）
+     * @param force 力度（0-100）
+     * @param amplitude 张合幅度（0-100）
     */
     void set_claw(double force, double amplitude);
     /**

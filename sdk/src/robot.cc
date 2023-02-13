@@ -145,7 +145,7 @@ int Robot::movej(const CartesianPose & cart_pose, double a, double v, double t, 
   }
   if(cart_pose.find("rx") != cart_pose.end())
   {
-    move_req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_z(cart_pose.at("rx"));
+    move_req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_x(cart_pose.at("rx"));
   }
   else
   {    
@@ -161,7 +161,7 @@ int Robot::movej(const CartesianPose & cart_pose, double a, double v, double t, 
   }
   if(cart_pose.find("rz") != cart_pose.end())
   {
-    move_req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_x(cart_pose.at("rz"));
+    move_req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_z(cart_pose.at("rz"));
   }
   else
   {    
@@ -220,7 +220,7 @@ int Robot::movel(const CartesianPose & cart_pose, double a, double v, double t, 
   }
   if(cart_pose.find("rx") != cart_pose.end())
   {
-    move_req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_z(cart_pose.at("rx"));
+    move_req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_x(cart_pose.at("rx"));
   }
   else
   {    
@@ -236,7 +236,7 @@ int Robot::movel(const CartesianPose & cart_pose, double a, double v, double t, 
   }
   if(cart_pose.find("rz") != cart_pose.end())
   {
-    move_req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_x(cart_pose.at("rz"));
+    move_req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_z(cart_pose.at("rz"));
   }
   else
   {    
@@ -299,7 +299,7 @@ int Robot::movec(const CartesianPose & cart_via, const CartesianPose & cart, dou
   }
   if(cart_via.find("rx") != cart_via.end())
   {
-    move_req.mutable_pose_via()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_z(cart_via.at("rx"));
+    move_req.mutable_pose_via()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_x(cart_via.at("rx"));
   }
   else
   {    
@@ -315,7 +315,7 @@ int Robot::movec(const CartesianPose & cart_via, const CartesianPose & cart, dou
   }
   if(cart_via.find("rz") != cart_via.end())
   {
-    move_req.mutable_pose_via()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_x(cart_via.at("rz"));
+    move_req.mutable_pose_via()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_z(cart_via.at("rz"));
   }
   else
   {    
@@ -347,7 +347,7 @@ int Robot::movec(const CartesianPose & cart_via, const CartesianPose & cart, dou
   }
   if(cart.find("rx") != cart.end())
   {
-    move_req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_z(cart.at("rx"));
+    move_req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_x(cart.at("rx"));
   }
   else
   {    
@@ -363,7 +363,7 @@ int Robot::movec(const CartesianPose & cart_via, const CartesianPose & cart, dou
   }
   if(cart.find("rz") != cart.end())
   {
-    move_req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_x(cart.at("rz"));
+    move_req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_z(cart.at("rz"));
   }
   else
   {    
@@ -478,9 +478,9 @@ CartesianPose Robot::get_actual_tcp_pose()
   cart_pose["z"] = pose.position().z();
   if(pose.rotation().euler_zyx())
   {
-    cart_pose["rz"] = pose.rotation().euler_zyx()->x();
+    cart_pose["rx"] = pose.rotation().euler_zyx()->x();
     cart_pose["ry"] = pose.rotation().euler_zyx()->y();
-    cart_pose["rx"] = pose.rotation().euler_zyx()->z();
+    cart_pose["rz"] = pose.rotation().euler_zyx()->z();
   }
   return cart_pose;
 }
@@ -493,9 +493,9 @@ CartesianPose Robot::get_target_tcp_pose()
   cart_pose["z"] = pose.position().z();
   if(pose.rotation().euler_zyx())
   {
-    cart_pose["rz"] = pose.rotation().euler_zyx()->x();
+    cart_pose["rx"] = pose.rotation().euler_zyx()->x();
     cart_pose["ry"] = pose.rotation().euler_zyx()->y();
-    cart_pose["rx"] = pose.rotation().euler_zyx()->z();
+    cart_pose["rz"] = pose.rotation().euler_zyx()->z();
   }
   return cart_pose;
 }
