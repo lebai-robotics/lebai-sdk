@@ -701,6 +701,10 @@ namespace lebai
     unsigned int exec_hook(unsigned int id);
     /**
      * @brief 获取任务状态.
+    */
+    std::string get_task_state();
+    /**
+     * @brief 获取任务状态.
      * 
      * @param id 任务的ID.
     */

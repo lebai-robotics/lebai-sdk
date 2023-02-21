@@ -984,6 +984,20 @@ std::string Robot::get_task_state(unsigned int id)
     default:return "Undefined State";
   }
 }
+std::string Robot::get_task_state()
+{
+  control::Task resp = impl_->loadTask();
+  switch(resp.state())
+  {
+    case control::TaskState::WAIT:return "WAIT";break;
+    case control::TaskState::RUNNING:return "RUNNING";break;
+    case control::TaskState::PAUSE:return "PAUSE";break;
+    case control::TaskState::SUCCESS:return "SUCCESS";break;
+    case control::TaskState::INTERRUPT:return "INTERRUPT";break;
+    case control::TaskState::FAIL:return "FAIL";break;
+    default:return "Undefined State";
+  }
+}
 
 
 KinematicsForwardResp Robot::kinematics_forward(const std::vector<double> & joint_positions)

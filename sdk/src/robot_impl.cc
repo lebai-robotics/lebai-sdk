@@ -376,11 +376,19 @@ namespace lebai
   }
   control::Task Robot::RobotImpl::loadTask(const control::TaskIndex & req)
   {
-    std::string resp_str;
-    json_rpc_connector_->CallRpc("load_task",req.ToJSONString(),nullptr);
-    control::Task resp;
-    resp.FromJSONString(resp_str);
-    return resp;
+    std::string resp;
+    json_rpc_connector_->CallRpc("load_task",req.ToJSONString(),&resp);
+    control::Task task_resp;
+    task_resp.FromJSONString(resp);
+    return task_resp;
+  }
+  control::Task Robot::RobotImpl::loadTask()
+  {
+    std::string resp;
+    json_rpc_connector_->CallRpc("load_task","{}",&resp);
+    control::Task task_resp;
+    task_resp.FromJSONString(resp);
+    return task_resp;
   }
 
   posture::CartesianPose Robot::RobotImpl::getForwardKin(const posture::PoseRequest & req)
