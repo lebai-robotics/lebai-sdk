@@ -402,6 +402,12 @@ namespace lebai
      */
     int get_robot_mode();
     /**
+     * @brief 是否已与手臂断开连接
+     *
+     * @return 是否已断开连接
+     */
+    bool is_disconnected();
+    /**
      * @brief 获取机械臂关节当前反馈位置 
      * 
      * @return 关节反馈位置数组，包括所有关节的角度值.
