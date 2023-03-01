@@ -448,6 +448,11 @@ int Robot::get_robot_mode()
 {
   return impl_->getRobotState();
 }
+ 
+bool Robot::is_disconnected()
+{
+ return impl_->getRobotState() == 0;
+}
 
 std::vector<double> Robot::get_actual_joint_positions()
 {
