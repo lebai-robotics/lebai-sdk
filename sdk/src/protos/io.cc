@@ -827,6 +827,19 @@ namespace lebai
       return false;
     }
 
+    void SetDioModeRequest::set_device(IoDevice device)
+    {
+      device_ = device;
+    }
+    IoDevice SetDioModeRequest::device()
+    {
+      return device_;
+    }
+    IoDevice* SetDioModeRequest::mutable_device()
+    {
+      return &device_;
+    }
+
     void SetDioModeRequest::set_pin(unsigned int pin)
     {
       pin_ = pin;
@@ -855,6 +868,22 @@ namespace lebai
 
     bool SetDioModeRequest::Deserialize(const rapidjson::Value &obj)
     {
+      if(obj.HasMember("device"))
+      {
+        std::string device_str = std::string(obj["device"].GetString());
+        if(device_str == "ROBOT")
+        {
+          device_ = ROBOT;
+        }
+        else if(device_str == "FLANGE")
+        {
+          device_ = FLANGE;
+        }
+        else if(device_str == "EXTRA")
+        {
+          device_ = EXTRA;
+        }
+      }
       if(obj.HasMember("pin"))
       {
         pin_ = obj["pin"].GetUint();
@@ -868,6 +897,8 @@ namespace lebai
     bool SetDioModeRequest::Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const
     {
       writer->StartObject();
+      writer->Key("device");
+      writer->Int(device_);
       writer->Key("pin");
       writer->Uint(pin_);
       writer->Key("value");
@@ -913,6 +944,18 @@ namespace lebai
       return false;
     }
 
+    void SetDioRequest::set_device(IoDevice device)
+    {
+      device_ = device;
+    }
+    IoDevice SetDioRequest::device()
+    {
+      return device_;
+    }
+    IoDevice* SetDioRequest::mutable_device()
+    {
+      return &device_;
+    }
     void SetDioRequest::set_pin(unsigned int pin)
     {
       pin_ = pin;
@@ -941,6 +984,22 @@ namespace lebai
 
     bool SetDioRequest::Deserialize(const rapidjson::Value &obj)
     {
+      if(obj.HasMember("device"))
+      {
+        std::string device_str = std::string(obj["device"].GetString());
+        if(device_str == "ROBOT")
+        {
+          device_ = ROBOT;
+        }
+        else if(device_str == "FLANGE")
+        {
+          device_ = FLANGE;
+        }
+        else if(device_str == "EXTRA")
+        {
+          device_ = EXTRA;
+        }
+      }
       if(obj.HasMember("pin"))
       {
         pin_ = obj["pin"].GetUint();
@@ -954,6 +1013,8 @@ namespace lebai
     bool SetDioRequest::Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const
     {
       writer->StartObject();
+      writer->Key("device");
+      writer->Int(device_);
       writer->Key("pin");
       writer->Uint(pin_);
       writer->Key("value");
@@ -1095,6 +1156,18 @@ namespace lebai
       return false;
     }
 
+    void GetDiosModeRequest::set_device(IoDevice device)
+    {
+      device_ = device;
+    }
+    IoDevice GetDiosModeRequest::device()
+    {
+      return device_;
+    }
+    IoDevice* GetDiosModeRequest::mutable_device()
+    {
+      return &device_;
+    }
     void GetDiosModeRequest::set_pin(unsigned int pin)
     {
       pin_ = pin;
@@ -1123,6 +1196,22 @@ namespace lebai
 
     bool GetDiosModeRequest::Deserialize(const rapidjson::Value &obj)
     {
+      if(obj.HasMember("device"))
+      {
+        std::string device_str = std::string(obj["device"].GetString());
+        if(device_str == "ROBOT")
+        {
+          device_ = ROBOT;
+        }
+        else if(device_str == "FLANGE")
+        {
+          device_ = FLANGE;
+        }
+        else if(device_str == "EXTRA")
+        {
+          device_ = EXTRA;
+        }
+      }
       if(obj.HasMember("pin"))
       {
         pin_ = obj["pin"].GetUint();
@@ -1136,6 +1225,8 @@ namespace lebai
     bool GetDiosModeRequest::Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const
     {
       writer->StartObject();
+      writer->Key("device");
+      writer->Int(device_);
       writer->Key("pin");
       writer->Uint(pin_);
       writer->Key("count");

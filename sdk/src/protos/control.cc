@@ -665,5 +665,90 @@ namespace lebai
         {
             return false;
         }
+
+        void Exec::set_id(unsigned int id)
+        {
+            id_ = id;
+        }
+        unsigned int Exec::id()
+        {
+            return id_;
+        }
+        unsigned int *Exec::mutable_id()
+        {
+            return &id_;
+        }
+        bool Exec::Deserialize(const rapidjson::Value &obj)
+        {
+            if(obj.HasMember("id"))
+            {
+                id_ = (unsigned int)(obj["id"].GetUint());
+            }
+            return true;
+        }
+        bool Exec::Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const
+        {
+            writer->StartObject();
+            writer->Key("id");
+            writer->Uint(id_);
+            writer->EndObject();
+            return true;
+        }
+        bool Exec::IsNullJSONData() const
+        {
+            return false;
+        }
+
+        void HookResponse::set_success(unsigned int success)
+        {
+            success_ = success;
+        }
+        unsigned int HookResponse::success()
+        {
+            return success_;
+        }
+        unsigned int *HookResponse::mutable_success()
+        {
+            return &success_;
+        }
+
+        void HookResponse::set_error(std::string error)
+        {
+            error_ = error;
+        }
+        std::string HookResponse::error()
+        {
+            return error_;
+        }
+        std::string *HookResponse::mutable_error()
+        {
+            return &error_;
+        }
+        bool HookResponse::Deserialize(const rapidjson::Value &obj)
+        {
+            if(obj.HasMember("success"))
+            {
+                success_ = bool(obj["success"].GetBool());
+            }
+            if(obj.HasMember("error"))
+            {
+                error_ = (std::string)(obj["error"].GetString());
+            }
+            return true;
+        }
+        bool HookResponse::Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const
+        {
+            writer->StartObject();
+            writer->Key("success");
+            writer->Bool(success_);
+            writer->Key("error");
+            writer->String(error_.c_str());
+            writer->EndObject();
+            return true;
+        }
+        bool HookResponse::IsNullJSONData() const
+        {
+            return false;
+        }
     }
 }
