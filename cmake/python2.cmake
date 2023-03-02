@@ -1,4 +1,4 @@
-if(NOT BUILD_PYTHON)
+if(NOT BUILD_PYTHON2)
   return()
 endif()
 
@@ -17,10 +17,9 @@ if(UNIX AND NOT APPLE)
   list(APPEND CMAKE_SWIG_FLAGS "-DSWIGWORDSIZE64")
 endif()
 
-# Find Python 3
-
-find_package(Python3 REQUIRED COMPONENTS Interpreter Development.Module)
-list(APPEND CMAKE_SWIG_FLAGS "-threads" "-DPY3")
+# Find Python 2
+find_package(Python2 COMPONENTS Interpreter Development REQUIRED)
+list(APPEND CMAKE_SWIG_FLAGS "-threads")
 
 # Find if the python module is available,
 # otherwise install it (PACKAGE_NAME) to the Python3 user install directory.
@@ -46,7 +45,7 @@ function(search_python_module)
   message(STATUS "Searching python module: \"${MODULE_NAME}\"")
   if(${MODULE_NO_VERSION})
     execute_process(
-      COMMAND ${Python3_EXECUTABLE} -c "import ${MODULE_NAME}"
+      COMMAND ${Python2_EXECUTABLE} -c "import ${MODULE_NAME}"
       RESULT_VARIABLE _RESULT
       ERROR_QUIET
       OUTPUT_STRIP_TRAILING_WHITESPACE
@@ -54,7 +53,7 @@ function(search_python_module)
     set(MODULE_VERSION "unknown")
   else()
     execute_process(
-      COMMAND ${Python3_EXECUTABLE} -c "import ${MODULE_NAME}; print(${MODULE_NAME}.__version__)"
+      COMMAND ${Python2_EXECUTABLE} -c "import ${MODULE_NAME}; print(${MODULE_NAME}.__version__)"
       RESULT_VARIABLE _RESULT
       OUTPUT_VARIABLE MODULE_VERSION
       ERROR_QUIET
@@ -67,7 +66,7 @@ function(search_python_module)
     if(FETCH_PYTHON_DEPS)
       message(WARNING "Can't find python module: \"${MODULE_NAME}\", install it using pip...")
       execute_process(
-        COMMAND ${Python3_EXECUTABLE} -m pip install --user ${MODULE_PACKAGE}
+        COMMAND ${Python2_EXECUTABLE} -m pip install --user ${MODULE_PACKAGE}
         OUTPUT_STRIP_TRAILING_WHITESPACE
         )
     else()
@@ -88,7 +87,7 @@ function(search_python_internal_module)
   )
   message(STATUS "Searching python module: \"${MODULE_NAME}\"")
   execute_process(
-    COMMAND ${Python3_EXECUTABLE} -c "import ${MODULE_NAME}"
+    COMMAND ${Python2_EXECUTABLE} -c "import ${MODULE_NAME}"
     RESULT_VARIABLE _RESULT
     ERROR_QUIET
     OUTPUT_STRIP_TRAILING_WHITESPACE
@@ -152,7 +151,7 @@ add_custom_command(
   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:l_master> ${PYTHON_PROJECT}/
   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:zeroconf> ${PYTHON_PROJECT}/
   # COMMAND ${Python3_EXECUTABLE} setup.py bdist_egg bdist_wheel
-  COMMAND ${Python3_EXECUTABLE} setup.py bdist_wheel
+  COMMAND ${Python2_EXECUTABLE} setup.py bdist_wheel
   COMMAND ${CMAKE_COMMAND} -E touch ${PROJECT_BINARY_DIR}/python/dist/timestamp
   MAIN_DEPENDENCY
     python/setup.py.in

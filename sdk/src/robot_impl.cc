@@ -26,7 +26,7 @@ namespace lebai
   namespace l_master {
   Robot::RobotImpl::RobotImpl(const ::std::string &ip, bool simulator)
   {
-    uint16_t port = simulator ? 3030 : 3031;
+    uint16_t port = simulator ? simulation_port_ : physical_machine_port_;
     json_rpc_connector_ = std::make_unique<JSONRpcConnector>(ip, port);
     unsigned int i = 0;
     unsigned int count = timeout_ / 0.1;

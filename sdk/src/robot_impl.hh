@@ -130,6 +130,8 @@ namespace lebai
       protected:
       std::unique_ptr<JSONRpcConnector> json_rpc_connector_;
       double timeout_ = 1.0;
+      const uint16_t simulation_port_ = 3030;
+      const uint16_t physical_machine_port_ = 3031;
       // int jsonrpc_id_ = 0;
         // WebSocketEndPoint endpoint_;
     };

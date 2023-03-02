@@ -82,11 +82,18 @@ message(STATUS "Build C++ library: ${BUILD_CXX}")
 option(BUILD_PYTHON "Build Python Library" OFF)
 message(STATUS "Build Python: ${BUILD_PYTHON}")
 
+option(BUILD_PYTHON2 "Build Python2 Library" OFF)
+message(STATUS "Build Python2: ${BUILD_PYTHON2}")
+
 option(BUILD_DOTNET "Build .NET Library" OFF)
 message(STATUS "Build .Net: ${BUILD_DOTNET}")
 
 option(BUILD_JAVA "Build Java Library" OFF)
 message(STATUS "Build Java: ${BUILD_JAVA}")
+
+if(BUILD_PYTHON AND BUILD_PYTHON2)
+  message(FATAL_ERROR "Can only build one of python2 and python3.")
+endif()
 
 if(BUILD_PYTHON)
   option(FETCH_PYTHON_DEPS "Install python required modules if not available" ON)
@@ -94,6 +101,13 @@ if(BUILD_PYTHON)
    if(DEFINED PYTHONPATH)
      message(STATUS "Python path: ${PYTHONPATH}")
      set(Python3_ROOT_DIR ${PYTHONPATH})
+   endif()
+endif()
+
+if(BUILD_PYTHON2)
+   if(DEFINED PYTHONPATH)
+     message(STATUS "Python path: ${PYTHON2PATH}")
+     set(Python2_ROOT_DIR ${PYTHONPATH})
    endif()
 endif()
 
@@ -114,6 +128,8 @@ if(BUILD_PYTHON)
   message(STATUS "Python fetch dependencies: ${FETCH_PYTHON_DEPS}")
 endif()
 include(python)
+
+include(python2)
 
 
 if(BUILD_DOTNET)

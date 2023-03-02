@@ -7,6 +7,8 @@ lebai-sdk的源代码仓库，可以用于控制乐白机械臂.
 
 **上图中显示TODO的地方表示该平台该语言的实现还存在问题，没有完全测试通过，后续会陆续完成。**
 
+**上图中显示TODO的地方表示该平台该语言的实现还存在问题，没有完全测试通过，后续会陆续完成。**
+
 [cpp_linux_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_cpp_release.yml/badge.svg
 [cpp_linux_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_cpp_release.yml
 [python_linux_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_python_release.yml/badge.svg
@@ -66,8 +68,10 @@ sudo apt install build-essential python3-pip dpkg-dev
 sudo pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
 # 如果需要生成文档，还需要安装doxygen
 sudo apt install doxygen graphviz
-# 如果需要生成python的wrapper包
-sudo apt install python3-dev
+# 如果需要生成python3的wrapper包
+sudo apt install python3-dev python3-setuptools
+# 如果需要生成python2的wrapper包
+sudo apt install python-dev python-setuptools
 ```
 
 
@@ -100,7 +104,8 @@ cpack
 
 ## 编译选项
 
- - BUILD_PYTHON: 是否编译python接口 默认为OFF
+ - BUILD_PYTHON: 是否编译python3接口 默认为OFF
+ - BUILD_PYTHON2: 是否编译python2接口 默认为OFF
  - PYTHONPATH: PYTHON的安装目录
  - BUILD_DOTNET: 是否编译.NET接口 默认为OFF（请先安装好.NET的开发环境）
  - BUILD_JAVA: 是否编译JAVA接口 默认为OFF（请先安装好JDK和Maven）
