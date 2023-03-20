@@ -20,3 +20,25 @@ jobs:
       - name: build
         run: cmake --build build
 
+      - name: upload artifact
+        uses: actions/upload-artifact@v3.1.2
+        with: 
+          name: ./build/java/lebai-java/target/lebai-1.*.jar
+          
+  release:
+    if: ${{ contains(github.ref, 'tags/v') }}
+    needs: [linux_java_build]
+    strategy:
+      fail-fast: false
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v3
+      - name: Zip Artifact
+        run: for dir in `ls`; do zip -r ${dir}.zip ${dir}; done
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          draft: false
+          prerelease: false
+          files: |
+            *
