@@ -23,7 +23,7 @@ jobs:
       - name: upload artifact
         uses: actions/upload-artifact@v3
         with: 
-          path: ./build/java/lebai-java/target/lebai-1.*.jar
+          path: ./build/java/lebai-java/target/*.jar
           
   release:
     if: ${{ contains(github.ref, 'tags/v') }}
