@@ -21,9 +21,9 @@ jobs:
         run: cmake --build build
 
       - name: upload artifact
-        uses: actions/upload-artifact@v3.1.2
+        uses: actions/upload-artifact@v3
         with: 
-          name: ./build/java/lebai-java/target/lebai-1.*.jar
+          path: ./build/java/lebai-java/target/lebai-1.*.jar
           
   release:
     if: ${{ contains(github.ref, 'tags/v') }}
