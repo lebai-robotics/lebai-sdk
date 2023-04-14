@@ -454,6 +454,11 @@ bool Robot::is_disconnected()
  return impl_->getRobotState() == 0;
 }
 
+bool Robot::is_down()
+{
+ return impl_->getRobotState() < 4;
+}
+
 std::vector<double> Robot::get_actual_joint_positions()
 {
   std::map<std::string, double> ret;

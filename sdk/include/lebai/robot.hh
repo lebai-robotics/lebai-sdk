@@ -408,6 +408,12 @@ namespace lebai
      */
     bool is_disconnected();
     /**
+     * @brief 手臂是否已下电
+     *
+     * @return 是否已下电
+     */
+    bool is_down();
+    /**
      * @brief 获取机械臂关节当前反馈位置 
      * 
      * @return 关节反馈位置数组，包括所有关节的角度值.
