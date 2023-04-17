@@ -448,6 +448,11 @@ int Robot::get_robot_mode()
 {
   return impl_->getRobotState();
 }
+
+int Robot::get_estop_reason()
+{
+  return impl_->getEstopReason();
+}
  
 bool Robot::is_disconnected()
 {

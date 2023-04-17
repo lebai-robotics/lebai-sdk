@@ -180,6 +180,15 @@ namespace lebai
     return get_robot_state_resp.state();
   }
 
+  system::EstopReason Robot::RobotImpl::getEstopReason()
+  {
+    std::string resp;
+    json_rpc_connector_->CallRpc("get_estop_reason", "{}", &resp);
+    system::GetEstopReasonResponse get_estop_reason_resp;
+    get_estop_reason_resp.FromJSONString(resp);
+    return get_estop_reason_resp.reason();
+  }
+
   system::PhyData Robot::RobotImpl::getPhyData()
   {
     std::string resp;
