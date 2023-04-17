@@ -64,6 +64,7 @@ namespace lebai
       motion::GetMotionStateResponse getMotionState(const motion::MotionIndex & req);
       void stopMove();
       system::RobotState getRobotState();
+      system::EstopReason getEstopReason();
       system::PhyData getPhyData();
       kinematic::KinData getKinData();
       io::GetDioPinResponse getDI(const io::GetDioPinRequest & req);

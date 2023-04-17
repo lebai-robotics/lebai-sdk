@@ -236,5 +236,84 @@ namespace lebai
     {
       return false;
     }
+
+
+    void GetEstopReasonResponse::set_reason(EstopReason reason)
+    {
+      reason_ = reason;
+    }
+    const EstopReason & GetEstopReasonResponse::reason() const
+    {
+      return reason_;
+    }
+    EstopReason * GetEstopReasonResponse::mutable_reason()
+    {
+      return &reason_;
+    }
+    bool GetEstopReasonResponse::Deserialize(const rapidjson::Value& obj)
+    {
+      if (obj.HasMember("reason"))
+      {
+        std::string reason_str = std::string(obj["reason"].GetString());
+        if(reason_str == "NONE")
+        {
+          reason_ = NONE;
+        }
+        else if(reason_str == "SYSTEM")
+        {
+          reason_ = SYSTEM;
+        }
+        else if(reason_str == "MANUAL")
+        {
+          reason_ = MANUAL;
+        }
+        else if(reason_str == "HARD_ESTOP")
+        {
+          reason_ = HARD_ESTOP;
+        }
+        else if(reason_str == "COLLISION")
+        {
+          reason_ = COLLISION;
+        }
+        else if(reason_str == "JOINT_LIMIT")
+        {
+          reason_ = JOINT_LIMIT;
+        }
+        else if(reason_str == "EXCEED")
+        {
+          reason_ = EXCEED;
+        }
+        else if(reason_str == "TRAJECTORY_ERROR")
+        {
+          reason_ = TRAJECTORY_ERROR;
+        }
+        else if(reason_str == "COMM_ERROR")
+        {
+          reason_ = COMM_ERROR;
+        }
+        else if(reason_str == "CAN_ERROR")
+        {
+          reason_ = CAN_ERROR;
+        }
+        else if(reason_str == "JOINT_ERROR")
+        {
+          reason_ = JOINT_ERROR;
+        }
+        return true;
+      }
+      return false;      
+    }
+    bool GetEstopReasonResponse::Serialize(rapidjson::Writer<rapidjson::StringBuffer>* writer) const
+    {
+      writer->StartObject();
+      writer->Key("reason");
+      writer->Int(reason_);
+      writer->EndObject();
+      return true;
+    }
+    bool GetEstopReasonResponse::IsNullJSONData() const
+    {
+      return false;
+    }
   }
 }

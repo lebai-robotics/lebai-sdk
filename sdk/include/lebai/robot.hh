@@ -402,6 +402,12 @@ namespace lebai
      */
     int get_robot_mode();
     /**
+     *  @brief 查看急停原因
+     * 
+     *  @return 急停原因
+    */
+    int get_estop_reason();
+    /**
      * @brief 是否已与手臂断开连接
      *
      * @return 是否已断开连接
