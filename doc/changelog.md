@@ -1,5 +1,9 @@
 # ChangeLog
 
+## 1.0.20
+
+修正windows平台编译WebSocket的问题。
+
 ## 1.0.17
 
 添加python2的构建选项
