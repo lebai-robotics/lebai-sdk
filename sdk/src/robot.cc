@@ -449,6 +449,21 @@ int Robot::get_robot_mode()
   return impl_->getRobotState();
 }
 
+int Robot::get_estop_reason()
+{
+  return impl_->getEstopReason();
+}
+ 
+bool Robot::is_disconnected()
+{
+ return impl_->getRobotState() == 0;
+}
+
+bool Robot::is_down()
+{
+ return impl_->getRobotState() < 4;
+}
+
 std::vector<double> Robot::get_actual_joint_positions()
 {
   std::map<std::string, double> ret;
@@ -478,9 +493,9 @@ CartesianPose Robot::get_actual_tcp_pose()
   cart_pose["z"] = pose.position().z();
   if(pose.rotation().euler_zyx())
   {
-    cart_pose["rx"] = pose.rotation().euler_zyx()->x();
+    cart_pose["rz"] = pose.rotation().euler_zyx()->x();
     cart_pose["ry"] = pose.rotation().euler_zyx()->y();
-    cart_pose["rz"] = pose.rotation().euler_zyx()->z();
+    cart_pose["rx"] = pose.rotation().euler_zyx()->x();
   }
   return cart_pose;
 }
@@ -493,9 +508,9 @@ CartesianPose Robot::get_target_tcp_pose()
   cart_pose["z"] = pose.position().z();
   if(pose.rotation().euler_zyx())
   {
-    cart_pose["rx"] = pose.rotation().euler_zyx()->x();
+    cart_pose["rz"] = pose.rotation().euler_zyx()->x();
     cart_pose["ry"] = pose.rotation().euler_zyx()->y();
-    cart_pose["rz"] = pose.rotation().euler_zyx()->z();
+    cart_pose["rx"] = pose.rotation().euler_zyx()->z();
   }
   return cart_pose;
 }
@@ -730,154 +745,45 @@ std::vector<double> Robot::get_ais(std::string device, unsigned int pin, unsigne
   io::GetAioPinsResponse resp = impl_->getAIS(req);
   return resp.values();
 }
-bool Robot::set_dio(unsigned int pin, bool value)
-{
-  io::SetDioRequest req;
-  req.set_pin(pin);
-  req.set_value(value);
-  io::SetDioResponse resp = impl_->setDio(req);
-  return resp.success();
-}
-bool Robot::set_dio_mode(unsigned int pin, bool value)
+void Robot::set_dio_mode(std::string device,unsigned int pin, bool value)
 {
   io::SetDioModeRequest req;
+  if(device == "ROBOT")
+  {
+    req.set_device(io::IoDevice::ROBOT);
+  }
+  else if(device == "FLANGE")
+  {
+    req.set_device(io::IoDevice::FLANGE);
+  }
+  else if(device == "EXTRA")
+  { 
+    req.set_device(io::IoDevice::EXTRA); 
+  }
   req.set_pin(pin);
   req.set_value(value);
-  io::SetDioModeResponse resp = impl_->setDioMode(req);
-  return resp.success();
+  impl_->setDioMode(req);
 }
-std::vector<bool> Robot::get_dios(unsigned int pin, unsigned int count)
-{
-  io::GetDiosRequest req;
-  req.set_pin(pin);
-  req.set_count(count);
-  io::GetDiosResponse resp = impl_->getDios(req);
-  return resp.values();
-}
-std::vector<bool> Robot::get_dios_mode(unsigned int pin, unsigned int count)
+std::vector<bool> Robot::get_dios_mode(std::string device,unsigned int pin, unsigned int count)
 {
   io::GetDiosModeRequest req;
+  if(device == "ROBOT")
+  {
+    req.set_device(io::IoDevice::ROBOT);
+  }
+  else if(device == "FLANGE")
+  {
+    req.set_device(io::IoDevice::FLANGE);
+  }
+  else if(device == "EXTRA")
+  { 
+    req.set_device(io::IoDevice::EXTRA); 
+  }
   req.set_pin(pin);
   req.set_count(count);
   io::GetDiosModeResponse resp = impl_->getDiosMode(req);
   return resp.values();
 }
-
-// bool Robot::get_robot_di(unsigned int pin)
-// {
-//   io::GetDioPinRequest req;
-//   req.set_pin(pin);
-//   req.set_device(io::IoDevice::ROBOT);
-//   auto resp = impl_->getDI(req);
-//   return resp.value() ? true : false;
-// }
-
-// void Robot::set_robot_do(unsigned int pin, bool value)
-// {
-//   io::SetDoPinRequest req;
-//   req.set_pin(pin);
-//   req.set_value(value);
-//   req.set_device(io::IoDevice::ROBOT);
-//   impl_->setDO(req);
-// }
-
-// void Robot::set_robot_do(unsigned int pin, unsigned int value)
-// {
-//   io::SetDoPinRequest req;
-//   req.set_pin(pin);
-//   req.set_value(value);
-//   req.set_device(io::IoDevice::ROBOT);
-//   impl_->setDO(req);  
-// }
-
-// double Robot::get_robot_ai(unsigned int pin)
-// {
-//   io::GetAioPinRequest req;
-//   req.set_pin(pin);
-//   req.set_device(io::IoDevice::ROBOT);
-//   auto resp = impl_->getAI(req);
-//   return resp.value();
-// }
-
-// void Robot::set_robot_ao(unsigned int pin, double value)
-// {
-//   io::SetAoPinRequest req;
-//   req.set_pin(pin);
-//   req.set_value(value);
-//   req.set_device(io::IoDevice::ROBOT);
-//   impl_->setAO(req);
-// }
-
-
-// bool Robot::get_flange_di(unsigned int pin)
-// {
-//   io::GetDioPinRequest req;
-//   req.set_pin(pin);
-//   req.set_device(io::IoDevice::FLANGE);
-//   auto resp = impl_->getDI(req);
-//   return resp.value() ? true : false;
-// }
-
-// void Robot::set_flange_do(unsigned int pin, bool value)
-// {
-//   io::SetDoPinRequest req;
-//   req.set_pin(pin);
-//   req.set_value(value);
-//   req.set_device(io::IoDevice::FLANGE);
-//   impl_->setDO(req);
-// }
-// void Robot::set_flange_do(unsigned int pin, unsigned int value)
-// {
-//   io::SetDoPinRequest req;
-//   req.set_pin(pin);
-//   req.set_value(value);
-//   req.set_device(io::IoDevice::FLANGE);
-//   impl_->setDO(req);
-// }
-
-// bool Robot::get_extra_di(unsigned int pin)
-// {
-//   io::GetDioPinRequest req;
-//   req.set_pin(pin);
-//   req.set_device(io::IoDevice::EXTRA);
-//   auto resp = impl_->getDI(req);
-//   return resp.value() ? true : false;
-// }
-
-// void Robot::set_extra_do(unsigned int pin, bool value)
-// {
-//   io::SetDoPinRequest req;
-//   req.set_pin(pin);
-//   req.set_value(value);
-//   req.set_device(io::IoDevice::EXTRA);
-//   impl_->setDO(req);
-// }
-// void Robot::set_extra_do(unsigned int pin, unsigned int value)
-// {
-//   io::SetDoPinRequest req;
-//   req.set_pin(pin);
-//   req.set_value(value);
-//   req.set_device(io::IoDevice::EXTRA);
-//   impl_->setDO(req);
-// }
-
-// double Robot::get_extra_ai(unsigned int pin)
-// {
-//   io::GetAioPinRequest req;
-//   req.set_pin(pin);
-//   req.set_device(io::IoDevice::EXTRA);
-//   auto resp = impl_->getAI(req);
-//   return resp.value();
-// }
-
-// void Robot::set_extra_ao(unsigned int pin, double value)
-// {
-//   io::SetAoPinRequest req;
-//   req.set_pin(pin);
-//   req.set_value(value);
-//   req.set_device(io::IoDevice::EXTRA);
-//   impl_->setAO(req);
-// }
 
 void Robot::set_claw(double force, double amplitude)
 {
@@ -1066,11 +972,36 @@ void Robot::cancel_task(unsigned int id)
   req.set_id(id);
   impl_->cancelTask(req);
 }
+unsigned int Robot::exec_hook(unsigned int id)
+{
+  control::Exec req;
+  req.set_id(id);
+  control::HookResponse resp = impl_->execHook(req);
+  if(!resp.success())
+  {
+    return 0;
+  }
+  return atoi(resp.error().c_str());
+}
 std::string Robot::get_task_state(unsigned int id)
 {
   control::TaskIndex req;
   req.set_id(id);
   control::Task resp = impl_->loadTask(req);
+  switch(resp.state())
+  {
+    case control::TaskState::WAIT:return "WAIT";break;
+    case control::TaskState::RUNNING:return "RUNNING";break;
+    case control::TaskState::PAUSE:return "PAUSE";break;
+    case control::TaskState::SUCCESS:return "SUCCESS";break;
+    case control::TaskState::INTERRUPT:return "INTERRUPT";break;
+    case control::TaskState::FAIL:return "FAIL";break;
+    default:return "Undefined State";
+  }
+}
+std::string Robot::get_task_state()
+{
+  control::Task resp = impl_->loadTask();
   switch(resp.state())
   {
     case control::TaskState::WAIT:return "WAIT";break;
@@ -1096,9 +1027,9 @@ KinematicsForwardResp Robot::kinematics_forward(const std::vector<double> & join
   kf_resp.pose["x"] = resp.position().x();
   kf_resp.pose["y"] = resp.position().y();
   kf_resp.pose["z"] = resp.position().z();
-  kf_resp.pose["rz"] = resp.rotation().euler_zyx()->x();
+  kf_resp.pose["rz"] = resp.rotation().euler_zyx()->z();
   kf_resp.pose["ry"] = resp.rotation().euler_zyx()->y();
-  kf_resp.pose["rx"] = resp.rotation().euler_zyx()->z();
+  kf_resp.pose["rx"] = resp.rotation().euler_zyx()->x();
   kf_resp.ok = true;
   return kf_resp;
 }
@@ -1140,9 +1071,9 @@ KinematicsInverseResp Robot::kinematics_inverse(const CartesianPose & pose, cons
   req.mutable_pose()->mutable_cart()->mutable_position()->set_x(x);
   req.mutable_pose()->mutable_cart()->mutable_position()->set_y(y);
   req.mutable_pose()->mutable_cart()->mutable_position()->set_z(z);
-  req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_x(rz);
+  req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_z(rz);
   req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_y(ry);
-  req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_z(rx);
+  req.mutable_pose()->mutable_cart()->mutable_rotation()->mutable_euler_zyx()->set_x(rx);
   
   for(auto && p: joint_init_positions)
   {
@@ -1428,9 +1359,9 @@ void Robot::set_tcp(std::array<double, 6> tcp)
   pos.set_z(tcp[2]);
   req.set_position(pos);
   posture::Position p;
-  p.set_x(tcp[3]);
+  p.set_z(tcp[3]);
   p.set_y(tcp[4]);
-  p.set_z(tcp[5]);
+  p.set_x(tcp[5]);
   rot.set_euler_zyx(p);
   req.set_rotation(rot);
   impl_->setTcp(req);
@@ -1442,9 +1373,9 @@ std::array<double, 6> Robot::get_tcp()
   ret[0] = resp.position().x();
   ret[1] = resp.position().y();
   ret[2] = resp.position().z();
-  ret[3] = resp.rotation().euler_zyx()->x();
+  ret[3] = resp.rotation().euler_zyx()->z();
   ret[4] = resp.rotation().euler_zyx()->y();
-  ret[5] = resp.rotation().euler_zyx()->z();
+  ret[5] = resp.rotation().euler_zyx()->x();
   return ret;
 }
 

@@ -402,6 +402,24 @@ namespace lebai
      */
     int get_robot_mode();
     /**
+     *  @brief 查看急停原因
+     * 
+     *  @return 急停原因
+    */
+    int get_estop_reason();
+    /**
+     * @brief 是否已与手臂断开连接
+     *
+     * @return 是否已断开连接
+     */
+    bool is_disconnected();
+    /**
+     * @brief 手臂是否已下电
+     *
+     * @return 是否已下电
+     */
+    bool is_down();
+    /**
      * @brief 获取机械臂关节当前反馈位置 
      * 
      * @return 关节反馈位置数组，包括所有关节的角度值.
@@ -551,33 +569,19 @@ namespace lebai
      */
     std::vector<double> get_ais(std::string device, unsigned int pin, unsigned int num);
     /**
-     * @brief 设置数字端口输出值
-     * @param pin: 端口号，从 0 开始
-     * @param value: 待设置的模拟输出值
-     * @return 若设置成功为true,若当前此端口为输入模式则为false
-     */
-    bool set_dio(unsigned int pin, bool value);
-    /**
      * @brief 设置数字端口模式
      * @param pin 端口号，从 0 开始
      * @param value 设置的值，false为输入模式，true为输出模式
      * @return 返回是否成功
      */
-    bool set_dio_mode(unsigned int pin, bool value);
-    /**
-     * @brief 获取数字端口输出值
-     * @param pin: 端口号，从 0 开始
-     * @param count: 查询的连续端口数
-     * @return 从pin开始的连续count个端口的当前值
-     */
-    std::vector<bool> get_dios(unsigned int pin, unsigned int count);
+    void set_dio_mode(std::string device,unsigned int pin, bool value);
     /**
      * @brief 获取数字端口模式
      * @param pin 端口号，从 0 开始
      * @param count 查询的连续端口数
      * @return 从pin开始的连续count个端口的当前模式
      */
-    std::vector<bool> get_dios_mode(unsigned int pin, unsigned int count);
+    std::vector<bool> get_dios_mode(std::string device,unsigned int pin, unsigned int count);
     /** @}*/
 
 
@@ -707,6 +711,16 @@ namespace lebai
      * @param id 任务的ID.
     */
     void cancel_task(unsigned int id);
+    /**
+     * @brief 根据已设置的Hook执行对应场景
+     *
+     * @param id 任务的ID.
+     */
+    unsigned int exec_hook(unsigned int id);
+    /**
+     * @brief 获取任务状态.
+    */
+    std::string get_task_state();
     /**
      * @brief 获取任务状态.
      * 

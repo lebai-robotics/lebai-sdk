@@ -211,5 +211,40 @@ namespace lebai
 			virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const;
 			virtual bool IsNullJSONData() const;
         };
+
+        class Exec : public JSONBase
+        {
+        public:
+            void set_id(unsigned int id);
+            unsigned int id();
+            unsigned int * mutable_id();
+
+        protected:
+            unsigned int id_;
+        public:
+            virtual bool Deserialize(const rapidjson::Value &obj);
+			virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const;
+			virtual bool IsNullJSONData() const;
+        };
+
+        class HookResponse : public JSONBase
+        {
+        public:
+            void set_success(unsigned int success);
+            unsigned int success();
+            unsigned int * mutable_success();
+
+            void set_error(std::string error);
+            std::string error();
+            std::string * mutable_error();
+
+        protected:
+            unsigned int success_;
+            std::string error_;
+        public:
+            virtual bool Deserialize(const rapidjson::Value &obj);
+			virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const;
+			virtual bool IsNullJSONData() const;
+        };
     }
 }

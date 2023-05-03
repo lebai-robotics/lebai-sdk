@@ -1,6 +1,6 @@
 # ChangeLog
 
-## 1.0.18
+## 1.0.20
 
 修正windows平台编译WebSocket的问题。
 

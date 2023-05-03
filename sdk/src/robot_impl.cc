@@ -180,6 +180,15 @@ namespace lebai
     return get_robot_state_resp.state();
   }
 
+  system::EstopReason Robot::RobotImpl::getEstopReason()
+  {
+    std::string resp;
+    json_rpc_connector_->CallRpc("get_estop_reason", "{}", &resp);
+    system::GetEstopReasonResponse get_estop_reason_resp;
+    get_estop_reason_resp.FromJSONString(resp);
+    return get_estop_reason_resp.reason();
+  }
+
   system::PhyData Robot::RobotImpl::getPhyData()
   {
     std::string resp;
@@ -271,29 +280,9 @@ namespace lebai
     get_aio_resp.FromJSONString(resp);
     return get_aio_resp;
   }
-  io::SetDioResponse Robot::RobotImpl::setDio(const io::SetDioRequest &req)
+  void Robot::RobotImpl::setDioMode(const io::SetDioModeRequest &req)
   {
-    std::string resp;
-    json_rpc_connector_->CallRpc("set_dio", req.ToJSONString(), &resp);
-    io::SetDioResponse resp_;
-    resp_.FromJSONString(resp);
-    return resp_;
-  }
-  io::SetDioModeResponse Robot::RobotImpl::setDioMode(const io::SetDioModeRequest &req)
-  {
-    std::string resp;
-    json_rpc_connector_->CallRpc("set_dio_mode", req.ToJSONString(), &resp);
-    io::SetDioModeResponse resp_;
-    resp_.FromJSONString(resp);
-    return resp_;
-  }
-  io::GetDiosResponse Robot::RobotImpl::getDios(const io::GetDiosRequest &req)
-  {
-    std::string resp;
-    json_rpc_connector_->CallRpc("get_dios", req.ToJSONString(), &resp);
-    io::GetDiosResponse resp_;
-    resp_.FromJSONString(resp);
-    return resp_;
+    json_rpc_connector_->CallRpc("set_dio_mode", req.ToJSONString(),nullptr);
   }
   io::GetDiosModeResponse Robot::RobotImpl::getDiosMode(const io::GetDiosModeRequest &req)
   {
@@ -386,13 +375,29 @@ namespace lebai
   {
     json_rpc_connector_->CallRpc("cancel_task",req.ToJSONString(),nullptr);
   }
+  control::HookResponse Robot::RobotImpl::execHook(const control::Exec &req)
+  {
+    std::string resp;
+    json_rpc_connector_->CallRpc("exec_hook",req.ToJSONString(),&resp);
+    control::HookResponse hook_resp;
+    hook_resp.FromJSONString(resp);
+    return hook_resp;
+  }
   control::Task Robot::RobotImpl::loadTask(const control::TaskIndex & req)
   {
-    std::string resp_str;
-    json_rpc_connector_->CallRpc("load_task",req.ToJSONString(),nullptr);
-    control::Task resp;
-    resp.FromJSONString(resp_str);
-    return resp;
+    std::string resp;
+    json_rpc_connector_->CallRpc("load_task",req.ToJSONString(),&resp);
+    control::Task task_resp;
+    task_resp.FromJSONString(resp);
+    return task_resp;
+  }
+  control::Task Robot::RobotImpl::loadTask()
+  {
+    std::string resp;
+    json_rpc_connector_->CallRpc("load_task","{}",&resp);
+    control::Task task_resp;
+    task_resp.FromJSONString(resp);
+    return task_resp;
   }
 
   posture::CartesianPose Robot::RobotImpl::getForwardKin(const posture::PoseRequest & req)

@@ -3,6 +3,9 @@ run-name: ${{ github.actor }} Linux python build
 on: 
   workflow_dispatch: 
   pull_request: 
+  push: 
+    branches: 
+      - master
 jobs: 
   linux_python_build: 
     runs-on: ubuntu-latest

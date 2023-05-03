@@ -101,5 +101,34 @@ namespace lebai
       virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer>* writer) const;		
       virtual bool IsNullJSONData() const;
     };
+
+    enum EstopReason 
+    {
+      NONE = 0,
+      SYSTEM = 2,
+      MANUAL = 3,
+      HARD_ESTOP = 4,
+      COLLISION = 5,
+      JOINT_LIMIT = 6,
+      EXCEED = 7,
+      TRAJECTORY_ERROR = 8,
+      COMM_ERROR = 11,
+      CAN_ERROR = 12,
+      JOINT_ERROR = 13,
+    };
+    class GetEstopReasonResponse : public JSONBase
+    {
+    public:      
+      void set_reason(EstopReason);
+      const EstopReason & reason() const;
+      EstopReason * mutable_reason();
+    protected:
+      EstopReason reason_;
+    public:
+      virtual bool Deserialize(const rapidjson::Value& obj);
+      virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer>* writer) const;		
+      virtual bool IsNullJSONData() const;      
+    };
+
   }
 } // namespace lebai

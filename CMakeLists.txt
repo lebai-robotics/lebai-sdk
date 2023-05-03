@@ -7,7 +7,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 option(CMAKE_EXPORT_COMPILE_COMMANDS "Export compile command" TRUE)
 
-project(lebai VERSION 1.0.18 LANGUAGES CXX)
+project(lebai VERSION 1.0.20 LANGUAGES CXX)
 set(PROJECT_NAMESPACE lebai)
 message(STATUS "${PROJECT_NAME} version: ${PROJECT_VERSION}")
 # message(STATUS "major: ${PROJECT_VERSION_MAJOR}")
@@ -94,7 +94,7 @@ message(STATUS "Build Java: ${BUILD_JAVA}")
 if(BUILD_PYTHON AND BUILD_PYTHON2)
   message(FATAL_ERROR "Can only build one of python2 and python3.")
 endif()
-
+if(UNIX)
 if(BUILD_PYTHON)
   option(FETCH_PYTHON_DEPS "Install python required modules if not available" ON)
   message(STATUS "Python fetch dependencies: ${FETCH_PYTHON_DEPS}")
@@ -110,7 +110,7 @@ if(BUILD_PYTHON2)
      set(Python2_ROOT_DIR ${PYTHONPATH})
    endif()
 endif()
-
+endif()
 # Disable CTest targets
 set_property(GLOBAL PROPERTY CTEST_TARGETS_ADDED 1)
 include(CTest)

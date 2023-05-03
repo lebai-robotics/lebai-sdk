@@ -301,6 +301,10 @@ namespace lebai
 		class SetDioModeRequest : public JSONBase
 		{
 		public:
+			void set_device(IoDevice device);
+			IoDevice device();
+			IoDevice* mutable_device();
+
 			void set_pin(unsigned int pin);
 			unsigned int pin() const;
 			unsigned int *mutable_pin();
@@ -310,6 +314,7 @@ namespace lebai
 			bool *mutable_value();
 
 		protected:
+			IoDevice device_;
 			unsigned int pin_;
 			bool value_;
 			// These methods are used to serialize and deserialize the class.
@@ -340,6 +345,10 @@ namespace lebai
 		class SetDioRequest : public JSONBase
 		{
 		public:
+			void set_device(IoDevice device);
+			IoDevice device();
+			IoDevice* mutable_device();
+
 			void set_pin(unsigned int pin);
 			unsigned int pin() const;
 			unsigned int *mutable_pin();
@@ -349,6 +358,7 @@ namespace lebai
 			bool *mutable_value();
 
 		protected:
+			IoDevice device_;
 			unsigned int pin_;
 			bool value_;
 			// These methods are used to serialize and deserialize the class.
@@ -416,6 +426,10 @@ namespace lebai
 		class GetDiosModeRequest : public JSONBase
 		{
 		public:
+			void set_device(IoDevice device);
+			IoDevice device();
+			IoDevice* mutable_device();
+
 			void set_pin(unsigned int pin);
 			unsigned int pin() const;
 			unsigned int *mutable_pin();
@@ -424,6 +438,7 @@ namespace lebai
 			unsigned int count() const;
 			unsigned int *mutable_count();
 		protected:
+			IoDevice device_;
 			unsigned int pin_;
 			unsigned int count_;
 			// These methods are used to serialize and deserialize the class.
