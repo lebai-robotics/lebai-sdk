@@ -102,6 +102,7 @@ if(BUILD_PYTHON)
      message(STATUS "Python path: ${PYTHONPATH}")
      set(Python3_ROOT_DIR ${PYTHONPATH})
    endif()
+   include(python)
 endif()
 
 if(BUILD_PYTHON2)
@@ -109,6 +110,8 @@ if(BUILD_PYTHON2)
      message(STATUS "Python path: ${PYTHON2PATH}")
      set(Python2_ROOT_DIR ${PYTHONPATH})
    endif()
+   include(python2)
+
 endif()
 endif()
 # Disable CTest targets
@@ -127,9 +130,6 @@ if(BUILD_PYTHON)
   option(FETCH_PYTHON_DEPS "Install python required modules if not available" ON)
   message(STATUS "Python fetch dependencies: ${FETCH_PYTHON_DEPS}")
 endif()
-include(python)
-
-include(python2)
 
 
 if(BUILD_DOTNET)
