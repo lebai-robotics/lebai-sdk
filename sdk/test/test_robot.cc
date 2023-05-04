@@ -281,6 +281,10 @@ namespace lebai
     kf_resp.pose = robot_.pose_times(kf_resp.pose, kf_resp.pose);
     kf_resp.pose = robot_.pose_inverse(kf_resp.pose);
   }
+  TEST_F(RobotTest, TestNetworkConnection)
+  {
+    EXPECT_TRUE(robot_.is_network_connected());
+  }
 }
 
 int main(int argc, char **argv)

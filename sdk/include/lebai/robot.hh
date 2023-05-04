@@ -73,9 +73,16 @@ namespace lebai
 
     /**
      * @brief 构造Robot对象.
+     * @note 当你尝试创建Robot对象时，会根据传入的ip参数尝试去连接机械臂，但是可能会连接失败，当连接不成功时，对象依然会创建。
+     * 
+     * 但是如果网络没有连接成功而你调用和机械臂交互的接口时，会抛出std::runtime_error异常，表示网络连接异常.
+     * 
+     * 你可以通过@ref is_network_connected()方法来判断是否连接成功，如果连接不成功，你可以尝试重新创建Robot对象，或者等待网络恢复.
+     * 
+     * 
      * 
      * @param ip: 机械臂IP地址.
-     * @param simulator: 用于表示机械臂是否为仿真机械臂(docker仿真或控制器运行在仿真模式下)的标志.True表示仿真模式，False表示实物机械臂.
+     * @param simulator: 用于表示机械臂是否为仿真机械臂(docker仿真或控制器运行在仿真模式下)的macs标志.True表示仿真模式，False表示实物机械臂.
      */
     explicit Robot(std::string ip, bool simulator = false);
     /**
@@ -100,6 +107,13 @@ namespace lebai
      * 如果返回码为非0，表示调用失败，第二个元素是错误信息.
      */
     std::tuple<int, std::string> call(const std::string & method, const std::string & params);
+    
+    /**
+     * @brief 返回是否和机械臂的网络连接正常，如果网络连接异常，调用和机械臂交互的接口会抛出异常std::runtime_error。
+     * 
+     * @return true 表示网络连接正常，false表示网络连接异常.
+    */
+    bool is_network_connected();
     
     /** \defgroup STARTSTOP 启动停止.
      *  \brief    启动停止相关的接口.
@@ -364,7 +378,7 @@ namespace lebai
     /**
      * @brief 查询指定MotionId的运动状态.
      * 
-     * @param id 指定的运动id.
+     * @return id 指定的运动id.
     */
     std::string get_motion_state(unsigned int id);
     /**

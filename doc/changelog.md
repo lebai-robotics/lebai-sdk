@@ -1,5 +1,9 @@
 # ChangeLog
 
+## 1.0.21
+
+添加is_network_connected方法。
+
 ## 1.0.20
 
 修正windows平台编译WebSocket的问题。

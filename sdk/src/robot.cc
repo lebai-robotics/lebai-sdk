@@ -45,6 +45,10 @@ std::tuple<int, std::string> Robot::call(const std::string & method, const std::
 {
   return impl_->call(method, params);
 }
+bool Robot::is_network_connected()
+{
+  return impl_->isNetworkConnected();
+}
 
 void Robot::start_sys()
 {

@@ -42,6 +42,7 @@ namespace lebai
       RobotImpl(const::std::string &ip, bool simulator);
       virtual ~RobotImpl();
       std::tuple<int, std::string> call(const std::string & method, const std::string & params);
+      bool isNetworkConnected();
       int startSys();
       int stopSys();
       int powerdown();
