@@ -55,6 +55,11 @@ namespace lebai
     return std::make_tuple(ret, resp_data_str);
   }
 
+  bool Robot::RobotImpl::isNetworkConnected()
+  {
+    return json_rpc_connector_->GetConnectionStatus() == JSONRpcConnector::kOpen;
+  }
+
   int Robot::RobotImpl::startSys()
   {
     return json_rpc_connector_->CallRpc("start_sys", "{}", nullptr);
