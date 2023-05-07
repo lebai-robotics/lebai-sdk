@@ -19,9 +19,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-        
+      - run: ls /opt/python/
       - run: for PYBIN in /opt/python/*/bin;do "${PYBIN}/pip" install -r requirements.txt; done;
-      - run: /opt/python/cp310-cp310/bin/pip install twine==2.0.
+      - run: /opt/python/cp37-cp37m/bin/pip install twine==2.0 urllib3==1.24.
       - name: configure
         run: cmake -S. -Bbuild -DBUILD_PYTHON=ON
       - name: build
@@ -42,4 +42,4 @@ jobs:
           done;
         
       - name: upload Pypi
-        run: /opt/python/cp310-cp310/bin/twine upload -u ${{ secrets.USRNAME }} -p ${{ secrets.PASSWD }} wheelhouse/*.whl
+        run: /opt/python/cp37-cp37m/bin/twine upload -u ${{ secrets.USRNAME }} -p ${{ secrets.PASSWD }} wheelhouse/*.whl
