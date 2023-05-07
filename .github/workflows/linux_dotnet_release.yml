@@ -8,17 +8,21 @@ on:
 jobs: 
   linux_dotnet_build_and_release: 
     runs-on: ubuntu-latest
-    container: quay.io/pypa/manylinux2014_x86_64
     steps:
       - name: Checkout
         uses: actions/checkout@v1
       
-      - run: |
-          yum update
-          rpm -Uvh https://packages.microsoft.com/config/centos/7/packages-microsoft-prod.rpm
-          yum install -y dotnet-sdk-6.0
-          /opt/python/cp310-cp310/bin/pip install -r requirements.txt
-          
+      - name: Setup .NET Core 3.1
+        uses: actions/setup-dotnet@v3.0.3
+
+      - name: Setup .NET 6.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+
+      - name: Check dotnet
+        run: dotnet --info
+
       - name: configure
         run: cmake -S. -Bbuild -DBUILD_DOTNET=ON
 
