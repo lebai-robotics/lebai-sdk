@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-        
+      - run: ls /opt/python/;
       - run: for PYBIN in /opt/python/*/bin;do "${PYBIN}/pip" install -r requirements.txt; done;
       - run: /opt/python/cp310-cp310/bin/pip install twine==2.0.
       - name: configure
