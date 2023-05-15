@@ -40,7 +40,6 @@ namespace lebai
         asio::async_connect(*socket_, endpoint_iterator,
             [this](std::error_code ec, asio::ip::tcp::resolver::iterator)
             {
-              std::cerr<<"xxxxxxxx\n";
               if (!ec)
               {
                 std::cerr<<"Connect ok.\n";

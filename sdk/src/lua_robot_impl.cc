@@ -38,6 +38,7 @@ namespace lebai
     auto endpoint_iterator = resolver.resolve({ip, "5180"});
     socket_ = std::make_unique<asio::ip::tcp::socket>(*io_service_);    
     doConnect(endpoint_iterator);
+    return 0;
   }  
   void LuaRobot::LuaRobotImpl::send(const std::string & lua_code)
   {
