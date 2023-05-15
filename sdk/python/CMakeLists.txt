@@ -81,6 +81,15 @@ target_link_libraries(zeroconf PRIVATE ${PROJECT_NAMESPACE}::lebai-cpp)
 # which won't be interpreted inside a generator expression.
 # i.e. we can't use: $<$<PLATFORM_ID:Windows>:${PYTHON_LIBRARIES}>
 # see: https://cmake.org/cmake/help/git-stage/command/target_link_libraries.html#command:target_link_libraries
-if(MSVC)
-  target_link_libraries(zeroconf PRIVATE ${Python2_LIBRARIES} ${Python3_LIBRARIES})
+# if(MSVC)
+#   target_link_libraries(zeroconf PRIVATE ${Python2_LIBRARIES} ${Python3_LIBRARIES})
+# endif()
+if(BUILD_PYTHON)
+  if(MSVC)
+    target_link_libraries(zeroconf PRIVATE ${Python3_LIBRARIES})
+  endif()
+elseif(BUILD_PYTHON2)
+  if(MSVC)
+    target_link_libraries(zeroconf PRIVATE ${Pytho2_LIBRARIES})
+  endif()
 endif()

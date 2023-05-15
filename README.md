@@ -7,8 +7,6 @@ lebai-sdk的源代码仓库，可以用于控制乐白机械臂.
 
 **上图中显示TODO的地方表示该平台该语言的实现还存在问题，没有完全测试通过，后续会陆续完成。**
 
-**上图中显示TODO的地方表示该平台该语言的实现还存在问题，没有完全测试通过，后续会陆续完成。**
-
 [cpp_linux_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_cpp_release.yml/badge.svg
 [cpp_linux_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_cpp_release.yml
 [python_linux_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_python_release.yml/badge.svg
@@ -17,6 +15,8 @@ lebai-sdk的源代码仓库，可以用于控制乐白机械臂.
 [dotnet_linux_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_dotnet_release.yml
 [dotnet_windows_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/windows_dotnet_release.yaml/badge.svg
 [dotnet_windows_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/windows_dotnet_release.yaml
+
+**SDK使用需要乐白机械臂的控制器软件版本大于等于`3.1.5`，您可以在机械臂WEB界面左上方查看当前版本号.**
 
 [SDK在线文档](http://help.lebai.ltd/sdk/)中包含了lua语言的接口（本项目参考了lua语言进行接口设置，但是本项目和lua语言的接口无直接关系）
 

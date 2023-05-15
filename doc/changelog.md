@@ -1,5 +1,9 @@
 # ChangeLog
 
+## 1.1.0
+
+添加LuaRobot对象，可以向机械臂发送lua指令
+
 ## 1.0.21
 
 添加is_network_connected方法。

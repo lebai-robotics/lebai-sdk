@@ -1,5 +1,5 @@
 add_library(lebai-cpp)
-file(GLOB PROTOS_SRC RELATIVE ${CMAKE_SOURCE_DIR}/sdk "src/protos/*.cc")
+file(GLOB PROTOS_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "src/protos/*.cc")
 target_sources(lebai-cpp
   PRIVATE
     include/lebai/robot.hh
@@ -8,6 +8,8 @@ target_sources(lebai-cpp
     src/jsonrpc_connector.cc
     src/discovery.cc
     src/discovery_impl.cc
+    src/lua_robot.cc
+    src/lua_robot_impl.cc
     ${PROTOS_SRC}
     )
 target_include_directories(lebai-cpp

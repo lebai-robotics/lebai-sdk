@@ -7,6 +7,7 @@
 // #include "lebai/posture.hh"
 // #include "lebai/motion.hh"
 #include "lebai/robot.hh"
+#include "lebai/lua_robot.hh"
 %}
 
 %extend lebai::l_master::KinematicsForwardResp {
@@ -59,6 +60,7 @@
 // %import "lebai/posture.hh"
 // %import "lebai/motion.hh"
 %include "lebai/robot.hh"
+%include "lebai/lua_robot.hh"
 
 
 

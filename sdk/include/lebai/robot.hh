@@ -56,6 +56,10 @@ namespace lebai
     std::vector<double> joint_positions;  /*!< 机械臂关节位置的map数据，应当包括'j1','j2','j3','j4','j5','j6'六个关节的角度值.  */
     bool ok = false;  /*!< 计算是否成功 */
   };  
+
+ 
+
+
   /**
    *  @brief 机械臂的主要接口对象，通过本对象的方法与机械臂进行数据交互.
    *
@@ -499,24 +503,32 @@ namespace lebai
      */
     /**
      * @brief 设置数字输出
-     * @param device 设备类型，以字符串形式传入，包括 `ROBOT`, `FLANGE`, `EXTRA`, `SHOULDER`, `FLANGE_BTN`
+     * @anchor DEVICENAME
+     * @param device 设备名字，
+     *   ID    |      设备名字	 |       说明  
+     *  ------ | -------------  | -------------
+     *    0	   |   ROBOT         |  机箱IO
+     *    1	   |   FLANGE	       |  法兰IO
+     *    2	   |   EXTRA	       |  拓展IO
+     *    11	 |   SHOULDER	     |  肩部按钮DI
+     *    12	 |   FLANGE_BTN	   |  法兰按钮DI
+     * 
      * 查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
+     * 
      * @param pin 端口，从 0 开始
      * @param value 待设置的值
      */
     void set_do(std::string device, unsigned int pin, unsigned int value);
     /**
      * @brief 获取数字输出
-     * @param device 设备类型，以字符串形式传入，包括 `ROBOT`, `FLANGE`, `EXTRA`, `SHOULDER`, `FLANGE_BTN`
-     * 查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
+     * @param device 设备名字，查看 @ref DEVICENAME ，可以进一步查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
      * @param pin 端口，从 0 开始
      * @return 返回数字输出数值
      */
     unsigned int get_do(std::string device, unsigned int pin);
     /**
      * @brief 获取多个数字输出
-     * @param device 设备类型，以字符串形式传入，包括 `ROBOT`, `FLANGE`, `EXTRA`, `SHOULDER`, `FLANGE_BTN`
-     * 查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
+     * @param device 设备名字，查看 @ref DEVICENAME ，可以进一步查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
      * @param pin 起始数字输出端口，从 0 开始
      * @param num 连续的数字输出个数
      * @return 返回多个数字输出数值
@@ -524,16 +536,14 @@ namespace lebai
     std::vector<unsigned int> get_dos(std::string device, unsigned int pin, unsigned int num);
     /**
      * @brief 获取数字输入
-     * @param device 设备类型，以字符串形式传入，包括 `ROBOT`, `FLANGE`, `EXTRA`, `SHOULDER`, `FLANGE_BTN`
-     * 查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
+     * @param device 设备名字，查看 @ref DEVICENAME ，可以进一步查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
      * @param pin 端口，从 0 开始
      * @return 返回输入数值
      */
     unsigned int get_di(std::string device, unsigned int pin);
     /**
      * @brief 获取多个数字输入
-     * @param device 设备类型，以字符串形式传入，包括 `ROBOT`, `FLANGE`, `EXTRA`, `SHOULDER`, `FLANGE_BTN`
-     * 查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
+     * @param device 设备名字，查看 @ref DEVICENAME ，可以进一步查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
      * @param pin 起始数字输入端口，从 0 开始
      * @param num 连续的数字输入个数
      * @return 返回多个数字输入
@@ -542,24 +552,21 @@ namespace lebai
 
     /**
      * @brief 设置模拟输出
-     * @param device 设备类型，以字符串形式传入，包括 `ROBOT`, `FLANGE`, `EXTRA`, `SHOULDER`, `FLANGE_BTN`
-     * 查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
+     * @param device 设备名字，查看 @ref DEVICENAME ，可以进一步查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
      * @param pin: 模拟输出端口，从 0 开始
      * @param value: 待设置的模拟输出值
      */
     void set_ao(std::string device, unsigned int pin, double value);
     /**
      * @brief 获取模拟输出
-     * @param device 设备类型，以字符串形式传入，包括 `ROBOT`, `FLANGE`, `EXTRA`, `SHOULDER`, `FLANGE_BTN`
-     * 查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
+     * @param device 设备名字，查看 @ref DEVICENAME ，可以进一步查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
      * @param pin: 端口，从 0 开始
      * @return 返回模拟输入数值
      */
     double get_ao(std::string device, unsigned int pin);
     /**
      * @brief 获取多个模拟输出
-     * @param device 设备类型，以字符串形式传入，包括 `ROBOT`, `FLANGE`, `EXTRA`, `SHOULDER`, `FLANGE_BTN`
-     * 查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
+     * @param device 设备名字，查看 @ref DEVICENAME ，可以进一步查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
      * @param pin: 起始模拟输出端口，从 0 开始
      * @param num 连续的模拟输出个数
      * @return 返回模拟输出数值
@@ -567,16 +574,14 @@ namespace lebai
     std::vector<double> get_aos(std::string device, unsigned int pin, unsigned int num);
     /**
      * @brief 获取模拟输入
-     * @param device 设备类型，以字符串形式传入，包括 `ROBOT`, `FLANGE`, `EXTRA`, `SHOULDER`, `FLANGE_BTN`
-     * 查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
+     * @param device 设备名字，查看 @ref DEVICENAME ，可以进一步查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
      * @param pin: 端口，从 0 开始
      * @return 返回模拟输入数值
      */
     double get_ai(std::string device, unsigned int pin);
     /**
      * @brief 获取多个模拟输入
-     * @param device 设备类型，以字符串形式传入，包括 `ROBOT`, `FLANGE`, `EXTRA`, `SHOULDER`, `FLANGE_BTN`
-     * 查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>. 
+     * @param device 设备名字，查看 @ref DEVICENAME ，可以进一步查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>. 
      * @param pin: 起始模拟输入端口，从 0 开始
      * @param num 连续的模拟输入个数
      * @return 返回多个模拟输入数值
@@ -584,6 +589,7 @@ namespace lebai
     std::vector<double> get_ais(std::string device, unsigned int pin, unsigned int num);
     /**
      * @brief 设置数字端口模式
+     * @param device 设备名字，查看 @ref DEVICENAME ，可以进一步查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>. 
      * @param pin 端口号，从 0 开始
      * @param value 设置的值，false为输入模式，true为输出模式
      * @return 返回是否成功
@@ -591,6 +597,7 @@ namespace lebai
     void set_dio_mode(std::string device,unsigned int pin, bool value);
     /**
      * @brief 获取数字端口模式
+     * @param device 设备名字，查看 @ref DEVICENAME ，可以进一步查看 <a href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
      * @param pin 端口号，从 0 开始
      * @param count 查询的连续端口数
      * @return 从pin开始的连续count个端口的当前模式
