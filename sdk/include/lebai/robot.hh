@@ -721,6 +721,7 @@ namespace lebai
      * @param wait: 是否等待
     */
     void pause_task(unsigned int id,unsigned long time,bool wait);
+    void pause_task(unsigned int id);
     /**
      * @brief 恢复任务与运动
      * 

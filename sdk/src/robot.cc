@@ -956,6 +956,14 @@ std::vector<unsigned int> Robot::load_task_list()
   control::TaskIds resp = impl_->loadTaskList();
   return resp.ids();
 }
+void Robot::pause_task(unsigned int id)
+{
+  control::PauseRequest req;
+  req.set_id(id);
+  req.set_time(0);
+  req.set_wait(false);
+  impl_->pauseTask(req);
+}
 void Robot::pause_task(unsigned int id,unsigned long time,bool wait)
 {
   control::PauseRequest req;
