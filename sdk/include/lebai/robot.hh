@@ -693,7 +693,7 @@ namespace lebai
       * @param dir: 调用场景所在的文件夹名
       * @param params: 其他参数
     */
-    unsigned int start_task(const std::string &name,const std::vector<std::string> & params,const std::string & dir, bool is_parallel,unsigned int loop_to)
+    unsigned int start_task(const std::string &name,const std::vector<std::string> & params,const std::string & dir, bool is_parallel,unsigned int loop_to);
     /**
       * @brief 调用场景
       * 

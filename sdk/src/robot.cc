@@ -1313,16 +1313,18 @@ void Robot::set_payload(double mass, std::map<std::string, double> cog)
 {
   dynamic::SetPayloadRequest req;
   req.set_mass(mass);
-  std::vector<double> c;
-  c.push_back(cog.at("x"));
-  c.push_back(cog.at("y"));
-  c.push_back(cog.at("z"));
+  posture::Position c;
+  req.set_x(cog.at("x"));
+  req.set_y(cog.at("y"));
+  req.set_z(cog.at("z"));
   req.set_cog(c);
   impl_->setPayload(req);
 }
 void Robot::set_payload(double mass)
 {
-  impl_->setPayload(mass);
+  dynamic::SetMassRequest req;
+  req.set_mass(mass);
+  impl_->setPayload(req);
 }
 void Robot::set_payload(std::map<std::string, double> cog)
 {
