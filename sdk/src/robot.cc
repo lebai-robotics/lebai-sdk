@@ -1323,15 +1323,15 @@ void Robot::set_payload(double mass, std::map<std::string, double> cog)
   impl_->setPayload(req);
 }
 
-std::tuple<double, std::map<std::string, double>> Robot::get_payload()
+std::map<std::string, double> Robot::get_payload()
 {
   dynamic::Payload resp = impl_->getPayload();
   std::map<std::string,double> cog;
   cog["x"] = resp.cog()[0];
   cog["y"] = resp.cog()[1];
   cog["Z"] = resp.cog()[2];
-  std::tuple<double, std::map<std::string, double>> ret = std::make_tuple(resp.mass(),cog);
-  return ret;
+  cog["mass"] = resp.mass();
+  return cog;
 }
 
 void Robot::set_gravity(std::map<std::string,double> gravity)

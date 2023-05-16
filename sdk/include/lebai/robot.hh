@@ -901,7 +901,7 @@ namespace lebai
      *
      *  @return 由负载质量mass和负载偏移组成的元组.
      */
-    std::tuple<double, std::map<std::string, double>> get_payload();
+    std::map<std::string, double> get_payload();
     /**
      *  @brief 设置机器人重力加速度方向.
      *
