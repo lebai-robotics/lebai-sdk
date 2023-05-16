@@ -1337,9 +1337,9 @@ std::map<std::string, double> Robot::get_payload()
 {
   dynamic::Payload resp = impl_->getPayload();
   std::map<std::string,double> cog;
-  cog["x"] = resp.cog()[0];
-  cog["y"] = resp.cog()[1];
-  cog["Z"] = resp.cog()[2];
+  cog["x"] = resp.cog().x();
+  cog["y"] = resp.cog().y();
+  cog["Z"] = resp.cog().z();
   cog["mass"] = resp.mass();
   return cog;
 }
