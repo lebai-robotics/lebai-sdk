@@ -1314,9 +1314,9 @@ void Robot::set_payload(double mass, std::map<std::string, double> cog)
   dynamic::SetPayloadRequest req;
   req.set_mass(mass);
   posture::Position c;
-  req.set_x(cog.at("x"));
-  req.set_y(cog.at("y"));
-  req.set_z(cog.at("z"));
+  c.set_x(cog.at("x"));
+  c.set_y(cog.at("y"));
+  c.set_z(cog.at("z"));
   req.set_cog(c);
   impl_->setPayload(req);
 }
