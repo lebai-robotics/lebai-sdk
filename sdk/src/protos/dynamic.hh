@@ -4,6 +4,7 @@
 #include <vector>
 #include <memory>
 #include <string>
+#include "posture.hh"
 
 namespace lebai
 {
@@ -16,13 +17,30 @@ namespace lebai
             double mass() const;
             double *mutable_mass();
 
-            void set_cog(std::vector<double> cog);
-            std::vector<double> cog() const;
-            std::vector<double> * mutable_cog();
+            void set_cog(posture::Position cog);
+            posture::Position cog() const;
+            posture::Position * mutable_cog();
 
         protected:
             double mass_;
-            std::vector<double> cog_;
+            posture::Position cog_;
+            // These methods are used to serialize and deserialize the class.
+            // They will not be wrapped in the SDK.
+        public:
+            virtual bool Deserialize(const rapidjson::Value &obj);
+            virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const;
+            virtual bool IsNullJSONData() const;
+        };
+
+        class SetMassRequest : public JSONBase
+        {
+        public:
+            void set_mass(double mass);
+            double mass() const;
+            double *mutable_mass();
+
+        protected:
+            double mass_;
             // These methods are used to serialize and deserialize the class.
             // They will not be wrapped in the SDK.
         public:
@@ -38,13 +56,13 @@ namespace lebai
             double mass() const;
             double *mutable_mass();
 
-            void set_cog(std::vector<double> cog);
-            std::vector<double>  cog() const;
-            std::vector<double> * mutable_cog();
+            void set_cog(posture::Position cog);
+            posture::Position cog() const;
+            posture::Position * mutable_cog();
 
         protected:
             double mass_;
-            std::vector<double> cog_;
+            posture::Position cog_;
             // These methods are used to serialize and deserialize the class.
             // They will not be wrapped in the SDK.
         public:

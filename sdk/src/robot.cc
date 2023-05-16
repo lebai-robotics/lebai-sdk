@@ -921,7 +921,7 @@ void Robot::add_signal(unsigned int index,int value)
   impl_->addSignal(req);
 }
 
-unsigned int Robot::start_task(const std::string &name,bool is_parallel,unsigned int loop_to,const std::string & dir,const std::vector<std::string> & params)
+unsigned int Robot::start_task(const std::string &name,const std::vector<std::string> & params,const std::string & dir, bool is_parallel,unsigned int loop_to)
 {
   control::StartTaskRequest req;
   req.set_name(name);
@@ -929,16 +929,6 @@ unsigned int Robot::start_task(const std::string &name,bool is_parallel,unsigned
   req.set_loop_to(loop_to);
   req.set_dir(dir);
   req.set_params(params);
-  control::TaskIndex resp = impl_->scene(req);
-  return resp.id();
-}
-unsigned int Robot::start_task(const std::string &name,bool is_parallel,unsigned int loop_to,const std::string & dir)
-{
-  control::StartTaskRequest req;
-  req.set_name(name);
-  req.set_is_parallel(is_parallel);
-  req.set_loop_to(loop_to);
-  req.set_dir(dir);
   control::TaskIndex resp = impl_->scene(req);
   return resp.id();
 }
@@ -1328,6 +1318,18 @@ void Robot::set_payload(double mass, std::map<std::string, double> cog)
   c.push_back(cog.at("y"));
   c.push_back(cog.at("z"));
   req.set_cog(c);
+  impl_->setPayload(req);
+}
+void Robot::set_payload(double mass)
+{
+  impl_->setPayload(mass);
+}
+void Robot::set_payload(std::map<std::string, double> cog)
+{
+  posture::Position req;
+  req.set_x(cog.at("x"));
+  req.set_y(cog.at("y"));
+  req.set_z(cog.at("z"));
   impl_->setPayload(req);
 }
 
