@@ -6,6 +6,41 @@ namespace lebai
 {
     namespace dynamic
     {
+        void SetMassRequest::set_mass(double mass)
+        {
+            mass_ = mass;
+        }
+        double SetMassRequest::mass() const
+        {
+            return mass_;
+        }
+        double *SetMassRequest::mutable_mass()
+        {
+            return &mass_;
+        }
+        bool SetMassRequest::Deserialize(const rapidjson::Value &obj)
+        {
+            if(obj.HasMember("mass"))
+            {
+                double mass = (double)(obj["mass"].GetDouble());
+                mass_ = mass;
+            }
+            return true;
+        }
+        bool SetMassRequest::Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const
+        {
+            writer->StartObject();
+            writer->Key("mass");
+            writer->Double(mass_);
+            writer->EndObject();
+            return true;
+        }
+        bool SetMassRequest::IsNullJSONData() const
+        {
+            return false;
+        }
+
+
         void SetPayloadRequest::set_mass(double mass)
         {
             mass_ = mass;
@@ -19,15 +54,15 @@ namespace lebai
             return &mass_;
         }
 
-        void SetPayloadRequest::set_cog(std::vector<double> cog)
+        void SetPayloadRequest::set_cog(posture::Position cog)
         {
             cog_ = cog;
         }
-        std::vector<double> SetPayloadRequest::cog() const
+        posture::Position SetPayloadRequest::cog() const
         {
             return cog_;
         }
-        std::vector<double> *SetPayloadRequest::mutable_cog()
+        posture::Position *SetPayloadRequest::mutable_cog()
         {
             return &cog_;
         }
@@ -41,11 +76,10 @@ namespace lebai
             }
             if(obj.HasMember("cog"))
             {
-                std::vector<double> cog;
-                for(auto c = obj["cog"].GetArray().Begin();c != obj["cog"].GetArray().End();c++)
-                {
-                    cog.push_back(c->GetDouble());
-                }
+                posture::Position cog;
+                cog.set_x(obj["cog"].GetObject()["x"].GetDouble());
+                cog.set_y(obj["cog"].GetObject()["y"].GetDouble());
+                cog.set_z(obj["cog"].GetObject()["z"].GetDouble());
                 cog_ = cog;
             }
             return true;
@@ -56,12 +90,7 @@ namespace lebai
             writer->Key("mass");
             writer->Double(mass_);
             writer->Key("cog");
-            writer->StartArray();
-            for(auto c:cog_)
-            {
-                writer->Double(c);
-            }
-            writer->EndArray();
+            cog_.Serialize(writer);
             writer->EndObject();
             return true;
         }
@@ -69,6 +98,8 @@ namespace lebai
         {
             return false;
         }
+
+
         void Payload::set_mass(double mass)
         {
             mass_ = mass;
@@ -82,15 +113,15 @@ namespace lebai
             return &mass_;
         }
 
-        void Payload::set_cog(std::vector<double> cog)
+        void Payload::set_cog(posture::Position cog)
         {
             cog_ = cog;
         }
-        std::vector<double> Payload::cog() const
+        posture::Position Payload::cog() const
         {
             return cog_;
         }
-        std::vector<double> *Payload::mutable_cog()
+        posture::Position *Payload::mutable_cog()
         {
             return &cog_;
         }
@@ -104,11 +135,10 @@ namespace lebai
             }
             if(obj.HasMember("cog"))
             {
-                std::vector<double> cog;
-                for(auto c = obj["cog"].GetArray().Begin();c != obj["cog"].GetArray().End();c++)
-                {
-                    cog.push_back(c->GetDouble());
-                }
+                posture::Position cog;
+                cog.set_x(obj["cog"].GetObject()["x"].GetDouble());
+                cog.set_y(obj["cog"].GetObject()["y"].GetDouble());
+                cog.set_z(obj["cog"].GetObject()["z"].GetDouble());
                 cog_ = cog;
             }
             return true;
@@ -119,12 +149,7 @@ namespace lebai
             writer->Key("mass");
             writer->Double(mass_);
             writer->Key("cog");
-            writer->StartArray();
-            for(auto c:cog_)
-            {
-                writer->Double(c);
-            }
-            writer->EndArray();
+            cog_.Serialize(writer);
             writer->EndObject();
             return true;
         }
