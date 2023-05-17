@@ -32,6 +32,23 @@ namespace lebai
             virtual bool IsNullJSONData() const;
         };
 
+        class SetCogRequest : public JSONBase
+        {
+        public:
+            void set_cog(posture::Position cog);
+            posture::Position cog() const;
+            posture::Position * mutable_cog();
+
+        protected:
+            posture::Position cog_;
+            // These methods are used to serialize and deserialize the class.
+            // They will not be wrapped in the SDK.
+        public:
+            virtual bool Deserialize(const rapidjson::Value &obj);
+            virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const;
+            virtual bool IsNullJSONData() const;
+        };
+
         class SetMassRequest : public JSONBase
         {
         public:

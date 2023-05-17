@@ -38,6 +38,7 @@ namespace lebai
    * 
    */
   using CartesianPose = std::map<std::string, double>;  
+  using DoubleVector = std::vector<double>;
   /**
    * @brief 运动学正解的返回值数据结构.
    * 
@@ -53,7 +54,7 @@ namespace lebai
    */
   struct KinematicsInverseResp
   {
-    std::vector<double> joint_positions;  /*!< 机械臂关节位置的map数据，应当包括'j1','j2','j3','j4','j5','j6'六个关节的角度值.  */
+    DoubleVector joint_positions;  /*!< 机械臂关节位置的map数据，应当包括'j1','j2','j3','j4','j5','j6'六个关节的角度值.  */
     bool ok = false;  /*!< 计算是否成功 */
   };  
 

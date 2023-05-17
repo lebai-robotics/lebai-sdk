@@ -41,6 +41,45 @@ namespace lebai
         }
 
 
+        void SetCogRequest::set_cog(posture::Position cog)
+        {
+            cog_ = cog;
+        }
+        posture::Position SetCogRequest::cog() const
+        {
+            return cog_;
+        }
+        posture::Position *SetCogRequest::mutable_cog()
+        {
+            return &cog_;
+        }
+
+        bool SetCogRequest::Deserialize(const rapidjson::Value &obj)
+        {
+            if(obj.HasMember("cog"))
+            {
+                posture::Position cog;
+                cog.set_x(obj["cog"].GetObject()["x"].GetDouble());
+                cog.set_y(obj["cog"].GetObject()["y"].GetDouble());
+                cog.set_z(obj["cog"].GetObject()["z"].GetDouble());
+                cog_ = cog;
+            }
+            return true;
+        }
+        bool SetCogRequest::Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const
+        {
+            writer->StartObject();
+            writer->Key("cog");
+            cog_.Serialize(writer);
+            writer->EndObject();
+            return true;
+        }
+        bool SetCogRequest::IsNullJSONData() const
+        {
+            return false;
+        }
+
+
         void SetPayloadRequest::set_mass(double mass)
         {
             mass_ = mass;

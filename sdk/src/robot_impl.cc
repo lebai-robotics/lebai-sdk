@@ -495,7 +495,7 @@ namespace lebai
   {
     json_rpc_connector_->CallRpc("set_payload",req.ToJSONString(),nullptr);
   }
-  void Robot::RobotImpl::setPayload(const posture::Position &req)
+  void Robot::RobotImpl::setPayload(const dynamic::SetCogRequest &req)
   {
     json_rpc_connector_->CallRpc("set_payload",req.ToJSONString(),nullptr);
   }
