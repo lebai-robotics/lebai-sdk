@@ -29,4 +29,4 @@ jobs:
       - name: upload pacakges
         run: 
           cd ./build/dotnet/packages;
-          dotnet nuget push lebai.runtime.win-x64.1.0.*.nupkg --api-key ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json;
+          dotnet nuget push lebai.runtime.win-x64.*.nupkg --api-key ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json;

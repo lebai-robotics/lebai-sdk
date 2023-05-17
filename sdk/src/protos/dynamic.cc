@@ -78,8 +78,8 @@ namespace lebai
         {
             return false;
         }
-
-
+      
+      
         void SetPayloadRequest::set_mass(double mass)
         {
             mass_ = mass;
