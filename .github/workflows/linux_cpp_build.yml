@@ -28,7 +28,7 @@ jobs:
   linux_cpp_test:
    needs: linux_cpp_build
    runs-on: ubuntu-latest
-   container: registry.cn-shanghai.aliyuncs.com/lebai/l-master:latest
+   container: registry.cn-shanghai.aliyuncs.com/lebai/l-master:3.1.6
    steps: 
      - name: start nginx
        run: nginx
