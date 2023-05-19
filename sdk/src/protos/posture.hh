@@ -27,7 +27,7 @@ class JointPose : public JSONBase {
    * @brief Return the const joint array object.
    * @return Immutable joint array data.
    */
-  const std::vector<double>& joint() const;
+  std::vector<double> joint() const;
   /**
    * @brief Return the joint array reference.
    *
