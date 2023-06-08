@@ -497,7 +497,7 @@ CartesianPose Robot::get_actual_tcp_pose()
   cart_pose["z"] = pose.position().z();
   if(pose.rotation().euler_zyx())
   {
-    cart_pose["rz"] = pose.rotation().euler_zyx()->x();
+    cart_pose["rz"] = pose.rotation().euler_zyx()->z();
     cart_pose["ry"] = pose.rotation().euler_zyx()->y();
     cart_pose["rx"] = pose.rotation().euler_zyx()->x();
   }
