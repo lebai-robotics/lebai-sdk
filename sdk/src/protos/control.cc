@@ -198,7 +198,7 @@ namespace lebai
 		bool TaskIndex::Serialize(rapidjson::Writer<rapidjson::StringBuffer> *writer) const
         {
             writer->StartObject();
-            writer->Key("ids");
+            writer->Key("id");
             writer->Uint(id_);
             writer->EndObject();
             return true;

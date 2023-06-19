@@ -109,6 +109,8 @@ namespace lebai
       void unzip(const file::UnzipRequest & req);
       file::LoadZipListResponse loadZipList(const file::LoadZipListRequest & req);
       void setPayload(const dynamic::SetPayloadRequest & req);
+      void setPayload(const dynamic::SetCogRequest & req);
+      void setPayload(const dynamic::SetMassRequest & req);
       dynamic::Payload getPayload();
       void setGravity(const posture::Position & req);
       posture::Position getGravity();

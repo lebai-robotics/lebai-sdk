@@ -567,7 +567,7 @@ CartesianPose Robot::get_actual_tcp_pose()
   cart_pose["z"] = pose.position().z();
   if(pose.rotation().euler_zyx())
   {
-    cart_pose["rz"] = pose.rotation().euler_zyx()->x();
+    cart_pose["rz"] = pose.rotation().euler_zyx()->z();
     cart_pose["ry"] = pose.rotation().euler_zyx()->y();
     cart_pose["rx"] = pose.rotation().euler_zyx()->x();
   }
@@ -991,7 +991,7 @@ void Robot::add_signal(unsigned int index,int value)
   impl_->addSignal(req);
 }
 
-unsigned int Robot::start_task(const std::string &name,bool is_parallel,unsigned int loop_to,const std::string & dir,const std::vector<std::string> & params)
+unsigned int Robot::start_task(const std::string &name,const std::vector<std::string> & params,const std::string & dir, bool is_parallel,unsigned int loop_to)
 {
   control::StartTaskRequest req;
   req.set_name(name);
@@ -999,16 +999,6 @@ unsigned int Robot::start_task(const std::string &name,bool is_parallel,unsigned
   req.set_loop_to(loop_to);
   req.set_dir(dir);
   req.set_params(params);
-  control::TaskIndex resp = impl_->scene(req);
-  return resp.id();
-}
-unsigned int Robot::start_task(const std::string &name,bool is_parallel,unsigned int loop_to,const std::string & dir)
-{
-  control::StartTaskRequest req;
-  req.set_name(name);
-  req.set_is_parallel(is_parallel);
-  req.set_loop_to(loop_to);
-  req.set_dir(dir);
   control::TaskIndex resp = impl_->scene(req);
   return resp.id();
 }
@@ -1025,6 +1015,14 @@ std::vector<unsigned int> Robot::load_task_list()
 {
   control::TaskIds resp = impl_->loadTaskList();
   return resp.ids();
+}
+void Robot::pause_task(unsigned int id)
+{
+  control::PauseRequest req;
+  req.set_id(id);
+  req.set_time(0);
+  req.set_wait(false);
+  impl_->pauseTask(req);
 }
 void Robot::pause_task(unsigned int id,unsigned long time,bool wait)
 {
@@ -1385,23 +1383,39 @@ void Robot::set_payload(double mass, std::map<std::string, double> cog)
 {
   dynamic::SetPayloadRequest req;
   req.set_mass(mass);
-  std::vector<double> c;
-  c.push_back(cog.at("x"));
-  c.push_back(cog.at("y"));
-  c.push_back(cog.at("z"));
+  posture::Position c;
+  c.set_x(cog.at("x"));
+  c.set_y(cog.at("y"));
+  c.set_z(cog.at("z"));
+  req.set_cog(c);
+  impl_->setPayload(req);
+}
+void Robot::set_payload(double mass)
+{
+  dynamic::SetMassRequest req;
+  req.set_mass(mass);
+  impl_->setPayload(req);
+}
+void Robot::set_payload(std::map<std::string, double> cog)
+{
+  dynamic::SetCogRequest req;
+  posture::Position c;
+  c.set_x(cog.at("x"));
+  c.set_y(cog.at("y"));
+  c.set_z(cog.at("z"));
   req.set_cog(c);
   impl_->setPayload(req);
 }
 
-std::tuple<double, std::map<std::string, double>> Robot::get_payload()
+std::map<std::string, double> Robot::get_payload()
 {
   dynamic::Payload resp = impl_->getPayload();
   std::map<std::string,double> cog;
-  cog["x"] = resp.cog()[0];
-  cog["y"] = resp.cog()[1];
-  cog["Z"] = resp.cog()[2];
-  std::tuple<double, std::map<std::string, double>> ret = std::make_tuple(resp.mass(),cog);
-  return ret;
+  cog["x"] = resp.cog().x();
+  cog["y"] = resp.cog().y();
+  cog["z"] = resp.cog().z();
+  cog["mass"] = resp.mass();
+  return cog;
 }
 
 void Robot::set_gravity(std::map<std::string,double> gravity)

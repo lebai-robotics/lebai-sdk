@@ -38,6 +38,7 @@ namespace lebai
    * 
    */
   using CartesianPose = std::map<std::string, double>;  
+  using DoubleVector = std::vector<double>;
   /**
    * @brief 运动学正解的返回值数据结构.
    * 
@@ -53,7 +54,11 @@ namespace lebai
    */
   struct KinematicsInverseResp
   {
+<<<<<<< HEAD
     std::vector<double> joint_positions;  /*!< 机械臂关节位置数组..  */
+=======
+    DoubleVector joint_positions;  /*!< 机械臂关节位置的map数据，应当包括'j1','j2','j3','j4','j5','j6'六个关节的角度值.  */
+>>>>>>> f26a02b73d6e1e44a254f55c83b8be75945da501
     bool ok = false;  /*!< 计算是否成功 */
   };  
 
@@ -720,16 +725,7 @@ namespace lebai
       * @param dir: 调用场景所在的文件夹名
       * @param params: 其他参数
     */
-    unsigned int start_task(const std::string &name,bool is_main,unsigned int loop_to,const std::string &dir,const std::vector<std::string> & params);
-    /**
-      * @brief 调用场景
-      * 
-      * @param name: 调用场景的名字
-      * @param is_main: 是否以主任务方式运行（主任务会排队执行，子任务会并发执行）
-      * @param loop_to: 循环次数（默认0永久循环）
-      * @param dir: 调用场景所在的文件夹名
-    */
-    unsigned int start_task(const std::string &name,bool is_main,unsigned int loop_to,const std::string &dir);
+    unsigned int start_task(const std::string &name,const std::vector<std::string> & params,const std::string & dir, bool is_parallel,unsigned int loop_to);
     /**
       * @brief 调用场景
       * 
@@ -748,6 +744,7 @@ namespace lebai
      * @param wait: 是否等待
     */
     void pause_task(unsigned int id,unsigned long time,bool wait);
+    void pause_task(unsigned int id);
     /**
      * @brief 恢复任务与运动
      * 
@@ -924,11 +921,24 @@ namespace lebai
      */
     void set_payload(double mass, std::map<std::string, double> cog);
     /**
+     *  @brief 设置机器人末端负载.
+     *
+     *  @param mass 末端负载的质量(kg).
+     */
+    void set_payload(double mass);
+    /**
+     *  @brief 设置机器人末端负载.
+     *
+     *  @param mass 末端负载的质量(kg).
+     *  @param cog 质心相对于TCP坐标系的偏移.
+     */
+    void set_payload(std::map<std::string, double> cog);
+    /**
      *  @brief 获取末端负载设置.
      *
      *  @return 由负载质量mass和负载偏移组成的元组.
      */
-    std::tuple<double, std::map<std::string, double>> get_payload();
+    std::map<std::string, double> get_payload();
     /**
      *  @brief 设置机器人重力加速度方向.
      *

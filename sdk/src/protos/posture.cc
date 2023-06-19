@@ -8,7 +8,7 @@ namespace lebai
   namespace posture
   {
     void JointPose::set_joint(const std::vector<double> &joint) { joint_ = joint; }
-    const std::vector<double> &JointPose::joint() const { return joint_; }
+    std::vector<double> JointPose::joint() const { return joint_; }
     std::vector<double> *JointPose::mutable_joint() { return &joint_; }
     bool JointPose::Deserialize(const rapidjson::Value &obj)
     {

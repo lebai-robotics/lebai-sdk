@@ -84,7 +84,7 @@
 %template(StrVector) std::vector<std::string>;
 %template(IntVector) std::vector<int>;
 %template(BVector) std::vector<bool>;
-// %template(DoubleVector) std::vector<double>;
+%template(DoubleVector) std::vector<double>;
 %template(BSVector) std::vector<std::tuple<bool,std::string>>;
 %std_tuple(TupleDDB, double, double, bool);
 %std_tuple(TupleIntStr, int, std::string);

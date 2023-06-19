@@ -507,6 +507,14 @@ namespace lebai
   {
     json_rpc_connector_->CallRpc("set_payload",req.ToJSONString(),nullptr);
   }
+  void Robot::RobotImpl::setPayload(const dynamic::SetCogRequest &req)
+  {
+    json_rpc_connector_->CallRpc("set_payload",req.ToJSONString(),nullptr);
+  }
+  void Robot::RobotImpl::setPayload(const dynamic::SetMassRequest &req)
+  {
+    json_rpc_connector_->CallRpc("set_payload",req.ToJSONString(),nullptr);
+  }
   dynamic::Payload Robot::RobotImpl::getPayload()
   {
     std::string resp_str;
