@@ -54,11 +54,7 @@ namespace lebai
    */
   struct KinematicsInverseResp
   {
-<<<<<<< HEAD
-    std::vector<double> joint_positions;  /*!< 机械臂关节位置数组..  */
-=======
     DoubleVector joint_positions;  /*!< 机械臂关节位置的map数据，应当包括'j1','j2','j3','j4','j5','j6'六个关节的角度值.  */
->>>>>>> f26a02b73d6e1e44a254f55c83b8be75945da501
     bool ok = false;  /*!< 计算是否成功 */
   };  
 
