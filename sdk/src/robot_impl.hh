@@ -58,7 +58,8 @@ namespace lebai
       motion::MotionIndex moveLinear(const motion::MoveRequest & req);
       motion::MotionIndex moveCircular(const motion::MovecRequest & req);
       motion::MotionIndex towardJoint(const motion::MoveRequest & req);
-      void speedJoint(const motion::SpeedJRequest & req);
+      motion::MotionIndex speedJoint(const motion::SpeedJRequest & req);
+      motion::MotionIndex speedLinear(const motion::SpeedLRequest & req);
       void movePvat(const motion::MovePvatRequest & req);
       void waitMove(const motion::MotionIndex & req);
       motion::MotionIndex getRunningMotion();

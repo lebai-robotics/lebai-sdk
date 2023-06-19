@@ -215,5 +215,28 @@ namespace lebai
 		virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer>* writer) const;		
 		virtual bool IsNullJSONData() const;
 	};
+
+	class SpeedLRequest : public JSONBase
+	{
+	public:
+		void set_speed(const posture::CartesianPose & speed);
+		const posture::CartesianPose & speed() const;
+		posture::CartesianPose * mutable_speed();
+		void set_param(const SpeedParam & param);
+		const SpeedParam & param() const;
+		SpeedParam * mutable_param();
+		void set_frame(const posture::CartesianFrame & param);
+		const posture::CartesianFrame & frame() const;
+		posture::CartesianFrame * mutable_frame();		
+
+	protected:
+		posture::CartesianPose speed_;
+		SpeedParam param_;
+		posture::CartesianFrame frame_;
+	public:		
+		virtual bool Deserialize(const rapidjson::Value& obj);
+		virtual bool Serialize(rapidjson::Writer<rapidjson::StringBuffer>* writer) const;		
+		virtual bool IsNullJSONData() const;
+	};	
 	}
 }

@@ -44,7 +44,7 @@ namespace lebai
    */
   struct KinematicsForwardResp
   {
-    CartesianPose pose; /*!< 笛卡尔坐标位置，依次为 x, y, z, rz, ry, rx. */
+    CartesianPose pose; /*!< 笛卡尔坐标位置，map数据，应当包括'x','y','z','rx','ry','rz'的键值. */
     bool ok = false;  /*!< 计算是否成功. */
   };
   /**
@@ -53,7 +53,7 @@ namespace lebai
    */
   struct KinematicsInverseResp
   {
-    std::vector<double> joint_positions;  /*!< 机械臂关节位置的map数据，应当包括'j1','j2','j3','j4','j5','j6'六个关节的角度值.  */
+    std::vector<double> joint_positions;  /*!< 机械臂关节位置数组..  */
     bool ok = false;  /*!< 计算是否成功 */
   };  
 
@@ -325,7 +325,7 @@ namespace lebai
     int movec(const std::vector<double> & joint_via, const std::vector<double> & joint, double rad, double a, double v, double t, double r);
     /**
      * 
-     * @brief 通过坐标位置发送机械臂圆弧运动     * 
+     * @brief 通过坐标位置发送机械臂圆弧运动
      * @param[in] cart_via 圆弧上途径点坐标位置，应当包括键为x,y,z,rz,ry,rx的值.为圆上三点中的一点.
      * @param[in] cart 圆弧目标点坐标位置，应当包括键为x,y,z,rz,ry,rx的值.如果编程rad不为零，则为圆上三点中的一点.
      * @param[in] rad 圆弧角度值，单位为弧度，如果为零，则走到目标点，正负值用来确定圆弧方向.
@@ -335,8 +335,35 @@ namespace lebai
      * @param[in] r: 交融半径，设置为0，则无交融半径.
      * @return >0 发送成功.
      * @return <=0 发送失败.
-     */    
+     */
     int movec(const CartesianPose & cart_via, const CartesianPose & cart, double rad, double a, double v, double t, double r);
+    /**
+     * 示例代码:
+     * 
+     *     robot.speedj( 1.0, {0.5,0.0,0.0,0.0,0.0,0.0}, 0.0);
+     * 
+     * @brief 通过关节速度矢量发送机械臂关节匀速运动
+     * @param[in] a 加速度.
+     * @param[in] v 速度矢量
+     * @param[in] t: 运动时间，默认t = 0，一直运动到限位.
+     * @return  >0 发送成功.返回运动号
+     * @return  <=0 发送失败.
+     */    
+    int speedj(double a, const std::vector<double> & v, double t = 0.0);
+    /**
+     * 
+     * 示例代码:
+     * 
+     *     robot.speedl( 1.0, {{"x", 0.0}, {"y", 0.0}, {"z", 0.1}, {"rx", 0.0}, {"ry", 0.0}, {"rz", 0.0}}, 0.0);
+     * 
+     * @brief 通过坐标速度矢量发送机械臂关节匀速运动
+     * @param[in] a 加速度.
+     * @param[in] v 速度矢量
+     * @param[in] t: 运动时间，默认t = 0，一直运动到限位.
+     * @return  >0 发送成功.返回运动号
+     * @return  <=0 发送失败.
+     */
+    int speedl(double a, const CartesianPose & v, double t = 0.0);
     /**
      * 示例代码: 
      * 
@@ -351,7 +378,7 @@ namespace lebai
      * @param[in] v: 速度.
      * @param[in] t: 时间参数，如果设置时间不为零，则按照时间计算出速度，而不使用速度参数.
      * @param[in] r: 交融半径，设置为0，则无交融半径.
-     * @return  >0 发送成功.
+     * @return  >0 发送成功.返回运动号
      * @return  <=0 发送失败.
      * 
      */

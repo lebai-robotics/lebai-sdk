@@ -179,6 +179,14 @@ namespace lebai
       //  0.0, 1.0, 0.5, 0.0, 0.0);
 // kinematics_forward: -0.282541, -0.168246, 0.265824, 1.27256, -0.206353, 0.937445
 // kinematics_forward: -0.255832, 0.00270435, 0.266642, 1.27293, -0.20805, 0.94485       
+      robot_.speedj( 1.0, {0.5,0.0,0.0,0.0,0.0,0.0}, 0.0);
+      std::this_thread::sleep_for(std::chrono::seconds(2));
+      robot_.stop_move();
+      robot_.speedl( 1.0, {{"x", 0.0}, {"y", 0.0}, {"z", 0.1}, {"rx", 0.0}, {"ry", 0.0}, {"rz", 0.0}}, 0.0);
+      std::this_thread::sleep_for(std::chrono::seconds(2));
+      robot_.stop_move();
+
+
 
       robot_.towardj({0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, 1.0, 1.0, 0.0, 0.0);
       robot_.wait_move();

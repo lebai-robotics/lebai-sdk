@@ -377,6 +377,76 @@ int Robot::movec(const CartesianPose & cart_via, const CartesianPose & cart, dou
   return resp.id();
 }
 
+int Robot::speedj(double a, const std::vector<double> & v, double t)
+{
+  motion::SpeedJRequest req;
+  req.mutable_param()->set_acc(a);
+  req.mutable_param()->set_time(a);
+  for(auto && p :v)
+  {
+    req.mutable_speed()->mutable_joint()->push_back(p);
+  }
+  lebai::motion::MotionIndex resp = impl_->speedJoint(req);
+  return resp.id();
+}
+
+int Robot::speedl(double a, const CartesianPose & v, double t)
+{
+  motion::SpeedLRequest req;
+  req.mutable_param()->set_acc(a);
+  req.mutable_param()->set_time(a);
+  if(v.find("x") != v.end())
+  {
+    req.mutable_speed()->mutable_position()->set_x(v.at("x"));
+  }
+  else
+  {    
+    return -1;
+  }
+  if(v.find("y") != v.end())
+  {
+    req.mutable_speed()->mutable_position()->set_y(v.at("y"));
+  }
+  else
+  {    
+    return -1;
+  }
+  if(v.find("z") != v.end())
+  {
+    req.mutable_speed()->mutable_position()->set_z(v.at("z"));
+  }
+  else
+  {    
+    return -1;
+  }
+  if(v.find("rx") != v.end())
+  {
+    req.mutable_speed()->mutable_rotation()->mutable_euler_zyx()->set_x(v.at("rx"));
+  }
+  else
+  {    
+    return -1;
+  }
+  if(v.find("ry") != v.end())
+  {
+    req.mutable_speed()->mutable_rotation()->mutable_euler_zyx()->set_y(v.at("ry"));
+  }
+  else
+  {    
+    return -1;
+  }
+  if(v.find("rz") != v.end())
+  {
+    req.mutable_speed()->mutable_rotation()->mutable_euler_zyx()->set_z(v.at("rz"));
+  }
+  else
+  {    
+    return -1;
+  }
+  lebai::motion::MotionIndex resp = impl_->speedLinear(req);
+  return resp.id();
+}
+
 
 int Robot::towardj(const std::vector<double> & joint_positions, double a, double v, double t, double r)
 {
