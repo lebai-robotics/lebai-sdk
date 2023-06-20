@@ -751,6 +751,7 @@ namespace lebai
     }
     return true;
   }
+  // SpeedJRequest
   void SpeedJRequest::set_speed(const posture::JointPose & speed)
   {
     speed_ = speed;
@@ -812,6 +813,90 @@ namespace lebai
     }
     return false;
   }
-  // MoveParam end
+  // SpeedJRequest end
+  // SpeedJRequest
+  void SpeedLRequest::set_speed(const posture::CartesianPose & speed)
+  {
+    speed_ = speed;
+  }
+  const posture::CartesianPose & SpeedLRequest::speed() const
+  {
+    return speed_;
+  }
+
+  posture::CartesianPose * SpeedLRequest::mutable_speed()
+  {
+    return &speed_;
+  }
+  void SpeedLRequest::set_param(const SpeedParam & param)
+  {
+    param_ = param;
+  }
+  const SpeedParam & SpeedLRequest::param() const
+  {
+    return param_;
+  }
+  SpeedParam * SpeedLRequest::mutable_param()
+  {
+    return &param_;
+  }
+  void SpeedLRequest::set_frame(const posture::CartesianFrame & frame)
+  {
+    frame_ = frame;
+  }
+  const posture::CartesianFrame & SpeedLRequest::frame() const
+  {
+    return frame_;
+  }
+  posture::CartesianFrame * SpeedLRequest::mutable_frame()
+  {
+    return &frame_;
+  }
+	bool SpeedLRequest::Deserialize(const rapidjson::Value& obj)
+  {
+    if(obj.HasMember("speed"))
+    {
+      speed_.Deserialize(obj["speed"]);
+    }
+    if(obj.HasMember("param"))
+    {
+      param_.Deserialize(obj["param"]);
+    }
+    if(obj.HasMember("frame"))
+    {
+      frame_.Deserialize(obj["frame"]);
+    }    
+    return true;      
+  }
+	bool SpeedLRequest::Serialize(rapidjson::Writer<rapidjson::StringBuffer>* writer) const
+  {
+    writer->StartObject();
+    if(!speed_.IsNullJSONData())
+    {
+      writer->String("speed");
+      speed_.Serialize(writer);
+    }
+    if(!param_.IsNullJSONData())
+    {
+      writer->String("param");
+      param_.Serialize(writer);
+    }
+    if(!frame_.IsNullJSONData())
+    {
+      writer->String("frame");
+      frame_.Serialize(writer);
+    }    
+    writer->EndObject();
+    return true;
+  }
+	bool SpeedLRequest::IsNullJSONData() const
+  {
+    if(speed_.IsNullJSONData() && param_.IsNullJSONData())
+    {
+      return true;
+    }
+    return false;
+  }
+  // SpeedJRequest end  
   }  
 }

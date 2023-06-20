@@ -1,5 +1,9 @@
 # ChangeLog
 
+## 1.1.1
+
+添加speedj和speedl的实现和文档
+
 ## 1.1.0
 
 添加LuaRobot对象，可以向机械臂发送lua指令
