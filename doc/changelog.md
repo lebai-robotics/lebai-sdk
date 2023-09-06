@@ -1,5 +1,9 @@
 # ChangeLog
 
+## 1.1.7
+
+README添加多语言支持
+
 ## 1.1.1
 
 添加speedj和speedl的实现和文档
