@@ -1,4 +1,4 @@
-# Multilanguage README Pattern
+# Languages
 [![zh](https://img.shields.io/badge/lang-zh-red.svg)](https://github.com/lebai-robotics/lebai-sdk/blob/master/README.md)
 [![en](https://img.shields.io/badge/lang-en-green.svg)](https://github.com/lebai-robotics/lebai-sdk/blob/master/README.en.md)
 
