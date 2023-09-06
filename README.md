@@ -1,3 +1,7 @@
+# Languages
+[![zh](https://img.shields.io/badge/lang-zh-red.svg)](https://github.com/lebai-robotics/lebai-sdk/blob/master/README.md)
+[![en](https://img.shields.io/badge/lang-en-green.svg)](https://github.com/lebai-robotics/lebai-sdk/blob/master/README.en.md)
+
 lebai-sdk的源代码仓库，可以用于控制乐白机械臂.
 
 | OS     | C++ | Python | C# | Java |
@@ -78,7 +82,9 @@ sudo apt install python-dev python-setuptools
 ### 编译
 ```bash
 # 生成编译配置
-cmake -S. -Bbuild -DBUILD_PYTHON=ON -DBUILD_DEB=ON -DBUILD_TESTING=OFF 
+cmake -S. -Bbuild -DBUILD_PYTHON=ON -DBUILD_DEB=ON -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF
+# 生成编译配置，只C++,同时生成DEB包
+cmake -S. -Bbuild -DBUILD_PYTHON=OFF -DBUILD_DEB=ON -DBUILD_TESTING=OFF 
 # 编译
 cmake --build build
 # 运行单元测试
@@ -137,7 +143,7 @@ lebai-sdk使用如下第三方软件:
 
 | 软件名      | 协议 | 官方网站 | 
 | ----------- | ----------- |----------- |
-| Asio      | Boost  | https://think-async.com/Asio/ |
+| Asio      | [MPL2](https://www.mozilla.org/en-US/MPL/2.0/FAQ/)  | https://think-async.com/Asio/ |
 | rapidjson      | MIT  | https://rapidjson.org/ |
 | websocketpp      | BSD  | https://www.zaphoyd.com/websocketpp |
 | mdns | public domain | https://github.com/mjansson/mdns |
