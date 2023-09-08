@@ -505,6 +505,9 @@ namespace lebai
                 if(state == "WAIT")
                 {
                     state_ = TaskState::WAIT;
+                }else if(state == "NONE")
+                {
+                    state_ = TaskState::NONE;
                 }else if(state == "RUNNING")
                 {
                     state_ = TaskState::RUNNING;
@@ -520,6 +523,9 @@ namespace lebai
                 }else if(state == "FAIL")
                 {
                     state_ = TaskState::FAIL;
+                }else if(state == "INTERRUPTING")
+                {
+                    state_ = TaskState::INTERRUPTING;
                 }
             }
             if(obj.HasMember("loop_count"))
@@ -598,6 +604,9 @@ namespace lebai
             writer->Key("state");
             switch(state_)
             {
+            case TaskState::NONE:
+                writer->String("NONE");
+                break;
             case TaskState::WAIT:
                 writer->String("WAIT");
                 break;
@@ -615,6 +624,9 @@ namespace lebai
                 break;
             case TaskState::FAIL:
                 writer->String("FAIL");
+                break;
+            case TaskState::INTERRUPTING:
+                writer->String("INTERRUPTING");
                 break;
             default:
                 writer->String("nil");
