@@ -14,14 +14,13 @@
  *  
  * # ChangeLog
  *  查阅 \ref doc/changelog.md.
- *  
- *  
+ *    
  * # Python
  * 查看 \ref doc/python.md 来获取使用python开发相关的内容.
  *
  * # .net
- * 查看 \ref doc/dotnet.md 来获取在.net中使用C#开发相关的内容.
- * 
+ * 查看 \ref doc/dotnet.md 来获取在.net中使用C\#开发相关的内容.
+ *
  * # Develop
  * 如果需要开发sdk，添加新的功能，可以参考 \ref doc/develop.md.
  * 
@@ -33,7 +32,7 @@
  * 
  * 界面显示的Rz，Ry，Rx为角度，将其转换为弧度后，它和旋转矩阵的关系如下：
  * 
- * @f$RotationMatrix = \begin{bmatrix}
+ * \f$RotationMatrix = \begin{bmatrix}
  * \cos(Rz) & -sin(Rz) & 0 \\ 
  * sin(Rz) & cos(Rz) & 0\\ 
  * 0 & 0 & 1
@@ -45,6 +44,6 @@
  * 1 & 0 & 0 \\ 
  * 0 & cos(Rx) & -sin(Rx) \\ 
  * 0 & sin(Rx)  & cos(Rx) 
- * \end{bmatrix}@f$
+ * \end{bmatrix}\f$
  */
 

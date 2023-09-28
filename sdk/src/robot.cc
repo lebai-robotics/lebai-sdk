@@ -1390,13 +1390,13 @@ void Robot::set_payload(double mass, std::map<std::string, double> cog)
   req.set_cog(c);
   impl_->setPayload(req);
 }
-void Robot::set_payload(double mass)
+void Robot::set_payload_mass(double mass)
 {
   dynamic::SetMassRequest req;
   req.set_mass(mass);
   impl_->setPayload(req);
 }
-void Robot::set_payload(std::map<std::string, double> cog)
+void Robot::set_payload_cog(std::map<std::string, double> cog)
 {
   dynamic::SetCogRequest req;
   posture::Position c;
