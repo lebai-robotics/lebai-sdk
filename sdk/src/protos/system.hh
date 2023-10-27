@@ -12,6 +12,7 @@ namespace lebai
   {
     enum RobotState 
     {
+      ERROR = -1,
       DISCONNECTED = 0,
       ESTOP = 1,
       BOOTING = 2,
@@ -24,8 +25,7 @@ namespace lebai
       STARTING = 9,
       STOPPING = 10,
       TEACHING = 11,
-      STOP = 12,
-      FINETUNING = 13
+      STOP = 12
     };
     class GetRobotStateResponse : public JSONBase
     {

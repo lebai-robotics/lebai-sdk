@@ -56,9 +56,8 @@ namespace lebai
   {
     DoubleVector joint_positions;  /*!< 机械臂关节位置的map数据，应当包括'j1','j2','j3','j4','j5','j6'六个关节的角度值.  */
     bool ok = false;  /*!< 计算是否成功 */
-  };  
+  };
 
- 
 
 
   /**
@@ -361,10 +360,11 @@ namespace lebai
      * @param[in] a 加速度.
      * @param[in] v 速度矢量
      * @param[in] t: 运动时间，默认t = 0，一直运动到限位.
+     * @param[in] reference: 参考坐标系，默认为零.
      * @return  >0 发送成功.返回运动号
      * @return  <=0 发送失败.
      */
-    int speedl(double a, const CartesianPose & v, double t = 0.0);
+    int speedl(double a, const CartesianPose & v, double t = 0.0, const CartesianPose & reference = {{"x", 0.0}, {"y", 0.0}, {"z", 0.0}, {"rx", 0.0}, {"ry", 0.0}, {"rz", 0.0}});
     /**
      * 示例代码: 
      * 

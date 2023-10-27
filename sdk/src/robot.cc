@@ -390,7 +390,7 @@ int Robot::speedj(double a, const std::vector<double> & v, double t)
   return resp.id();
 }
 
-int Robot::speedl(double a, const CartesianPose & v, double t)
+int Robot::speedl(double a, const CartesianPose & v, double t, const CartesianPose & reference)
 {
   motion::SpeedLRequest req;
   req.mutable_param()->set_acc(a);
@@ -438,6 +438,76 @@ int Robot::speedl(double a, const CartesianPose & v, double t)
   if(v.find("rz") != v.end())
   {
     req.mutable_speed()->mutable_rotation()->mutable_euler_zyx()->set_z(v.at("rz"));
+  }
+  else
+  {    
+    return -1;
+  }
+  // if(reference == BASE) {
+  //   req.mutable_frame()->set_position_kind(posture::CartesianFrame::Kind::BASE);
+  //   req.mutable_frame()->set_rotation_kind(posture::CartesianFrame::Kind::BASE);
+  // } else if(reference == FLANGE) {
+  //   req.mutable_frame()->set_position_kind(posture::CartesianFrame::Kind::FLANGE);
+  //   req.mutable_frame()->set_rotation_kind(posture::CartesianFrame::Kind::FLANGE);  
+  // } else if(reference == TCP) {
+  //   auto tcp = get_target_tcp_pose();
+  //   req.mutable_frame()->mutable_position()->set_x(tcp["x"]);
+  //   req.mutable_frame()->mutable_position()->set_y(tcp["y"]);
+  //   req.mutable_frame()->mutable_position()->set_z(tcp["z"]);
+  //   req.mutable_frame()->mutable_rotation()->mutable_euler_zyx()->set_x(tcp["rx"]);
+  //   req.mutable_frame()->mutable_rotation()->mutable_euler_zyx()->set_y(tcp["ry"]);
+  //   req.mutable_frame()->mutable_rotation()->mutable_euler_zyx()->set_z(tcp["rz"]);
+  //   req.mutable_frame()->set_position_kind(posture::CartesianFrame::Kind::CUSTOM);
+  //   req.mutable_frame()->set_rotation_kind(posture::CartesianFrame::Kind::CUSTOM);
+  // } else {
+  //   return -1;
+  // }
+  req.mutable_frame()->set_position_kind(posture::CartesianFrame::Kind::CUSTOM);
+  req.mutable_frame()->set_rotation_kind(posture::CartesianFrame::Kind::CUSTOM);
+
+  if(reference.find("x") != reference.end())
+  {
+    req.mutable_frame()->mutable_position()->set_x(reference.at("x"));
+  }
+  else
+  {    
+    return -1;
+  }
+  if(reference.find("y") != reference.end())
+  {
+    req.mutable_frame()->mutable_position()->set_y(reference.at("y"));
+  }
+  else
+  {    
+    return -1;
+  }
+  if(reference.find("z") != reference.end())
+  {
+    req.mutable_frame()->mutable_position()->set_z(reference.at("z"));
+  }
+  else
+  {    
+    return -1;
+  }
+  if(reference.find("rx") != reference.end())
+  {
+    req.mutable_frame()->mutable_rotation()->mutable_euler_zyx()->set_x(reference.at("rx"));
+  }
+  else
+  {    
+    return -1;
+  }
+  if(reference.find("ry") != reference.end())
+  {
+    req.mutable_frame()->mutable_rotation()->mutable_euler_zyx()->set_y(reference.at("ry"));
+  }
+  else
+  {    
+    return -1;
+  }
+  if(reference.find("rz") != reference.end())
+  {
+    req.mutable_frame()->mutable_rotation()->mutable_euler_zyx()->set_z(reference.at("rz"));
   }
   else
   {    
