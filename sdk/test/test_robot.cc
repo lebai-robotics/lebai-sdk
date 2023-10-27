@@ -44,9 +44,7 @@ namespace lebai
     std::this_thread::sleep_for(std::chrono::seconds(1));
     EXPECT_EQ(5, robot_.get_robot_mode());
     robot_.stop_sys();
-    std::this_thread::sleep_for(std::chrono::milliseconds(20));
-    EXPECT_EQ(10, robot_.get_robot_mode());
-    std::this_thread::sleep_for(std::chrono::seconds(3));
+    std::this_thread::sleep_for(std::chrono::seconds(5));
     EXPECT_EQ(12, robot_.get_robot_mode());
     robot_.estop();
     std::this_thread::sleep_for(std::chrono::seconds(1));

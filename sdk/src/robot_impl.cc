@@ -153,9 +153,14 @@ namespace lebai
   motion::MotionIndex Robot::RobotImpl::speedLinear(const motion::SpeedLRequest & req)
   {    
     std::string resp;
-    json_rpc_connector_->CallRpc("speed_linear",req.ToJSONString(),&resp);    
+    
+    auto req_string = req.ToJSONString();
+    std::cout<<"req "<<req_string<<"\n";
+    json_rpc_connector_->CallRpc("speed_linear",req_string,&resp);    
+    // json_rpc_connector_->CallRpc("speed_linear",req.ToJSONString(),&resp);    
     motion::MotionIndex motion_resp;
     motion_resp.FromJSONString(resp);
+    std::cout<<"resp "<<resp<<"\n";
     return motion_resp;    
   }
   void Robot::RobotImpl::movePvat(const motion::MovePvatRequest & req)

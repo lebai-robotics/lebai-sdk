@@ -56,9 +56,8 @@ namespace lebai
   {
     DoubleVector joint_positions;  /*!< 机械臂关节位置的map数据，应当包括'j1','j2','j3','j4','j5','j6'六个关节的角度值.  */
     bool ok = false;  /*!< 计算是否成功 */
-  };  
+  };
 
- 
 
 
   /**
@@ -183,13 +182,13 @@ namespace lebai
      */
     void start_sys();
     /**
-     * @brief 停止机械臂（机械臂上使能）.
+     * @brief 停止机械臂（机械臂下使能）.
      * 
      */
 
     void stop_sys();
     /**
-     * @brief 关闭机器人电源（关机.
+     * @brief 关闭机器人电源（关机）.
      * 
      */
     void powerdown();
@@ -361,10 +360,11 @@ namespace lebai
      * @param[in] a 加速度.
      * @param[in] v 速度矢量
      * @param[in] t: 运动时间，默认t = 0，一直运动到限位.
+     * @param[in] reference: 参考坐标系，默认为零.
      * @return  >0 发送成功.返回运动号
      * @return  <=0 发送失败.
      */
-    int speedl(double a, const CartesianPose & v, double t = 0.0);
+    int speedl(double a, const CartesianPose & v, double t = 0.0, const CartesianPose & reference = {{"x", 0.0}, {"y", 0.0}, {"z", 0.0}, {"rx", 0.0}, {"ry", 0.0}, {"rz", 0.0}});
     /**
      * 示例代码: 
      * 
@@ -715,11 +715,13 @@ namespace lebai
     /**
       * @brief 调用场景
       * 
-      * @param name: 调用场景的名字
-      * @param is_main: 是否以主任务方式运行（主任务会排队执行，子任务会并发执行）
-      * @param loop_to: 循环次数（默认0永久循环）
-      * @param dir: 调用场景所在的文件夹名
-      * @param params: 其他参数
+      * @param name 调用场景的名字
+      * @param params 其他参数
+      * @param dir 调用场景所在的文件夹名
+      * @param is_parallel 是否并行
+      * @param loop_to 循环次数（默认0永久循环）
+      * 
+      * 
     */
     unsigned int start_task(const std::string &name,const std::vector<std::string> & params,const std::string & dir, bool is_parallel,unsigned int loop_to);
     /**
@@ -740,6 +742,10 @@ namespace lebai
      * @param wait: 是否等待
     */
     void pause_task(unsigned int id,unsigned long time,bool wait);
+    /**
+     * @brief 暂停任务与运动
+     * @param id: 任务的ID
+    */
     void pause_task(unsigned int id);
     /**
      * @brief 恢复任务与运动
@@ -917,18 +923,17 @@ namespace lebai
      */
     void set_payload(double mass, std::map<std::string, double> cog);
     /**
-     *  @brief 设置机器人末端负载.
+     *  @brief 设置机器人末端负载质量.
      *
      *  @param mass 末端负载的质量(kg).
      */
-    void set_payload(double mass);
+    void set_payload_mass(double mass);
     /**
-     *  @brief 设置机器人末端负载.
+     *  @brief 设置机器人末端负载重心.
      *
-     *  @param mass 末端负载的质量(kg).
      *  @param cog 质心相对于TCP坐标系的偏移.
      */
-    void set_payload(std::map<std::string, double> cog);
+    void set_payload_cog(std::map<std::string, double> cog);
     /**
      *  @brief 获取末端负载设置.
      *
