@@ -63,6 +63,8 @@ namespace lebai
   /**
    *  @brief 机械臂的主要接口对象，通过本对象的方法与机械臂进行数据交互.
    *  @note 使用该数据结构和机械臂交互要求机械臂软件版本>=3.1.5。
+   *  @note 接口的每一个函数都可能抛出异常std::runtime_error, 这是因为网络连接丢失或者调用的逻辑错误等。
+   * 
    *
    */
   class Robot
@@ -71,6 +73,7 @@ namespace lebai
     /**
      * @brief 内部实现.
      * @note 用户无需使用.
+     * 
      */
     class RobotImpl;
 
@@ -79,11 +82,6 @@ namespace lebai
     /**
      * @brief 构造Robot对象.
      * @note 当你尝试创建Robot对象时，会根据传入的ip参数尝试去连接机械臂，但是可能会连接失败，当连接不成功时，对象依然会创建。
-     * 
-     * 但是如果网络没有连接成功而你调用和机械臂交互的接口时，会抛出std::runtime_error异常，表示网络连接异常.
-     * 
-     * 你可以通过@ref is_network_connected()方法来判断是否连接成功，如果连接不成功，你可以尝试重新创建Robot对象，或者等待网络恢复.
-     * 
      * 
      * 
      * @param ip: 机械臂IP地址.
@@ -115,7 +113,7 @@ namespace lebai
     
     /**
      * @brief 返回是否和机械臂的网络连接正常，如果网络连接异常，调用和机械臂交互的接口会抛出异常std::runtime_error。
-     * 
+     * @note 不建议使用，直接catch接口调用获取网络异常。
      * @return true 表示网络连接正常，false表示网络连接异常.
     */
     bool is_network_connected();

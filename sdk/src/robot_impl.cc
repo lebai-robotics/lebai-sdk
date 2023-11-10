@@ -57,6 +57,7 @@ namespace lebai
 
   bool Robot::RobotImpl::isNetworkConnected()
   {
+    // return json_rpc_connector_->Ping();
     return json_rpc_connector_->GetConnectionStatus() == JSONRpcConnector::kOpen;
   }
 
