@@ -91,6 +91,7 @@ namespace lebai
       auto ret = ExtractJSONRpcRespString(message_str, callback_jsonrpc_id, error_code, resp_data_str);
       if(ret == JSONRpcRespParseResult::kInvalid)
       {
+        std::cout<<"invalid jsonrpc response\n";
         return;
       }
       else
@@ -133,7 +134,14 @@ namespace lebai
       promises_[rpc_id] = std::make_unique<std::promise<std::tuple<int, std::string>>>();
       return promises_[rpc_id]->get_future();;
     }
-
+    void deletePromise(int rpc_id)
+    {
+      std::lock_guard<std::mutex> guard(promises_map_mutex_);
+      if(promises_.find(rpc_id) != promises_.end())
+      {
+        promises_.erase(rpc_id);
+      }
+    }
     
 
     // friend std::ostream& operator<<(std::ostream& out,
@@ -298,6 +306,12 @@ namespace lebai
       // metadata_it->second->SetRespFlag(false);
       ConList::iterator metadata_it = connection_list_.find(id);
       return metadata_it->second->createPromise(rpc_id);
+    }
+
+    void deletePromise(int id, int rpc_id)
+    {
+      ConList::iterator metadata_it = connection_list_.find(id);
+      metadata_it->second->deletePromise(rpc_id);
     }
 
 

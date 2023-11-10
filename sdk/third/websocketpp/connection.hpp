@@ -373,7 +373,7 @@ public:
         m_fail_handler = h;
     }
 
-    /// Set ping handler
+    /// Set ping hangfpdler
     /**
      * The ping handler is called whenever the connection receives a ping
      * control frame. The ping payload is included.
