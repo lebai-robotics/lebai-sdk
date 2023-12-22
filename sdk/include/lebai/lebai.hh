@@ -32,7 +32,7 @@
  * 
  * 界面显示的Rz，Ry，Rx为角度，将其转换为弧度后，它和旋转矩阵的关系如下：
  * 
- * \f$RotationMatrix = \begin{bmatrix}
+ * \f$ RotationMatrix = \begin{bmatrix}
  * \cos(Rz) & -sin(Rz) & 0 \\ 
  * sin(Rz) & cos(Rz) & 0\\ 
  * 0 & 0 & 1
@@ -44,6 +44,6 @@
  * 1 & 0 & 0 \\ 
  * 0 & cos(Rx) & -sin(Rx) \\ 
  * 0 & sin(Rx)  & cos(Rx) 
- * \end{bmatrix}\f$
+ * \end{bmatrix} \f$
  */
 
