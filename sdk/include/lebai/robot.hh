@@ -170,6 +170,10 @@ namespace lebai
      *  \brief    场景相关的接口.
     */
 
+    /** \defgroup SERIAL serial.
+     *  \brief    串口相关的接口.
+    */   
+
     /** \addtogroup STARTSTOP
      *  @{
      */
@@ -1033,6 +1037,27 @@ namespace lebai
     */
     std::vector<unsigned int> read_input_registers(std::string device, std::string addr, unsigned int num);
     /** @}*/
+
+/** \addtogroup SERIAL
+     *  @{
+    */
+
+    /**
+     * @brief 设置串口波特率.
+     * 
+     * @param device 设备名称.
+     * @param baud_rate 波特率.
+    */
+    void set_serial_baud_rate(std::string device, unsigned int baud_rate);
+    /**
+     * @brief 设置串口校验位.
+     * 
+     * @param device 设备名称.
+     * @param parity 校验位. 0:无校验; 1:奇校验; 2:偶校验.
+     * 
+    */
+    void set_serial_parity(std::string device, unsigned int parity);
+    /** @}*/    
   protected:
     std::unique_ptr<RobotImpl> impl_; /*!< 内部实现数据结构，用户无需关注. */
   };
