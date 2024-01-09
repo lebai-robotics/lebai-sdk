@@ -31,6 +31,7 @@
 #include "protos/dynamic.hh"
 #include "protos/db.hh"
 #include "protos/modbus.hh"
+#include "protos/serial.hh"
 
 namespace lebai
 {
@@ -130,7 +131,8 @@ namespace lebai
       void writeMultipleRegisters(const modbus::SetRegistersRequest & req);
       modbus::GetRegistersResponse readInputRegisters(const modbus::GetRegistersRequest & req);
       modbus::GetRegistersResponse readHoldingRegisters(const modbus::GetRegistersRequest & req);
-
+      void setSerialBaudRateRequest(const serial::SetSerialBaudRateRequest & req);
+      void setSerialParityRequest(const serial::SetSerialParityRequest & req);
 
       protected:
       std::unique_ptr<JSONRpcConnector> json_rpc_connector_;
