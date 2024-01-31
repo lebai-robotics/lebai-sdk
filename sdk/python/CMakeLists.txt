@@ -25,6 +25,7 @@ elseif(BUILD_PYTHON2)
 endif()
 
 set_property(TARGET l_master PROPERTY SWIG_USE_TARGET_INCLUDE_DIRECTORIES ON)
+# get_target_property(nd l_master COMPILE_DEFINITIONS)
 
 if(UNIX)
   set_target_properties(l_master PROPERTIES
@@ -37,8 +38,9 @@ target_link_libraries(l_master PRIVATE ${PROJECT_NAMESPACE}::lebai-cpp)
 # which won't be interpreted inside a generator expression.
 # i.e. we can't use: $<$<PLATFORM_ID:Windows>:${PYTHON_LIBRARIES}>
 # see: https://cmake.org/cmake/help/git-stage/command/target_link_libraries.html#command:target_link_libraries
+message(STATUS "PYTHON_LIBRARIES: ${Python3_LIBRARIES}")
 if(MSVC)
-  target_link_libraries(l_master PRIVATE ${Python2_LIBRARIES} ${Python3_LIBRARIES})
+  target_link_libraries(l_master PRIVATE ${Python3_LIBRARIES})
 endif()
 
 

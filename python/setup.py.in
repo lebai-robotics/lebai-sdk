@@ -13,8 +13,9 @@ class InstallPlatlib(install):
         install.finalize_options(self)
         self.install_lib=self.install_platlib
 
-with open(r"../../README.md", "r") as fh:
-    long_description = fh.read()
+#with open(r"../../README.md", "r") as fh:
+#    long_description = fh.read()
+long_description = "See (Lebai sdk doc)[https://lebai-robotics.github.io/lebai-sdk/] for more."
 
 setup(
   name='py@PYTHON_PROJECT@',
