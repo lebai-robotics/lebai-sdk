@@ -21,7 +21,7 @@ jobs:
           python-version: '3.10'
       - name: Check cmake
         run: cmake --version
-      - run: pip install python-dev-tools
+      - run: python.exe -m pip install python-dev-tools
 #      - uses: msys2/setup-msys2@v2
 #        with:
 #          update: true
