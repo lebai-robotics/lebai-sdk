@@ -22,7 +22,7 @@ jobs:
       - name: Check cmake
         run: cmake --version
       - name: Install python-dev-tools
-        run: python.exe -m pip install python-dev-tools
+        run: python.exe -m pip install python-dev-tools markdown
 #      - uses: msys2/setup-msys2@v2
 #        with:
 #          update: true

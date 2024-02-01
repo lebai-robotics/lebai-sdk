@@ -7,7 +7,7 @@ lebai-sdk的源代码仓库，可以用于控制乐白机械臂.
 | OS     | C++ | Python | C# | Java |
 |:-------|-----|--------|----|------| 
 | Linux  | [![Status][cpp_linux_svg]][cpp_linux_link] | [![Status][python_linux_svg]][python_linux_link] | [![Status][dotnet_linux_svg]][dotnet_linux_link] | TODO |
-| Windows | TODO | TODO | [![Status][dotnet_windows_svg]][dotnet_windows_link] | TODO |
+| Windows | TODO | [![Status][python_windows_svg]][python_windows_link] | [![Status][dotnet_windows_svg]][dotnet_windows_link] | TODO |
 
 **上图中显示TODO的地方表示该平台该语言的实现还存在问题，没有完全测试通过，后续会陆续完成。**
 
@@ -17,6 +17,8 @@ lebai-sdk的源代码仓库，可以用于控制乐白机械臂.
 [python_linux_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_python_release.yml
 [dotnet_linux_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_dotnet_release.yml/badge.svg
 [dotnet_linux_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_dotnet_release.yml
+[python_windows_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/windows_python_release.yml/badge.svg
+[python_windows_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/windows_python_release.yml
 [dotnet_windows_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/windows_dotnet_release.yaml/badge.svg
 [dotnet_windows_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/windows_dotnet_release.yaml
 
@@ -34,12 +36,19 @@ python开发可以直接从[PyPI](https://pypi.org/project/pylebai/)安装.
 ```
 pip install pylebai
 ```
-目前支持的Python版本有
+目前Linux平台支持的Python版本有
 - `3.6`
 - `3.7`
 - `3.8`
 - `3.9`
 - `3.10`
+
+目前Windows平台支持的Python版本有
+- `3.8`
+- `3.9`
+- `3.10`
+- `3.11`
+
 
 
 python开发可以直接从[PyPI](https://pypi.org/project/pylebai/)安装.
