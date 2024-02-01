@@ -13,7 +13,7 @@ permissions:
   pull-requests: read
 
 jobs: 
-  windows_python_release:
+  windows_python310_release:
     runs-on: windows-latest 
     steps: 
       - name: Checkout
@@ -32,7 +32,26 @@ jobs:
         run: cmake --build build --config release
       - name: Upload Pypi
         run: twine upload -u __token__ -p ${{ secrets.PYLEBAI }} build/python/dist/*.whl
+  windows_python311_release:
+    runs-on: windows-latest 
+    steps: 
+      - name: Checkout
+        uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      - name: Check cmake
+        run: cmake --version
+      - name: Install python-dev-tools
+        run: python.exe -m pip install python-dev-tools setuptools wheel twine
 
+      - name: CMake configure
+        run: cmake -S. -Bbuild -G "Visual Studio 17 2022" -DBUILD_PYTHON=ON -DBUILD_DOCUMENTATION=OFF
+      - name: CMake build
+        run: cmake --build build --config release
+      - name: Upload Pypi
+        run: twine upload -u __token__ -p ${{ secrets.PYLEBAI }} build/python/dist/*.whl
+      
       # - name: Publish package
       #   uses: pypa/gh-action-pypi-publish@release/v1
       #   with:
