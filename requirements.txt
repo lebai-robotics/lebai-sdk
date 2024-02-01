@@ -1,3 +1,4 @@
 swig==4.0.2
 cmake==3.18.2
 readme-renderer==34.0
+markdown
