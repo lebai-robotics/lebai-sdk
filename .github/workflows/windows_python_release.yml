@@ -32,14 +32,14 @@ jobs:
         run: cmake --build build --config release
       - name: Upload Pypi
         run: twine upload --skip-existing -u __token__ -p ${{ secrets.PYLEBAI }} build/python/dist/*.whl
-  windows_python308_release:
+  windows_python38_release:
     runs-on: windows-latest
     steps: 
       - name: Checkout
         uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.08'
+          python-version: '3.8'
       - name: Check cmake
         run: cmake --version
       - name: Install python-dev-tools
@@ -51,14 +51,14 @@ jobs:
         run: cmake --build build --config release
       - name: Upload Pypi
         run: twine upload --skip-existing -u __token__ -p ${{ secrets.PYLEBAI }} build/python/dist/*.whl
-  windows_python309_release:
+  windows_python39_release:
     runs-on: windows-latest 
     steps: 
       - name: Checkout
         uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.09'
+          python-version: '3.9'
       - name: Check cmake
         run: cmake --version
       - name: Install python-dev-tools
