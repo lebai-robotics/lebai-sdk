@@ -38,7 +38,7 @@ PROJECT_NAME           = "lebai sdk"
 # could be handy for archiving the generated documentation or if some version
 # control system is used.
 
-PROJECT_NUMBER         = 1.1.12
+PROJECT_NUMBER         = 1.1.13
 
 # Using the PROJECT_BRIEF tag one can provide an optional one line description
 # for a project that appears at the top of each page and should give viewer a
@@ -1570,6 +1570,8 @@ MATHJAX_EXTENSIONS     =
 # This tag requires that the tag USE_MATHJAX is set to YES.
 
 MATHJAX_CODEFILE       = 
+
+MATHJAX_VERSION        = MathJax_3
 
 # When the SEARCHENGINE tag is enabled doxygen will generate a search box for
 # the HTML output. The underlying search engine uses javascript and DHTML and
