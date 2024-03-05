@@ -1224,16 +1224,15 @@ KinematicsInverseResp Robot::kinematics_inverse(const CartesianPose & pose, cons
   
   for(auto && p: joint_init_positions)
   {
-    req.mutable_pose()->mutable_joint()->mutable_joint()->push_back(p);
+    req.mutable_refer()->mutable_joint()->push_back(p);
   }
-  std::vector<double> joint_positions;
+  // std::vector<double> joint_positions;
   KinematicsInverseResp ki_resp;
   try
   {
     auto resp = impl_->getInverseKin(req);
     ki_resp.joint_positions = resp.joint();
-    ki_resp.ok = true;
-    
+    ki_resp.ok = true;    
   }
   catch(std::exception & e)
   {
