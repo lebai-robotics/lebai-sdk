@@ -1,5 +1,5 @@
 name: Linux python aarch64 build
-run-name: ${{ github.actor }} Linux python build
+run-name: ${{ github.actor }} Linux python aarch64 build
 on: 
   workflow_dispatch: 
   pull_request: 

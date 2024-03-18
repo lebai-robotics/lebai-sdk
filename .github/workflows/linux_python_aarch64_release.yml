@@ -1,5 +1,5 @@
 name: Linux python aarch64 release
-run-name: ${{ github.actor }} Linux python release
+run-name: ${{ github.actor }} Linux python aarch64 release
 on: 
   workflow_dispatch: 
   push:
