@@ -1,4 +1,4 @@
-name: Linux python release
+name: Linux python aarch64 release
 run-name: ${{ github.actor }} Linux python release
 on: 
   workflow_dispatch: 
@@ -14,7 +14,7 @@ permissions:
 
 jobs: 
   linux_python_build_and_release: 
-    runs-on: ubuntu
+    runs-on: [self-hosted, Linux, ARM64]
     container: quay.io/pypa/manylinux2010_x86_64
     steps:
       - name: Checkout
