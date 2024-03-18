@@ -6,7 +6,7 @@ on:
 jobs: 
   linux_python_aarch64_build: 
     runs-on: [self-hosted, Linux, ARM64]
-    container: quay.io/pypa/manylinux2010_x86_64
+    container: quay.io/pypa/manylinux2014_aarch64
     steps:
       - name: Checkout
         uses: actions/checkout@v1
