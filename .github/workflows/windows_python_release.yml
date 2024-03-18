@@ -89,6 +89,25 @@ jobs:
         run: cmake --build build --config release
       - name: Upload Pypi
         run: twine upload --skip-existing -u __token__ -p ${{ secrets.PYLEBAI }} build/python/dist/*.whl
+  windows_python312_release:
+    runs-on: windows-latest 
+    steps: 
+      - name: Checkout
+        uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.12'
+      - name: Check cmake
+        run: cmake --version
+      - name: Install python-dev-tools
+        run: python.exe -m pip install python-dev-tools setuptools wheel twine markdown
+
+      - name: CMake configure
+        run: cmake -S. -Bbuild -G "Visual Studio 17 2022" -DBUILD_PYTHON=ON -DBUILD_DOCUMENTATION=OFF
+      - name: CMake build
+        run: cmake --build build --config release
+      - name: Upload Pypi
+        run: twine upload --skip-existing -u __token__ -p ${{ secrets.PYLEBAI }} build/python/dist/*.whl
       
       # - name: Publish package
       #   uses: pypa/gh-action-pypi-publish@release/v1
