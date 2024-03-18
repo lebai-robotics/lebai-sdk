@@ -4,10 +4,18 @@
 
 lebai-sdk的源代码仓库，可以用于控制乐白机械臂.
 
+## amd64架构
+
 | OS     | C++ | Python | C# | Java |
 |:-------|-----|--------|----|------| 
 | Linux  | [![Status][cpp_linux_svg]][cpp_linux_link] | [![Status][python_linux_svg]][python_linux_link] | [![Status][dotnet_linux_svg]][dotnet_linux_link] | TODO |
 | Windows | TODO | [![Status][python_windows_svg]][python_windows_link] | [![Status][dotnet_windows_svg]][dotnet_windows_link] | TODO |
+
+## aarch64架构
+| OS     | Python |
+|:-------|--------|
+| Linux  | [![Status][python_linux_aarch64_svg]][python_linux_aarch64_link] |
+
 
 **上图中显示TODO的地方表示该平台该语言的实现还存在问题，没有完全测试通过，后续会陆续完成。**
 
@@ -21,6 +29,9 @@ lebai-sdk的源代码仓库，可以用于控制乐白机械臂.
 [python_windows_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/windows_python_release.yml
 [dotnet_windows_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/windows_dotnet_release.yaml/badge.svg
 [dotnet_windows_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/windows_dotnet_release.yaml
+
+[python_linux_aarch64_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_python_aarch64_release.yml/badge.svg
+[python_linux_aarch64_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_python_aarch64_release.yml
 
 **SDK使用需要乐白机械臂的控制器软件版本大于等于`3.1.5`，您可以在机械臂WEB界面左上方查看当前版本号.**
 
