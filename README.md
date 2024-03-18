@@ -42,23 +42,30 @@ lebai-sdk的源代码仓库，可以用于控制乐白机械臂.
 ## python
 python开发可以直接从[PyPI](https://pypi.org/project/pylebai/)安装.
 
-**目前python仅支持linux平台，windows平台还存在问题.**
+python2理论上可以从源代码编译生成包（不再持续维护）
 
 ```
 pip install pylebai
 ```
-目前Linux平台支持的Python版本有
-- `3.6`
-- `3.7`
-- `3.8`
-- `3.9`
-- `3.10`
+目前Linux平台(amd64, aarch64)支持的Python版本有:
+- `cp3.6`
+- `cp3.7`
+- `cp3.8`
+- `cp3.9`
+- `cp3.10`
+- `cp3.11`
+- `cp3.12`
+- `pp3.7`
+- `pp3.8`
+- `pp3.9`
+- `pp3.10`
 
-目前Windows平台支持的Python版本有
+目前Windows平台支持的Python版本有:
 - `3.8`
 - `3.9`
 - `3.10`
 - `3.11`
+- `3.12`
 
 
 
