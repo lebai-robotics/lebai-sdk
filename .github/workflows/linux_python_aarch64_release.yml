@@ -1,5 +1,5 @@
-name: Linux python release
-run-name: ${{ github.actor }} Linux python release
+name: Linux python aarch64 release
+run-name: ${{ github.actor }} Linux python aarch64 release
 on: 
   workflow_dispatch: 
   push:
@@ -13,12 +13,13 @@ permissions:
   pull-requests: read
 
 jobs: 
-  linux_python_build_and_release: 
-    runs-on: ubuntu-latest
-    container: quay.io/pypa/manylinux2014_x86_64
+  linux_python_aarch64_build_and_release: 
+    runs-on: [self-hosted, Linux, ARM64]
+    container: quay.io/pypa/manylinux2014_aarch64
     steps:
       - name: Checkout
         uses: actions/checkout@v1
+      - run: ls /opt/python/
       - run: for PYBIN in /opt/python/*/bin;do "${PYBIN}/pip" install -r requirements.txt; done;
       - run: /opt/python/cp310-cp310/bin/pip install twine==2.0 urllib3==1.24. markdown
       - name: configure

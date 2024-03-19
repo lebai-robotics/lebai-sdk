@@ -1,5 +1,9 @@
 # ChangeLog
 
+## 1.1.15
+
+完善文档，python支持更多版本，python生成aarch64的包。
+
 ## 1.1.14
 
 修正IK的bug
