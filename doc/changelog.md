@@ -1,5 +1,9 @@
 # ChangeLog
 
+## 1.1.16
+
+添加接口`get_claw_data`返回数据结构而不是tuple。
+
 ## 1.1.15
 
 完善文档，python支持更多版本，python生成aarch64的包。
