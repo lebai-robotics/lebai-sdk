@@ -944,6 +944,16 @@ std::tuple<double, double ,bool> Robot::get_claw()
   return std::make_tuple(resp.force(), resp.amplitude(), resp.hold_on());
 }
 
+ClawData Robot::get_claw_data() 
+{
+  auto resp = impl_->getClaw();
+  ClawData claw_data;
+  claw_data.force = resp.force();
+  claw_data.amplitude = resp.amplitude();
+  claw_data.hold_on = resp.hold_on();
+  return claw_data;
+}
+
 void Robot::set_led(unsigned int mode,unsigned int speed,const std::vector<unsigned int> & color)
 {
   led::LedData req;
