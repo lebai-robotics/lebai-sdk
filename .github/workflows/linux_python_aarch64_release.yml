@@ -23,7 +23,7 @@ jobs:
       - run: for PYBIN in /opt/python/*/bin;do "${PYBIN}/pip" install -i https://mirrors.aliyun.com/pypi/simple/ -r requirements.txt; done;
       - run: /opt/python/cp310-cp310/bin/pip install -i https://mirrors.aliyun.com/pypi/simple/ twine==2.0 urllib3==1.24. markdown
       - name: configure
-        run: cmake -S. -Bbuild -DBUILD_PYTHON=ON
+        run: cmake -S. -Bbuild -DBUILD_TESTING=OFF -DBUILD_PYTHON=ON
       - name: build
         run: cmake --build build
       - name: create-whl-dir
@@ -31,7 +31,7 @@ jobs:
       - name: build with python
         run: for PY in /opt/python/*;do
           rm -rf build;
-          cmake -S. -Bbuild -DBUILD_PYTHON=ON -DPYTHONPATH=${PY};
+          cmake -S. -Bbuild -DBUILD_TESTING=OFF -DBUILD_PYTHON=ON -DPYTHONPATH=${PY};
           cmake --build build;
           cp build/python/dist/*.whl whl/;
           done;
