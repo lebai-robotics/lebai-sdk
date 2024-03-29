@@ -58,6 +58,13 @@ namespace lebai
     bool ok = false;  /*!< 计算是否成功 */
   };
 
+  struct ClawData 
+  {
+    double force;
+    double amplitude;
+    bool hold_on;    
+  };
+
 
 
   /**
@@ -653,6 +660,12 @@ namespace lebai
      * @return std::tuple<double, double ,bool> 第一个数据为夹爪力度，第二个数据为幅度，第三个数据为开度是否稳定
      */
     std::tuple<double, double ,bool> get_claw();
+    /**
+     * @brief 获取夹爪当前数据
+     * 
+     * @return ClawData 数据
+     */    
+    ClawData get_claw_data();
     /** @}*/
 
     /** \addtogroup LED
