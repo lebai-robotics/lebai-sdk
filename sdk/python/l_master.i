@@ -10,6 +10,18 @@
 #include "lebai/lua_robot.hh"
 %}
 
+%exception {
+    try {
+        $action
+    } catch (const std::exception &e) {
+        PyErr_SetString(PyExc_Exception, e.what());
+        return NULL;
+    } catch (...) {
+        PyErr_SetString(PyExc_Exception, "An unknown exception occurred");
+        return NULL;
+    }
+}
+
 %extend lebai::l_master::KinematicsForwardResp {
   std::string __repr__() {
     std::string repr = "{pose: {{x: ";
