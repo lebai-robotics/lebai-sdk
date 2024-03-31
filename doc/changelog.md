@@ -1,5 +1,9 @@
 # ChangeLog
 
+## 1.1.17
+
+修正python不能捕获异常的问题。
+
 ## 1.1.16
 
 添加接口`get_claw_data`返回数据结构而不是tuple。
