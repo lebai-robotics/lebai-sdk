@@ -100,7 +100,7 @@ function(search_python_internal_module)
   endif()
 endfunction()
 
-set(PYTHON_PROJECT lebai)
+set(PYTHON_PROJECT pylebai)
 set(PYTHON_PROJECT_DIR ${PROJECT_BINARY_DIR}/python/${PYTHON_PROJECT})
 message(STATUS "Python project build path: ${PYTHON_PROJECT_DIR}")
 

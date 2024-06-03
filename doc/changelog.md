@@ -1,5 +1,9 @@
 # ChangeLog
 
+## 1.1.18
+
+调整python包名字为pylebai。
+
 ## 1.1.17
 
 修正python不能捕获异常的问题。
