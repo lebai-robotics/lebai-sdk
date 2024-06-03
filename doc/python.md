@@ -24,7 +24,7 @@ cmake --build build --target python_package
 构建完成后，在`build/python/dist/`目录下会生成python的whl包，可以直接使用pip进行安装。
 
 ```bash
-pip3 install build/python/dist/pylebai-xxx.whl
+pip3 install build/python/dist/pypylebai-xxx.whl
 ```
 
 您可以通过如下命令来查看安装的包的信息。
@@ -44,7 +44,7 @@ sudo pip3 uninstall pylebai
 安装完成后可以直接使用lebai包。
 
 ```python
-from lebai import l_master
+from pylebai import l_master
 robot = l_master.Robot("172.17.0.5",True)
 robot.movej({"j1": 1.0,"j2": -1.0471975511965976,"j3": 1.3962634015954636,"j4": -0.17453292519943295,"j5": -1.0471975511965976,"j6": 0.0},1.0,1.0,0.0,0.0)
 ```
