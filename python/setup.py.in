@@ -19,7 +19,7 @@ class InstallPlatlib(install):
 long_description = "See (Lebai sdk doc)[https://lebai-robotics.github.io/lebai-sdk/] for more."
 
 setup(
-  name='py@PYTHON_PROJECT@',
+  name='@PYTHON_PROJECT@',
   description = 'lebai controller python sdk',
   version='@PROJECT_VERSION@',
   author='liufang',

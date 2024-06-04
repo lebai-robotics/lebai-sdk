@@ -1,5 +1,8 @@
 # ChangeLog
 
+## 1.1.23
+修正pypi生成的问题。
+
 ## 1.1.22
 
 调整python构建token。
