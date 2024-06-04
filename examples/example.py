@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from pylebai import zeroconf
+from lebai import zeroconf
 ## Try to find the l_master
 d = zeroconf.Discovery()
 controllers = d.resolve()
 ## Robot instance
-from pylebai import l_master
+from lebai import l_master
 import time
 robot = l_master.Robot(controllers[0].ip_address)
 time.sleep(2)

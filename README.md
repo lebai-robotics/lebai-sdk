@@ -45,7 +45,7 @@ python开发可以直接从[PyPI](https://pypi.org/project/pylebai/)安装.
 python2理论上可以从源代码编译生成包（不再持续维护）
 
 ```
-pip install pylebai
+pip install lebai
 ```
 目前Linux平台(amd64, aarch64)支持的Python版本有:
 - `cp3.6`
