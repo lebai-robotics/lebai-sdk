@@ -1,5 +1,8 @@
 # ChangeLog
 
+## 1.1.24
+暂时移除windows上python3.12生成。
+
 ## 1.1.23
 修正pypi生成的问题。
 
