@@ -1,5 +1,13 @@
 # ChangeLog
 
+## 1.1.21
+
+调整python构建token。
+
+## 1.1.19
+
+调整python构建token。
+
 ## 1.1.19
 
 调整python构建token。
