@@ -6,7 +6,7 @@ if (POLICY CMP0135)
   cmake_policy(SET CMP0135 NEW)
 endif()
 
-project(lebai VERSION 1.1.22 LANGUAGES CXX)
+project(lebai VERSION 1.1.23 LANGUAGES CXX)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
