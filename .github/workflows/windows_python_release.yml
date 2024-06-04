@@ -88,7 +88,7 @@ jobs:
       - name: CMake build
         run: cmake --build build --config release
       - name: Upload Pypi
-        run: twine upload --skip-existing -u __token__ -p ${{ secrets.PYLEBAI }} build/python/dist/*.whl
+        run: twine upload --skip-existing --verbose -u __token__ -p ${{ secrets.PYLEBAI2024 }} build/python/dist/*.whl
   # windows_cp312_release:
   #   runs-on: windows-latest 
   #   steps: 

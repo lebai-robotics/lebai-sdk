@@ -41,4 +41,4 @@ jobs:
           done;
         
       - name: upload Pypi
-        run: /opt/python/cp310-cp310/bin/twine upload --skip-existing -u __token__ -p ${{ secrets.PYLEBAI2024 }} wheelhouse/*.whl
+        run: /opt/python/cp310-cp310/bin/twine upload --verbose --skip-existing -u __token__ -p ${{ secrets.PYLEBAI2024 }} wheelhouse/*.whl
