@@ -6,12 +6,12 @@ if (POLICY CMP0135)
   cmake_policy(SET CMP0135 NEW)
 endif()
 
+project(lebai VERSION 1.1.19 LANGUAGES CXX)
+
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 option(CMAKE_EXPORT_COMPILE_COMMANDS "Export compile command" TRUE)
 
-
-project(lebai VERSION 1.1.18 LANGUAGES CXX)
 set(PROJECT_NAMESPACE lebai)
 message(STATUS "${PROJECT_NAME} version: ${PROJECT_VERSION}")
 # message(STATUS "major: ${PROJECT_VERSION_MAJOR}")

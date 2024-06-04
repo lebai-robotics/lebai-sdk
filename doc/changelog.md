@@ -1,5 +1,9 @@
 # ChangeLog
 
+## 1.1.19
+
+调整python构建token。
+
 ## 1.1.18
 
 尝试调整python包名字。
