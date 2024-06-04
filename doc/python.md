@@ -44,7 +44,7 @@ sudo pip3 uninstall pylebai
 安装完成后可以直接使用lebai包。
 
 ```python
-from lebai import l_master
+from pylebai import l_master
 robot = l_master.Robot("172.17.0.5",True)
 robot.movej({"j1": 1.0,"j2": -1.0471975511965976,"j3": 1.3962634015954636,"j4": -0.17453292519943295,"j5": -1.0471975511965976,"j6": 0.0},1.0,1.0,0.0,0.0)
 ```
