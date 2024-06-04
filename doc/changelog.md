@@ -1,6 +1,6 @@
 # ChangeLog
 
-## 1.1.21
+## 1.1.22
 
 调整python构建token。
 
