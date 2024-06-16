@@ -1,7 +1,8 @@
 name: Windows python release
 run-name: ${{ github.actor }} Windows python release
 on: 
-  workflow_dispatch: 
+  workflow_dispatch:
+  workflow_call:
   push:
    tags:
     - v1.*.*

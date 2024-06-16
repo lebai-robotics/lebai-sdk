@@ -1,7 +1,8 @@
 name: Linux dotnet release
 run-name: ${{ github.actor }} Linux dotnet release
 on: 
-  workflow_dispatch: 
+  workflow_dispatch:
+  workflow_call:
   push:
    tags:
     - v1.*.*
@@ -34,3 +35,10 @@ jobs:
           cd ./build/dotnet/packages;
           dotnet nuget push lebai.runtime.linux-x64.1.*.*.nupkg --api-key ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json;
           dotnet nuget push lebai.1.*.*.nupkg --api-key ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json;
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        id: artifact
+        with:
+          name: lebai-linux-x64-nupkg
+          path: build/dotnet/packages/*.nupkg

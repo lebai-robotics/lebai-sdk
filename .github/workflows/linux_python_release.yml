@@ -1,7 +1,8 @@
 name: Linux python release
 run-name: ${{ github.actor }} Linux python release
 on: 
-  workflow_dispatch: 
+  workflow_dispatch:
+  workflow_call:
   push:
    tags:
     - v1.*.*
@@ -21,11 +22,11 @@ jobs:
         uses: actions/checkout@v1
       - run: for PYBIN in /opt/python/*/bin;do "${PYBIN}/pip" install -r requirements.txt; done;
       - run: /opt/python/cp310-cp310/bin/pip install twine==2.0 urllib3==1.24. markdown
-      - name: configure
+      - name: Configure
         run: cmake -S. -Bbuild -DBUILD_PYTHON=ON
-      - name: build
+      - name: Build
         run: cmake --build build
-      - name: create-whl-dir
+      - name: Create-whl-dir
         run: mkdir -p whl
       - name: build with python
         run: for PY in /opt/python/*;do
@@ -35,10 +36,17 @@ jobs:
           cp build/python/dist/*.whl whl/;
           done;
         
-      - name: repair
+      - name: Repair
         run: for PYWHL in whl/*.whl;do
           auditwheel repair ${PYWHL};
           done;
         
-      - name: upload Pypi
+      - name: Upload Pypi
         run: /opt/python/cp310-cp310/bin/twine upload --verbose --skip-existing -u __token__ -p ${{ secrets.PYLEBAI }} wheelhouse/*.whl
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        id: artifact
+        with:
+          name: lebai-linux-x64-whl
+          path: wheelhouse/*.whl

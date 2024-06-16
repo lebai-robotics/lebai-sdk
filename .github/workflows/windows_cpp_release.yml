@@ -1,0 +1,36 @@
+name: Windows cpp build
+run-name: ${{ github.actor }} Windows cpp build
+on: 
+  workflow_dispatch:
+  workflow_call:
+  push:
+   tags:
+    - v1.*.*
+# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  pull-requests: read
+
+jobs: 
+  windows_cpp_build:
+    runs-on: windows-latest 
+    steps: 
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Check cmake
+        run: cmake --version
+      - name: Configure
+        run: cmake -S. -Bbuild -G "Visual Studio 17 2022" -DBUILD_NSIS=ON -DBUILD_DOCUMENTATION=OFF
+      - name: Build
+        run: cmake --build build --config Release
+      - name: Pack
+        run: cd build && cpack -C Release && cd ..
+      - name: Upload nsis package
+        uses: actions/upload-artifact@v4
+        id: artifact
+        with:
+          name: lebai-win-x64-exe
+          path: |
+            build/*.exe        

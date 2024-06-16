@@ -1,0 +1,52 @@
+name: Release lebai sdk
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  linux-cpp-x64:
+    uses: ./.github/workflows/linux_cpp_release.yml
+  linux-python-x64:
+    uses: ./.github/workflows/linux_python_release.yml
+  linux-dotnet-x64:
+    uses: ./.github/workflows/linux_dotnet_release.yml   
+  release:
+    needs: 
+      - linux-cpp-x64
+      - linux-python-x64
+      - linux-dotnet-x64
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4    
+      - uses: actions/download-artifact@v4
+        with:
+          name: lebai-linux-x64-deb
+      - uses: actions/download-artifact@v4
+        with:
+          name: lebai-linux-x64-nupkg
+      - uses: actions/download-artifact@v4
+        with:
+          name: lebai-linux-x64-whl      
+      - name: Display structure of downloaded files
+        run: ls -l
+      - name: Extract Project Version
+        id: extract_version
+        run: |
+          # Extract the project version from CMakeLists.txt
+          version=$(awk '/project\s*\(/,/)/' CMakeLists.txt | grep -Po 'VERSION\s*\K[0-9]+\.[0-9]+\.[0-9]+')
+          echo "version_tag=v$version" >> $GITHUB_ENV        
+      - name: Create release
+        id: create_release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.extract_version.outputs.version_tag }}
+          allowUpdates: true
+          artifacts: |
+            *.exe,
+            *.deb
