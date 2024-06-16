@@ -7,10 +7,13 @@ on:
 jobs:
   linux-cpp-x64:
     uses: ./.github/workflows/linux_cpp_release.yml
+    secrets: inherit
   linux-python-x64:
     uses: ./.github/workflows/linux_python_release.yml
+    secrets: inherit
   linux-dotnet-x64:
     uses: ./.github/workflows/linux_dotnet_release.yml
+    secrets: inherit
   release:
     needs: 
       - linux-cpp-x64
