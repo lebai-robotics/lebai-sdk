@@ -70,8 +70,8 @@ jobs:
         with:
          name: DebForCPP
          path: ./*.deb
-      - name: release
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: DebForCPP
-          allowUpdates: true          
+      # - name: release
+      #   uses: ncipollo/release-action@v1
+      #   with:
+      #     artifacts: DebForCPP
+      #     allowUpdates: true          
