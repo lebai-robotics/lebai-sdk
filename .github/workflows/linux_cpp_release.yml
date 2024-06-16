@@ -1,7 +1,8 @@
 name: Linux cpp release
 run-name: ${{ github.actor }} Linux cpp release
 on: 
-  workflow_dispatch: 
+  workflow_dispatch:
+  workflow_call:
   push:
    tags:
     - v1.*.*
@@ -24,7 +25,7 @@ jobs:
     runs-on: ${{ matrix.os-version }}
     steps: 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         
       - name: check python version
         uses: actions/setup-python@v4.3.0
@@ -56,22 +57,19 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v1
         
-      # - name: upload .whl
-      #   uses: actions/upload-artifact@v3
-      #   with: 
-      #    name: WheelForPython
-      #    path: ./build/python/dist/*.whl
-
-      - name: build deb pack
-        run: cpack --config ./build/CPackConfig.cmake
-
-      - name: upload .deb
+      - name: Build and pack
+        run: |
+          cmake --build build
+          cd build && cpack && cd ..
+      - name: Upload artifact
         uses: actions/upload-artifact@v4
+        id: artifact
         with:
-         name: DebForCPP
-         path: ./*.deb
-      - name: release
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: DebForCPP
-          allowUpdates: true          
+          name: lebai-linux-x64-deb
+          path: build/*.deb
+
+      # - name: release
+      #   uses: ncipollo/release-action@v1
+      #   with:
+      #     artifacts: DebForCPP
+      #     allowUpdates: true          

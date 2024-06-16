@@ -1,8 +1,11 @@
 name: Windows cpp build
 run-name: ${{ github.actor }} Windows cpp build
 on: 
-  workflow_dispatch: 
-  pull_request: 
+  workflow_dispatch:
+  workflow_call:
+  push:
+   tags:
+    - v1.*.*
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read

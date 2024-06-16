@@ -16,7 +16,7 @@ jobs:
       - name: create-whl-dir
         run: mkdir -p whl
 
-      - name: build with python
+      - name: Build with python
         run: for PY in /opt/python/*;do
           rm -rf build;
           cmake -S. -Bbuild -DBUILD_PYTHON=ON -DPYTHONPATH=${PY};
@@ -24,10 +24,17 @@ jobs:
           cp build/python/dist/*.whl whl/;
           done;
         
-      - name: repair
+      - name: Repair
         run: for PYWHL in whl/*.whl;do
           auditwheel repair ${PYWHL};
           done;
         
-      - name: list Pypi
+      - name: List wheels.
         run: ls wheelhouse/*
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        id: artifact
+        with:
+          name: lebai-linux-x64-whl
+          path: wheelhouse/*.whl

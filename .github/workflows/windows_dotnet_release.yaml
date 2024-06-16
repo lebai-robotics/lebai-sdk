@@ -1,7 +1,8 @@
 name: Windows dotnet release
 run-name: ${{ github.actor }} Windows dotnet release
 on: 
-  workflow_dispatch: 
+  workflow_dispatch:
+  workflow_call:
   push:
    tags:
     - v1.*.*
