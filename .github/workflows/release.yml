@@ -10,7 +10,7 @@ jobs:
   linux-python-x64:
     uses: ./.github/workflows/linux_python_release.yml
   linux-dotnet-x64:
-    uses: ./.github/workflows/linux_dotnet_release.yml   
+    uses: ./.github/workflows/linux_dotnet_release.yml
   release:
     needs: 
       - linux-cpp-x64
