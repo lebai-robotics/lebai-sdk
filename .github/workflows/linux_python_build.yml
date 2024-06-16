@@ -36,5 +36,5 @@ jobs:
         uses: actions/upload-artifact@v4
         id: artifact
         with:
-          name: lebai-linux-x64-python-whl
+          name: lebai-linux-x64-whl
           path: wheelhouse/*.whl

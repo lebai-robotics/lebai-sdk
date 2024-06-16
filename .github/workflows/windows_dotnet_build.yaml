@@ -1,0 +1,30 @@
+name: Windows dotnet build
+run-name: ${{ github.actor }} Windows dotnet build
+on: 
+  workflow_dispatch: 
+  pull_request:
+jobs: 
+  linux_dotnet_build: 
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v1
+      
+      - name: Setup .NET Core 3.1
+        uses: actions/setup-dotnet@v3.0.3
+
+      - name: Setup .NET 6.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.x
+          
+      - name: Configure
+        run: cmake -S. -Bbuild -G "Visual Studio 17 2022" -DBUILD_DOTNET=ON -DBUILD_DOCUMENTATION=OFF
+      - name: Build
+        run: cmake --build build --config release
+      - name: Upload windows nupkg
+        uses: actions/upload-artifact@v4
+        id: artifact
+        with:
+          name: lebai-win-x64-nupkg
+          path: build/python/dist/*.whl        
