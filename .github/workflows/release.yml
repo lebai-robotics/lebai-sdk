@@ -49,4 +49,7 @@ jobs:
           allowUpdates: true
           artifacts: |
             *.exe,
-            *.deb
+            *.deb,
+            *.nupkg,
+            *.whl
+            

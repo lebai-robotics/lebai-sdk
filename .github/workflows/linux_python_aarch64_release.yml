@@ -2,9 +2,9 @@ name: Linux python aarch64 release
 run-name: ${{ github.actor }} Linux python aarch64 release
 on: 
   workflow_dispatch: 
-  push:
-   tags:
-    - v1.*.*
+  # push:
+  #  tags:
+  #   - v1.*.*
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read

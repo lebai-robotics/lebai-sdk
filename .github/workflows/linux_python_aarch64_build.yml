@@ -2,7 +2,7 @@ name: Linux python aarch64 build
 run-name: ${{ github.actor }} Linux python aarch64 build
 on: 
   workflow_dispatch: 
-  pull_request: 
+  # pull_request: 
 jobs: 
   linux_python_aarch64_build: 
     runs-on: [self-hosted, Linux, ARM64]
