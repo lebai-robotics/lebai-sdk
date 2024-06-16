@@ -7,18 +7,28 @@ on:
 jobs:
   linux-cpp-x64:
     uses: ./.github/workflows/linux_cpp_release.yml
-    secrets: inherit
   linux-python-x64:
     uses: ./.github/workflows/linux_python_release.yml
     secrets: inherit
   linux-dotnet-x64:
     uses: ./.github/workflows/linux_dotnet_release.yml
     secrets: inherit
+  win-cpp-x64:
+    uses: ./.github/workflows/windows_cpp_release.yml
+  win-python-x64:
+    uses: ./.github/workflows/windows_python_release.yml
+    secrets: inherit
+  win-dotnet-x64:
+    uses: ./.github/workflows/windows_dotnet_release.yml
+    secrets: inherit    
   release:
     needs: 
       - linux-cpp-x64
       - linux-python-x64
       - linux-dotnet-x64
+      - win-cpp-x64
+      - win-python-x64
+      - win-dotnet-x64
     runs-on: ubuntu-latest
     permissions:
       contents: write
