@@ -19,9 +19,9 @@ jobs:
       matrix:
         py-version: [ 3.11 ]
         os-version: [ ubuntu-latest ]
-      environment:
-        name: github-pages
-        url: ${{ steps.deployment.outputs.page_url }}
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ${{ matrix.os-version }}
     steps: 
       - name: Checkout
