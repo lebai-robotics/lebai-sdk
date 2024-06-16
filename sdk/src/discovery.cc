@@ -14,41 +14,30 @@
  * limitations under the License.
  */
 
-#include <lebai/robot.hh>
 #include <memory>
+#include <lebai/robot.hh>
 #include "discovery_impl.hh"
 
-namespace lebai
-{
+namespace lebai {
 
-  namespace zeroconf
-  {
+namespace zeroconf {
 
-    std::string ControllerInfo::str()
-    {
-      std::string str;
-      str += "{'hostname':" + hostname + ",";
-      str += "'ip_address':" + ip_address + ",";
-      str += "'mac_address':" + mac_address + ",";
-      str += "'model':" + model + ",";
-      str += "'ds_version':" + ds_version + ",";
-      str += "'rc_version':" + rc_version + ",";
-      str += "'id':" + id+"}";
-      return str;
-    }
-    Discovery::Discovery()
-    {
-      impl_ = std::make_unique<DiscoveryImpl>();
-    }
-    Discovery::~Discovery()
-    {
-    }
+std::string ControllerInfo::str() {
+  std::string str;
+  str += "{'hostname':" + hostname + ",";
+  str += "'ip_address':" + ip_address + ",";
+  str += "'mac_address':" + mac_address + ",";
+  str += "'model':" + model + ",";
+  str += "'ds_version':" + ds_version + ",";
+  str += "'rc_version':" + rc_version + ",";
+  str += "'id':" + id + "}";
+  return str;
+}
+Discovery::Discovery() { impl_ = std::make_unique<DiscoveryImpl>(); }
+Discovery::~Discovery() {}
 
-    std::vector<ControllerInfo> Discovery::resolve()
-    {
-      return impl_->resolve();
-    }
+std::vector<ControllerInfo> Discovery::resolve() { return impl_->resolve(); }
 
-  }
+}  // namespace zeroconf
 
-} // namespace zeroconf
+}  // namespace lebai

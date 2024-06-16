@@ -4,3 +4,4 @@ out
 .vs
 sdk/include/lebai/config.hh
 CMakeSettings.json
+.cache

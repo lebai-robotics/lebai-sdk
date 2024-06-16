@@ -4,26 +4,8 @@ on:
   workflow_dispatch: 
   pull_request: 
 jobs: 
-  linux_cpp_build: 
-    runs-on: ubuntu-latest
-    steps: 
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: install components
-        run: sudo apt-get install -y build-essential doxygen graphviz python3-pip python3-dev
-
-      - name: install dependencies
-        run: pip3 install -r requirements.txt
-
-      - name: configure
-        run: cmake -S. -Bbuild -DBUILD_DEB=ON
-
-      - name: build
-        run: cmake --build build
- 
   linux_cpp_test:
-   needs: linux_cpp_build
+  #  needs: linux_cpp_build
    runs-on: ubuntu-latest
    container: registry.cn-shanghai.aliyuncs.com/lebai/l-master:3.1.6
    steps: 
@@ -52,3 +34,31 @@ jobs:
        
      - name: test
        run: cmake --build build --target test
+
+  linux_cpp_build: 
+    runs-on: ubuntu-latest
+    steps: 
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: install components
+        run: sudo apt-get install -y build-essential doxygen graphviz python3-pip python3-dev
+
+      - name: install dependencies
+        run: |
+          pip3 install -r requirements.txt
+          pip3 install clang-format
+
+      - name: configure
+        run: cmake -S. -Bbuild -DBUILD_DEB=ON -DCLANG_FORMAT_CHECK=ON
+
+      - name: build
+        run: |
+          cmake --build build
+          cd build && cpack && cd ..
+      # - name: Upload deb
+      #   uses: actions/upload-artifact@v4
+      #   id: artifact
+      #   with:
+      #     name: lebai-deb-package
+      #     path: build/*.deb

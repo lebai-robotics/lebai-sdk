@@ -15,7 +15,7 @@ target_sources(lebai-cpp
 target_include_directories(lebai-cpp
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/third>
+    $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/third>
     $<INSTALL_INTERFACE:include>)
 target_compile_features(lebai-cpp PUBLIC cxx_std_14)
 if(WIN32)
