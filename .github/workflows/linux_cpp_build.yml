@@ -56,13 +56,6 @@ jobs:
         run: |
           cmake --build build
           cd build && cpack && cd ..
-
-      - name: release
-        uses: ncipollo/release-action@v1
-        with:
-          artifacts: build/*.deb
-          allowUpdates: true
-
       # - name: Upload deb
       #   uses: actions/upload-artifact@v4
       #   id: artifact

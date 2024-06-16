@@ -68,5 +68,10 @@ jobs:
       - name: upload .deb
         uses: actions/upload-artifact@v3
         with:
-         name: DebForCPP
-         path: ./*.deb
+         name: lebai-deb-package
+         path: *.deb
+      - name: release
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: *.deb
+          allowUpdates: true         
