@@ -16,9 +16,9 @@
 
 #pragma once
 
+#include <iostream>
 #include <lebai/lua_robot.hh>
 #include <asio.hpp>
-#include <iostream>
 
 namespace lebai {
 namespace l_master {

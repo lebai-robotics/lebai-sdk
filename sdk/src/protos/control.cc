@@ -1,4 +1,3 @@
-#include <iostream>
 #include "control.hh"
 
 namespace lebai {

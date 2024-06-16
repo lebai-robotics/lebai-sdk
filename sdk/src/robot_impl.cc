@@ -13,12 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#include "robot_impl.hh"
-#include <exception>
 #include <rapidjson/rapidjson.h>
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/writer.h>
+#include <exception>
+#include "robot_impl.hh"
 #include "protos/utils.hh"
 
 namespace lebai {

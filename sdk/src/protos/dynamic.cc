@@ -1,6 +1,5 @@
-#include "dynamic.hh"
-#include <vector>
 #include <string>
+#include "dynamic.hh"
 
 namespace lebai {
 namespace dynamic {

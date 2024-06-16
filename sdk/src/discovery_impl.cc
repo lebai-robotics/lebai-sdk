@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-#include "discovery_impl.hh"
-#include <iostream>
-#include <vector>
 #ifdef _WIN32
 #include <winsock2.h>
 #include <iphlpapi.h>
@@ -26,7 +23,8 @@
 #include <ifaddrs.h>
 #include <net/if.h>
 #endif
-#include <exception>
+#include <vector>
+#include "discovery_impl.hh"
 
 namespace lebai {
 namespace zeroconf {

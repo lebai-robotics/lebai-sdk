@@ -1,8 +1,5 @@
-#include "jsonbase.hh"
 #include <string>
-#include <fstream>
-#include <sstream>
-#include <iostream>
+#include "jsonbase.hh"
 
 namespace lebai {
 

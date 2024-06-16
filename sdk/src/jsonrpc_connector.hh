@@ -15,10 +15,9 @@
  */
 
 #pragma once
-
-#include "websocket.hh"
 #include <rapidjson/document.h>
 #include <atomic>
+#include "websocket.hh"
 
 namespace lebai {
 class JSONRpcConnector {

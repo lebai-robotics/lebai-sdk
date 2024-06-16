@@ -1,7 +1,5 @@
-#include "posture.hh"
-
 #include <cmath>
-#include <string>
+#include "posture.hh"
 
 namespace lebai {
 namespace posture {

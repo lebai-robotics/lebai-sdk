@@ -196,8 +196,7 @@ file(
 option(CLANG_FORMAT_CHECK "Run clang-format in check mode" OFF)
 message(STATUS "Clang format check: ${CLANG_FORMAT_CHECK}")
 
-set(XXXX /root/workspace/lebai-sdk/sdk/include/lebai/config.hh
-         /root/workspace/lebai-sdk/sdk/include/lebai/discovery.hh)
+list(FILTER SDK_CXX_FILES EXCLUDE REGEX "${SDK_DIR}/include/lebai/config.hh")
 
 # Create the clang-format target
 if(CLANG_FORMAT_CHECK)

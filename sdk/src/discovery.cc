@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-#include <lebai/robot.hh>
 #include <memory>
+#include <lebai/robot.hh>
 #include "discovery_impl.hh"
 
 namespace lebai {

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-#include "lua_robot_impl.hh"
 #include <exception>
 #include <iostream>
+#include "lua_robot_impl.hh"
 
 namespace lebai {
 namespace l_master {

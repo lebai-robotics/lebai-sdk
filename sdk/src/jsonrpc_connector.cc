@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-#include "jsonrpc_connector.hh"
-
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/writer.h>
 #include <chrono>
+#include "jsonrpc_connector.hh"
 #include "protos/utils.hh"
 
 namespace lebai {

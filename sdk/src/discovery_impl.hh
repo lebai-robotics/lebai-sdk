@@ -15,10 +15,8 @@
  */
 
 #pragma once
-
-#include <lebai/discovery.hh>
 #include <mdns.h>
-#include <map>
+#include <lebai/discovery.hh>
 #include <string>
 namespace lebai {
 namespace zeroconf {
