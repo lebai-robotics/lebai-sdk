@@ -5,7 +5,7 @@ on:
   pull_request: 
 jobs: 
   linux_cpp_test:
-   needs: linux_cpp_build
+  #  needs: linux_cpp_build
    runs-on: ubuntu-latest
    container: registry.cn-shanghai.aliyuncs.com/lebai/l-master:3.1.6
    steps: 
@@ -55,9 +55,15 @@ jobs:
           cmake --build build
           cd build && cpack && cd ..
 
-      - name: Upload deb
-        uses: actions/upload-artifact@v4
-        id: artifact
+      - name: release
+        uses: ncipollo/release-action@v1
         with:
-          name: lebai-deb-package
-          path: build/*.deb
+          artifacts: build/*.deb
+          allowUpdates: true
+
+      # - name: Upload deb
+      #   uses: actions/upload-artifact@v4
+      #   id: artifact
+      #   with:
+      #     name: lebai-deb-package
+      #     path: build/*.deb
