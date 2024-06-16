@@ -28,9 +28,9 @@ jobs:
         run: cmake --build build
 
       - name: Upload pacakges
-        run: 
-          cd ./build/dotnet/packages;
-          dotnet nuget push lebai.runtime.win-x64.*.nupkg --api-key ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json;
+        run: |
+          cd ./build/dotnet/packages
+          dotnet nuget push lebai.runtime.win-x64.*.nupkg --api-key ${{ secrets.LEBAI_NUGET_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
       - name: Upload package
         uses: actions/upload-artifact@v3
         id: artifact
