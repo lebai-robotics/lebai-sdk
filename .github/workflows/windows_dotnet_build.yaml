@@ -27,4 +27,4 @@ jobs:
         id: artifact
         with:
           name: lebai-win-x64-nupkg
-          path: build/python/dist/*.whl        
+          path: build/dotnet/packages/*.nupkg        
