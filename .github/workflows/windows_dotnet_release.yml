@@ -21,13 +21,20 @@ jobs:
         with:
           dotnet-version: 6.0.x
           
-      - name: configure
+      - name: Configure
         run: cmake -S. -Bbuild -G "Visual Studio 17 2022" -DBUILD_DOTNET=ON -DBUILD_DOCUMENTATION=OFF
 
-      - name: build
+      - name: Build
         run: cmake --build build
 
-      - name: upload pacakges
+      - name: Upload pacakges
         run: 
           cd ./build/dotnet/packages;
           dotnet nuget push lebai.runtime.win-x64.*.nupkg --api-key ${{ secrets.NUGET_KEY }} --source https://api.nuget.org/v3/index.json;
+      - name: Upload package
+        uses: actions/upload-artifact@v3
+        id: artifact
+        with:
+          name: lebai-win-x64-nupkg
+          path: |
+            build/dotnet/packages/*.nupkg

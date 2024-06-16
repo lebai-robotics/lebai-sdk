@@ -28,7 +28,7 @@ jobs:
       - name: Pack
         run: cd build && cpack -C Release && cd ..
       - name: Upload nsis package
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         id: artifact
         with:
           name: lebai-win-x64-exe

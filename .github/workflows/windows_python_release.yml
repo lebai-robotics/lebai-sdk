@@ -33,6 +33,13 @@ jobs:
         run: cmake --build build --config release
       - name: Upload Pypi
         run: twine upload --skip-existing -u __token__ -p ${{ secrets.PYLEBAI }} build/python/dist/*.whl
+      - name: Upload packages
+        uses: actions/upload-artifact@v3
+        id: artifact
+        with:
+          name: lebai-win-x64-38-whl
+          path: |
+            build/dotnet/packages/*.whl        
   windows_cp39_release:
     runs-on: windows-latest 
     steps: 
@@ -52,6 +59,13 @@ jobs:
         run: cmake --build build --config release
       - name: Upload Pypi
         run: twine upload --skip-existing -u __token__ -p ${{ secrets.PYLEBAI }} build/python/dist/*.whl
+      - name: Upload packages
+        uses: actions/upload-artifact@v3
+        id: artifact
+        with:
+          name: lebai-win-x64-39-whl
+          path: |
+            build/dotnet/packages/*.whl        
   windows_cp310_release:
     runs-on: windows-latest 
     steps: 
@@ -71,6 +85,13 @@ jobs:
         run: cmake --build build --config release
       - name: Upload Pypi
         run: twine upload --skip-existing -u __token__ -p ${{ secrets.PYLEBAI }} build/python/dist/*.whl
+      - name: Upload packages
+        uses: actions/upload-artifact@v3
+        id: artifact
+        with:
+          name: lebai-win-x64-310-whl
+          path: |
+            build/dotnet/packages/*.whl        
   windows_cp311_release:
     runs-on: windows-latest 
     steps: 
@@ -90,6 +111,13 @@ jobs:
         run: cmake --build build --config release
       - name: Upload Pypi
         run: twine upload --skip-existing --verbose -u __token__ -p ${{ secrets.PYLEBAI }} build/python/dist/*.whl
+      - name: Upload packages
+        uses: actions/upload-artifact@v3
+        id: artifact
+        with:
+          name: lebai-win-x64-311-whl
+          path: |
+            build/dotnet/packages/*.whl        
   # windows_cp312_release:
   #   runs-on: windows-latest 
   #   steps: 
