@@ -16,21 +16,21 @@ permissions:
 jobs: 
   linux_cpp_build_and_release:
     strategy:
-     matrix:
-      py-version: [ 3.11 ]
-      os-version: [ ubuntu-latest ]
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      matrix:
+        py-version: [ 3.11 ]
+        os-version: [ ubuntu-latest ]
+      environment:
+        name: github-pages
+        url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ${{ matrix.os-version }}
     steps: 
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
         
       - name: check python version
         uses: actions/setup-python@v4.3.0
         with: 
-         python-version: ${{ matrix.py-version }}
+          python-version: ${{ matrix.py-version }}
 
       - name: install component
         run: sudo apt-get install -y build-essential doxygen graphviz python3-pip python3-dev dpkg-dev
