@@ -885,7 +885,7 @@ EXCLUDE_PATTERNS       = */cmake/* \
                          */python/* \
                          */sdk/python/* \
                          */sdk/src/* \
-                         */sdk/third/* \
+                         */third/* \
                          */sdk/test/* \
                          */examples/*
 

@@ -110,9 +110,10 @@ class RotationMatrix : public JSONBase {
   std::array<double, 9>* mutable_data();
 
  protected:
-  std::array<double, 9> data_ = {{1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0}};; /*!< Rotation matrix data */
-  // These methods are used to serialize and deserialize the class.
-  // They will not be wrapped in the SDK.
+  std::array<double, 9> data_ = {{1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0}};
+  ; /*!< Rotation matrix data */
+    // These methods are used to serialize and deserialize the class.
+    // They will not be wrapped in the SDK.
  public:
   virtual bool Deserialize(const rapidjson::Value& obj);
   virtual bool Serialize(
@@ -292,18 +293,16 @@ class Pose : public JSONBase {
   Kind kind() const;
 
   void set_joint(const JointPose& joint);
-  JointPose* mutable_joint();  
-  
+  JointPose* mutable_joint();
+
   void set_cart(const CartesianPose& cartesian_pose);
   CartesianPose* mutable_cart();
-  
+
   void set_cart_frame_index(const db::LoadRequest& cart_frame_index);
   db::LoadRequest* mutable_cart_frame_index();
-  
+
   void set_cart_frame(const CartesianFrame& cart_frame);
   CartesianFrame* mutable_cart_frame();
-
-
 
  protected:
   Kind kind_;
@@ -311,7 +310,6 @@ class Pose : public JSONBase {
   std::unique_ptr<CartesianPose> cart_ = nullptr;
   std::unique_ptr<db::LoadRequest> cart_frame_index_ = nullptr;
   std::unique_ptr<CartesianFrame> cart_frame_ = nullptr;
-  
 
  public:
   // These methods are used to serialize and deserialize the class.
@@ -341,7 +339,7 @@ class PoseRequest : public JSONBase {
 };
 
 class GetInverseKinRequest : public JSONBase {
-public:
+ public:
   // Data
   // pose
   void set_pose(const Pose& pose);
@@ -350,13 +348,12 @@ public:
 
   // refer
   void set_refer(const JointPose& refer);
-  const JointPose * refer() const;
-  JointPose * mutable_refer();
+  const JointPose* refer() const;
+  JointPose* mutable_refer();
 
  protected:
   Pose pose_;
   std::unique_ptr<JointPose> refer_;
-
 
  public:
   // These methods are used to serialize and deserialize the class.
@@ -364,7 +361,7 @@ public:
   virtual bool Deserialize(const rapidjson::Value& obj);
   virtual bool Serialize(
       rapidjson::Writer<rapidjson::StringBuffer>* writer) const;
-  virtual bool IsNullJSONData() const;  
+  virtual bool IsNullJSONData() const;
 };
 
 class GetPoseTransRequest : public JSONBase {
@@ -377,7 +374,7 @@ class GetPoseTransRequest : public JSONBase {
 
   // from_to
   void set_from_to(const Pose& refer);
-  const Pose & from_to() const;
+  const Pose& from_to() const;
   Pose* mutable_from_to();
 
  protected:
