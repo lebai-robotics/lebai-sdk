@@ -18,7 +18,7 @@ jobs:
           systemctl start l-master-ds
         
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v3
 
       - name: install components
         run: apt-get install -y build-essential doxygen graphviz python3-pip python3-dev
