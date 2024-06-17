@@ -37,19 +37,24 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4    
-      - uses: actions/download-artifact@v3
+      - name: Download linux x64 deb
+        uses: actions/download-artifact@v3
         with:
           name: lebai-linux-x64-deb
-      - uses: actions/download-artifact@v3
+      - name: Download linux x64 nupkg
+        uses: actions/download-artifact@v3
         with: 
           name: lebai-linux-x64-nupkg
-      - uses: actions/download-artifact@v3
+      - name: Download linux x64 whl
+        uses: actions/download-artifact@v3
         with: 
           name: lebai-linux-x64-whl
-      - uses: actions/download-artifact@v3
+      - name : Download win x64 exe
+        uses: actions/download-artifact@v3
         with:        
           name: lebai-win-x64-exe
-      - uses: actions/download-artifact@v3
+      - name : Download win x64 deb
+        uses: actions/download-artifact@v3
         with:        
           name: lebai-win-x64-nupkg
       - uses: actions/download-artifact@v3
