@@ -81,7 +81,7 @@ jobs:
         id: create_release
         uses: ncipollo/release-action@v1
         with:
-          tag: ${{ steps.extract_version.outputs.version_tag }}
+          tag: ${{ env.version_tag }}
           allowUpdates: true
           artifacts: |
             *.exe,
