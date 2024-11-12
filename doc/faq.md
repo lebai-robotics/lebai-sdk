@@ -1,7 +1,7 @@
 FAQ
 ---------------------
 
-# 如果在CMake项目中使用lebai c++包开发。
+# 如何在CMake项目中使用lebai c++包开发。
 
 1. 通过deb包或者源码安装。
 2. 创建您的CMake项目，在CMakeLists.txt中添加如下内容：
