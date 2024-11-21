@@ -1,5 +1,8 @@
 # ChangeLog
 
+## 1.1.29
+修正move_pvat不能正常工作的问题。
+
 ## 1.1.28
 修正c++安装包CMake Config的错误，添加使用文档。
 

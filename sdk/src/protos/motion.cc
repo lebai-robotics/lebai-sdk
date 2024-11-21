@@ -322,13 +322,13 @@ const double JointMove::acc() const { return acc_; }
 double* JointMove::mutable_acc() { return &acc_; }
 bool JointMove::Deserialize(const rapidjson::Value& obj) {
   if (obj.HasMember("pose")) {
-    pose_ = (double)(obj["pose"].GetDouble());
+    pose_ = obj["pose"].GetDouble();
   }
   if (obj.HasMember("velocity")) {
-    velocity_ = (double)(obj["velocity"].GetDouble());
+    velocity_ = obj["velocity"].GetDouble();
   }
   if (obj.HasMember("acc")) {
-    acc_ = (double)(obj["acc"].GetDouble());
+    acc_ = obj["acc"].GetDouble();
   }
   return true;
 }
@@ -374,9 +374,10 @@ bool MovePvatRequest::Serialize(
   writer->StartObject();
   writer->Key("duration");
   writer->Double(duration_);
+  writer->Key("joints");
   writer->StartArray();
   for (auto j : joints_) {
-    writer->String(j.ToJSONString().c_str());
+    j.Serialize(writer);
   }
   writer->EndArray();
   writer->EndObject();

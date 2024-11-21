@@ -141,21 +141,19 @@ motion::MotionIndex Robot::RobotImpl::speedLinear(
   std::string resp;
 
   auto req_string = req.ToJSONString();
-  std::cout << "req " << req_string << "\n";
   json_rpc_connector_->CallRpc("speed_linear", req_string, &resp);
   // json_rpc_connector_->CallRpc("speed_linear",req.ToJSONString(),&resp);
   motion::MotionIndex motion_resp;
   motion_resp.FromJSONString(resp);
-  std::cout << "resp " << resp << "\n";
   return motion_resp;
 }
 void Robot::RobotImpl::movePvat(const motion::MovePvatRequest &req) {
-  json_rpc_connector_->CallRpc("move_pvat", req.ToJSONString(), nullptr);
+  std::string resp;
+  json_rpc_connector_->CallRpc("move_pvat", req.ToJSONString(), &resp);
 }
 void Robot::RobotImpl::waitMove(const motion::MotionIndex &req) {
   std::string resp;
   json_rpc_connector_->CallRpc("wait_move", req.ToJSONString(), &resp);
-  // std::cout<<"resp " << resp << std::endl;
 }
 motion::MotionIndex Robot::RobotImpl::getRunningMotion() {
   std::string resp;

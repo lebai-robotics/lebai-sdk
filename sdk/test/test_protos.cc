@@ -378,6 +378,24 @@ TEST_F(ProtosTest, TestMotion) {
     EXPECT_NEAR(0.3, *req_check.mutable_param()->mutable_velocity(), 1e-6);
     EXPECT_NEAR(0.5, *req_check.mutable_rad(), 1e-6);
   }
+  {
+    lebai::motion::JointMove joint_move;
+    joint_move.set_pose(0.1);
+    joint_move.set_velocity(0.2);
+    joint_move.set_acc(0.3);
+    auto json_str = joint_move.ToJSONString();
+    // "{"pose":0.1,"velocity":0.2,"acc":0.3}"
+    EXPECT_EQ("{\"pose\":0.1,\"velocity\":0.2,\"acc\":0.3}", json_str);
+    lebai::motion::MovePvatRequest req;
+    req.set_duration(0.4);
+    req.set_joints({joint_move});
+    json_str = req.ToJSONString();
+    // {"duration":0.4,"joints":[{"pose":0.1,"velocity":0.2,"acc":0.3}]}
+    EXPECT_EQ(
+        "{\"duration\":0.4,\"joints\":[{\"pose\":0.1,\"velocity\":0.2,\"acc\":"
+        "0.3}]}",
+        json_str);
+  }
 }
 }  // namespace lebai
 

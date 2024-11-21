@@ -102,14 +102,14 @@ class Robot {
    *
    */
   virtual ~Robot();
+
+  // clang-format off
   /**
    * 示例代码:
    *
-   *     std::string movej_req =
-   * "{\"param\":{\"v\":0.1},\"pose\":{\"joint\":{\"delta\":"{\"joint\":[-1.0,0.0,0.0,0.0,0.0,0.0]}}}}";
+   *     std::string movej_req = "{\"param\":{\"v\":0.1},\"pose\":{\"joint\":{\"delta\":"{\"joint\":[-1.0,0.0,0.0,0.0,0.0,0.0]}}}}";
    *     resp = robot.call("movej", movej_req);
-   *     std::cout << "resp: " << std::get<0>(resp) << ", " << std::get<1>(resp)
-   * << std::endl;
+   *     std::cout << "resp: " << std::get<0>(resp) << ", " << std::get<1>(resp) << std::endl;
    *
    *
    * @brief 用JSON格式字符串调用机械臂的接口.
@@ -121,6 +121,7 @@ class Robot {
    * 如果返回码为0，表示调用成功，第二个元素是JSONRPC的返回数据.
    * 如果返回码为非0，表示调用失败，第二个元素是错误信息.
    */
+  // clang-format on
   std::tuple<int, std::string> call(const std::string &method,
                                     const std::string &params);
 
