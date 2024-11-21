@@ -45,7 +45,7 @@ jobs:
         run: /opt/python/cp310-cp310/bin/twine upload --verbose --skip-existing -u __token__ -p ${{ secrets.PYLEBAI }} wheelhouse/*.whl
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         id: artifact
         with:
           name: lebai-linux-x64-whl
