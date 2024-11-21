@@ -15,7 +15,7 @@ permissions:
 
 jobs: 
   linux_python_build_and_release: 
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     container: quay.io/pypa/manylinux2014_x86_64
     steps:
       - name: Checkout
