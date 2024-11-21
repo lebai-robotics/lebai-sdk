@@ -21,7 +21,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
       - run: for PYBIN in /opt/python/*/bin;do "${PYBIN}/pip" install -r requirements.txt; done;
-      - run: /opt/python/cp310-cp310/bin/pip install twine==2.0 urllib3==1.24. markdown
+      - run: /opt/python/cp310-cp310/bin/pip install twine==2.0 urllib3==1.24 markdown
       - name: Configure
         run: cmake -S. -Bbuild -DBUILD_PYTHON=ON
       - name: Build
