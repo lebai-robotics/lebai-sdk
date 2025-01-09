@@ -133,8 +133,8 @@ void TaskStdout::set_done(bool done) { done_ = done; }
 bool TaskStdout::done() { return done_; }
 bool *TaskStdout::mutable_done() { return &done_; }
 
-void TaskStdout::set_stdout(std::string stdout) { stdout_ = stdout; }
-std::string TaskStdout::stdout() { return stdout_; }
+void TaskStdout::set_stdout(std::string data) { stdout_ = data; }
+std::string TaskStdout::get_stdout() { return stdout_; }
 std::string *TaskStdout::mutable_stdout() { return &stdout_; }
 
 bool TaskStdout::Deserialize(const rapidjson::Value &obj) {

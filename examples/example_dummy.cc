@@ -48,16 +48,9 @@ int main(int argc, char **argv)
 
   robot.start_sys();
   auto id = robot.start_task("10006");
-  std::cout<<"start task id: "<<id<<std::endl;
-  while (true)
-  {
-    std::this_thread::sleep_for(std::chrono::milliseconds(200));
-    std::cout<<"wait_task: "<<robot.wait_task(id)<<std::endl;
-    // if(robot.get_task_state(10004) == "SUCCESS")
-    // {
-    //   break;
-    // }
-  }
+  auto done = robot.wait_task(id);
+  std::cout<<"wait_task: "<<done<<std::endl;
+
   // jp = {-28/ 180.0 * M_PI, -59.0/ 180.0 * M_PI, 96.0/ 180.0 * M_PI, -2.0/ 180.0 * M_PI, -92.0/ 180.0 * M_PI, 16.0/ 180.0 * M_PI};
   // std::cout<<"jp "<<jp[0]<<", "<<jp[1]<<", "<<jp[2]<<", "<<jp[3]<<", "<<jp[4]<<", "<<jp[5]<<std::endl;
   // fk_resp = robot.kinematics_forward(jp);

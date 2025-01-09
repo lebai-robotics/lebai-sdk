@@ -103,8 +103,8 @@ class TaskStdout : public JSONBase {
   bool done();
   bool *mutable_done();
 
-  void set_stdout(std::string stdout);
-  std::string stdout();
+  void set_stdout(std::string data);
+  std::string get_stdout();
   std::string *mutable_stdout();
 
  protected:
