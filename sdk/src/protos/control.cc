@@ -125,6 +125,47 @@ bool TaskIndex::Serialize(
 }
 bool TaskIndex::IsNullJSONData() const { return false; }
 
+void TaskStdout::set_id(unsigned int id) { id_ = id; }
+unsigned int TaskStdout::id() { return id_; }
+unsigned int *TaskStdout::mutable_id() { return &id_; }
+
+void TaskStdout::set_done(bool done) { done_ = done; }
+bool TaskStdout::done() { return done_; }
+bool *TaskStdout::mutable_done() { return &done_; }
+
+void TaskStdout::set_stdout(std::string stdout) { stdout_ = stdout; }
+std::string TaskStdout::stdout() { return stdout_; }
+std::string *TaskStdout::mutable_stdout() { return &stdout_; }
+
+bool TaskStdout::Deserialize(const rapidjson::Value &obj) {
+  if (obj.HasMember("id")) {
+    unsigned int id_int = (unsigned int)(obj["id"].GetUint());
+    id_ = id_int;
+  }
+  if (obj.HasMember("done")) {
+    bool done_bool = (bool)(obj["done"].GetBool());
+    done_ = done_bool;
+  }
+  if (obj.HasMember("stdout")) {
+    std::string stdout_str = (std::string)(obj["stdout"].GetString());
+    stdout_ = stdout_str;
+  }
+  return true;
+}
+bool TaskStdout::Serialize(
+    rapidjson::Writer<rapidjson::StringBuffer> *writer) const {
+  writer->StartObject();
+  writer->Key("id");
+  writer->Uint(id_);
+  writer->Key("done");
+  writer->Bool(done_);
+  writer->Key("stdout");
+  writer->String(stdout_.c_str());
+  writer->EndObject();
+  return true;
+}
+bool TaskStdout::IsNullJSONData() const { return false; }
+
 void PauseRequest::set_id(unsigned int id) { id_ = id; }
 unsigned int PauseRequest::id() { return id_; }
 unsigned int *PauseRequest::mutable_id() { return &id_; }

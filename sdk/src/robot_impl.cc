@@ -346,6 +346,14 @@ control::TaskIds Robot::RobotImpl::loadTaskList() {
   return list_resp;
 }
 
+control::TaskStdout Robot::RobotImpl::waitTask(const control::TaskIndex &req) {
+  std::string resp;
+  json_rpc_connector_->CallRpc("wait_task", req.ToJSONString(), &resp);
+  control::TaskStdout wait_task_resp;
+  wait_task_resp.FromJSONString(resp);
+  return wait_task_resp;
+}
+
 void Robot::RobotImpl::pauseTask(const control::PauseRequest &req) {
   json_rpc_connector_->CallRpc("pause_task", req.ToJSONString(), nullptr);
 }

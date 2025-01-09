@@ -93,6 +93,31 @@ class TaskIndex : public JSONBase {
   virtual bool IsNullJSONData() const;
 };
 
+class TaskStdout : public JSONBase {
+ public:
+  void set_id(unsigned int id);
+  unsigned int id();
+  unsigned int *mutable_id();
+
+  void set_done(bool done);
+  bool done();
+  bool *mutable_done();
+
+  void set_stdout(std::string stdout);
+  std::string stdout();
+  std::string *mutable_stdout();
+
+ protected:
+  unsigned int id_;
+  bool done_;
+  std::string stdout_;
+ public:
+  virtual bool Deserialize(const rapidjson::Value &obj);
+  virtual bool Serialize(
+      rapidjson::Writer<rapidjson::StringBuffer> *writer) const;
+  virtual bool IsNullJSONData() const;  
+};
+
 class Task : public JSONBase {
  public:
   void set_id(unsigned int id);

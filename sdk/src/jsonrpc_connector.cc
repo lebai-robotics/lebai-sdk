@@ -127,7 +127,7 @@ int JSONRpcConnector::CallRpc(const std::string &method,
   }
   using namespace std::chrono_literals;
   // TODO(@liufang) This corner case is not not good, need to be improved.
-  if (method != "wait_move") {
+  if (method != "wait_move" && method != "wait_task") {
     // TODO(@liufang) Make the timeout configurable.
     std::future_status status = future.wait_for(5s);
     switch (status) {

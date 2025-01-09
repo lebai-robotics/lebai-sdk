@@ -45,27 +45,18 @@ int main(int argc, char **argv)
   lebai::l_master::Robot robot(ip, sim);
   std::this_thread::sleep_for(std::chrono::seconds(1));
 
-  robot.movej({73.6359 / 180.0 * M_PI, -68.4064 / 180.0 * M_PI, -52.2675 / 180.0 * M_PI, 60.5182 / 180.0 * M_PI, -79.6674 / 180.0 * M_PI, 92.9829 / 180.0 * M_PI}, 1.0, 0.5, 0.0, 0.0);
-  robot.wait_move();
 
-  std::vector<double> jp = {73.6359 / 180.0 * M_PI, -68.4064 / 180.0 * M_PI, -52.2675 / 180.0 * M_PI, 60.5182 / 180.0 * M_PI, -79.6674 / 180.0 * M_PI, 92.9829 / 180.0 * M_PI};
-  std::cout << "jp " << jp[0] << ", " << jp[1] << ", " << jp[2] << ", " << jp[3] << ", " << jp[4] << ", " << jp[5] << std::endl;
-  lebai::l_master::CartesianPose pose;
-  pose["x"] = 0.088501997;
-  pose["y"] = -0.29743993;
-  pose["z"] = 0.70731318;
-  pose["rx"] = 16.6127 / 180.0 * M_PI;
-  pose["ry"] = 86.6987 / 180.0 * M_PI;
-  pose["rz"] = -66.8482 / 180.0 * M_PI;
-
-  auto ik_resp = robot.kinematics_inverse(pose, jp);
-  if (ik_resp.ok)
+  robot.start_sys();
+  auto id = robot.start_task("10006");
+  std::cout<<"start task id: "<<id<<std::endl;
+  while (true)
   {
-    std::cout << "kinematics_inverse: " << ik_resp.joint_positions[0] << ", " << ik_resp.joint_positions[1] << ", " << ik_resp.joint_positions[2] << ", " << ik_resp.joint_positions[3] << ", " << ik_resp.joint_positions[4] << ", " << ik_resp.joint_positions[5] << std::endl;
-  }
-  else
-  {
-    std::cout << "ik not ok!\n";
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
+    std::cout<<"wait_task: "<<robot.wait_task(id)<<std::endl;
+    // if(robot.get_task_state(10004) == "SUCCESS")
+    // {
+    //   break;
+    // }
   }
   // jp = {-28/ 180.0 * M_PI, -59.0/ 180.0 * M_PI, 96.0/ 180.0 * M_PI, -2.0/ 180.0 * M_PI, -92.0/ 180.0 * M_PI, 16.0/ 180.0 * M_PI};
   // std::cout<<"jp "<<jp[0]<<", "<<jp[1]<<", "<<jp[2]<<", "<<jp[3]<<", "<<jp[4]<<", "<<jp[5]<<std::endl;

@@ -8,12 +8,12 @@ endif()
 
 project(
   lebai
-  VERSION 1.1.31
+  VERSION 1.1.32
   LANGUAGES CXX)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
-option(CMAKE_EXPORT_COMPILE_COMMANDS "Export compile command" TRUE)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 set(PROJECT_NAMESPACE lebai)
 

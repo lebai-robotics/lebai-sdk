@@ -1001,6 +1001,12 @@ std::vector<unsigned int> Robot::load_task_list() {
   control::TaskIds resp = impl_->loadTaskList();
   return resp.ids();
 }
+bool Robot::wait_task(unsigned int id) {
+  control::TaskIndex task_index;
+  task_index.set_id(id);
+  control::TaskStdout resp = impl_->waitTask(task_index);
+  return resp.done();
+}
 void Robot::pause_task(unsigned int id) {
   control::PauseRequest req;
   req.set_id(id);

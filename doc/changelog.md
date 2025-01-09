@@ -1,4 +1,7 @@
 # ChangeLog
+## 1.1.32
+添加wait_task接口
+
 ## 1.1.31
 python镜像升级
 

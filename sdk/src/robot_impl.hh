@@ -89,6 +89,7 @@ class Robot::RobotImpl {
   void addSignal(const signal::SetSignalRequest &req);
   control::TaskIndex scene(const control::StartTaskRequest &req);
   control::TaskIds loadTaskList();
+  control::TaskStdout waitTask(const control::TaskIndex &req);
   void pauseTask(const control::PauseRequest &req);
   void resumeTask(const control::TaskIndex &req);
   void cancelTask(const control::TaskIndex &req);

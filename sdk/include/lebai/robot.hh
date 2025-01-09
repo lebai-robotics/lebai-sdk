@@ -828,6 +828,13 @@ class Robot {
    */
   std::vector<unsigned int> load_task_list();
   /**
+   * @brief 等待任务完成
+   *
+   * @param id: 任务的ID
+   * @return 返回任务是否成功
+   */
+  bool wait_task(unsigned int id);
+  /**
    * @brief 暂停任务与运动
    *
    * @param id: 任务的ID
