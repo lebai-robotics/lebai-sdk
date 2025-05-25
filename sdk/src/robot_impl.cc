@@ -603,6 +603,24 @@ void Robot::RobotImpl::setSerialParityRequest(
   json_rpc_connector_->CallRpc("set_serial_parity", req.ToJSONString(),
                                nullptr);
 }
+void Robot::RobotImpl::setItem(const storage::Item &req) {
+  json_rpc_connector_->CallRpc("set_item", req.ToJSONString(), nullptr);
+}
+storage::Item Robot::RobotImpl::getItem(const storage::ItemIndex &req) {
+  std::string resp_str;
+  json_rpc_connector_->CallRpc("get_item", req.ToJSONString(), &resp_str);
+  storage::Item resp;
+  resp.FromJSONString(resp_str);
+  return resp;
+}
+
+storage::Items Robot::RobotImpl::getItems(const storage::GetItemsRequest &req) {
+  std::string resp_str;
+  json_rpc_connector_->CallRpc("get_items", req.ToJSONString(), &resp_str);
+  storage::Items resp;
+  resp.FromJSONString(resp_str);
+  return resp;
+}
 
 }  // namespace l_master
 }  // namespace lebai

@@ -31,6 +31,7 @@
 #include "protos/db.hh"
 #include "protos/modbus.hh"
 #include "protos/serial.hh"
+#include "protos/storage.hh"
 
 namespace lebai {
 namespace l_master {
@@ -135,6 +136,9 @@ class Robot::RobotImpl {
       const modbus::GetRegistersRequest &req);
   void setSerialBaudRateRequest(const serial::SetSerialBaudRateRequest &req);
   void setSerialParityRequest(const serial::SetSerialParityRequest &req);
+  void setItem(const storage::Item &req);
+  storage::Item getItem(const storage::ItemIndex &req);
+  storage::Items getItems(const storage::GetItemsRequest &req);
 
  protected:
   std::unique_ptr<JSONRpcConnector> json_rpc_connector_;

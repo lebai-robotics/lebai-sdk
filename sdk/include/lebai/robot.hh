@@ -59,7 +59,8 @@ struct KinematicsInverseResp {
                         */
   bool ok = false;     /*!< 计算是否成功 */
 };
-/***
+
+/**
  * @brief 夹爪数据结构.
  *
  */
@@ -69,6 +70,14 @@ struct ClawData {
   bool hold_on;     /*!< 夹爪是否夹住. */
 };
 
+/**
+ * @brief 存储项数据结构.
+ *
+ */
+struct StorageItem {
+  std::string key;   /*!< 存储项名称. */
+  std::string value; /*!< 存储项值. */
+};
 /**
  *  @brief 机械臂的主要接口对象，通过本对象的方法与机械臂进行数据交互.
  *  @note 使用该数据结构和机械臂交互要求机械臂软件版本>=3.1.5。
@@ -1176,6 +1185,32 @@ class Robot {
    */
   void set_serial_parity(std::string device, unsigned int parity);
   /** @}*/
+
+  /** \addtogroup STORAGE
+   *  @{
+   */
+  /**
+   * @brief 设置存储项.
+   *
+   * @param item 存储项数据结构.
+   */
+  void set_item(StorageItem item);
+  /**
+   * @brief 获取存储项.
+   *
+   * @param name 存储项名称.
+   * @return 存储项值.
+   */
+  StorageItem get_item(std::string name);
+  /**
+   * @brief 获取存储项列表.
+   *
+   * @param prefix 存储项前缀.
+   * @return 存储项列表.
+   */
+  std::vector<StorageItem> get_items(std::string prefix);
+  /** @}*/
+
  protected:
   std::unique_ptr<RobotImpl> impl_; /*!< 内部实现数据结构，用户无需关注. */
 };
