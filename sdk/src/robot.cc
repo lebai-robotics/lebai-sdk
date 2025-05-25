@@ -1632,7 +1632,7 @@ std::vector<StorageItem> Robot::get_items(std::string prefix) {
   req.set_prefix(prefix);
   storage::Items resp = impl_->getItems(req);
   std::vector<StorageItem> ret;
-  for (const auto& item : resp.items()) {
+  for (const auto &item : resp.items()) {
     StorageItem storage_item;
     storage_item.key = item.key();
     storage_item.value = item.value();
