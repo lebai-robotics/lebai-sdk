@@ -4,35 +4,55 @@ on:
   workflow_dispatch:
   pull_request:
 jobs:
-  linux_cpp_test:
-    #  needs: linux_cpp_build
-    runs-on: ubuntu-latest
-    container: registry.cn-shanghai.aliyuncs.com/lebai/l-master:3.1.6
+linux_cpp_test:
+    runs-on: ubuntu-latest               # the host runner
+
+    container:
+      image: ubuntu:22.04                # or whatever tool-chain you need
+      options: --user 0                  # let apt use root
+
+    services:
+      lmaster:                           # you choose the alias
+        image: registry.cn-shanghai.aliyuncs.com/lebai/l-master:3.1.6
+        # Important: the service must **keep a foreground process alive**.
+        # If that image relies on systemd, create a tiny wrapper script in
+        # the image that starts nginx + your daemons and then `tail -f /dev/null`,
+        # or override the entry-point here:
+        # options: --entrypoint "/start-all.sh"
+
+        # optional: wait until the service is healthy before running steps
+        options: >-
+          --health-cmd="curl -f http://localhost:8080 || exit 1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
-      - name: start nginx
-        run: nginx
+      - uses: actions/checkout@v4        # runs **inside the Ubuntu 22.04 container**
 
-      - name: start daemon
+      - name: Install build tooling
         run: |
-          systemctl start l-master-rc
-          systemctl start l-master-ds
+          apt-get update
+          apt-get install -y build-essential doxygen graphviz python3-pip python3-dev
 
-      - name: Checkout
-        uses: actions/checkout@v2
-
-      - name: install components
-        run: apt-get install -y build-essential doxygen graphviz python3-pip python3-dev
-
-      - name: install dependencies
+      - name: Install Python deps
         run: pip3 install -r requirements.txt
 
-      - name: configure
-        run: cmake -S. -Bbuild -DBUILD_TESTING=ON -DBUILD_DOCUMENTATION=ON
+      - name: Configure
+        run: |
+          LM_IP=$(getent hosts lmaster | awk '{print $1}')
+          echo "LM_IP: $LM_IP"
+          cmake -S. -Bbuild \
+            -DBUILD_TESTING=ON \
+            -DBUILD_DOCUMENTATION=ON \
+            -DCLANG_FORMAT_CHECK=ON \
+            -DBUILD_DEB=ON \
+            -DTEST_ROBOT_IP=$LM_IP
 
-      - name: build
+      - name: Build
         run: cmake --build build
 
-      - name: test
+      - name: Run tests
         run: cmake --build build --target test
 
   linux_cpp_build:
