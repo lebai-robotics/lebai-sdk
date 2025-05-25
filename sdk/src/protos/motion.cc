@@ -252,7 +252,6 @@ bool MovecRequest::IsNullJSONData() const {
       param_.IsNullJSONData() && std::abs(rad_) < 1e-6) {
     return true;
   }
-  { return true; }
   return false;
 }
 
