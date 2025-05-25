@@ -44,9 +44,6 @@ jobs:
           echo "LM_IP: $LM_IP"
           cmake -S. -Bbuild \
             -DBUILD_TESTING=ON \
-            -DBUILD_DOCUMENTATION=ON \
-            -DCLANG_FORMAT_CHECK=ON \
-            -DBUILD_DEB=ON \
             -DTEST_ROBOT_IP=$LM_IP
 
       - name: Build
