@@ -1,11 +1,11 @@
 name: Windows python release
 run-name: ${{ github.actor }} Windows python release
-on: 
+on:
   workflow_dispatch:
   workflow_call:
   push:
-   tags:
-    - v1.*.*
+    tags:
+      - v1.*.*
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
@@ -16,12 +16,12 @@ permissions:
 jobs:
   windows_cp38_release:
     runs-on: windows-latest
-    steps: 
+    steps:
       - name: Checkout
         uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.8'
+          python-version: "3.8"
       - name: Check cmake
         run: cmake --version
       - name: Install python-dev-tools
@@ -34,20 +34,20 @@ jobs:
       - name: Upload Pypi
         run: twine upload --skip-existing -u __token__ -p ${{ secrets.PYLEBAI }} build/python/dist/*.whl
       - name: Upload packages
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         id: artifact-38
         with:
           name: lebai-win-x64-38-whl
           path: |
-            build/python/dist/*.whl        
+            build/python/dist/*.whl
   windows_cp39_release:
-    runs-on: windows-latest 
-    steps: 
+    runs-on: windows-latest
+    steps:
       - name: Checkout
         uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.9'
+          python-version: "3.9"
       - name: Check cmake
         run: cmake --version
       - name: Install python-dev-tools
@@ -60,20 +60,20 @@ jobs:
       - name: Upload Pypi
         run: twine upload --skip-existing -u __token__ -p ${{ secrets.PYLEBAI }} build/python/dist/*.whl
       - name: Upload packages
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         id: artifact-39
         with:
           name: lebai-win-x64-39-whl
           path: |
             build/python/dist/*.whl
   windows_cp310_release:
-    runs-on: windows-latest 
-    steps: 
+    runs-on: windows-latest
+    steps:
       - name: Checkout
         uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: "3.10"
       - name: Check cmake
         run: cmake --version
       - name: Install python-dev-tools
@@ -86,20 +86,20 @@ jobs:
       - name: Upload Pypi
         run: twine upload --skip-existing -u __token__ -p ${{ secrets.PYLEBAI }} build/python/dist/*.whl
       - name: Upload packages
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         id: artifact-310
         with:
           name: lebai-win-x64-310-whl
           path: |
             build/python/dist/*.whl
   windows_cp311_release:
-    runs-on: windows-latest 
-    steps: 
+    runs-on: windows-latest
+    steps:
       - name: Checkout
         uses: actions/checkout@v3
       - uses: actions/setup-python@v4
         with:
-          python-version: '3.11'
+          python-version: "3.11"
       - name: Check cmake
         run: cmake --version
       - name: Install python-dev-tools
@@ -112,15 +112,15 @@ jobs:
       - name: Upload Pypi
         run: twine upload --skip-existing --verbose -u __token__ -p ${{ secrets.PYLEBAI }} build/python/dist/*.whl
       - name: Upload packages
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         id: artifact-311
         with:
           name: lebai-win-x64-311-whl
           path: |
             build/python/dist/*.whl
   # windows_cp312_release:
-  #   runs-on: windows-latest 
-  #   steps: 
+  #   runs-on: windows-latest
+  #   steps:
   #     - name: Checkout
   #       uses: actions/checkout@v4
   #     - uses: actions/setup-python@v4
