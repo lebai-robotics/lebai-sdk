@@ -1,10 +1,10 @@
 name: Linux java build
 run-name: ${{ github.actor }} Linux java build
-on: 
-  workflow_dispatch: 
-  pull_request: 
-jobs: 
-  linux_java_build: 
+on:
+  workflow_dispatch:
+  pull_request:
+jobs:
+  linux_java_build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -12,7 +12,7 @@ jobs:
 
       - uses: actions/setup-java@v1
         with:
-          java-version: '11'
+          java-version: "11"
 
       - name: configure
         run: cmake -S. -Bbuild -DBUILD_JAVA=ON
@@ -21,10 +21,10 @@ jobs:
         run: cmake --build build
 
       - name: upload artifact
-        uses: actions/upload-artifact@v3
-        with: 
+        uses: actions/upload-artifact@v4
+        with:
           path: ./build/java/lebai-java/target/*.jar
-          
+
   release:
     if: ${{ contains(github.ref, 'tags/v') }}
     needs: [linux_java_build]

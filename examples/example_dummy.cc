@@ -20,10 +20,8 @@
 #include <cmath>
 #include <lebai/robot.hh>
 
-int main(int argc, char **argv)
-{
-  if (argc < 2)
-  {
+int main(int argc, char **argv) {
+  if (argc < 2) {
     std::cerr << "You must specify the IP address of the robot" << std::endl;
     std::cerr << "Execute example as follow:" << std::endl;
     std::cerr << "./example 192.168.1.200 sim" << std::endl;
@@ -31,11 +29,9 @@ int main(int argc, char **argv)
   }
   std::string ip = argv[1];
   bool sim = false;
-  if (argc > 2)
-  {
+  if (argc > 2) {
     std::string sim_str = argv[2];
-    if (sim_str == "sim")
-    {
+    if (sim_str == "sim") {
       sim = true;
     }
   }
@@ -45,15 +41,30 @@ int main(int argc, char **argv)
   lebai::l_master::Robot robot(ip, sim);
   std::this_thread::sleep_for(std::chrono::seconds(1));
 
-
   robot.start_sys();
-  auto id = robot.start_task("10006");
-  auto done = robot.wait_task(id);
-  std::cout<<"wait_task: "<<done<<std::endl;
+  // auto id = robot.start_task("10006");
+  // auto done = robot.wait_task(id);
+  // std::cout<<"wait_task: "<<done<<std::endl;
+  // std::this_thread::sleep_for(std::chrono::seconds(3));
 
-  // jp = {-28/ 180.0 * M_PI, -59.0/ 180.0 * M_PI, 96.0/ 180.0 * M_PI, -2.0/ 180.0 * M_PI, -92.0/ 180.0 * M_PI, 16.0/ 180.0 * M_PI};
-  // std::cout<<"jp "<<jp[0]<<", "<<jp[1]<<", "<<jp[2]<<", "<<jp[3]<<", "<<jp[4]<<", "<<jp[5]<<std::endl;
-  // fk_resp = robot.kinematics_forward(jp);
-  // std::cout<<"kinematics_forward: "<<fk_resp.pose["x"]<<", "<<fk_resp.pose["y"]<<", "<<fk_resp.pose["z"]<<", "<<fk_resp.pose["rx"]<<", "<<fk_resp.pose["ry"]<<", "<<fk_resp.pose["rz"]<<std::endl;
+  // robot.set_item({"data_a", "1"});
+  // robot.set_item({"data_b", "2"});
+  // std::this_thread::sleep_for(std::chrono::seconds(3));
+  // auto item = robot.get_item("data_a");
+  // std::cout << "item: " << item.key << " " << item.value << std::endl;
+  // auto items = robot.get_items("data");
+  // for (auto &item : items) {
+  //   std::cout << "item: " << item.key << " " << item.value << std::endl;
+  // }
+
+  robot.stop_sys();
+
+  // jp = {-28/ 180.0 * M_PI, -59.0/ 180.0 * M_PI, 96.0/ 180.0 * M_PI, -2.0/
+  // 180.0 * M_PI, -92.0/ 180.0 * M_PI, 16.0/ 180.0 * M_PI}; std::cout<<"jp
+  // "<<jp[0]<<", "<<jp[1]<<", "<<jp[2]<<", "<<jp[3]<<", "<<jp[4]<<",
+  // "<<jp[5]<<std::endl; fk_resp = robot.kinematics_forward(jp);
+  // std::cout<<"kinematics_forward: "<<fk_resp.pose["x"]<<",
+  // "<<fk_resp.pose["y"]<<", "<<fk_resp.pose["z"]<<", "<<fk_resp.pose["rx"]<<",
+  // "<<fk_resp.pose["ry"]<<", "<<fk_resp.pose["rz"]<<std::endl;
   return 0;
 }

@@ -18,6 +18,7 @@
 #include <memory>
 #include "protos/posture.hh"
 #include "protos/motion.hh"
+#include "protos/storage.hh"
 
 namespace lebai {
 class ProtosTest : public ::testing::Test {
@@ -395,6 +396,83 @@ TEST_F(ProtosTest, TestMotion) {
         "{\"duration\":0.4,\"joints\":[{\"pose\":0.1,\"velocity\":0.2,\"acc\":"
         "0.3}]}",
         json_str);
+  }
+}
+
+TEST_F(ProtosTest, TestStorage) {
+  {
+    // Test GetItemsRequest
+    lebai::storage::GetItemsRequest req;
+    req.set_prefix("123");
+    EXPECT_EQ(req.prefix(), "123");
+    EXPECT_EQ(*req.mutable_prefix(), "123");
+
+    std::string json = req.ToJSONString();
+    lebai::storage::GetItemsRequest req2;
+    EXPECT_TRUE(req2.FromJSONString(json));
+    EXPECT_EQ(req2.prefix(), "123");
+  }
+
+  {
+    // Test Item
+    lebai::storage::Item item;
+    item.set_key("test_key");
+    item.set_value("test_value");
+    EXPECT_EQ(item.key(), "test_key");
+    EXPECT_EQ(item.value(), "test_value");
+    EXPECT_EQ(*item.mutable_key(), "test_key");
+    EXPECT_EQ(*item.mutable_value(), "test_value");
+
+    std::string json = item.ToJSONString();
+    lebai::storage::Item item2;
+    EXPECT_TRUE(item2.FromJSONString(json));
+    EXPECT_EQ(item2.key(), "test_key");
+    EXPECT_EQ(item2.value(), "test_value");
+  }
+
+  {
+    // Test ItemIndex
+    lebai::storage::ItemIndex index;
+    index.set_key("test_key");
+    EXPECT_EQ(index.key(), "test_key");
+    EXPECT_EQ(*index.mutable_key(), "test_key");
+
+    std::string json = index.ToJSONString();
+    lebai::storage::ItemIndex index2;
+    EXPECT_TRUE(index2.FromJSONString(json));
+    EXPECT_EQ(index2.key(), "test_key");
+  }
+
+  {
+    // Test Items
+    lebai::storage::Items storage_items;
+    std::vector<lebai::storage::Item> items;
+
+    lebai::storage::Item item1;
+    item1.set_key("key1");
+    item1.set_value("value1");
+    items.push_back(item1);
+
+    lebai::storage::Item item2;
+    item2.set_key("key2");
+    item2.set_value("value2");
+    items.push_back(item2);
+
+    storage_items.set_items(items);
+    EXPECT_EQ(storage_items.items().size(), 2);
+    EXPECT_EQ(storage_items.items()[0].key(), "key1");
+    EXPECT_EQ(storage_items.items()[0].value(), "value1");
+    EXPECT_EQ(storage_items.items()[1].key(), "key2");
+    EXPECT_EQ(storage_items.items()[1].value(), "value2");
+
+    std::string json = storage_items.ToJSONString();
+    lebai::storage::Items items2;
+    EXPECT_TRUE(items2.FromJSONString(json));
+    EXPECT_EQ(items2.items().size(), 2);
+    EXPECT_EQ(items2.items()[0].key(), "key1");
+    EXPECT_EQ(items2.items()[0].value(), "value1");
+    EXPECT_EQ(items2.items()[1].key(), "key2");
+    EXPECT_EQ(items2.items()[1].value(), "value2");
   }
 }
 }  // namespace lebai

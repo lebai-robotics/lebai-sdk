@@ -1610,6 +1610,37 @@ void Robot::set_serial_parity(std::string device, unsigned int parity) {
   impl_->setSerialParityRequest(req);
 }
 
+void Robot::set_item(StorageItem item) {
+  storage::Item req;
+  req.set_key(item.key);
+  req.set_value(item.value);
+  impl_->setItem(req);
+}
+
+StorageItem Robot::get_item(std::string name) {
+  storage::ItemIndex req;
+  req.set_key(name);
+  storage::Item resp = impl_->getItem(req);
+  StorageItem item;
+  item.key = resp.key();
+  item.value = resp.value();
+  return item;
+}
+
+std::vector<StorageItem> Robot::get_items(std::string prefix) {
+  storage::GetItemsRequest req;
+  req.set_prefix(prefix);
+  storage::Items resp = impl_->getItems(req);
+  std::vector<StorageItem> ret;
+  for (const auto &item : resp.items()) {
+    StorageItem storage_item;
+    storage_item.key = item.key();
+    storage_item.value = item.value();
+    ret.push_back(storage_item);
+  }
+  return ret;
+}
+
 }  // namespace l_master
 
 }  // namespace lebai
