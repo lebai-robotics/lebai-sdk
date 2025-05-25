@@ -20,9 +20,9 @@ jobs:
     secrets: inherit
   win-dotnet-x64:
     uses: ./.github/workflows/windows_dotnet_release.yml
-    secrets: inherit    
+    secrets: inherit
   release:
-    needs: 
+    needs:
       - linux-cpp-x64
       - linux-python-x64
       - linux-dotnet-x64
@@ -36,38 +36,38 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4    
+        uses: actions/checkout@v4
       - name: Download linux x64 deb
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: lebai-linux-x64-deb
       - name: Download linux x64 nupkg
-        uses: actions/download-artifact@v3
-        with: 
+        uses: actions/download-artifact@v4
+        with:
           name: lebai-linux-x64-nupkg
       - name: Download linux x64 whl
-        uses: actions/download-artifact@v3
-        with: 
+        uses: actions/download-artifact@v4
+        with:
           name: lebai-linux-x64-whl
-      - name : Download win x64 exe
-        uses: actions/download-artifact@v3
-        with:        
+      - name: Download win x64 exe
+        uses: actions/download-artifact@v4
+        with:
           name: lebai-win-x64-exe
-      - name : Download win x64 deb
-        uses: actions/download-artifact@v3
-        with:        
+      - name: Download win x64 deb
+        uses: actions/download-artifact@v4
+        with:
           name: lebai-win-x64-nupkg
-      - uses: actions/download-artifact@v3
-        with:        
+      - uses: actions/download-artifact@v4
+        with:
           name: lebai-win-x64-38-whl
-      - uses: actions/download-artifact@v3
-        with:        
+      - uses: actions/download-artifact@v4
+        with:
           name: lebai-win-x64-39-whl
-      - uses: actions/download-artifact@v3
-        with:        
+      - uses: actions/download-artifact@v4
+        with:
           name: lebai-win-x64-310-whl
-      - uses: actions/download-artifact@v3
-        with:        
+      - uses: actions/download-artifact@v4
+        with:
           name: lebai-win-x64-311-whl
       - name: Display structure of downloaded files
         run: ls -l
@@ -76,7 +76,7 @@ jobs:
         run: |
           # Extract the project version from CMakeLists.txt
           version=$(awk '/project\s*\(/,/)/' CMakeLists.txt | grep -Po 'VERSION\s*\K[0-9]+\.[0-9]+\.[0-9]+')
-          echo "version_tag=v$version" >> $GITHUB_ENV        
+          echo "version_tag=v$version" >> $GITHUB_ENV
       - name: Create release
         id: create_release
         uses: ncipollo/release-action@v1
@@ -88,4 +88,3 @@ jobs:
             *.deb,
             *.nupkg,
             *.whl
-            
