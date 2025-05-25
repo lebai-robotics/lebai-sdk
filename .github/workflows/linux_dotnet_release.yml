@@ -1,18 +1,18 @@
 name: Linux dotnet release
 run-name: ${{ github.actor }} Linux dotnet release
-on: 
+on:
   workflow_dispatch:
   workflow_call:
   push:
-   tags:
-    - v1.*.*
-jobs: 
-  linux_dotnet_build_and_release: 
+    tags:
+      - v1.*.*
+jobs:
+  linux_dotnet_build_and_release:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      
+
       - name: Setup .NET Core 3.1
         uses: actions/setup-dotnet@v3.0.3
 
@@ -28,7 +28,7 @@ jobs:
         run: cmake -S. -Bbuild -DBUILD_DOTNET=ON
 
       - name: Build
-        run: cmake --build build 
+        run: cmake --build build
 
       - name: Upload pacakges
         run: |
@@ -38,7 +38,7 @@ jobs:
           dotnet nuget push lebai.runtime.linux-x64.1.*.*.nupkg -k ${{ secrets.LEBAI_NUGET_KEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate
           dotnet nuget push lebai.1.*.*.nupkg -k ${{ secrets.LEBAI_NUGET_KEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         id: artifact
         with:
           name: lebai-linux-x64-nupkg

@@ -1,18 +1,18 @@
 name: Windows dotnet release
 run-name: ${{ github.actor }} Windows dotnet release
-on: 
+on:
   workflow_dispatch:
   workflow_call:
   push:
-   tags:
-    - v1.*.*
-jobs: 
-  linux_dotnet_build_and_release: 
+    tags:
+      - v1.*.*
+jobs:
+  linux_dotnet_build_and_release:
     runs-on: windows-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v1
-      
+
       - name: Setup .NET Core 3.1
         uses: actions/setup-dotnet@v3.0.3
 
@@ -20,7 +20,7 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 6.0.x
-          
+
       - name: Configure
         run: cmake -S. -Bbuild -G "Visual Studio 17 2022" -DBUILD_DOTNET=ON -DBUILD_DOCUMENTATION=OFF
 
@@ -32,7 +32,7 @@ jobs:
           cd ./build/dotnet/packages
           dotnet nuget push lebai.runtime.win-x64.*.nupkg --api-key ${{ secrets.LEBAI_NUGET_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
       - name: Upload package
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         id: artifact
         with:
           name: lebai-win-x64-nupkg

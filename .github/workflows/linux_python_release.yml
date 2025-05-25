@@ -1,11 +1,11 @@
 name: Linux python release
 run-name: ${{ github.actor }} Linux python release
-on: 
+on:
   workflow_dispatch:
   workflow_call:
   push:
-   tags:
-    - v1.*.*
+    tags:
+      - v1.*.*
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
@@ -13,8 +13,8 @@ permissions:
   id-token: write
   pull-requests: read
 
-jobs: 
-  linux_python_build_and_release: 
+jobs:
+  linux_python_build_and_release:
     runs-on: ubuntu-22.04
     container: quay.io/pypa/manylinux_2_28_x86_64
     steps:
@@ -35,17 +35,17 @@ jobs:
           cmake --build build;
           cp build/python/dist/*.whl whl/;
           done;
-        
+
       - name: Repair
         run: for PYWHL in whl/*.whl;do
           auditwheel repair ${PYWHL};
           done;
-        
+
       - name: Upload Pypi
         run: /opt/python/cp310-cp310/bin/twine upload --verbose --skip-existing -u __token__ -p ${{ secrets.PYLEBAI }} wheelhouse/*.whl
 
       - name: Upload artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         id: artifact
         with:
           name: lebai-linux-x64-whl

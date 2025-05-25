@@ -1,35 +1,35 @@
 name: Linux cpp release
 run-name: ${{ github.actor }} Linux cpp release
-on: 
+on:
   workflow_dispatch:
   workflow_call:
   push:
-   tags:
-    - v1.*.*
+    tags:
+      - v1.*.*
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
-#   contents: read
+  #   contents: read
   pages: write
   id-token: write
 #   pull-requests: read
 
-jobs: 
+jobs:
   linux_cpp_build_and_release:
     strategy:
       matrix:
-        py-version: [ 3.11 ]
-        os-version: [ ubuntu-latest ]
+        py-version: [3.11]
+        os-version: [ubuntu-latest]
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ${{ matrix.os-version }}
-    steps: 
+    steps:
       - name: Checkout
         uses: actions/checkout@v1
-        
+
       - name: check python version
         uses: actions/setup-python@v4.3.0
-        with: 
+        with:
           python-version: ${{ matrix.py-version }}
 
       - name: install component
@@ -43,20 +43,20 @@ jobs:
 
       - name: build
         run: cmake --build build
-        
+
       - name: Setup Pages
         uses: actions/configure-pages@v2
-        
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
           # Upload entire repository
-          path: './build/html'
-          
+          path: "./build/html"
+
       - name: Deploy to github pages
         id: deployment
         uses: actions/deploy-pages@v1
-        
+
       - name: Build and pack
         run: |
           cmake --build build
@@ -72,4 +72,4 @@ jobs:
       #   uses: ncipollo/release-action@v1
       #   with:
       #     artifacts: DebForCPP
-      #     allowUpdates: true          
+      #     allowUpdates: true
