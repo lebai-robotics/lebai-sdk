@@ -6,8 +6,6 @@ on:
 jobs:
   linux_python_build:
     runs-on: ubuntu-22.04
-    runs:
-      using: "node16"
     container: quay.io/pypa/manylinux_2_28_x86_64
     env:
       ACTIONS_RUNNER_FORCE_ACTIONS_NODE_VERSION: node16
