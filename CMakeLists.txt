@@ -8,7 +8,7 @@ endif()
 
 project(
   lebai
-  VERSION 1.2.0
+  VERSION 1.2.1
   LANGUAGES CXX)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -204,7 +204,8 @@ if(CLANG_FORMAT_CHECK)
   add_custom_target(clang-format ALL COMMAND clang-format -style=file --Werror
                                              --dry-run ${SDK_CXX_FILES})
 else()
-  add_custom_target(clang-format COMMAND clang-format -style=file -i ${SDK_CXX_FILES})
+  add_custom_target(clang-format COMMAND clang-format -style=file -i
+                                         ${SDK_CXX_FILES})
 endif()
 
 find_package(Doxygen)

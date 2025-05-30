@@ -16,21 +16,24 @@ permissions:
 jobs:
   windows_cpp_build:
     runs-on: windows-latest
+    strategy:
+      matrix:
+        arch: [x64, Win32]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
       - name: Check cmake
         run: cmake --version
       - name: Configure
-        run: cmake -S. -Bbuild -G "Visual Studio 17 2022" -DBUILD_NSIS=ON -DBUILD_DOCUMENTATION=OFF
+        run: cmake -S. -Bbuild-${{ matrix.arch }} -G "Visual Studio 17 2022" -A ${{ matrix.arch }} -DBUILD_NSIS=ON -DBUILD_DOCUMENTATION=OFF
       - name: Build
-        run: cmake --build build --config Release
+        run: cmake --build build-${{ matrix.arch }} --config Release
       - name: Pack
-        run: cd build && cpack -C Release && cd ..
+        run: cd build-${{ matrix.arch }} && cpack -C Release && cd ..
       - name: Upload nsis package
         uses: actions/upload-artifact@v4
         id: artifact
         with:
-          name: lebai-win-x64-exe
+          name: lebai-win-${{ matrix.arch }}-exe
           path: |
-            build/*.exe
+            build-${{ matrix.arch }}/*.exe
