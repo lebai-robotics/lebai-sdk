@@ -5,3 +5,4 @@ out
 sdk/include/lebai/config.hh
 CMakeSettings.json
 .cache
+example_dummy.cc

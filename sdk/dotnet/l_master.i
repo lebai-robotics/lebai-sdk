@@ -1,6 +1,40 @@
 %module l_master
 %include  "jsonbase.i"
 
+// Exception handling for C#
+%include "exception.i"
+
+%exception {
+  try {
+    $action
+  } catch (const std::exception& e) {
+    SWIG_CSharpSetPendingException(SWIG_CSharpSystemException, e.what());
+    return $null;
+  } catch (...) {
+    SWIG_CSharpSetPendingException(SWIG_CSharpSystemException, "Unknown exception occurred");
+    return $null;
+  }
+}
+
+%typemap(throws) std::runtime_error %{
+  SWIG_CSharpSetPendingException(SWIG_CSharpSystemException, $1.what());
+  return $null;
+%}
+
+%typemap(throws) std::invalid_argument %{
+  SWIG_CSharpSetPendingException(SWIG_CSharpArgumentException, $1.what());
+  return $null;
+%}
+
+%typemap(throws) std::out_of_range %{
+  SWIG_CSharpSetPendingException(SWIG_CSharpIndexOutOfRangeException, $1.what());
+  return $null;
+%}
+
+%typemap(throws) std::logic_error %{
+  SWIG_CSharpSetPendingException(SWIG_CSharpInvalidOperationException, $1.what());
+  return $null;
+%}
 
 %{
 // #include "lebai/jsonbase.hh"

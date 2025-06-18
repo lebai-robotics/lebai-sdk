@@ -1,6 +1,40 @@
 %module l_master
 %include  "jsonbase.i"
 
+// Exception handling for Java
+%include "exception.i"
+
+%exception {
+  try {
+    $action
+  } catch (const std::exception& e) {
+    jclass clazz = jenv->FindClass("java/lang/RuntimeException");
+    jenv->ThrowNew(clazz, e.what());
+    return $null;
+  } catch (...) {
+    jclass clazz = jenv->FindClass("java/lang/RuntimeException");
+    jenv->ThrowNew(clazz, "Unknown exception occurred");
+    return $null;
+  }
+}
+
+%typemap(throws) std::runtime_error %{
+  jclass clazz = jenv->FindClass("java/lang/RuntimeException");
+  jenv->ThrowNew(clazz, $1.what());
+  return $null;
+%}
+
+%typemap(throws) std::invalid_argument %{
+  jclass clazz = jenv->FindClass("java/lang/IllegalArgumentException");
+  jenv->ThrowNew(clazz, $1.what());
+  return $null;
+%}
+
+%typemap(throws) std::out_of_range %{
+  jclass clazz = jenv->FindClass("java/lang/IndexOutOfBoundsException");
+  jenv->ThrowNew(clazz, $1.what());
+  return $null;
+%}
 
 %{
 // #include "lebai/jsonbase.hh"
