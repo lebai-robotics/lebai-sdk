@@ -35,27 +35,27 @@ TEST_F(RobotTest, TestStartStop) {
   std::this_thread::sleep_for(std::chrono::seconds(3));
   robot_.start_sys();
   std::this_thread::sleep_for(std::chrono::seconds(1));
-  EXPECT_EQ(5, robot_.get_robot_mode());
+  EXPECT_EQ(5, robot_.get_robot_state());
   robot_.stop_sys();
   std::this_thread::sleep_for(std::chrono::seconds(5));
-  EXPECT_EQ(12, robot_.get_robot_mode());
+  EXPECT_EQ(12, robot_.get_robot_state());
   robot_.estop();
   std::this_thread::sleep_for(std::chrono::seconds(1));
-  EXPECT_EQ(1, robot_.get_robot_mode());
+  EXPECT_EQ(1, robot_.get_robot_state());
   robot_.start_sys();
   std::this_thread::sleep_for(std::chrono::seconds(1));
-  EXPECT_EQ(5, robot_.get_robot_mode());
+  EXPECT_EQ(5, robot_.get_robot_state());
   robot_.teach_mode();
   std::this_thread::sleep_for(std::chrono::seconds(1));
-  EXPECT_EQ(11, robot_.get_robot_mode());
+  EXPECT_EQ(11, robot_.get_robot_state());
   robot_.end_teach_mode();
   std::this_thread::sleep_for(std::chrono::seconds(1));
-  EXPECT_EQ(5, robot_.get_robot_mode());
+  EXPECT_EQ(5, robot_.get_robot_state());
 }
 TEST_F(RobotTest, TestMove) {
   robot_.start_sys();
   std::this_thread::sleep_for(std::chrono::seconds(1));
-  ASSERT_EQ(5, robot_.get_robot_mode());
+  ASSERT_EQ(5, robot_.get_robot_state());
   {
     std::vector<double> joint_positions(6);
     joint_positions[0] = 0.0;
@@ -73,7 +73,7 @@ TEST_F(RobotTest, TestMove) {
     joint_positions[5] = 0.0;
     robot_.movej(joint_positions, 1.0, 0.5, 0.0, 0.0);
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    EXPECT_EQ(7, robot_.get_robot_mode());
+    EXPECT_EQ(7, robot_.get_robot_state());
     robot_.wait_move();
     auto tcp = robot_.get_target_tcp_pose();
     EXPECT_NEAR(tcp["x"], -0.296, 1e-3);
@@ -91,7 +91,7 @@ TEST_F(RobotTest, TestMove) {
     EXPECT_NEAR(jp[4], joint_positions[4], 1e-3);
     EXPECT_NEAR(jp[5], joint_positions[5], 1e-3);
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
-    EXPECT_EQ(5, robot_.get_robot_mode());
+    EXPECT_EQ(5, robot_.get_robot_state());
     robot_.movej({{"x", -0.296},
                   {"y", -0.295},
                   {"z", 0.285},
@@ -100,7 +100,7 @@ TEST_F(RobotTest, TestMove) {
                   {"rz", 81.0 / 180.0 * M_PI}},
                  3.0, 1.0, 0.0, 0.0);
     // std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    EXPECT_EQ(7, robot_.get_robot_mode());
+    EXPECT_EQ(7, robot_.get_robot_state());
     robot_.wait_move(0);
     tcp = robot_.get_target_tcp_pose();
     EXPECT_NEAR(tcp["x"], -0.296, 1e-3);
@@ -134,7 +134,7 @@ TEST_F(RobotTest, TestMove) {
                   {"rz", 81.0 / 180.0 * M_PI}},
                  1.0, 0.5, 0.0, 0.0);
     // std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    EXPECT_EQ(7, robot_.get_robot_mode());
+    EXPECT_EQ(7, robot_.get_robot_state());
     robot_.wait_move();
     tcp = robot_.get_target_tcp_pose();
     EXPECT_NEAR(tcp["x"], -0.306, 1e-3);
@@ -144,7 +144,7 @@ TEST_F(RobotTest, TestMove) {
     EXPECT_NEAR(tcp["ry"], -5.0 / 180.0 * M_PI, 1e-2);
     EXPECT_NEAR(tcp["rz"], 81.0 / 180.0 * M_PI, 1e-2);
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
-    EXPECT_EQ(5, robot_.get_robot_mode());
+    EXPECT_EQ(5, robot_.get_robot_state());
     robot_.movej(
         {13.0 / 180.0 * M_PI, -52.0 / 180.0 * M_PI, 86.0 / 180.0 * M_PI,
          8.0 / 180.0 * M_PI, -59.0 / 180.0 * M_PI, -11.0 / 180.0 * M_PI},

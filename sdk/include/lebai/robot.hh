@@ -78,6 +78,13 @@ struct StorageItem {
   std::string key;   /*!< 存储项名称. */
   std::string value; /*!< 存储项值. */
 };
+
+struct PhysicalData {
+  DoubleVector joint_temperature; /*!< 关节温度. */
+  DoubleVector joint_voltage;     /*!< 关节电压. */
+  double flange_voltage;          /*!< 法兰电压. */
+};
+
 /**
  *  @brief 机械臂的主要接口对象，通过本对象的方法与机械臂进行数据交互.
  *  @note 使用该数据结构和机械臂交互要求机械臂软件版本>=3.1.5。
@@ -520,13 +527,20 @@ class Robot {
    * @note 查看 <a
    * href="https://help.lebai.ltd/guide/basic.html#%E6%9C%BA%E5%99%A8%E4%BA%BA%E7%8A%B6%E6%80%81">具体信息</a>.
    */
-  int get_robot_mode();
+  int get_robot_state();
   /**
    *  @brief 查看急停原因
    *
    *  @return 急停原因
    */
   int get_estop_reason();
+  /**
+   * @brief 获取机械臂物理数据
+   *
+   * @return 机械臂物理数据
+   */
+  PhysicalData get_phy_data();
+
   /**
    * @brief 是否已与手臂断开连接
    *
@@ -842,7 +856,7 @@ class Robot {
    * @param id: 任务的ID
    * @return 返回任务是否成功
    */
-  bool wait_task(unsigned int id);
+  std::string wait_task(unsigned int id);
   /**
    * @brief 暂停任务与运动
    *

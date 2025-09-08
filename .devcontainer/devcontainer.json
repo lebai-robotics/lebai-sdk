@@ -1,0 +1,25 @@
+{
+    "name": "lebai-sdk",
+    "image": "lebai-sdk:latest",
+    "initializeCommand": "docker buildx build --progress=plain -f .devcontainer/DevDockerfile -t lebai-sdk:latest .",
+    "capAdd": [
+        "SYS_PTRACE"
+    ],
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "llvm-vs-code-extensions.vscode-clangd",
+                "anysphere.cpptools",
+                "eamodio.gitlens",
+                "esbenp.prettier-vscode",
+                "cheshirekow.cmake-format"
+            ]
+        }
+    },
+    "runArgs": [
+        "--name",
+        "lebai-sdk"
+    ],
+    "workspaceMount": "source=${localWorkspaceFolder},target=/workspace,type=bind",
+    "workspaceFolder": "/workspace"
+}

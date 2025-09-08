@@ -493,9 +493,18 @@ std::string Robot::get_motion_state(unsigned int id) {
 
 void Robot::stop_move() { impl_->stopMove(); }
 
-int Robot::get_robot_mode() { return impl_->getRobotState(); }
+int Robot::get_robot_state() { return impl_->getRobotState(); }
 
 int Robot::get_estop_reason() { return impl_->getEstopReason(); }
+
+PhysicalData Robot::get_phy_data() {
+  auto phy_data = impl_->getPhyData();
+  PhysicalData physical_data;
+  physical_data.joint_temperature = phy_data.joint_temp();
+  physical_data.joint_voltage = phy_data.joint_voltage();
+  physical_data.flange_voltage = phy_data.flange_voltage();
+  return physical_data;
+}
 
 bool Robot::is_disconnected() { return impl_->getRobotState() == 0; }
 
@@ -1001,11 +1010,11 @@ std::vector<unsigned int> Robot::load_task_list() {
   control::TaskIds resp = impl_->loadTaskList();
   return resp.ids();
 }
-bool Robot::wait_task(unsigned int id) {
+std::string Robot::wait_task(unsigned int id) {
   control::TaskIndex task_index;
   task_index.set_id(id);
   control::TaskStdout resp = impl_->waitTask(task_index);
-  return resp.done();
+  return resp.get_stdout();
 }
 void Robot::pause_task(unsigned int id) {
   control::PauseRequest req;
