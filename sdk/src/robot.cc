@@ -19,6 +19,7 @@
 #include "robot_impl.hh"
 #include "protos/motion.hh"
 #include "protos/serial.hh"
+#include "protos/posture.hh"
 #include <lebai/config.hh>
 
 namespace lebai {
@@ -26,6 +27,20 @@ namespace lebai {
 namespace l_master {
 
 std::string version() { return LEBAI_SDK_VERSION_STR; }
+
+static CartesianPose convertToCartesianPose(
+    const posture::CartesianPose &pose) {
+  CartesianPose cart_pose;
+  cart_pose["x"] = pose.position().x();
+  cart_pose["y"] = pose.position().y();
+  cart_pose["z"] = pose.position().z();
+  if (pose.rotation().euler_zyx()) {
+    cart_pose["rz"] = pose.rotation().euler_zyx()->z();
+    cart_pose["ry"] = pose.rotation().euler_zyx()->y();
+    cart_pose["rx"] = pose.rotation().euler_zyx()->x();
+  }
+  return cart_pose;
+}
 
 Robot::Robot(std::string ip, bool simulator)
 // :ip_(ip)
@@ -506,6 +521,26 @@ PhysicalData Robot::get_phy_data() {
   return physical_data;
 }
 
+JointMotionData Robot::get_kin_data() {
+  auto kin_data = impl_->getKinData();
+  JointMotionData joint_motion_data;
+  joint_motion_data.actual_joint_pose = kin_data.actual_joint_pose();
+  joint_motion_data.actual_joint_speed = kin_data.actual_joint_speed();
+  joint_motion_data.actual_joint_acc = kin_data.actual_joint_acc();
+  joint_motion_data.actual_joint_torque = kin_data.actual_joint_torque();
+  joint_motion_data.target_joint_pose = kin_data.target_joint_pose();
+  joint_motion_data.target_joint_speed = kin_data.target_joint_speed();
+  joint_motion_data.target_joint_acc = kin_data.target_joint_acc();
+  joint_motion_data.target_joint_torque = kin_data.target_joint_torque();
+  joint_motion_data.actual_tcp_pose =
+      convertToCartesianPose(kin_data.actual_tcp_pose());
+  joint_motion_data.target_tcp_pose =
+      convertToCartesianPose(kin_data.target_tcp_pose());
+  joint_motion_data.actual_flange_pose =
+      convertToCartesianPose(kin_data.actual_flange_pose());
+  return joint_motion_data;
+}
+
 bool Robot::is_disconnected() { return impl_->getRobotState() == 0; }
 
 bool Robot::is_down() { return impl_->getRobotState() < 4; }
@@ -528,29 +563,11 @@ std::vector<double> Robot::get_target_joint_speed() {
 
 CartesianPose Robot::get_actual_tcp_pose() {
   auto pose = impl_->getKinData().actual_tcp_pose();
-  CartesianPose cart_pose;
-  cart_pose["x"] = pose.position().x();
-  cart_pose["y"] = pose.position().y();
-  cart_pose["z"] = pose.position().z();
-  if (pose.rotation().euler_zyx()) {
-    cart_pose["rz"] = pose.rotation().euler_zyx()->z();
-    cart_pose["ry"] = pose.rotation().euler_zyx()->y();
-    cart_pose["rx"] = pose.rotation().euler_zyx()->x();
-  }
-  return cart_pose;
+  return convertToCartesianPose(pose);
 }
 CartesianPose Robot::get_target_tcp_pose() {
   auto pose = impl_->getKinData().target_tcp_pose();
-  CartesianPose cart_pose;
-  cart_pose["x"] = pose.position().x();
-  cart_pose["y"] = pose.position().y();
-  cart_pose["z"] = pose.position().z();
-  if (pose.rotation().euler_zyx()) {
-    cart_pose["rz"] = pose.rotation().euler_zyx()->z();
-    cart_pose["ry"] = pose.rotation().euler_zyx()->y();
-    cart_pose["rx"] = pose.rotation().euler_zyx()->x();
-  }
-  return cart_pose;
+  return convertToCartesianPose(pose);
 }
 
 double Robot::get_joint_temp(unsigned int joint_index) {
@@ -1519,16 +1536,7 @@ CartesianPose Robot::load_tcp(std::string name, std::string dir) {
   req.set_name(name);
   req.set_dir(dir);
   const auto &pose = impl_->loadTcp(req);
-  CartesianPose cart_pose;
-  cart_pose["x"] = pose.position().x();
-  cart_pose["y"] = pose.position().y();
-  cart_pose["z"] = pose.position().z();
-  if (pose.rotation().euler_zyx()) {
-    cart_pose["rz"] = pose.rotation().euler_zyx()->z();
-    cart_pose["ry"] = pose.rotation().euler_zyx()->y();
-    cart_pose["rx"] = pose.rotation().euler_zyx()->x();
-  }
-  return cart_pose;
+  return convertToCartesianPose(pose);
 }
 
 void Robot::write_single_coil(std::string device, std::string addr,

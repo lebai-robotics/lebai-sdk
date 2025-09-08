@@ -88,6 +88,7 @@ class LuaRobot {
    * @return std::string: 机械臂返回的数据.
    */
   std::string call(const std::string& lua_code);
+
  protected:
   std::unique_ptr<LuaRobotImpl> impl_; /*!< 内部实现数据结构，用户无需关注. */
 };

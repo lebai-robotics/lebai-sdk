@@ -64,7 +64,7 @@ jobs:
       - name: Install dependencies from pip
         run: |
           pip3 install -r requirements.txt
-          pip3 install clang-format
+          pip3 install clang-format==18.1.8
 
       - name: Configure
         run: cmake -S. -Bbuild -DBUILD_DEB=ON -DCLANG_FORMAT_CHECK=ON
