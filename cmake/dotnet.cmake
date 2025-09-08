@@ -58,12 +58,8 @@ else()
 endif()
 
 # see: https://docs.microsoft.com/en-us/dotnet/standard/frameworks
-if(USE_DOTNET_CORE_31 AND USE_DOTNET_6)
-  set(DOTNET_TFM "<TargetFrameworks>netcoreapp3.1;net6.0</TargetFrameworks>")
-elseif(USE_DOTNET_6)
-  set(DOTNET_TFM "<TargetFramework>net6.0</TargetFramework>")
-elseif(USE_DOTNET_CORE_31)
-  set(DOTNET_TFM "<TargetFramework>netcoreapp3.1</TargetFramework>")
+if(USE_DOTNET_8)
+  set(DOTNET_TFM "<TargetFramework>net8.0</TargetFramework>")
 else()
   message(FATAL_ERROR "No .Net SDK selected !")
 endif()
@@ -296,16 +292,10 @@ function(add_dotnet_example FILE_NAME)
     WORKING_DIRECTORY ${DOTNET_EXAMPLE_DIR})
 
   if(BUILD_TESTING)
-    if(USE_DOTNET_CORE_31)
+    if(USE_DOTNET_8)
       add_test(
-        NAME dotnet_${COMPONENT_NAME}_${EXAMPLE_NAME}_netcoreapp31
-        COMMAND ${CMAKE_COMMAND} -E env --unset=TARGETNAME ${DOTNET_EXECUTABLE} run --no-build --framework netcoreapp3.1 -c Release ${EXAMPLE_NAME}.csproj
-        WORKING_DIRECTORY ${DOTNET_EXAMPLE_DIR})
-    endif()
-    if(USE_DOTNET_6)
-      add_test(
-        NAME dotnet_${COMPONENT_NAME}_${EXAMPLE_NAME}_net60
-        COMMAND ${CMAKE_COMMAND} -E env --unset=TARGETNAME ${DOTNET_EXECUTABLE} run --no-build --framework net6.0 -c Release ${EXAMPLE_NAME}.csproj
+        NAME dotnet_${COMPONENT_NAME}_${EXAMPLE_NAME}_net80
+        COMMAND ${CMAKE_COMMAND} -E env --unset=TARGETNAME ${DOTNET_EXECUTABLE} run --no-build --framework net8.0 -c Release ${EXAMPLE_NAME}.csproj
         WORKING_DIRECTORY ${DOTNET_EXAMPLE_DIR})
     endif()
   endif()

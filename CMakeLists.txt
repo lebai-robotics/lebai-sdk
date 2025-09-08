@@ -157,16 +157,8 @@ if(BUILD_PYTHON)
 endif()
 
 if(BUILD_DOTNET)
-  # .Net Core 3.1 LTS is not available for osx arm64
-  if(APPLE AND CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64|arm64)")
-    set(USE_DOTNET_CORE_31 OFF)
-  else()
-    option(USE_DOTNET_CORE_31 "Use .Net Core 3.1 LTS support" ON)
-  endif()
-  message(STATUS ".Net: Use .Net Core 3.1 LTS support: ${USE_DOTNET_CORE_31}")
-
-  option(USE_DOTNET_6 "Use .Net 6.0 LTS support" ON)
-  message(STATUS ".Net: Use .Net 6.0 LTS support: ${USE_DOTNET_6}")
+  option(USE_DOTNET_8 "Use .Net 8.0 LTS support" ON)
+  message(STATUS ".Net: Use .Net 8.0 LTS support: ${USE_DOTNET_8}")
 endif()
 include(dotnet)
 
