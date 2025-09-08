@@ -1,5 +1,10 @@
 # ChangeLog
 
+## 1.3.2
+
+添加 get_kin_data
+升级 dotnet sdk 为 8.0
+
 ## 1.3.1
 
 get_robot_mode -> get_robot_state
