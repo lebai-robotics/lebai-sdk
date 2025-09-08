@@ -13,13 +13,10 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v1
 
-      - name: Setup .NET Core 3.1
-        uses: actions/setup-dotnet@v3.0.3
-
-      - name: Setup .NET 6.0
-        uses: actions/setup-dotnet@v1
+      - name: Setup .NET 8.0
+        uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: 6.0.x
+          dotnet-version: 8.0.x
 
       - name: Configure
         run: cmake -S. -Bbuild -G "Visual Studio 17 2022" -DBUILD_DOTNET=ON -DBUILD_DOCUMENTATION=OFF

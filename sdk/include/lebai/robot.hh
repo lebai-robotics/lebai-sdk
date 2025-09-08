@@ -79,10 +79,32 @@ struct StorageItem {
   std::string value; /*!< 存储项值. */
 };
 
+/**
+ * @brief 机械臂物理数据结构.
+ *
+ */
 struct PhysicalData {
   DoubleVector joint_temperature; /*!< 关节温度. */
   DoubleVector joint_voltage;     /*!< 关节电压. */
   double flange_voltage;          /*!< 法兰电压. */
+};
+
+/**
+ * @brief 机械臂关节运动数据结构.
+ *
+ */
+struct JointMotionData {
+  DoubleVector actual_joint_pose;   /*!< 关节实际位置. */
+  DoubleVector actual_joint_speed;  /*!< 关节实际速度. */
+  DoubleVector actual_joint_acc;    /*!< 关节实际加速度. */
+  DoubleVector actual_joint_torque; /*!< 关节实际力矩. */
+  DoubleVector target_joint_pose;   /*!< 关节目标位置. */
+  DoubleVector target_joint_speed;  /*!< 关节目标速度. */
+  DoubleVector target_joint_acc;    /*!< 关节目标加速度. */
+  DoubleVector target_joint_torque; /*!< 关节目标力矩. */
+  CartesianPose actual_tcp_pose;    /*!< 法兰实际位置. */
+  CartesianPose target_tcp_pose;    /*!< 法兰目标位置. */
+  CartesianPose actual_flange_pose; /*!< 法兰实际位置. */
 };
 
 /**
@@ -540,6 +562,12 @@ class Robot {
    * @return 机械臂物理数据
    */
   PhysicalData get_phy_data();
+  /**
+   * @brief 获取机械臂关节运动数据
+   *
+   * @return 机械臂关节运动数据
+   */
+  JointMotionData get_kin_data();
 
   /**
    * @brief 是否已与手臂断开连接
