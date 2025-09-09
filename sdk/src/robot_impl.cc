@@ -290,6 +290,11 @@ void Robot::RobotImpl::setAO(const io::SetAoPinRequest &req) {
   return;
 }
 
+void Robot::RobotImpl::initClaw(const claw::InitClawRequest &req) {
+  json_rpc_connector_->CallRpc("init_claw", req.ToJSONString(), nullptr);
+  return;
+}
+
 void Robot::RobotImpl::setClaw(const claw::SetClawRequest &req) {
   json_rpc_connector_->CallRpc("set_claw", req.ToJSONString(), nullptr);
   return;

@@ -272,7 +272,7 @@ TEST_F(RobotTest, TestExtraIO) {
 TEST_F(RobotTest, TestClaw) {
   robot_.start_sys();
   robot_.set_claw(0, 0);
-  auto claw_data = robot_.get_claw();
+  auto claw_data = robot_.get_claw_data();
 }
 TEST_F(RobotTest, TestLed) {
   robot_.start_sys();

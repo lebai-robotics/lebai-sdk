@@ -1,5 +1,11 @@
 # ChangeLog
 
+## 1.3.3
+
+添加 init_claw 接口
+load_task_list -> get_task_list 修正
+修正 get_motion_state 接口
+
 ## 1.3.2
 
 添加 get_kin_data

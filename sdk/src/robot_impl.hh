@@ -81,6 +81,7 @@ class Robot::RobotImpl {
   void setDioMode(const io::SetDioModeRequest &req);
   io::GetDiosModeResponse getDiosMode(const io::GetDiosModeRequest &req);
   void setAO(const io::SetAoPinRequest &req);
+  void initClaw(const claw::InitClawRequest &req);
   void setClaw(const claw::SetClawRequest &req);
   void setLed(const led::LedData &req);
   void setVoice(const led::VoiceData &req);

@@ -6,6 +6,24 @@
 
 namespace lebai {
 namespace claw {
+
+class InitClawRequest : public JSONBase {
+ public:
+  void set_force_initilization(bool force_initilization);
+  bool force_initilization() const;
+  bool *mutable_force_initilization();
+
+ protected:
+  bool force_initilization_;
+  // These methods are used to serialize and deserialize the class.
+  // They will not be wrapped in the SDK.
+ public:
+  virtual bool Deserialize(const rapidjson::Value &obj);
+  virtual bool Serialize(
+      rapidjson::Writer<rapidjson::StringBuffer> *writer) const;
+  virtual bool IsNullJSONData() const;
+};
+
 class SetClawRequest : public JSONBase {
  public:
   void set_force(double force);

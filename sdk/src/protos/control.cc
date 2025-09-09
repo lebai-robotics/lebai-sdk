@@ -85,7 +85,7 @@ bool TaskIds::Deserialize(const rapidjson::Value &obj) {
   if (obj.HasMember("ids")) {
     const rapidjson::Value &ids = obj["ids"];
     for (rapidjson::SizeType i = 0; i < ids.Size(); i++) {
-      unsigned int id_int = (unsigned int)(obj[i].GetUint());
+      unsigned int id_int = (unsigned int)(ids[i].GetUint());
       ids_.push_back(id_int);
     }
   }

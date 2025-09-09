@@ -282,20 +282,13 @@ MotionState* GetMotionStateResponse::mutable_state() { return &state_; }
 
 bool GetMotionStateResponse::Deserialize(const rapidjson::Value& obj) {
   if (obj.HasMember("state")) {
-    int state_int = (int)(obj["state"].GetInt());
-    switch (state_int) {
-      case 0:
-        state_ = WAIT;
-        break;
-      case 1:
-        state_ = RUNNING;
-        break;
-      case 2:
-        state_ = FINISHED;
-        break;
-      default:
-        state_ = WAIT;
-        break;
+    std::string state_string = (std::string)(obj["state"].GetString());
+    if (state_string == "WAIT") {
+      state_ = WAIT;
+    } else if (state_string == "RUNNING") {
+      state_ = RUNNING;
+    } else if (state_string == "FINISHED") {
+      state_ = FINISHED;
     }
   }
   return true;
