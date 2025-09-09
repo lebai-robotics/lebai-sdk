@@ -768,16 +768,17 @@ std::vector<bool> Robot::get_dios_mode(std::string device, unsigned int pin,
   return resp.values();
 }
 
+void Robot::init_claw(bool force_initilization) {
+  claw::InitClawRequest req;
+  req.set_force_initilization(force_initilization);
+  impl_->initClaw(req);
+}
+
 void Robot::set_claw(double force, double amplitude) {
   claw::SetClawRequest req;
   req.set_force(force);
   req.set_amplitude(amplitude);
   impl_->setClaw(req);
-}
-
-std::tuple<double, double, bool> Robot::get_claw() {
-  auto resp = impl_->getClaw();
-  return std::make_tuple(resp.force(), resp.amplitude(), resp.hold_on());
 }
 
 ClawData Robot::get_claw_data() {
@@ -1023,7 +1024,7 @@ unsigned int Robot::start_task(const std::string &name) {
   control::TaskIndex resp = impl_->scene(req);
   return resp.id();
 }
-std::vector<unsigned int> Robot::load_task_list() {
+std::vector<unsigned int> Robot::get_task_list() {
   control::TaskIds resp = impl_->loadTaskList();
   return resp.ids();
 }

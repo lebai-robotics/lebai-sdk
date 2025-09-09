@@ -3,6 +3,37 @@
 namespace lebai {
 namespace claw {
 
+void InitClawRequest::set_force_initilization(bool force_initilization) {
+  force_initilization_ = force_initilization;
+}
+bool InitClawRequest::force_initilization() const {
+  return force_initilization_;
+}
+bool *InitClawRequest::mutable_force_initilization() {
+  return &force_initilization_;
+}
+
+// Deserialize
+bool InitClawRequest::Deserialize(const rapidjson::Value &obj) {
+  if (obj.HasMember("force")) {
+    force_initilization_ = obj["force"].GetBool();
+  }
+  return true;
+}
+
+// Serialize
+bool InitClawRequest::Serialize(
+    rapidjson::Writer<rapidjson::StringBuffer> *writer) const {
+  writer->StartObject();
+  writer->Key("force");
+  writer->Bool(force_initilization_);
+  writer->EndObject();
+  return true;
+}
+
+// IsNullJSONData
+bool InitClawRequest::IsNullJSONData() const { return false; }
+
 void SetClawRequest::set_force(double force) { force_ = force; }
 double SetClawRequest::force() const { return force_; }
 double *SetClawRequest::mutable_force() { return &force_; }

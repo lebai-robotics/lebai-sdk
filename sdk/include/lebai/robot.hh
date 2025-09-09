@@ -771,6 +771,12 @@ class Robot {
    *  @{
    */
   /**
+   * @brief 初始化夹爪
+   *
+   * @param force_initilization 是否强制初始化
+   */
+  void init_claw(bool force_initilization);
+  /**
    * @brief
    * 设置夹爪力度（力控）和幅度（位控）.如果在闭合过程中抓取到物体，则不再继续闭合以避免夹坏物体，判断的准则为这里设置的力的大小.
    *
@@ -778,13 +784,7 @@ class Robot {
    * @param amplitude 张合幅度（0-100）
    */
   void set_claw(double force, double amplitude);
-  /**
-   * @brief 获取夹爪当前数据
-   *
-   * @return std::tuple<double, double ,bool>
-   * 第一个数据为夹爪力度，第二个数据为幅度，第三个数据为开度是否稳定
-   */
-  std::tuple<double, double, bool> get_claw();
+
   /**
    * @brief 获取夹爪当前数据
    *
@@ -877,7 +877,7 @@ class Robot {
   /**
    * @brief 查询任务列表
    */
-  std::vector<unsigned int> load_task_list();
+  std::vector<unsigned int> get_task_list();
   /**
    * @brief 等待任务完成
    *
