@@ -17,11 +17,6 @@ if(BUILD_PYTHON)
     PRIVATE
     ${Python3_INCLUDE_DIRS}
   )
-elseif(BUILD_PYTHON2)
-  target_include_directories(l_master
-    PRIVATE
-    ${Python2_INCLUDE_DIRS}
-  )
 endif()
 
 set_property(TARGET l_master PROPERTY SWIG_USE_TARGET_INCLUDE_DIRECTORIES ON)
@@ -64,11 +59,6 @@ if(BUILD_PYTHON)
     PRIVATE
     ${Python3_INCLUDE_DIRS}
   )
-elseif(BUILD_PYTHON2)
-  target_include_directories(zeroconf
-    PRIVATE
-    ${Python2_INCLUDE_DIRS}
-  )
 endif()
 set_property(TARGET zeroconf PROPERTY SWIG_USE_TARGET_INCLUDE_DIRECTORIES ON)
 
@@ -83,16 +73,9 @@ target_link_libraries(zeroconf PRIVATE ${PROJECT_NAMESPACE}::lebai-cpp)
 # which won't be interpreted inside a generator expression.
 # i.e. we can't use: $<$<PLATFORM_ID:Windows>:${PYTHON_LIBRARIES}>
 # see: https://cmake.org/cmake/help/git-stage/command/target_link_libraries.html#command:target_link_libraries
-# if(MSVC)
-#   target_link_libraries(zeroconf PRIVATE ${Python2_LIBRARIES} ${Python3_LIBRARIES})
-# endif()
 if(BUILD_PYTHON)
   if(MSVC)
     target_link_libraries(zeroconf PRIVATE ${Python3_LIBRARIES})
-  endif()
-elseif(BUILD_PYTHON2)
-  if(MSVC)
-    target_link_libraries(zeroconf PRIVATE ${Pytho2_LIBRARIES})
   endif()
 endif()
 
@@ -117,11 +100,6 @@ if(BUILD_PYTHON)
     PRIVATE
     ${Python3_INCLUDE_DIRS}
   )
-elseif(BUILD_PYTHON2)
-  target_include_directories(gripper
-    PRIVATE
-    ${Python2_INCLUDE_DIRS}
-  )
 endif()
 
 set_property(TARGET gripper PROPERTY SWIG_USE_TARGET_INCLUDE_DIRECTORIES ON)
@@ -136,9 +114,5 @@ target_link_libraries(gripper PRIVATE ${PROJECT_NAMESPACE}::lebai-cpp)
 if(BUILD_PYTHON)
   if(MSVC)
     target_link_libraries(gripper PRIVATE ${Python3_LIBRARIES})
-  endif()
-elseif(BUILD_PYTHON2)
-  if(MSVC)
-    target_link_libraries(gripper PRIVATE ${Python2_LIBRARIES})
   endif()
 endif()
