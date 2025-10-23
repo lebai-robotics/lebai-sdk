@@ -21,8 +21,7 @@ namespace lebai {
 namespace l_master {
 
 Gripper::Gripper(const std::string &port_name)
-    : impl_(std::make_unique<GripperImpl>(port_name)) {
-}
+    : impl_(std::make_unique<GripperImpl>(port_name)) {}
 
 Gripper::~Gripper() = default;
 
@@ -34,42 +33,26 @@ unsigned int Gripper::GetCurrentPosition() const {
   return impl_->GetCurrentPosition();
 }
 
-void Gripper::SetForce(unsigned int force) {
-    return impl_->SetForce(force);
-}
+void Gripper::SetForce(unsigned int force) { return impl_->SetForce(force); }
 unsigned int Gripper::GetCurrentForce() const {
-    return impl_->GetCurrentForce();
+  return impl_->GetCurrentForce();
 }
 
-void Gripper::SetVelocity(unsigned int velocity, bool persistent)
-{
-    return impl_->SetVelocity(velocity, persistent);
+void Gripper::SetVelocity(unsigned int velocity, bool persistent) {
+  return impl_->SetVelocity(velocity, persistent);
 }
 
-unsigned int Gripper::GetCurrentVelocity(bool persistent) const
-{
-    return impl_->GetCurrentVelocity(persistent);
+unsigned int Gripper::GetCurrentVelocity(bool persistent) const {
+  return impl_->GetCurrentVelocity(persistent);
 }
 
-void Gripper::DoCalibration()
-{
-    impl_->DoCalibration();
-}
+void Gripper::DoCalibration() { impl_->DoCalibration(); }
 
-bool Gripper::IsCalibrated() const
-{
-    return impl_->IsCalibrated();
-}
+bool Gripper::IsCalibrated() const { return impl_->IsCalibrated(); }
 
-void Gripper::TurnOnAutoCalibration()
-{
-    impl_->TurnOnAutoCalibration();
-}
+void Gripper::TurnOnAutoCalibration() { impl_->TurnOnAutoCalibration(); }
 
-void Gripper::TurnOffAutoCalibration()
-{
-    impl_->TurnOffAutoCalibration();
-}
+void Gripper::TurnOffAutoCalibration() { impl_->TurnOffAutoCalibration(); }
 
 }  // namespace l_master
 }  // namespace lebai

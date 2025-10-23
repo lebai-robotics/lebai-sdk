@@ -30,7 +30,7 @@ namespace l_master {
 
 class Gripper::GripperImpl {
  public:
-  GripperImpl(const std::string &port_name);
+  GripperImpl(const std::string& port_name);
   virtual ~GripperImpl();
 
   void SetPosition(unsigned int amplitude);
