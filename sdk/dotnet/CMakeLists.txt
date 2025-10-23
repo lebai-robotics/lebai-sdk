@@ -39,3 +39,25 @@ target_include_directories(dotnet_zeroconf
   ${PROJECT_SOURCE_DIR}/sdk/src
   )
 target_link_libraries(dotnet_zeroconf PRIVATE ${PROJECT_NAMESPACE}::lebai-cpp)
+
+# Gripper module
+set_property(SOURCE gripper.i PROPERTY CPLUSPLUS ON)
+set_property(SOURCE gripper.i PROPERTY COMPILE_OPTIONS
+  -namespace ${DOTNET_PROJECT}.gripper
+  -dllimport lebai-native)
+swig_add_library(dotnet_gripper
+  TYPE OBJECT
+  LANGUAGE csharp
+  OUTPUT_DIR ${DOTNET_PROJECT_DIR}
+  SOURCES gripper.i)
+
+set_target_properties(dotnet_gripper PROPERTIES
+  SWIG_INCLUDE_DIRECTORIES ${PROJECT_SOURCE_DIR}/dotnet
+  SWIG_USE_TARGET_INCLUDE_DIRECTORIES ON
+  POSITION_INDEPENDENT_CODE ON)
+target_include_directories(dotnet_gripper
+  PRIVATE
+  ${PROJECT_SOURCE_DIR}/sdk/include
+  ${PROJECT_SOURCE_DIR}/sdk/src
+  )
+target_link_libraries(dotnet_gripper PRIVATE ${PROJECT_NAMESPACE}::lebai-cpp)

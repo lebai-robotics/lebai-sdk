@@ -140,6 +140,27 @@ set_property(GLOBAL PROPERTY CTEST_TARGETS_ADDED 1)
 include(CTest)
 include(cpp)
 
+# Fetch ModbusLib
+include(FetchContent)
+set(BUILD_SHARED_LIBS_SAVE ${BUILD_SHARED_LIBS})
+set(BUILD_SHARED_LIBS OFF) # Force ModbusLib to build as static
+set(MB_CLIENT_DISABLE OFF CACHE BOOL "Enable Modbus client" FORCE)
+set(MB_SERVER_DISABLE ON CACHE BOOL "Disable Modbus server" FORCE)
+set(MB_EXAMPLES_ENABLED OFF CACHE BOOL "Disable ModbusLib examples" FORCE)
+set(MB_TESTS_ENABLED OFF CACHE BOOL "Disable ModbusLib tests" FORCE)
+FetchContent_Declare(
+  ModbusLib
+  GIT_REPOSITORY https://github.com/serhmarch/ModbusLib.git
+  GIT_TAG        main  # or specify a specific tag/commit
+)
+FetchContent_MakeAvailable(ModbusLib)
+# Set modbus as a static library that won't be installed
+set_target_properties(modbus PROPERTIES
+  POSITION_INDEPENDENT_CODE ON
+  EXCLUDE_FROM_ALL TRUE
+)
+set(BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS_SAVE})
+
 if(WIN32
    AND (BUILD_DOTNET
         OR BUILD_JAVA

@@ -95,3 +95,50 @@ elseif(BUILD_PYTHON2)
     target_link_libraries(zeroconf PRIVATE ${Pytho2_LIBRARIES})
   endif()
 endif()
+
+
+# Gripper module
+set_property(SOURCE gripper.i PROPERTY CPLUSPLUS ON)
+set_property(SOURCE gripper.i PROPERTY SWIG_MODULE_NAME gripper)
+swig_add_library(gripper
+  TYPE MODULE
+  LANGUAGE python
+  OUTPUT_DIR ${PYTHON_PROJECT_DIR}
+  SOURCES gripper.i)
+add_library(${PROJECT_NAMESPACE}::gripper ALIAS gripper)
+
+target_include_directories(gripper
+  PRIVATE
+  ${PROJECT_SOURCE_DIR}/sdk/include
+  ${PROJECT_SOURCE_DIR}/sdk/src
+)
+if(BUILD_PYTHON)
+  target_include_directories(gripper
+    PRIVATE
+    ${Python3_INCLUDE_DIRS}
+  )
+elseif(BUILD_PYTHON2)
+  target_include_directories(gripper
+    PRIVATE
+    ${Python2_INCLUDE_DIRS}
+  )
+endif()
+
+set_property(TARGET gripper PROPERTY SWIG_USE_TARGET_INCLUDE_DIRECTORIES ON)
+
+if(UNIX)
+  set_target_properties(gripper PROPERTIES
+    INSTALL_RPATH "$ORIGIN:$ORIGIN/../${PYTHON_PROJECT}/.libs"
+    )
+endif()
+target_link_libraries(gripper PRIVATE ${PROJECT_NAMESPACE}::lebai-cpp)
+
+if(BUILD_PYTHON)
+  if(MSVC)
+    target_link_libraries(gripper PRIVATE ${Python3_LIBRARIES})
+  endif()
+elseif(BUILD_PYTHON2)
+  if(MSVC)
+    target_link_libraries(gripper PRIVATE ${Python2_LIBRARIES})
+  endif()
+endif()
