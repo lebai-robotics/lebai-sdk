@@ -41,33 +41,12 @@ int main(int argc, char* argv[]) {
 		auto gripper = std::make_unique<lebai::l_master::Gripper>(port_name);
 
 		std::cout << "Gripper connected successfully!" << std::endl;
-		//gripper->SetPosition(30);
-		//std::this_thread::sleep_for(std::chrono::seconds(1));
-		//gripper->SetPosition(70);
-		//std::this_thread::sleep_for(std::chrono::seconds(5));
-		//std::cout << "Get current position: " << gripper->GetCurrentPosition() << "\n";
-		//gripper->SetForce(37);
-		//std::this_thread::sleep_for(std::chrono::seconds(1));
-		//std::cout << "Get current force: " << gripper->GetCurrentForce() << "\n";
-		//std::this_thread::sleep_for(std::chrono::seconds(1));
-		//gripper->DoCalibration();
-		//std::this_thread::sleep_for(std::chrono::seconds(5));
-		//std::cout << "Is calibrated: " << gripper->IsCalibrated() << "\n";
-		//gripper->SetPosition(0);
-		//std::this_thread::sleep_for(std::chrono::seconds(1));
-		//gripper->SetVelocity(0, false);
-		//gripper->SetPosition(100);
-		//std::this_thread::sleep_for(std::chrono::seconds(1));
-		//gripper->SetPosition(0);
-		//std::this_thread::sleep_for(std::chrono::seconds(1));
-		//std::cout << "Get current velocity (volatile): " << gripper->GetCurrentVelocity(false) << "\n";
-		//gripper->SetVelocity(100, true);
-		//gripper->SetPosition(100);
-		//std::this_thread::sleep_for(std::chrono::seconds(1));
-		//gripper->SetPosition(0);
-		//std::cout << "Get current velocity (persistent): " << gripper->GetCurrentVelocity(true) << "\n";
-		//std::this_thread::sleep_for(std::chrono::seconds(3));
-		gripper->TurnOffAutoCalibration();
+		gripper->SetPosition(30);
+		std::this_thread::sleep_for(std::chrono::seconds(1));
+		gripper->SetPosition(70);
+		std::this_thread::sleep_for(std::chrono::seconds(5));
+		gripper->DoCalibration();
+		std::this_thread::sleep_for(std::chrono::seconds(5));
 	}
 	catch (const std::exception& e) {
 		std::cerr << "Error: " << e.what() << std::endl;

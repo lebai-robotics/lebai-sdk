@@ -138,6 +138,7 @@ FetchContent_Declare(
   ModbusLib
   GIT_REPOSITORY https://github.com/serhmarch/ModbusLib.git
   GIT_TAG        main  # or specify a specific tag/commit
+
 )
 FetchContent_MakeAvailable(ModbusLib)
 # Set modbus as a static library that won't be installed
