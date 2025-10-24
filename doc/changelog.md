@@ -1,5 +1,9 @@
 # ChangeLog
 
+## 1.3.4
+
+添加独立的 gripper 接口
+
 ## 1.3.3
 
 添加 init_claw 接口
