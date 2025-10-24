@@ -42,8 +42,6 @@ lebai-sdk的源代码仓库，可以用于控制乐白机械臂.
 ## python
 python开发可以直接从[PyPI](https://pypi.org/project/pylebai/)安装.
 
-python2理论上可以从源代码编译生成包（不再持续维护）
-
 ```
 pip install lebai
 ```
@@ -101,8 +99,6 @@ sudo pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.tx
 sudo apt install doxygen graphviz
 # 如果需要生成python3的wrapper包
 sudo apt install python3-dev python3-setuptools
-# 如果需要生成python2的wrapper包
-sudo apt install python-dev python-setuptools
 ```
 
 
@@ -138,7 +134,6 @@ cpack
 ## 编译选项
 
  - BUILD_PYTHON: 是否编译python3接口 默认为OFF
- - BUILD_PYTHON2: 是否编译python2接口 默认为OFF
  - PYTHONPATH: PYTHON的安装目录
  - BUILD_DOTNET: 是否编译.NET接口 默认为OFF（请先安装好.NET的开发环境）
  - BUILD_JAVA: 是否编译JAVA接口 默认为OFF（请先安装好JDK和Maven）

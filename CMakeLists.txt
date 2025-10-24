@@ -105,17 +105,11 @@ message(STATUS "Build C++ library: ${BUILD_CXX}")
 option(BUILD_PYTHON "Build Python Library" OFF)
 message(STATUS "Build Python: ${BUILD_PYTHON}")
 
-option(BUILD_PYTHON2 "Build Python2 Library" OFF)
-message(STATUS "Build Python2: ${BUILD_PYTHON2}")
-
 option(BUILD_DOTNET "Build .NET Library" OFF)
 message(STATUS "Build .Net: ${BUILD_DOTNET}")
 
 option(BUILD_JAVA "Build Java Library" OFF)
 message(STATUS "Build Java: ${BUILD_JAVA}")
-if(BUILD_PYTHON AND BUILD_PYTHON2)
-  message(FATAL_ERROR "Can only build one of python2 and python3.")
-endif()
 # if(UNIX)
 if(BUILD_PYTHON)
   option(FETCH_PYTHON_DEPS "Install python required modules if not available"
@@ -127,18 +121,32 @@ if(BUILD_PYTHON)
   endif()
   include(python)
 endif()
-
-if(BUILD_PYTHON2)
-  if(DEFINED PYTHONPATH)
-    message(STATUS "Python path: ${PYTHON2PATH}")
-    set(Python2_ROOT_DIR ${PYTHONPATH})
-  endif()
-  include(python2)
-endif()
-# endif() Disable CTest targets
+# Disable CTest targets
 set_property(GLOBAL PROPERTY CTEST_TARGETS_ADDED 1)
 include(CTest)
 include(cpp)
+
+# Fetch ModbusLib
+include(FetchContent)
+set(BUILD_SHARED_LIBS_SAVE ${BUILD_SHARED_LIBS})
+set(BUILD_SHARED_LIBS OFF) # Force ModbusLib to build as static
+set(MB_CLIENT_DISABLE OFF CACHE BOOL "Enable Modbus client" FORCE)
+set(MB_SERVER_DISABLE ON CACHE BOOL "Disable Modbus server" FORCE)
+set(MB_EXAMPLES_ENABLED OFF CACHE BOOL "Disable ModbusLib examples" FORCE)
+set(MB_TESTS_ENABLED OFF CACHE BOOL "Disable ModbusLib tests" FORCE)
+FetchContent_Declare(
+  ModbusLib
+  GIT_REPOSITORY https://github.com/serhmarch/ModbusLib.git
+  GIT_TAG        main  # or specify a specific tag/commit
+
+)
+FetchContent_MakeAvailable(ModbusLib)
+# Set modbus as a static library that won't be installed
+set_target_properties(modbus PROPERTIES
+  POSITION_INDEPENDENT_CODE ON
+  EXCLUDE_FROM_ALL TRUE
+)
+set(BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS_SAVE})
 
 if(WIN32
    AND (BUILD_DOTNET

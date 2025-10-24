@@ -7,7 +7,7 @@ RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime
 RUN echo "Asia/Shanghai" > /etc/timezone
 
 RUN apt-get update \
-    && apt-get install -y build-essential git doxygen graphviz python3-pip libgtest-dev libeigen3-dev libboost-dev gdb vim swig
+    && apt-get install -y build-essential git doxygen graphviz python3-pip libgtest-dev libeigen3-dev libboost-dev gdb vim swig default-jre default-jdk maven
 ENV LANG=zh_CN.UTF-8
 RUN apt-get install -y locales && \
     sed -i -e "s/# $LANG.*/$LANG UTF-8/" /etc/locale.gen && \

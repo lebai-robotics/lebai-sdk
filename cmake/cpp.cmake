@@ -12,7 +12,8 @@ configure_file("${PROJECT_SOURCE_DIR}/sdk/config.hh.in"
 include(GNUInstallDirs)
 
 add_subdirectory(sdk)
-# Install
+
+# Install the export targets
 install(
   EXPORT ${PROJECT_NAME}Targets
   NAMESPACE ${PROJECT_NAMESPACE}::
