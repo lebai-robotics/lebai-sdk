@@ -45,7 +45,7 @@ jobs:
       - name: Repair wheels with delvewheel
         run: |
           New-Item -ItemType Directory -Force -Path repaired_wheels
-          delvewheel repair --add-path build\python\dist\*.whl -w repaired_wheels
+          delvewheel repair --add-path build\Release -w repaired_wheels build\python\dist\*.whl
       - name: List repaired wheels
         run: dir repaired_wheels\
       - name: Upload Pypi
