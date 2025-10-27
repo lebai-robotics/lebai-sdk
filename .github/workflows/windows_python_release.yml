@@ -45,7 +45,7 @@ jobs:
       - name: Repair wheels with delvewheel
         run: |
           mkdir -p repaired_wheels
-          delvewheel repair --add-path build\Release build\python\dist\*.whl -w repaired_wheels
+          delvewheel repair --add-path build\python\dist\*.whl -w repaired_wheels
         shell: bash
       - name: List repaired wheels
         run: dir repaired_wheels\
