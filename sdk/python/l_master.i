@@ -73,6 +73,7 @@
 // %import "lebai/motion.hh"
 %include "lebai/robot.hh"
 %include "lebai/lua_robot.hh"
+%include "lebai/gripper.hh"
 
 
 
