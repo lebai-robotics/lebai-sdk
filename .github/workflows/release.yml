@@ -73,6 +73,9 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: lebai-win-x64-311-whl
+      - uses: actions/download-artifact@v4
+        with:
+          name: lebai-win-x64-312-whl
       - name: Display structure of downloaded files
         run: ls -l
       - name: Extract Project Version
