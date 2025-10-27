@@ -51,28 +51,28 @@ class Gripper {
    *
    * @param Position 位置.
    */
-  void SetPosition(unsigned int position);
+  void set_position(unsigned int position);
   /**
    * @brief 获取夹爪当前位置.
    * @note 请求的寄存器地址为40005,0x9C45。
    *
    * @return 当前位置.
    */
-  unsigned int GetCurrentPosition() const;
+  unsigned int get_current_position() const;
   /**
    * @brief 设置夹爪夹持力道. 范围为0-100.
    * @note 请求的寄存器地址为40001,0x9C41。
    *
    * @param force 力道.
    */
-  void SetForce(unsigned int force);
+  void set_force(unsigned int force);
   /**
    * @brief 获取夹爪当前力道.
    * @note 请求的寄存器地址为40006,0x9C46。
    *
    * @return 当前力道.
    */
-  unsigned int GetCurrentForce() const;
+  unsigned int get_current_force() const;
   /**
    * @brief 设置夹爪开合速度. 范围为0-100.
    * @note 当 persistent=false 时，请求寄存器地址为40010,0x9C4A；当
@@ -81,7 +81,7 @@ class Gripper {
    * @param velocity 速度.
    * @param persistent 是否写入掉电保持寄存器。
    */
-  void SetVelocity(unsigned int velocity, bool persistent);
+  void set_velocity(unsigned int velocity, bool persistent);
   /**
    * @brief 获取夹爪当前开合速度.
    * @note 当 persistent=false 时，请求寄存器地址为40010,0x9C4A；当
@@ -89,32 +89,32 @@ class Gripper {
    *
    * @return 当前速度.
    */
-  unsigned int GetCurrentVelocity(bool persistent) const;
+  unsigned int get_current_velocity(bool persistent) const;
   /**
    * @brief 执行夹爪校准动作.
    * @note 请求的寄存器地址为40007,0x9C47。
    *
    */
-  void DoCalibration();
+  void do_calibration();
   /**
    * @brief 获取夹爪是否已校准完成状态.
    * @note 请求的寄存器地址为40008,0x9C48。
    *
    * @return true 已校准完成，false 未校准.
    */
-  bool IsCalibrated() const;
+  bool is_calibrated() const;
   /**
    * @brief 打开自动校准功能.
    * @note 请求的寄存器地址为40009,0x9C49。
    *
    */
-  void TurnOnAutoCalibration();
+  void turn_on_auto_calibration();
   /**
    * @brief 关闭自动校准功能.
    * @note 请求的寄存器地址为40009,0x9C49。
    *
    */
-  void TurnOffAutoCalibration();
+  void turn_off_auto_calibration();
 
  protected:
   std::unique_ptr<GripperImpl> impl_; /*!< 内部实现数据结构，用户无需关注. */

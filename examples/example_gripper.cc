@@ -41,11 +41,11 @@ int main(int argc, char* argv[]) {
 		auto gripper = std::make_unique<lebai::l_master::Gripper>(port_name);
 
 		std::cout << "Gripper connected successfully!" << std::endl;
-		gripper->SetPosition(30);
+		gripper->set_position(30);
 		std::this_thread::sleep_for(std::chrono::seconds(1));
-		gripper->SetPosition(70);
+		gripper->set_position(70);
 		std::this_thread::sleep_for(std::chrono::seconds(5));
-		gripper->DoCalibration();
+		gripper->do_calibration();
 		std::this_thread::sleep_for(std::chrono::seconds(5));
 	}
 	catch (const std::exception& e) {
