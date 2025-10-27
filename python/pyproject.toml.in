@@ -1,0 +1,48 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "@PYTHON_PROJECT@"
+version = "@PROJECT_VERSION@"
+description = "Lebai controller Python SDK"
+readme = {text = "See [Lebai SDK documentation](https://lebai-robotics.github.io/lebai-sdk/) for more.", content-type = "text/markdown"}
+authors = [
+    {name = "liufang", email = "liufang_robot@outlook.com"}
+]
+requires-python = ">=3.7"
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: Microsoft :: Windows",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.7",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: C++",
+    "Topic :: Software Development :: Libraries :: Python Modules"
+]
+
+[project.urls]
+Homepage = "https://github.com/lebai-robotics/lebai-sdk"
+Documentation = "https://lebai-robotics.github.io/lebai-sdk/"
+Repository = "https://github.com/lebai-robotics/lebai-sdk"
+
+[tool.setuptools]
+# This tells setuptools to use the setup.py for build configuration
+# We keep setup.py for now for compatibility with the CMake build process
+zip-safe = false
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["@PYTHON_PROJECT@*"]
+
+[tool.setuptools.package-data]
+"@PYTHON_PROJECT@" = [".libs/*", "*.so", "*.pyd"]

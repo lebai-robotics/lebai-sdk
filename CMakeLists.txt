@@ -5,10 +5,17 @@ endif()
 if(POLICY CMP0135)
   cmake_policy(SET CMP0135 NEW)
 endif()
+# SWIG policies - use modern SWIG target naming
+if(POLICY CMP0078)
+  cmake_policy(SET CMP0078 NEW)
+endif()
+if(POLICY CMP0086)
+  cmake_policy(SET CMP0086 NEW)
+endif()
 
 project(
   lebai
-  VERSION 1.3.6
+  VERSION 1.3.7
   LANGUAGES CXX)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -66,6 +73,7 @@ else()
   option(BUILD_SHARED_LIBS "Build shared libraries (.dll)." OFF)
   add_compile_definitions(_USE_MATH_DEFINES)
   add_compile_definitions(_WEBSOCKETPP_CPP11_RANDOM_DEVICE_)
+  add_compile_definitions(_WINSOCK_DEPRECATED_NO_WARNINGS)  # Suppress inet_addr deprecation from websocketpp
   # add_compile_definitions(NOMINMAX) add_compile_definitions(_DEBUG)
   if(WIN32)
     add_definitions(-D_WIN32_WINNT=0x0601)

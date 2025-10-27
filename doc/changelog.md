@@ -1,5 +1,11 @@
 # ChangeLog
 
+## 1.3.7
+
+优化构建系统
+
+调整 gripper 接口命名
+
 ## 1.3.5
 
 优化 Windows 平台 python 包的构建支持
