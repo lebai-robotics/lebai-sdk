@@ -2,8 +2,6 @@ if(NOT BUILD_PYTHON)
   return()
 endif()
 
-cmake_minimum_required(VERSION 3.18)
-
 # Will need swig
 set(CMAKE_SWIG_FLAGS)
 find_package(SWIG REQUIRED)
@@ -124,19 +122,31 @@ file(GENERATE
   OUTPUT ${PROJECT_BINARY_DIR}/python/setup.py
   INPUT ${PROJECT_BINARY_DIR}/python/setup.py.in)
 
+# Configure pyproject.toml for modern Python packaging
+configure_file(
+  ${PROJECT_SOURCE_DIR}/python/pyproject.toml.in
+  ${PROJECT_BINARY_DIR}/python/pyproject.toml.in
+  @ONLY)
+file(GENERATE
+  OUTPUT ${PROJECT_BINARY_DIR}/python/pyproject.toml
+  INPUT ${PROJECT_BINARY_DIR}/python/pyproject.toml.in)
+
 #add_custom_command(
 #  OUTPUT python/setup.py
 #  DEPENDS ${PROJECT_BINARY_DIR}/python/setup.py
 #  COMMAND ${CMAKE_COMMAND} -E copy setup.py setup.py
 #  WORKING_DIRECTORY python)
 
-# Look for python module wheel
+# Look for python modules needed for building
 search_python_module(
   NAME setuptools
   PACKAGE setuptools)
 search_python_module(
   NAME wheel
   PACKAGE wheel)
+search_python_module(
+  NAME build
+  PACKAGE build)
 
 add_custom_command(
   OUTPUT python/dist/timestamp
@@ -151,18 +161,21 @@ add_custom_command(
   # COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:motion> ${PYTHON_PROJECT}/
   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:l_master> ${PYTHON_PROJECT}/
   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:zeroconf> ${PYTHON_PROJECT}/
-  # COMMAND ${Python3_EXECUTABLE} setup.py bdist_egg bdist_wheel
-  COMMAND ${Python3_EXECUTABLE} setup.py bdist_wheel
+  COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:gripper> ${PYTHON_PROJECT}/
+  # Use modern python build instead of setup.py directly
+  COMMAND ${Python3_EXECUTABLE} -m build --wheel --outdir dist .
   COMMAND ${CMAKE_COMMAND} -E touch ${PROJECT_BINARY_DIR}/python/dist/timestamp
   MAIN_DEPENDENCY
     python/setup.py.in
   DEPENDS
     python/setup.py
+    python/pyproject.toml
     ${PROJECT_NAMESPACE}::lebai-cpp
     # ${PROJECT_NAMESPACE}::posture
     # ${PROJECT_NAMESPACE}::motion
     ${PROJECT_NAMESPACE}::l_master
     ${PROJECT_NAMESPACE}::zeroconf
+    ${PROJECT_NAMESPACE}::gripper
   BYPRODUCTS
     python/${PYTHON_PROJECT}
     python/${PYTHON_PROJECT}.egg-info
