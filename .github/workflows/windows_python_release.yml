@@ -49,7 +49,7 @@ jobs:
       - name: List repaired wheels
         run: dir repaired_wheels\
       - name: Upload Pypi
-        run: twine upload --skip-existing --verbose -u __token__ -p ${{ secrets.PYLEBAI }} repaired_wheels/*.whl
+        run: twine upload --verbose -u __token__ -p ${{ secrets.PYLEBAI }} repaired_wheels/*.whl
       - name: Upload packages
         uses: actions/upload-artifact@v4
         with:

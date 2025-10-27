@@ -42,7 +42,7 @@ jobs:
           done;
 
       - name: Upload Pypi
-        run: /opt/python/cp310-cp310/bin/twine upload --verbose --skip-existing -u __token__ -p ${{ secrets.PYLEBAI }} wheelhouse/*.whl
+        run: /opt/python/cp310-cp310/bin/twine upload --verbose -u __token__ -p ${{ secrets.PYLEBAI }} wheelhouse/*.whl
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
