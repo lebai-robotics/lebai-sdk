@@ -163,7 +163,8 @@ add_custom_command(
   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:zeroconf> ${PYTHON_PROJECT}/
   COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:gripper> ${PYTHON_PROJECT}/
   # Use modern python build instead of setup.py directly
-  COMMAND ${Python3_EXECUTABLE} -m build --wheel --outdir dist .
+  # --no-isolation flag is needed for Python 3.12 compatibility
+  COMMAND ${Python3_EXECUTABLE} -m build --no-isolation --wheel --outdir dist .
   COMMAND ${CMAKE_COMMAND} -E touch ${PROJECT_BINARY_DIR}/python/dist/timestamp
   MAIN_DEPENDENCY
     python/setup.py.in
