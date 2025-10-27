@@ -33,8 +33,10 @@ jobs:
         run: cmake --version
       - name: Check Python version
         run: python.exe --version
+      - name: Upgrade pip, setuptools, and wheel
+        run: python.exe -m pip install --upgrade pip setuptools wheel
       - name: Install python-dev-tools
-        run: python.exe -m pip install python-dev-tools setuptools wheel twine delvewheel markdown build
+        run: python.exe -m pip install python-dev-tools twine delvewheel markdown build
 
       - name: CMake configure
         run: cmake -S. -Bbuild -G "Visual Studio 17 2022" -DBUILD_PYTHON=ON -DBUILD_TESTING=OFF -DBUILD_DOCUMENTATION=OFF -DPython3_EXECUTABLE="${{ env.pythonLocation }}\python.exe" -DPYTHON_EXECUTABLE="${{ env.pythonLocation }}\python.exe"
