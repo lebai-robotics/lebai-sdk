@@ -1,6 +1,6 @@
 # ChangeLog
 
-## 1.3.5
+## 1.3.7
 
 优化 Windows 平台 python 包的构建支持
 
