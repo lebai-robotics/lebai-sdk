@@ -127,6 +127,7 @@ include(CTest)
 include(cpp)
 
 # Fetch ModbusLib
+message(STATUS "Fetching ModbusLib...")
 include(FetchContent)
 set(BUILD_SHARED_LIBS_SAVE ${BUILD_SHARED_LIBS})
 set(BUILD_SHARED_LIBS OFF) # Force ModbusLib to build as static
