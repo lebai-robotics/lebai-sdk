@@ -1,5 +1,9 @@
 # ChangeLog
 
+## 1.3.5
+
+优化 Windows 平台 python 包的构建支持
+
 ## 1.3.4
 
 添加独立的 gripper 接口
