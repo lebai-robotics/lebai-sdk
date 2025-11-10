@@ -21,8 +21,10 @@ jobs:
           python-version: '3.10'
       - name: Check cmake
         run: cmake --version
+      - name: Install SWIG
+        run: choco install swig --version=4.2.1 -y
       - name: Install python-dev-tools
-        run: python.exe -m pip install python-dev-tools markdown build
+        run: python.exe -m pip install build setuptools wheel markdown
 #      - uses: msys2/setup-msys2@v2
 #        with:
 #          update: true
