@@ -4,7 +4,7 @@ on:
   workflow_dispatch: 
   pull_request:
 jobs: 
-  linux_dotnet_build: 
+  windows_dotnet_build: 
     runs-on: windows-latest
     steps:
       - name: Checkout

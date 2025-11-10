@@ -21,8 +21,16 @@ jobs:
           python-version: '3.10'
       - name: Check cmake
         run: cmake --version
+      - name: Ensure SWIG is available
+        run: |
+          if (!(Get-Command swig -ErrorAction SilentlyContinue)) {
+            choco install swig -y --no-progress
+          } else {
+            Write-Host "SWIG is already installed"
+            swig -version
+          }
       - name: Install python-dev-tools
-        run: python.exe -m pip install python-dev-tools markdown build
+        run: python.exe -m pip install build setuptools wheel markdown
 #      - uses: msys2/setup-msys2@v2
 #        with:
 #          update: true

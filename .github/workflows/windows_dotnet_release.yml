@@ -7,7 +7,7 @@ on:
     tags:
       - v1.*.*
 jobs:
-  linux_dotnet_build_and_release:
+  windows_dotnet_build_and_release:
     runs-on: windows-latest
     steps:
       - name: Checkout
