@@ -31,8 +31,14 @@ jobs:
           echo "PYTHON_VERSION_NO_DOT=$version" >> $env:GITHUB_ENV
       - name: Check cmake
         run: cmake --version
-      - name: Install SWIG
-        run: choco install swig --version=4.2.1 -y
+      - name: Ensure SWIG is available
+        run: |
+          if (!(Get-Command swig -ErrorAction SilentlyContinue)) {
+            choco install swig -y --no-progress
+          } else {
+            Write-Host "SWIG is already installed"
+            swig -version
+          }
       - name: Check Python version
         run: python.exe --version
       - name: Upgrade pip, setuptools, and wheel
