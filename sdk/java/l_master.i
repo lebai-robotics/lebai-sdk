@@ -37,11 +37,9 @@
 %}
 
 %{
-// #include "lebai/jsonbase.hh"
-// #include "lebai/posture.hh"
-// #include "lebai/motion.hh"
 #include "lebai/robot.hh"
 #include "lebai/lua_robot.hh"
+#include "lebai/gripper.hh"
 %}
 
 %extend lebai::l_master::KinematicsForwardResp {
@@ -66,7 +64,6 @@
   }
 };
 
-
 %extend lebai::l_master::KinematicsInverseResp {
   std::string __repr__() {
     std::string repr = "{ok: ";
@@ -85,5 +82,13 @@
   }
 };
 
+// 为 Gripper 添加 Java 友好的 toString 方法
+%extend lebai::l_master::Gripper {
+    std::string toString() {
+        return "Gripper object for RS485/Modbus RTU communication";
+    }
+}
+
 %include "lebai/robot.hh"
 %include "lebai/lua_robot.hh"
+%include "lebai/gripper.hh" // 添加此行
