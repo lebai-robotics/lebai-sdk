@@ -1,7 +1,0 @@
-# This is a generated file and its contents are an internal implementation detail.
-# The patch step will be re-executed if anything in this file changes.
-# No other meaning or use of this file is supported.
-
-command (connected)=D:/Scoop/apps/cmake/current/bin/cmake.exe;-Dcan_fetch=YES;-DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE;-P;D:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-subbuild/modbuslib-populate-prefix/tmp/modbuslib-populate-gitupdate.cmake
-command (disconnected)=D:/Scoop/apps/cmake/current/bin/cmake.exe;-Dcan_fetch=NO;-DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE;-P;D:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-subbuild/modbuslib-populate-prefix/tmp/modbuslib-populate-gitupdate.cmake
-work_dir=D:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-src

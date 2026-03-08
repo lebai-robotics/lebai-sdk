@@ -1,7 +1,0 @@
-{
-	"InstallScripts" : 
-	[
-		"D:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-subbuild/cmake_install.cmake"
-	],
-	"Parallel" : false
-}
