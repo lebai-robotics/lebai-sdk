@@ -339,7 +339,7 @@ int Robot::movec(const CartesianPose &cart_via, const CartesianPose &cart,
 int Robot::speedj(double a, const std::vector<double> &v, double t) {
   motion::SpeedJRequest req;
   req.mutable_param()->set_acc(a);
-  req.mutable_param()->set_time(a);
+  req.mutable_param()->set_time(t);
   for (auto &&p : v) {
     req.mutable_speed()->mutable_joint()->push_back(p);
   }
@@ -351,7 +351,7 @@ int Robot::speedl(double a, const CartesianPose &v, double t,
                   const CartesianPose &reference) {
   motion::SpeedLRequest req;
   req.mutable_param()->set_acc(a);
-  req.mutable_param()->set_time(a);
+  req.mutable_param()->set_time(t);
   if (v.find("x") != v.end()) {
     req.mutable_speed()->mutable_position()->set_x(v.at("x"));
   } else {

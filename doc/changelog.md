@@ -1,5 +1,9 @@
 # ChangeLog
 
+## 1.4.3
+
+修正`speedl`和`speedj`接口的错误
+
 ## 1.4.2
 
 支持 .net framework 4.8。
