@@ -108,6 +108,37 @@ struct JointMotionData {
 };
 
 /**
+ * @brief 碰撞检测配置.
+ *
+ */
+struct CollisionDetectorConfig {
+  unsigned int action = 99; /*!< 0:急停; 1:暂停; 2:停止运动; 99:关闭碰撞检测 */
+  unsigned int pause_time = 0;  /*!< action为1时的暂停时间，单位秒 */
+  unsigned int sensitivity = 0; /*!< 灵敏度[0-100] */
+};
+
+/**
+ * @brief 关节限位配置.
+ *
+ */
+struct JointLimitConfig {
+  double min_position = 0.0; /*!< 关节最小位置 */
+  double max_position = 0.0; /*!< 关节最大位置 */
+  double max_a = 0.0;        /*!< 关节最大加速度 */
+  double max_v = 0.0;        /*!< 关节最大速度 */
+};
+
+/**
+ * @brief 笛卡尔空间限位配置.
+ *
+ */
+struct CartesianLimitConfig {
+  double max_a = 0.0;     /*!< 笛卡尔空间最大加速度 */
+  double max_v = 0.0;     /*!< 笛卡尔空间最大速度 */
+  double eq_radius = 0.0; /*!< 等效半径 */
+};
+
+/**
  *  @brief 机械臂的主要接口对象，通过本对象的方法与机械臂进行数据交互.
  *  @note 使用该数据结构和机械臂交互要求机械臂软件版本>=3.1.5。
  *  @note 接口的每一个函数都可能抛出异常std::runtime_error,
@@ -1115,6 +1146,74 @@ class Robot {
    *  @return 相对于机器人基座标的重力方向.
    */
   std::map<std::string, double> get_gravity();
+  /**
+   * @brief 使能碰撞检测.
+   *
+   */
+  void enable_collision_detector();
+  /**
+   * @brief 临时禁用碰撞检测.
+   *
+   */
+  void disable_collision_detector();
+  /**
+   * @brief 设置碰撞监测误差.
+   *
+   * @param diffs 各关节的碰撞监测误差.
+   */
+  void set_collision_torque_diff(const std::vector<double> &diffs);
+  /**
+   * @brief 获取碰撞监测误差.
+   *
+   * @return 各关节的碰撞监测误差.
+   */
+  std::vector<double> get_collision_torque_diff();
+  /**
+   * @brief 设置碰撞检测参数.
+   *
+   * @param config 碰撞检测配置.
+   */
+  void set_collision_detector(const CollisionDetectorConfig &config);
+  /**
+   * @brief 获取碰撞检测参数.
+   *
+   * @return 碰撞检测配置.
+   */
+  CollisionDetectorConfig get_collision_detector();
+  /**
+   * @brief 使能安全限位检测.
+   *
+   */
+  void enable_limit();
+  /**
+   * @brief 临时禁用安全限位检测.
+   *
+   */
+  void disable_limit();
+  /**
+   * @brief 设置关节限位.
+   *
+   * @param joints 各关节的限位配置.
+   */
+  void set_joints_limit(const std::vector<JointLimitConfig> &joints);
+  /**
+   * @brief 获取关节限位.
+   *
+   * @return 各关节的限位配置.
+   */
+  std::vector<JointLimitConfig> get_joints_limit();
+  /**
+   * @brief 设置笛卡尔空间限位.
+   *
+   * @param limit 笛卡尔空间限位配置.
+   */
+  void set_cart_limit(const CartesianLimitConfig &limit);
+  /**
+   * @brief 获取笛卡尔空间限位.
+   *
+   * @return 笛卡尔空间限位配置.
+   */
+  CartesianLimitConfig get_cart_limit();
   /**
    * @brief 从资源库加载tcp.
    *
