@@ -47,7 +47,9 @@ void CollisionDetector::set_action(CollisionDetectorAction action) {
   action_ = action;
 }
 CollisionDetectorAction CollisionDetector::action() const { return action_; }
-CollisionDetectorAction *CollisionDetector::mutable_action() { return &action_; }
+CollisionDetectorAction *CollisionDetector::mutable_action() {
+  return &action_;
+}
 
 void CollisionDetector::set_pause_time(unsigned int pause_time) {
   pause_time_ = pause_time;
@@ -59,14 +61,11 @@ void CollisionDetector::set_sensitivity(unsigned int sensitivity) {
   sensitivity_ = sensitivity;
 }
 unsigned int CollisionDetector::sensitivity() const { return sensitivity_; }
-unsigned int *CollisionDetector::mutable_sensitivity() {
-  return &sensitivity_;
-}
+unsigned int *CollisionDetector::mutable_sensitivity() { return &sensitivity_; }
 
 bool CollisionDetector::Deserialize(const rapidjson::Value &obj) {
   if (obj.HasMember("action")) {
-    action_ =
-        static_cast<CollisionDetectorAction>(obj["action"].GetInt());
+    action_ = static_cast<CollisionDetectorAction>(obj["action"].GetInt());
   }
   if (obj.HasMember("pause_time")) {
     pause_time_ = obj["pause_time"].GetUint();

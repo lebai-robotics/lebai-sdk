@@ -1540,8 +1540,7 @@ std::vector<double> Robot::get_collision_torque_diff() {
 
 void Robot::set_collision_detector(const CollisionDetectorConfig &config) {
   safety::CollisionDetector req;
-  req.set_action(
-      static_cast<safety::CollisionDetectorAction>(config.action));
+  req.set_action(static_cast<safety::CollisionDetectorAction>(config.action));
   req.set_pause_time(config.pause_time);
   req.set_sensitivity(config.sensitivity);
   impl_->setCollisionDetector(req);

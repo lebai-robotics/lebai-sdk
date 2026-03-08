@@ -1,0 +1,15 @@
+# This is a generated file and its contents are an internal implementation detail.
+# The download step will be re-executed if anything in this file changes.
+# No other meaning or use of this file is supported.
+
+method=git
+command=D:/Scoop/apps/cmake/current/bin/cmake.exe;-DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE;-P;D:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-subbuild/modbuslib-populate-prefix/tmp/modbuslib-populate-gitclone.cmake
+source_dir=D:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-src
+work_dir=D:/affairs/lebai/lebai-sdk/build-format/_deps
+repository=https://github.com/serhmarch/ModbusLib.git
+remote=origin
+init_submodules=TRUE
+recurse_submodules=--recursive
+submodules=
+CMP0097=NEW
+      

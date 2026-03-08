@@ -1,0 +1,6 @@
+# lebai CMake configuration file
+
+# Check if the targets file exists (it won't if we skipped export)
+if(EXISTS "${CMAKE_CURRENT_LIST_DIR}/lebaiTargets.cmake")
+  include("${CMAKE_CURRENT_LIST_DIR}/lebaiTargets.cmake")
+endif()

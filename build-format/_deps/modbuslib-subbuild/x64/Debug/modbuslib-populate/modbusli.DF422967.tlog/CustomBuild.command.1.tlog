@@ -1,0 +1,150 @@
+^D:\AFFAIRS\LEBAI\LEBAI-SDK\BUILD-FORMAT\_DEPS\MODBUSLIB-SUBBUILD\CMAKEFILES\CEEFC9BB07130E48C5CEE49EAD652EC4\MODBUSLIB-POPULATE-MKDIR.RULE
+setlocal
+D:\Scoop\apps\cmake\current\bin\cmake.exe -Dcfgdir=/Debug -P D:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-subbuild/modbuslib-populate-prefix/tmp/modbuslib-populate-mkdirs.cmake
+if %errorlevel% neq 0 goto :cmEnd
+D:\Scoop\apps\cmake\current\bin\cmake.exe -E touch D:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-subbuild/modbuslib-populate-prefix/src/modbuslib-populate-stamp/Debug/modbuslib-populate-mkdir
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^D:\AFFAIRS\LEBAI\LEBAI-SDK\BUILD-FORMAT\_DEPS\MODBUSLIB-SUBBUILD\CMAKEFILES\CEEFC9BB07130E48C5CEE49EAD652EC4\MODBUSLIB-POPULATE-DOWNLOAD.RULE
+setlocal
+cd D:\affairs\lebai\lebai-sdk\build-format\_deps
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+D:\Scoop\apps\cmake\current\bin\cmake.exe -DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE -P D:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-subbuild/modbuslib-populate-prefix/tmp/modbuslib-populate-gitclone.cmake
+if %errorlevel% neq 0 goto :cmEnd
+D:\Scoop\apps\cmake\current\bin\cmake.exe -E touch D:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-subbuild/modbuslib-populate-prefix/src/modbuslib-populate-stamp/Debug/modbuslib-populate-download
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^D:\AFFAIRS\LEBAI\LEBAI-SDK\BUILD-FORMAT\_DEPS\MODBUSLIB-SUBBUILD\CMAKEFILES\CEEFC9BB07130E48C5CEE49EAD652EC4\MODBUSLIB-POPULATE-UPDATE.RULE
+setlocal
+cd D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+D:\Scoop\apps\cmake\current\bin\cmake.exe -Dcan_fetch=YES -DCMAKE_MESSAGE_LOG_LEVEL=VERBOSE -P D:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-subbuild/modbuslib-populate-prefix/tmp/modbuslib-populate-gitupdate.cmake
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^D:\AFFAIRS\LEBAI\LEBAI-SDK\BUILD-FORMAT\_DEPS\MODBUSLIB-SUBBUILD\CMAKEFILES\CEEFC9BB07130E48C5CEE49EAD652EC4\MODBUSLIB-POPULATE-PATCH.RULE
+setlocal
+D:\Scoop\apps\cmake\current\bin\cmake.exe -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+D:\Scoop\apps\cmake\current\bin\cmake.exe -E touch D:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-subbuild/modbuslib-populate-prefix/src/modbuslib-populate-stamp/Debug/modbuslib-populate-patch
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^D:\AFFAIRS\LEBAI\LEBAI-SDK\BUILD-FORMAT\_DEPS\MODBUSLIB-SUBBUILD\CMAKEFILES\CEEFC9BB07130E48C5CEE49EAD652EC4\MODBUSLIB-POPULATE-CONFIGURE.RULE
+setlocal
+cd D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-build
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+D:\Scoop\apps\cmake\current\bin\cmake.exe -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+D:\Scoop\apps\cmake\current\bin\cmake.exe -E touch D:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-subbuild/modbuslib-populate-prefix/src/modbuslib-populate-stamp/Debug/modbuslib-populate-configure
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^D:\AFFAIRS\LEBAI\LEBAI-SDK\BUILD-FORMAT\_DEPS\MODBUSLIB-SUBBUILD\CMAKEFILES\CEEFC9BB07130E48C5CEE49EAD652EC4\MODBUSLIB-POPULATE-BUILD.RULE
+setlocal
+cd D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-build
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+D:\Scoop\apps\cmake\current\bin\cmake.exe -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+D:\Scoop\apps\cmake\current\bin\cmake.exe -E touch D:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-subbuild/modbuslib-populate-prefix/src/modbuslib-populate-stamp/Debug/modbuslib-populate-build
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^D:\AFFAIRS\LEBAI\LEBAI-SDK\BUILD-FORMAT\_DEPS\MODBUSLIB-SUBBUILD\CMAKEFILES\CEEFC9BB07130E48C5CEE49EAD652EC4\MODBUSLIB-POPULATE-INSTALL.RULE
+setlocal
+cd D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-build
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+D:\Scoop\apps\cmake\current\bin\cmake.exe -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+D:\Scoop\apps\cmake\current\bin\cmake.exe -E touch D:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-subbuild/modbuslib-populate-prefix/src/modbuslib-populate-stamp/Debug/modbuslib-populate-install
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^D:\AFFAIRS\LEBAI\LEBAI-SDK\BUILD-FORMAT\_DEPS\MODBUSLIB-SUBBUILD\CMAKEFILES\CEEFC9BB07130E48C5CEE49EAD652EC4\MODBUSLIB-POPULATE-TEST.RULE
+setlocal
+cd D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-build
+if %errorlevel% neq 0 goto :cmEnd
+D:
+if %errorlevel% neq 0 goto :cmEnd
+D:\Scoop\apps\cmake\current\bin\cmake.exe -E echo_append
+if %errorlevel% neq 0 goto :cmEnd
+D:\Scoop\apps\cmake\current\bin\cmake.exe -E touch D:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-subbuild/modbuslib-populate-prefix/src/modbuslib-populate-stamp/Debug/modbuslib-populate-test
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^D:\AFFAIRS\LEBAI\LEBAI-SDK\BUILD-FORMAT\_DEPS\MODBUSLIB-SUBBUILD\CMAKEFILES\3C538EB96D10CC089099C18F74A59E43\MODBUSLIB-POPULATE-COMPLETE.RULE
+setlocal
+D:\Scoop\apps\cmake\current\bin\cmake.exe -E make_directory D:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-subbuild/CMakeFiles/Debug
+if %errorlevel% neq 0 goto :cmEnd
+D:\Scoop\apps\cmake\current\bin\cmake.exe -E touch D:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-subbuild/CMakeFiles/Debug/modbuslib-populate-complete
+if %errorlevel% neq 0 goto :cmEnd
+D:\Scoop\apps\cmake\current\bin\cmake.exe -E touch D:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-subbuild/modbuslib-populate-prefix/src/modbuslib-populate-stamp/Debug/modbuslib-populate-done
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^D:\AFFAIRS\LEBAI\LEBAI-SDK\BUILD-FORMAT\_DEPS\MODBUSLIB-SUBBUILD\CMAKEFILES\3D20A4A8F47E83F0C9809B09F30380BF\MODBUSLIB-POPULATE.RULE
+setlocal
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^D:\AFFAIRS\LEBAI\LEBAI-SDK\BUILD-FORMAT\_DEPS\MODBUSLIB-SUBBUILD\CMAKELISTS.TXT
+setlocal
+D:\Scoop\apps\cmake\current\bin\cmake.exe -SD:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-subbuild -BD:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-subbuild --check-stamp-file D:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-subbuild/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

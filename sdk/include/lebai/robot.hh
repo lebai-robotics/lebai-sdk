@@ -112,9 +112,9 @@ struct JointMotionData {
  *
  */
 struct CollisionDetectorConfig {
-  unsigned int action = 99;      /*!< 0:急停; 1:暂停; 2:停止运动; 99:关闭碰撞检测 */
-  unsigned int pause_time = 0;   /*!< action为1时的暂停时间，单位秒 */
-  unsigned int sensitivity = 0;  /*!< 灵敏度[0-100] */
+  unsigned int action = 99; /*!< 0:急停; 1:暂停; 2:停止运动; 99:关闭碰撞检测 */
+  unsigned int pause_time = 0;  /*!< action为1时的暂停时间，单位秒 */
+  unsigned int sensitivity = 0; /*!< 灵敏度[0-100] */
 };
 
 /**
@@ -133,9 +133,9 @@ struct JointLimitConfig {
  *
  */
 struct CartesianLimitConfig {
-  double max_a = 0.0;      /*!< 笛卡尔空间最大加速度 */
-  double max_v = 0.0;      /*!< 笛卡尔空间最大速度 */
-  double eq_radius = 0.0;  /*!< 等效半径 */
+  double max_a = 0.0;     /*!< 笛卡尔空间最大加速度 */
+  double max_v = 0.0;     /*!< 笛卡尔空间最大速度 */
+  double eq_radius = 0.0; /*!< 等效半径 */
 };
 
 /**

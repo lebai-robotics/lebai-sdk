@@ -1,0 +1,20 @@
+^D:\AFFAIRS\LEBAI\LEBAI-SDK\BUILD-FORMAT\CMAKEFILES\139137FC485369EDD1F6AA4F156DC5A8\CLANG-FORMAT.RULE
+setlocal
+clang-format -style=file --Werror --dry-run D:/affairs/lebai/lebai-sdk/sdk/include/lebai/discovery.hh D:/affairs/lebai/lebai-sdk/sdk/include/lebai/gripper.hh D:/affairs/lebai/lebai-sdk/sdk/include/lebai/lebai.hh D:/affairs/lebai/lebai-sdk/sdk/include/lebai/lua_robot.hh D:/affairs/lebai/lebai-sdk/sdk/include/lebai/robot.hh D:/affairs/lebai/lebai-sdk/sdk/src/discovery.cc D:/affairs/lebai/lebai-sdk/sdk/src/discovery_impl.cc D:/affairs/lebai/lebai-sdk/sdk/src/discovery_impl.hh D:/affairs/lebai/lebai-sdk/sdk/src/gripper.cc D:/affairs/lebai/lebai-sdk/sdk/src/gripper_impl.cc D:/affairs/lebai/lebai-sdk/sdk/src/gripper_impl.hh D:/affairs/lebai/lebai-sdk/sdk/src/jsonrpc_connector.cc D:/affairs/lebai/lebai-sdk/sdk/src/jsonrpc_connector.hh D:/affairs/lebai/lebai-sdk/sdk/src/lua_robot.cc D:/affairs/lebai/lebai-sdk/sdk/src/lua_robot_impl.cc D:/affairs/lebai/lebai-sdk/sdk/src/lua_robot_impl.hh D:/affairs/lebai/lebai-sdk/sdk/src/protos/block.cc D:/affairs/lebai/lebai-sdk/sdk/src/protos/block.hh D:/affairs/lebai/lebai-sdk/sdk/src/protos/claw.cc D:/affairs/lebai/lebai-sdk/sdk/src/protos/claw.hh D:/affairs/lebai/lebai-sdk/sdk/src/protos/control.cc D:/affairs/lebai/lebai-sdk/sdk/src/protos/control.hh D:/affairs/lebai/lebai-sdk/sdk/src/protos/db.cc D:/affairs/lebai/lebai-sdk/sdk/src/protos/db.hh D:/affairs/lebai/lebai-sdk/sdk/src/protos/dynamic.cc D:/affairs/lebai/lebai-sdk/sdk/src/protos/dynamic.hh D:/affairs/lebai/lebai-sdk/sdk/src/protos/file.cc D:/affairs/lebai/lebai-sdk/sdk/src/protos/file.hh D:/affairs/lebai/lebai-sdk/sdk/src/protos/io.cc D:/affairs/lebai/lebai-sdk/sdk/src/protos/io.hh D:/affairs/lebai/lebai-sdk/sdk/src/protos/jsonbase.cc D:/affairs/lebai/lebai-sdk/sdk/src/protos/jsonbase.hh D:/affairs/lebai/lebai-sdk/sdk/src/protos/kinematic.cc D:/affairs/lebai/lebai-sdk/sdk/src/protos/kinematic.hh D:/affairs/lebai/lebai-sdk/sdk/src/protos/led.cc D:/affairs/lebai/lebai-sdk/sdk/src/protos/led.hh D:/affairs/lebai/lebai-sdk/sdk/src/protos/modbus.cc D:/affairs/lebai/lebai-sdk/sdk/src/protos/modbus.hh D:/affairs/lebai/lebai-sdk/sdk/src/protos/motion.cc D:/affairs/lebai/lebai-sdk/sdk/src/protos/motion.hh D:/affairs/lebai/lebai-sdk/sdk/src/protos/posture.cc D:/affairs/lebai/lebai-sdk/sdk/src/protos/posture.hh D:/affairs/lebai/lebai-sdk/sdk/src/protos/safety.cc D:/affairs/lebai/lebai-sdk/sdk/src/protos/safety.hh D:/affairs/lebai/lebai-sdk/sdk/src/protos/serial.cc D:/affairs/lebai/lebai-sdk/sdk/src/protos/serial.hh D:/affairs/lebai/lebai-sdk/sdk/src/protos/signal.cc D:/affairs/lebai/lebai-sdk/sdk/src/protos/signal.hh D:/affairs/lebai/lebai-sdk/sdk/src/protos/storage.cc D:/affairs/lebai/lebai-sdk/sdk/src/protos/storage.hh D:/affairs/lebai/lebai-sdk/sdk/src/protos/system.cc D:/affairs/lebai/lebai-sdk/sdk/src/protos/system.hh D:/affairs/lebai/lebai-sdk/sdk/src/protos/utils.cc D:/affairs/lebai/lebai-sdk/sdk/src/protos/utils.hh D:/affairs/lebai/lebai-sdk/sdk/src/robot.cc D:/affairs/lebai/lebai-sdk/sdk/src/robot_impl.cc D:/affairs/lebai/lebai-sdk/sdk/src/robot_impl.hh D:/affairs/lebai/lebai-sdk/sdk/src/websocket.hh D:/affairs/lebai/lebai-sdk/sdk/test/test_discovery.cc D:/affairs/lebai/lebai-sdk/sdk/test/test_lua_robot.cc D:/affairs/lebai/lebai-sdk/sdk/test/test_protos.cc D:/affairs/lebai/lebai-sdk/sdk/test/test_robot.cc
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd
+^D:\AFFAIRS\LEBAI\LEBAI-SDK\CMAKELISTS.TXT
+setlocal
+D:\Scoop\apps\cmake\current\bin\cmake.exe -SD:/affairs/lebai/lebai-sdk -BD:/affairs/lebai/lebai-sdk/build-format --check-stamp-file D:/affairs/lebai/lebai-sdk/build-format/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal & call :cmErrorLevel %errorlevel% & goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd

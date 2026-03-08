@@ -1,0 +1,131 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\Modbus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusPort.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusSerialPort.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusRtuPort.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusAscPort.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusTcpPort.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusClient.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusClientPort.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\cModbus.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\win\Modbus_win.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\win\ModbusTcpPort_win.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\win\ModbusSerialPort_win.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\Modbus_config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusPlatform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusGlobal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\Modbus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusObject.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusPort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusSerialPort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusRtuPort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusAscPort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusTcpPort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusClient.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusClientPort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\cModbus.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusPort_p.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusObject_p.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusSerialPort_p.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusTcpPort_p.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusClient_p.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusClientPort_p.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\win\Modbus_win.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\win\ModbusTCP_win.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\win\ModbusSerialPort_p_win.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\win\ModbusTcpPort_p_win.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\win_resource.rc">
+      <Filter>Source Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{8EE4EB1F-0558-318F-9686-FDB9DD1A1E78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{74084881-A038-3160-929E-62081A98ED30}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,353 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <PreferredToolArchitecture>x64</PreferredToolArchitecture>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="MinSizeRel|x64">
+      <Configuration>MinSizeRel</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="RelWithDebInfo|x64">
+      <Configuration>RelWithDebInfo</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{49D3F902-AC13-3329-B28A-821940139F8F}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>10.0.26100.0</WindowsTargetPlatformVersion>
+    <Platform>x64</Platform>
+    <ProjectName>modbus</ProjectName>
+    <VCProjectUpgraderObjectName>NoUpgrade</VCProjectUpgraderObjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.20506.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\affairs\lebai\lebai-sdk\build-format\Debug\bin\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">modbus.dir\Debug\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">modbus</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\affairs\lebai\lebai-sdk\build-format\Release\bin\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">modbus.dir\Release\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">modbus</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='Release|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">D:\affairs\lebai\lebai-sdk\build-format\MinSizeRel\bin\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">modbus.dir\MinSizeRel\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">modbus</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">.lib</TargetExt>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">D:\affairs\lebai\lebai-sdk\build-format\RelWithDebInfo\bin\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">modbus.dir\RelWithDebInfo\</IntDir>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">modbus</TargetName>
+    <TargetExt Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">.lib</TargetExt>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <AdditionalOptions>%(AdditionalOptions) /utf-8</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>Disabled</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp14</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>Disabled</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;_USE_MATH_DEFINES;_WEBSOCKETPP_CPP11_RANDOM_DEVICE_;_WINSOCK_DEPRECATED_NO_WARNINGS;_WIN32_WINNT=0x0601;CMAKE_INTDIR="Debug"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_DEBUG;_WINDOWS;_USE_MATH_DEFINES;_WEBSOCKETPP_CPP11_RANDOM_DEVICE_;_WINSOCK_DEPRECATED_NO_WARNINGS;_WIN32_WINNT=0x0601;CMAKE_INTDIR=\"Debug\"</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <AdditionalOptions>%(AdditionalOptions) /utf-8</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>AnySuitable</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp14</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_USE_MATH_DEFINES;_WEBSOCKETPP_CPP11_RANDOM_DEVICE_;_WINSOCK_DEPRECATED_NO_WARNINGS;_WIN32_WINNT=0x0601;CMAKE_INTDIR="Release"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_USE_MATH_DEFINES;_WEBSOCKETPP_CPP11_RANDOM_DEVICE_;_WINSOCK_DEPRECATED_NO_WARNINGS;_WIN32_WINNT=0x0601;CMAKE_INTDIR=\"Release\"</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">
+    <ClCompile>
+      <AdditionalOptions>%(AdditionalOptions) /utf-8</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp14</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>MinSpace</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_USE_MATH_DEFINES;_WEBSOCKETPP_CPP11_RANDOM_DEVICE_;_WINSOCK_DEPRECATED_NO_WARNINGS;_WIN32_WINNT=0x0601;CMAKE_INTDIR="MinSizeRel"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <DebugInformationFormat>
+      </DebugInformationFormat>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_USE_MATH_DEFINES;_WEBSOCKETPP_CPP11_RANDOM_DEVICE_;_WINSOCK_DEPRECATED_NO_WARNINGS;_WIN32_WINNT=0x0601;CMAKE_INTDIR=\"MinSizeRel\"</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">
+    <ClCompile>
+      <AdditionalOptions>%(AdditionalOptions) /utf-8</AdditionalOptions>
+      <AssemblerListingLocation>$(IntDir)</AssemblerListingLocation>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck></BufferSecurityCheck>
+      <CallingConvention></CallingConvention>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <FloatingPointModel></FloatingPointModel>
+      <ForceConformanceInForLoopScope></ForceConformanceInForLoopScope>
+      <InlineFunctionExpansion>OnlyExplicitInline</InlineFunctionExpansion>
+      <LanguageStandard>stdcpp14</LanguageStandard>
+      <MinimalRebuild></MinimalRebuild>
+      <Optimization>MaxSpeed</Optimization>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <RemoveUnreferencedCodeData></RemoveUnreferencedCodeData>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <SupportJustMyCode></SupportJustMyCode>
+      <TreatWChar_tAsBuiltInType></TreatWChar_tAsBuiltInType>
+      <UseFullPaths>false</UseFullPaths>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_USE_MATH_DEFINES;_WEBSOCKETPP_CPP11_RANDOM_DEVICE_;_WINSOCK_DEPRECATED_NO_WARNINGS;_WIN32_WINNT=0x0601;CMAKE_INTDIR="RelWithDebInfo"</PreprocessorDefinitions>
+      <ObjectFileName>$(IntDir)</ObjectFileName>
+      <ScanSourceForModuleDependencies>false</ScanSourceForModuleDependencies>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions);WIN32;_WINDOWS;NDEBUG;_USE_MATH_DEFINES;_WEBSOCKETPP_CPP11_RANDOM_DEVICE_;_WINSOCK_DEPRECATED_NO_WARNINGS;_WIN32_WINNT=0x0601;CMAKE_INTDIR=\"RelWithDebInfo\"</PreprocessorDefinitions>
+    </ResourceCompile>
+    <Midl>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <OutputDirectory>$(ProjectDir)/$(IntDir)</OutputDirectory>
+      <HeaderFileName>%(Filename).h</HeaderFileName>
+      <TypeLibraryName>%(Filename).tlb</TypeLibraryName>
+      <InterfaceIdentifierFileName>%(Filename)_i.c</InterfaceIdentifierFileName>
+      <ProxyFileName>%(Filename)_p.c</ProxyFileName>
+    </Midl>
+    <Lib>
+      <AdditionalOptions>%(AdditionalOptions) /machine:x64</AdditionalOptions>
+    </Lib>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\CMakeLists.txt">
+      <UseUtf8Encoding>Always</UseUtf8Encoding>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Building Custom Rule D:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-src/src/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">setlocal
+D:\Scoop\apps\cmake\current\bin\cmake.exe -SD:/affairs/lebai/lebai-sdk -BD:/affairs/lebai/lebai-sdk/build-format --check-stamp-file D:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-build/src/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\Modbus_config.h.in;D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\win_resource.rc.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-build\src\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Building Custom Rule D:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-src/src/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">setlocal
+D:\Scoop\apps\cmake\current\bin\cmake.exe -SD:/affairs/lebai/lebai-sdk -BD:/affairs/lebai/lebai-sdk/build-format --check-stamp-file D:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-build/src/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\Modbus_config.h.in;D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\win_resource.rc.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-build\src\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">Building Custom Rule D:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-src/src/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">setlocal
+D:\Scoop\apps\cmake\current\bin\cmake.exe -SD:/affairs/lebai/lebai-sdk -BD:/affairs/lebai/lebai-sdk/build-format --check-stamp-file D:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-build/src/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\Modbus_config.h.in;D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\win_resource.rc.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-build\src\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='MinSizeRel|x64'">false</LinkObjects>
+      <Message Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">Building Custom Rule D:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-src/src/CMakeLists.txt</Message>
+      <Command Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">setlocal
+D:\Scoop\apps\cmake\current\bin\cmake.exe -SD:/affairs/lebai/lebai-sdk -BD:/affairs/lebai/lebai-sdk/build-format --check-stamp-file D:/affairs/lebai/lebai-sdk/build-format/_deps/modbuslib-build/src/CMakeFiles/generate.stamp
+if %errorlevel% neq 0 goto :cmEnd
+:cmEnd
+endlocal &amp; call :cmErrorLevel %errorlevel% &amp; goto :cmDone
+:cmErrorLevel
+exit /b %1
+:cmDone
+if %errorlevel% neq 0 goto :VCEnd</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\Modbus_config.h.in;D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\win_resource.rc.in;%(AdditionalInputs)</AdditionalInputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-build\src\CMakeFiles\generate.stamp</Outputs>
+      <LinkObjects Condition="'$(Configuration)|$(Platform)'=='RelWithDebInfo|x64'">false</LinkObjects>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\Modbus_config.h" />
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusPlatform.h" />
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusGlobal.h" />
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\Modbus.h" />
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusObject.h" />
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusPort.h" />
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusSerialPort.h" />
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusRtuPort.h" />
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusAscPort.h" />
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusTcpPort.h" />
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusClient.h" />
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusClientPort.h" />
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\cModbus.h" />
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusPort_p.h" />
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusObject_p.h" />
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusSerialPort_p.h" />
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusTcpPort_p.h" />
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusClient_p.h" />
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusClientPort_p.h" />
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\win\Modbus_win.h" />
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\win\ModbusTCP_win.h" />
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\win\ModbusSerialPort_p_win.h" />
+    <ClInclude Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\win\ModbusTcpPort_p_win.h" />
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\Modbus.cpp" />
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusObject.cpp" />
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusPort.cpp" />
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusSerialPort.cpp" />
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusRtuPort.cpp" />
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusAscPort.cpp" />
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusTcpPort.cpp" />
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusClient.cpp" />
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\ModbusClientPort.cpp" />
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\cModbus.cpp" />
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\win\Modbus_win.cpp" />
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\win\ModbusTcpPort_win.cpp" />
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\win\ModbusSerialPort_win.cpp" />
+    <ResourceCompile Include="D:\affairs\lebai\lebai-sdk\build-format\_deps\modbuslib-src\src\win_resource.rc" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="D:\affairs\lebai\lebai-sdk\build-format\ZERO_CHECK.vcxproj">
+      <Project>{BF445385-ED03-3B42-AE65-8AFA55C1163B}</Project>
+      <Name>ZERO_CHECK</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,97 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\sdk\src\robot.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\sdk\src\robot_impl.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\sdk\src\jsonrpc_connector.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\sdk\src\discovery.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\sdk\src\discovery_impl.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\sdk\src\lua_robot.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\sdk\src\lua_robot_impl.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\sdk\src\gripper.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\sdk\src\gripper_impl.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\sdk\src\protos\block.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\sdk\src\protos\claw.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\sdk\src\protos\control.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\sdk\src\protos\db.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\sdk\src\protos\dynamic.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\sdk\src\protos\file.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\sdk\src\protos\io.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\sdk\src\protos\jsonbase.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\sdk\src\protos\kinematic.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\sdk\src\protos\led.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\sdk\src\protos\modbus.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\sdk\src\protos\motion.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\sdk\src\protos\posture.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\sdk\src\protos\safety.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\sdk\src\protos\serial.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\sdk\src\protos\signal.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\sdk\src\protos\storage.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\sdk\src\protos\system.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="D:\affairs\lebai\lebai-sdk\sdk\src\protos\utils.cc">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="D:\affairs\lebai\lebai-sdk\sdk\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{74084881-A038-3160-929E-62081A98ED30}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>
