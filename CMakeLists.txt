@@ -15,7 +15,7 @@ endif()
 
 project(
   lebai
-  VERSION 1.4.2
+  VERSION 1.4.3
   LANGUAGES CXX)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")

@@ -627,5 +627,73 @@ storage::Items Robot::RobotImpl::getItems(const storage::GetItemsRequest &req) {
   return resp;
 }
 
+void Robot::RobotImpl::enableCollisionDetector() {
+  json_rpc_connector_->CallRpc("enable_collision_detector", "{}", nullptr);
+}
+
+void Robot::RobotImpl::disableCollisionDetector() {
+  json_rpc_connector_->CallRpc("disable_collision_detector", "{}", nullptr);
+}
+
+void Robot::RobotImpl::setCollisionTorqueDiff(
+    const safety::CollisionTorqueDiff &req) {
+  json_rpc_connector_->CallRpc("set_collision_torque_diff", req.ToJSONString(),
+                               nullptr);
+}
+
+safety::CollisionTorqueDiff Robot::RobotImpl::getCollisionTorqueDiff() {
+  std::string resp_str;
+  json_rpc_connector_->CallRpc("get_collision_torque_diff", "{}", &resp_str);
+  safety::CollisionTorqueDiff resp;
+  resp.FromJSONString(resp_str);
+  return resp;
+}
+
+void Robot::RobotImpl::setCollisionDetector(
+    const safety::CollisionDetector &req) {
+  json_rpc_connector_->CallRpc("set_collision_detector", req.ToJSONString(),
+                               nullptr);
+}
+
+safety::CollisionDetector Robot::RobotImpl::getCollisionDetector() {
+  std::string resp_str;
+  json_rpc_connector_->CallRpc("get_collision_detector", "{}", &resp_str);
+  safety::CollisionDetector resp;
+  resp.FromJSONString(resp_str);
+  return resp;
+}
+
+void Robot::RobotImpl::enableLimit() {
+  json_rpc_connector_->CallRpc("enable_limit", "{}", nullptr);
+}
+
+void Robot::RobotImpl::disableLimit() {
+  json_rpc_connector_->CallRpc("disable_limit", "{}", nullptr);
+}
+
+void Robot::RobotImpl::setJointsLimit(const safety::JointsLimit &req) {
+  json_rpc_connector_->CallRpc("set_joints_limit", req.ToJSONString(), nullptr);
+}
+
+safety::JointsLimit Robot::RobotImpl::getJointsLimit() {
+  std::string resp_str;
+  json_rpc_connector_->CallRpc("get_joints_limit", "{}", &resp_str);
+  safety::JointsLimit resp;
+  resp.FromJSONString(resp_str);
+  return resp;
+}
+
+void Robot::RobotImpl::setCartLimit(const safety::CartesianLimit &req) {
+  json_rpc_connector_->CallRpc("set_cart_limit", req.ToJSONString(), nullptr);
+}
+
+safety::CartesianLimit Robot::RobotImpl::getCartLimit() {
+  std::string resp_str;
+  json_rpc_connector_->CallRpc("get_cart_limit", "{}", &resp_str);
+  safety::CartesianLimit resp;
+  resp.FromJSONString(resp_str);
+  return resp;
+}
+
 }  // namespace l_master
 }  // namespace lebai

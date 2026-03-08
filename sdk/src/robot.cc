@@ -42,6 +42,34 @@ static CartesianPose convertToCartesianPose(
   return cart_pose;
 }
 
+static CollisionDetectorConfig convertToCollisionDetectorConfig(
+    const safety::CollisionDetector &detector) {
+  CollisionDetectorConfig config;
+  config.action = static_cast<unsigned int>(detector.action());
+  config.pause_time = detector.pause_time();
+  config.sensitivity = detector.sensitivity();
+  return config;
+}
+
+static JointLimitConfig convertToJointLimitConfig(
+    const safety::JointLimit &joint_limit) {
+  JointLimitConfig config;
+  config.min_position = joint_limit.min_position();
+  config.max_position = joint_limit.max_position();
+  config.max_a = joint_limit.max_a();
+  config.max_v = joint_limit.max_v();
+  return config;
+}
+
+static CartesianLimitConfig convertToCartesianLimitConfig(
+    const safety::CartesianLimit &cart_limit) {
+  CartesianLimitConfig config;
+  config.max_a = cart_limit.max_a();
+  config.max_v = cart_limit.max_v();
+  config.eq_radius = cart_limit.eq_radius();
+  return config;
+}
+
 Robot::Robot(std::string ip, bool simulator)
 // :ip_(ip)
 {
@@ -1493,6 +1521,74 @@ std::map<std::string, double> Robot::get_gravity() {
   gravity["y"] = resp.y();
   gravity["z"] = resp.z();
   return gravity;
+}
+
+void Robot::enable_collision_detector() { impl_->enableCollisionDetector(); }
+
+void Robot::disable_collision_detector() { impl_->disableCollisionDetector(); }
+
+void Robot::set_collision_torque_diff(const std::vector<double> &diffs) {
+  safety::CollisionTorqueDiff req;
+  req.set_diffs(diffs);
+  impl_->setCollisionTorqueDiff(req);
+}
+
+std::vector<double> Robot::get_collision_torque_diff() {
+  safety::CollisionTorqueDiff resp = impl_->getCollisionTorqueDiff();
+  return resp.diffs();
+}
+
+void Robot::set_collision_detector(const CollisionDetectorConfig &config) {
+  safety::CollisionDetector req;
+  req.set_action(
+      static_cast<safety::CollisionDetectorAction>(config.action));
+  req.set_pause_time(config.pause_time);
+  req.set_sensitivity(config.sensitivity);
+  impl_->setCollisionDetector(req);
+}
+
+CollisionDetectorConfig Robot::get_collision_detector() {
+  safety::CollisionDetector resp = impl_->getCollisionDetector();
+  return convertToCollisionDetectorConfig(resp);
+}
+
+void Robot::enable_limit() { impl_->enableLimit(); }
+
+void Robot::disable_limit() { impl_->disableLimit(); }
+
+void Robot::set_joints_limit(const std::vector<JointLimitConfig> &joints) {
+  safety::JointsLimit req;
+  for (auto &&joint : joints) {
+    safety::JointLimit joint_limit;
+    joint_limit.set_min_position(joint.min_position);
+    joint_limit.set_max_position(joint.max_position);
+    joint_limit.set_max_a(joint.max_a);
+    joint_limit.set_max_v(joint.max_v);
+    req.mutable_joints()->push_back(joint_limit);
+  }
+  impl_->setJointsLimit(req);
+}
+
+std::vector<JointLimitConfig> Robot::get_joints_limit() {
+  safety::JointsLimit resp = impl_->getJointsLimit();
+  std::vector<JointLimitConfig> joints;
+  for (auto &&joint : resp.joints()) {
+    joints.push_back(convertToJointLimitConfig(joint));
+  }
+  return joints;
+}
+
+void Robot::set_cart_limit(const CartesianLimitConfig &limit) {
+  safety::CartesianLimit req;
+  req.set_max_a(limit.max_a);
+  req.set_max_v(limit.max_v);
+  req.set_eq_radius(limit.eq_radius);
+  impl_->setCartLimit(req);
+}
+
+CartesianLimitConfig Robot::get_cart_limit() {
+  safety::CartesianLimit resp = impl_->getCartLimit();
+  return convertToCartesianLimitConfig(resp);
 }
 
 void Robot::set_tcp(std::array<double, 6> tcp) {

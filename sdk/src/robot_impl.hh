@@ -32,6 +32,7 @@
 #include "protos/modbus.hh"
 #include "protos/serial.hh"
 #include "protos/storage.hh"
+#include "protos/safety.hh"
 
 namespace lebai {
 namespace l_master {
@@ -140,6 +141,18 @@ class Robot::RobotImpl {
   void setItem(const storage::Item &req);
   storage::Item getItem(const storage::ItemIndex &req);
   storage::Items getItems(const storage::GetItemsRequest &req);
+  void enableCollisionDetector();
+  void disableCollisionDetector();
+  void setCollisionTorqueDiff(const safety::CollisionTorqueDiff &req);
+  safety::CollisionTorqueDiff getCollisionTorqueDiff();
+  void setCollisionDetector(const safety::CollisionDetector &req);
+  safety::CollisionDetector getCollisionDetector();
+  void enableLimit();
+  void disableLimit();
+  void setJointsLimit(const safety::JointsLimit &req);
+  safety::JointsLimit getJointsLimit();
+  void setCartLimit(const safety::CartesianLimit &req);
+  safety::CartesianLimit getCartLimit();
 
  protected:
   std::unique_ptr<JSONRpcConnector> json_rpc_connector_;
