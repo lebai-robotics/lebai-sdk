@@ -1,0 +1,46 @@
+name: Linux cpp arm64 release
+run-name: ${{ github.actor }} Linux cpp arm64 release
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  linux_cpp_build_and_release_arm64:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
+        with:
+          platforms: arm64
+
+      - name: Build ARM64 DEB in Ubuntu 20.04 container
+        run: |
+          docker run --rm --platform linux/arm64 \
+            -v ${{ github.workspace }}:/workspace \
+            -w /workspace \
+            arm64v8/ubuntu:20.04 bash -c '
+              set -e
+              export DEBIAN_FRONTEND=noninteractive
+              apt-get update
+              apt-get install -y build-essential cmake doxygen graphviz \
+                python3-pip python3-dev git ca-certificates
+              git config --global --add safe.directory /workspace
+              cmake -S. -Bbuild -DBUILD_DEB=ON
+              cmake --build build
+              cd build && cpack
+            '
+
+      - name: Rename ARM64 package
+        run: |
+          for file in build/*.deb; do
+            mv "$file" "${file%.deb}-arm64.deb"
+          done
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: lebai-linux-arm64-deb
+          path: build/*-arm64.deb

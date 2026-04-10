@@ -7,6 +7,8 @@ on:
 jobs:
   linux-cpp-x64:
     uses: ./.github/workflows/linux_cpp_release.yml
+  linux-cpp-arm64:
+    uses: ./.github/workflows/linux_cpp_arm64_release.yml
   linux-python-x64:
     uses: ./.github/workflows/linux_python_release.yml
     secrets: inherit
@@ -24,6 +26,7 @@ jobs:
   release:
     needs:
       - linux-cpp-x64
+      - linux-cpp-arm64
       - linux-python-x64
       - linux-dotnet-x64
       - win-cpp-x64
@@ -41,6 +44,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: lebai-linux-x64-deb
+      - name: Download linux arm64 deb
+        uses: actions/download-artifact@v4
+        with:
+          name: lebai-linux-arm64-deb
       - name: Download linux x64 nupkg
         uses: actions/download-artifact@v4
         with:
