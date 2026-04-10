@@ -31,13 +31,10 @@ jobs:
               cmake -S. -Bbuild -DBUILD_DEB=ON
               cmake --build build
               cd build && cpack
+              for file in *.deb; do
+                mv "$file" "${file%.deb}-arm64.deb"
+              done
             '
-
-      - name: Rename ARM64 package
-        run: |
-          for file in build/*.deb; do
-            mv "$file" "${file%.deb}-arm64.deb"
-          done
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
