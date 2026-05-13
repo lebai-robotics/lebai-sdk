@@ -1,5 +1,5 @@
 %module l_master
-%include  "jsonbase.i"
+%include  "common.i"
 
 // Exception handling for C#
 %include "exception.i"
@@ -37,7 +37,6 @@
 %}
 
 %{
-// #include "lebai/jsonbase.hh"
 // #include "lebai/posture.hh"
 // #include "lebai/motion.hh"
 #include "lebai/robot.hh"

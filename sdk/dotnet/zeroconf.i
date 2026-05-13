@@ -4,7 +4,6 @@
 %template(StringVector) std::vector<std::string>;
 
 %{
-// #include "lebai/jsonbase.hh"
 // #include "lebai/posture.hh"
 // #include "lebai/motion.hh"
 #include "lebai/discovery.hh"

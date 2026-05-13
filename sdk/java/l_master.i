@@ -1,5 +1,5 @@
 %module l_master
-%include  "jsonbase.i"
+%include  "common.i"
 
 // Exception handling for Java
 %include "exception.i"
