@@ -1665,22 +1665,22 @@ void Robot::set_item(StorageItem item) {
 StorageItem Robot::get_item(std::string name) {
   protos_json::storage_proto::ItemIndex req;
   req.key = name;
-  storage::Item resp = impl_->get_item(req);
+  const auto resp = impl_->get_item(req);
   StorageItem item;
-  item.key = resp.key();
-  item.value = resp.value();
+  item.key = resp.key;
+  item.value = resp.value;
   return item;
 }
 
 std::vector<StorageItem> Robot::get_items(std::string prefix) {
   protos_json::storage_proto::GetItemsRequest req;
   req.prefix = prefix;
-  storage::Items resp = impl_->get_items(req);
+  const auto resp = impl_->get_items(req);
   std::vector<StorageItem> ret;
-  for (const auto &item : resp.items()) {
+  for (const auto &item : resp.items) {
     StorageItem storage_item;
-    storage_item.key = item.key();
-    storage_item.value = item.value();
+    storage_item.key = item.key;
+    storage_item.value = item.value;
     ret.push_back(storage_item);
   }
   return ret;

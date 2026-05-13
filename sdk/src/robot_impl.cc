@@ -721,28 +721,15 @@ void Robot::RobotImpl::set_item(
     const protos_json::storage_proto::Item &req) {
   rpc_client_->Call<void>("set_item", {req});
 }
-storage::Item Robot::RobotImpl::get_item(
+protos_json::storage_proto::Item Robot::RobotImpl::get_item(
     const protos_json::storage_proto::ItemIndex &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::storage_proto::Item>("get_item", {req});
-  storage::Item resp;
-  resp.set_key(response.key);
-  resp.set_value(response.value);
-  return resp;
+  return rpc_client_->Call<protos_json::storage_proto::Item>("get_item", {req});
 }
 
-storage::Items Robot::RobotImpl::get_items(
+protos_json::storage_proto::Items Robot::RobotImpl::get_items(
     const protos_json::storage_proto::GetItemsRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::storage_proto::Items>("get_items", {req});
-  storage::Items resp;
-  for (const auto &item : response.items) {
-    storage::Item storage_item;
-    storage_item.set_key(item.key);
-    storage_item.set_value(item.value);
-    resp.mutable_items()->push_back(storage_item);
-  }
-  return resp;
+  return rpc_client_->Call<protos_json::storage_proto::Items>("get_items",
+                                                              {req});
 }
 
 void Robot::RobotImpl::enable_collision_detector() {

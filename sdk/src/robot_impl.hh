@@ -25,7 +25,6 @@
 #include "protos/db.hh"
 #include "protos/modbus.hh"
 #include "protos/serial.hh"
-#include "protos/storage.hh"
 #include "http_jsonrpc_connector.hh"
 #include "protos_json/claw_proto.hh"
 #include "protos_json/control_proto.hh"
@@ -192,8 +191,9 @@ class Robot::RobotImpl {
   void set_serial_parity(
       const protos_json::serial_proto::SetSerialParityRequest &req);
   void set_item(const protos_json::storage_proto::Item &req);
-  storage::Item get_item(const protos_json::storage_proto::ItemIndex &req);
-  storage::Items get_items(
+  protos_json::storage_proto::Item get_item(
+      const protos_json::storage_proto::ItemIndex &req);
+  protos_json::storage_proto::Items get_items(
       const protos_json::storage_proto::GetItemsRequest &req);
   void enable_collision_detector();
   void disable_collision_detector();
