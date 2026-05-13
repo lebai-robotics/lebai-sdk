@@ -781,9 +781,9 @@ void Robot::set_claw(double force, double amplitude) {
 ClawData Robot::get_claw_data() {
   auto resp = impl_->get_claw();
   ClawData claw_data;
-  claw_data.force = resp.force();
-  claw_data.amplitude = resp.amplitude();
-  claw_data.hold_on = resp.hold_on();
+  claw_data.force = resp.force;
+  claw_data.amplitude = resp.amplitude;
+  claw_data.hold_on = resp.hold_on;
   return claw_data;
 }
 
@@ -1001,8 +1001,8 @@ void Robot::set_signal(unsigned int index, int value) {
 int Robot::get_signal(unsigned int index) {
   protos_json::signal_proto::GetSignalRequest req;
   req.key = index;
-  signal::GetSignalResponse resp = impl_->get_signal(req);
-  return resp.value();
+  const auto resp = impl_->get_signal(req);
+  return resp.value;
 }
 void Robot::add_signal(unsigned int index, int value) {
   protos_json::signal_proto::SetSignalRequest req;

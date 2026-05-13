@@ -17,10 +17,8 @@
 #pragma once
 
 #include <lebai/robot.hh>
-#include "protos/claw.hh"
 #include "protos/led.hh"
 #include "protos/kinematic.hh"
-#include "protos/signal.hh"
 #include "protos/control.hh"
 #include "protos/file.hh"
 #include "protos/dynamic.hh"
@@ -122,12 +120,12 @@ class Robot::RobotImpl {
   void set_ao(const protos_json::io_proto::SetAoPinRequest &req);
   void init_claw(const protos_json::claw_proto::InitClawRequest &req);
   void set_claw(const protos_json::claw_proto::SetClawRequest &req);
-  claw::Claw get_claw();
+  protos_json::claw_proto::Claw get_claw();
   void set_led(const protos_json::led_proto::LedData &req);
   void set_voice(const protos_json::led_proto::VoiceData &req);
   void set_fan(const protos_json::led_proto::FanData &req);
   void set_signal(const protos_json::signal_proto::SetSignalRequest &req);
-  signal::GetSignalResponse get_signal(
+  protos_json::signal_proto::GetSignalResponse get_signal(
       const protos_json::signal_proto::GetSignalRequest &req);
   void add_signal(const protos_json::signal_proto::SetSignalRequest &req);
   control::TaskIndex start_task(

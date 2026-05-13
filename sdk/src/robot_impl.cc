@@ -315,14 +315,8 @@ void Robot::RobotImpl::set_claw(
     throw;
   }
 }
-claw::Claw Robot::RobotImpl::get_claw() {
-  const auto response =
-      rpc_client_->Call<protos_json::claw_proto::Claw>("get_claw", {});
-  claw::Claw get_claw_resp;
-  get_claw_resp.set_force(response.force);
-  get_claw_resp.set_amplitude(response.amplitude);
-  get_claw_resp.set_hold_on(response.hold_on);
-  return get_claw_resp;
+protos_json::claw_proto::Claw Robot::RobotImpl::get_claw() {
+  return rpc_client_->Call<protos_json::claw_proto::Claw>("get_claw", {});
 }
 
 void Robot::RobotImpl::set_led(const protos_json::led_proto::LedData &req) {
@@ -341,14 +335,10 @@ void Robot::RobotImpl::set_signal(
     const protos_json::signal_proto::SetSignalRequest &req) {
   rpc_client_->Call<void>("set_signal", {req});
 }
-signal::GetSignalResponse Robot::RobotImpl::get_signal(
+protos_json::signal_proto::GetSignalResponse Robot::RobotImpl::get_signal(
     const protos_json::signal_proto::GetSignalRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::signal_proto::GetSignalResponse>(
-          "get_signal", {req});
-  signal::GetSignalResponse set_signal_resp;
-  set_signal_resp.set_value(response.value);
-  return set_signal_resp;
+  return rpc_client_->Call<protos_json::signal_proto::GetSignalResponse>(
+      "get_signal", {req});
 }
 void Robot::RobotImpl::add_signal(
     const protos_json::signal_proto::SetSignalRequest &req) {
