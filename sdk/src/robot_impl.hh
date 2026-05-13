@@ -43,6 +43,7 @@
 #include "protos_json/kin_factor_proto.hh"
 #include "protos_json/kinematic_proto.hh"
 #include "protos_json/led_proto.hh"
+#include "protos_json/modbus_proto.hh"
 #include "protos_json/motion_proto.hh"
 #include "protos_json/posture_proto.hh"
 #include "protos_json/signal_proto.hh"
@@ -180,17 +181,21 @@ class Robot::RobotImpl {
   kinematic::KinFactor get_kin_factor();
   posture::CartesianPose load_tcp(
       const protos_json::db_proto::LoadRequest &req);
-  void writeSingleCoil(const modbus::SetCoilRequest &req);
-  void writeMultipleCoils(const modbus::SetCoilsRequest &req);
-  modbus::GetCoilsResponse readCoils(const modbus::GetCoilsRequest &req);
-  modbus::GetCoilsResponse readDiscreteInputs(
-      const modbus::GetCoilsRequest &req);
-  void writeSingleRegister(const modbus::SetRegisterRequest &req);
-  void writeMultipleRegisters(const modbus::SetRegistersRequest &req);
-  modbus::GetRegistersResponse readInputRegisters(
-      const modbus::GetRegistersRequest &req);
-  modbus::GetRegistersResponse readHoldingRegisters(
-      const modbus::GetRegistersRequest &req);
+  void write_single_coil(const protos_json::modbus_proto::SetCoilRequest &req);
+  void write_multiple_coils(
+      const protos_json::modbus_proto::SetCoilsRequest &req);
+  modbus::GetCoilsResponse read_coils(
+      const protos_json::modbus_proto::GetCoilsRequest &req);
+  modbus::GetCoilsResponse read_discrete_inputs(
+      const protos_json::modbus_proto::GetCoilsRequest &req);
+  void write_single_register(
+      const protos_json::modbus_proto::SetRegisterRequest &req);
+  void write_multiple_registers(
+      const protos_json::modbus_proto::SetRegistersRequest &req);
+  modbus::GetRegistersResponse read_input_registers(
+      const protos_json::modbus_proto::GetRegistersRequest &req);
+  modbus::GetRegistersResponse read_holding_registers(
+      const protos_json::modbus_proto::GetRegistersRequest &req);
   void set_serial_baud_rate(
       const protos_json::serial_proto::SetSerialBaudRateRequest &req);
   void set_serial_parity(

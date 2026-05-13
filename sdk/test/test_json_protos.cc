@@ -23,6 +23,7 @@
 #include "protos_json/file_proto.hh"
 #include "protos_json/kinematic_proto.hh"
 #include "protos_json/motion_proto.hh"
+#include "protos_json/modbus_proto.hh"
 #include "protos_json/serial_proto.hh"
 #include "protos_json/storage_proto.hh"
 #include "protos_json/system_proto.hh"
@@ -259,6 +260,22 @@ TEST(JsonSerialProtoTest, SerialRequestsSerializeExpectedFields) {
   parity.device = "ttyS0";
   parity.parity = 2;
   EXPECT_EQ(nlohmann::json(parity).at("parity"), 2);
+}
+
+TEST(JsonModbusProtoTest, RequestsAndResponsesRoundTrip) {
+  protos_json::modbus_proto::SetRegisterRequest set_req;
+  set_req.device = "modbus0";
+  set_req.pin = "40001";
+  set_req.value = 7;
+  const nlohmann::json set_json = set_req;
+  EXPECT_EQ(set_json.at("device"), "modbus0");
+  EXPECT_EQ(set_json.at("value"), 7);
+
+  const auto response_json = nlohmann::json::parse(R"({"values":[1,2,3]})");
+  const auto response =
+      response_json.get<protos_json::modbus_proto::GetRegistersResponse>();
+  ASSERT_EQ(response.values.size(), 3U);
+  EXPECT_EQ(response.values.back(), 3U);
 }
 
 int main(int argc, char** argv) {

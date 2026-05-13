@@ -802,57 +802,56 @@ posture::CartesianPose Robot::RobotImpl::load_tcp(
       response.rotation.euler_zyx.z);
   return resp;
 }
-void Robot::RobotImpl::writeSingleCoil(const modbus::SetCoilRequest &req) {
-  json_rpc_connector_->CallRpc("write_single_coil", req.ToJSONString(),
-                               nullptr);
+void Robot::RobotImpl::write_single_coil(
+    const protos_json::modbus_proto::SetCoilRequest &req) {
+  rpc_client_->Call<void>("write_single_coil", {req});
 }
-void Robot::RobotImpl::writeMultipleCoils(const modbus::SetCoilsRequest &req) {
-  json_rpc_connector_->CallRpc("write_multiple_coils", req.ToJSONString(),
-                               nullptr);
+void Robot::RobotImpl::write_multiple_coils(
+    const protos_json::modbus_proto::SetCoilsRequest &req) {
+  rpc_client_->Call<void>("write_multiple_coils", {req});
 }
-modbus::GetCoilsResponse Robot::RobotImpl::readCoils(
-    const modbus::GetCoilsRequest &req) {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("read_coils", req.ToJSONString(), &resp_str);
+modbus::GetCoilsResponse Robot::RobotImpl::read_coils(
+    const protos_json::modbus_proto::GetCoilsRequest &req) {
+  const auto response =
+      rpc_client_->Call<protos_json::modbus_proto::GetCoilsResponse>(
+          "read_coils", {req});
   modbus::GetCoilsResponse resp;
-  resp.FromJSONString(resp_str);
+  resp.set_values(response.values);
   return resp;
 }
-modbus::GetCoilsResponse Robot::RobotImpl::readDiscreteInputs(
-    const modbus::GetCoilsRequest &req) {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("read_discrete_inputs", req.ToJSONString(),
-                               &resp_str);
+modbus::GetCoilsResponse Robot::RobotImpl::read_discrete_inputs(
+    const protos_json::modbus_proto::GetCoilsRequest &req) {
+  const auto response =
+      rpc_client_->Call<protos_json::modbus_proto::GetCoilsResponse>(
+          "read_discrete_inputs", {req});
   modbus::GetCoilsResponse resp;
-  resp.FromJSONString(resp_str);
+  resp.set_values(response.values);
   return resp;
 }
-void Robot::RobotImpl::writeSingleRegister(
-    const modbus::SetRegisterRequest &req) {
-  json_rpc_connector_->CallRpc("write_single_register", req.ToJSONString(),
-                               nullptr);
+void Robot::RobotImpl::write_single_register(
+    const protos_json::modbus_proto::SetRegisterRequest &req) {
+  rpc_client_->Call<void>("write_single_register", {req});
 }
-void Robot::RobotImpl::writeMultipleRegisters(
-    const modbus::SetRegistersRequest &req) {
-  json_rpc_connector_->CallRpc("write_multiple_registers", req.ToJSONString(),
-                               nullptr);
+void Robot::RobotImpl::write_multiple_registers(
+    const protos_json::modbus_proto::SetRegistersRequest &req) {
+  rpc_client_->Call<void>("write_multiple_registers", {req});
 }
-modbus::GetRegistersResponse Robot::RobotImpl::readInputRegisters(
-    const modbus::GetRegistersRequest &req) {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("read_input_registers", req.ToJSONString(),
-                               &resp_str);
+modbus::GetRegistersResponse Robot::RobotImpl::read_input_registers(
+    const protos_json::modbus_proto::GetRegistersRequest &req) {
+  const auto response =
+      rpc_client_->Call<protos_json::modbus_proto::GetRegistersResponse>(
+          "read_input_registers", {req});
   modbus::GetRegistersResponse resp;
-  resp.FromJSONString(resp_str);
+  resp.set_values(response.values);
   return resp;
 }
-modbus::GetRegistersResponse Robot::RobotImpl::readHoldingRegisters(
-    const modbus::GetRegistersRequest &req) {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("read_holding_registers", req.ToJSONString(),
-                               &resp_str);
+modbus::GetRegistersResponse Robot::RobotImpl::read_holding_registers(
+    const protos_json::modbus_proto::GetRegistersRequest &req) {
+  const auto response =
+      rpc_client_->Call<protos_json::modbus_proto::GetRegistersResponse>(
+          "read_holding_registers", {req});
   modbus::GetRegistersResponse resp;
-  resp.FromJSONString(resp_str);
+  resp.set_values(response.values);
   return resp;
 }
 

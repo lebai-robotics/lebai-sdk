@@ -1530,75 +1530,75 @@ CartesianPose Robot::load_tcp(std::string name, std::string dir) {
 
 void Robot::write_single_coil(std::string device, std::string addr,
                               bool value) {
-  modbus::SetCoilRequest req;
-  req.set_device(device);
-  req.set_pin(addr);
-  req.set_value(value);
-  impl_->writeSingleCoil(req);
+  protos_json::modbus_proto::SetCoilRequest req;
+  req.device = device;
+  req.pin = addr;
+  req.value = value;
+  impl_->write_single_coil(req);
 }
 
 void Robot::wirte_multiple_coils(std::string device, std::string addr,
                                  std::vector<bool> values) {
-  modbus::SetCoilsRequest req;
-  req.set_device(device);
-  req.set_pin(addr);
-  req.set_values(values);
-  impl_->writeMultipleCoils(req);
+  protos_json::modbus_proto::SetCoilsRequest req;
+  req.device = device;
+  req.pin = addr;
+  req.values = values;
+  impl_->write_multiple_coils(req);
 }
 std::vector<bool> Robot::read_coils(std::string device, std::string addr,
                                     unsigned int num) {
-  modbus::GetCoilsRequest req;
-  req.set_device(device);
-  req.set_pin(addr);
-  req.set_count(num);
-  modbus::GetCoilsResponse resp = impl_->readCoils(req);
+  protos_json::modbus_proto::GetCoilsRequest req;
+  req.device = device;
+  req.pin = addr;
+  req.count = num;
+  modbus::GetCoilsResponse resp = impl_->read_coils(req);
   return resp.values();
 }
 std::vector<bool> Robot::read_discrete_inputs(std::string device,
                                               std::string addr,
                                               unsigned int num) {
-  modbus::GetCoilsRequest req;
-  req.set_device(device);
-  req.set_pin(addr);
-  req.set_count(num);
-  modbus::GetCoilsResponse resp = impl_->readDiscreteInputs(req);
+  protos_json::modbus_proto::GetCoilsRequest req;
+  req.device = device;
+  req.pin = addr;
+  req.count = num;
+  modbus::GetCoilsResponse resp = impl_->read_discrete_inputs(req);
   return resp.values();
 }
 void Robot::write_single_register(std::string device, std::string addr,
                                   unsigned int value) {
-  modbus::SetRegisterRequest req;
-  req.set_device(device);
-  req.set_pin(addr);
-  req.set_value(value);
-  impl_->writeSingleRegister(req);
+  protos_json::modbus_proto::SetRegisterRequest req;
+  req.device = device;
+  req.pin = addr;
+  req.value = value;
+  impl_->write_single_register(req);
 }
 void Robot::write_multiple_registers(std::string device, std::string addr,
                                      std::vector<unsigned int> values) {
-  modbus::SetRegistersRequest req;
-  req.set_device(device);
-  req.set_pin(addr);
-  req.set_values(values);
-  impl_->writeMultipleRegisters(req);
+  protos_json::modbus_proto::SetRegistersRequest req;
+  req.device = device;
+  req.pin = addr;
+  req.values = values;
+  impl_->write_multiple_registers(req);
 }
 
 std::vector<unsigned int> Robot::read_holding_registers(std::string device,
                                                         std::string addr,
                                                         unsigned int num) {
-  modbus::GetRegistersRequest req;
-  req.set_device(device);
-  req.set_pin(addr);
-  req.set_count(num);
-  modbus::GetRegistersResponse resp = impl_->readHoldingRegisters(req);
+  protos_json::modbus_proto::GetRegistersRequest req;
+  req.device = device;
+  req.pin = addr;
+  req.count = num;
+  modbus::GetRegistersResponse resp = impl_->read_holding_registers(req);
   return resp.values();
 }
 std::vector<unsigned int> Robot::read_input_registers(std::string device,
                                                       std::string addr,
                                                       unsigned int num) {
-  modbus::GetRegistersRequest req;
-  req.set_device(device);
-  req.set_pin(addr);
-  req.set_count(num);
-  modbus::GetRegistersResponse resp = impl_->readInputRegisters(req);
+  protos_json::modbus_proto::GetRegistersRequest req;
+  req.device = device;
+  req.pin = addr;
+  req.count = num;
+  modbus::GetRegistersResponse resp = impl_->read_input_registers(req);
   return resp.values();
 }
 
