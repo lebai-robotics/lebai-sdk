@@ -26,7 +26,6 @@
 #include "protos/modbus.hh"
 #include "protos/serial.hh"
 #include "protos/storage.hh"
-#include "protos/safety.hh"
 #include "http_jsonrpc_connector.hh"
 #include "protos_json/claw_proto.hh"
 #include "protos_json/control_proto.hh"
@@ -200,16 +199,16 @@ class Robot::RobotImpl {
   void disable_collision_detector();
   void set_collision_torque_diff(
       const protos_json::safety_proto::CollisionTorqueDiff &req);
-  safety::CollisionTorqueDiff get_collision_torque_diff();
+  protos_json::safety_proto::CollisionTorqueDiff get_collision_torque_diff();
   void set_collision_detector(
       const protos_json::safety_proto::CollisionDetector &req);
-  safety::CollisionDetector get_collision_detector();
+  protos_json::safety_proto::CollisionDetector get_collision_detector();
   void enable_limit();
   void disable_limit();
   void set_joints_limit(const protos_json::safety_proto::JointsLimit &req);
-  safety::JointsLimit get_joints_limit();
+  protos_json::safety_proto::JointsLimit get_joints_limit();
   void set_cart_limit(const protos_json::safety_proto::CartesianLimit &req);
-  safety::CartesianLimit get_cart_limit();
+  protos_json::safety_proto::CartesianLimit get_cart_limit();
 
  protected:
   std::unique_ptr<HttpJsonRpcConnector> http_json_rpc_connector_;

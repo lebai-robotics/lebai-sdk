@@ -56,44 +56,55 @@ static CartesianPose convertToCartesianPose(
 }
 
 static CollisionDetectorConfig convertToCollisionDetectorConfig(
-    const safety::CollisionDetector &detector) {
+    const protos_json::safety_proto::CollisionDetector &detector) {
   CollisionDetectorConfig config;
-  config.action = static_cast<unsigned int>(detector.action());
-  config.pause_time = detector.pause_time();
-  config.sensitivity = detector.sensitivity();
+  if (detector.action == "ESTOP") {
+    config.action = 0;
+  } else if (detector.action == "PAUSE") {
+    config.action = 1;
+  } else if (detector.action == "STOP_MOVE") {
+    config.action = 2;
+  } else if (detector.action == "NONE") {
+    config.action = 99;
+  } else {
+    throw std::runtime_error("unknown collision detector action: " +
+                             detector.action);
+  }
+  config.pause_time = detector.pause_time;
+  config.sensitivity = detector.sensitivity;
   return config;
 }
 
 static std::string convertCollisionDetectorActionToWire(unsigned int action) {
-  switch (static_cast<safety::CollisionDetectorAction>(action)) {
-    case safety::CollisionDetectorAction::ESTOP:
+  switch (action) {
+    case 0:
       return "ESTOP";
-    case safety::CollisionDetectorAction::PAUSE:
+    case 1:
       return "PAUSE";
-    case safety::CollisionDetectorAction::STOP_MOVE:
+    case 2:
       return "STOP_MOVE";
-    case safety::CollisionDetectorAction::NONE:
+    case 99:
       return "NONE";
   }
   throw std::runtime_error("unknown collision detector action");
 }
 
 static JointLimitConfig convertToJointLimitConfig(
-    const safety::JointLimit &joint_limit) {
+    const protos_json::safety_proto::JointLimit &joint_limit) {
   JointLimitConfig config;
-  config.min_position = joint_limit.min_position();
-  config.max_position = joint_limit.max_position();
-  config.max_a = joint_limit.max_a();
-  config.max_v = joint_limit.max_v();
+  config.min_position = joint_limit.min_position;
+  config.max_position = joint_limit.max_position;
+  config.max_a = joint_limit.max_a;
+  config.max_v = joint_limit.max_v;
   return config;
 }
 
 static CartesianLimitConfig convertToCartesianLimitConfig(
-    const safety::CartesianLimit &cart_limit) {
+    const protos_json::safety_proto::CartesianLimit &cart_limit) {
   CartesianLimitConfig config;
-  config.max_a = cart_limit.max_a();
-  config.max_v = cart_limit.max_v();
-  config.eq_radius = cart_limit.eq_radius();
+  config.max_a = cart_limit.max_a;
+  config.max_v = cart_limit.max_v;
+  config.eq_radius = cart_limit.eq_radius;
   return config;
 }
 
@@ -1461,8 +1472,8 @@ void Robot::set_collision_torque_diff(const std::vector<double> &diffs) {
 }
 
 std::vector<double> Robot::get_collision_torque_diff() {
-  safety::CollisionTorqueDiff resp = impl_->get_collision_torque_diff();
-  return resp.diffs();
+  const auto resp = impl_->get_collision_torque_diff();
+  return resp.diffs;
 }
 
 void Robot::set_collision_detector(const CollisionDetectorConfig &config) {
@@ -1474,7 +1485,7 @@ void Robot::set_collision_detector(const CollisionDetectorConfig &config) {
 }
 
 CollisionDetectorConfig Robot::get_collision_detector() {
-  safety::CollisionDetector resp = impl_->get_collision_detector();
+  const auto resp = impl_->get_collision_detector();
   return convertToCollisionDetectorConfig(resp);
 }
 
@@ -1496,9 +1507,9 @@ void Robot::set_joints_limit(const std::vector<JointLimitConfig> &joints) {
 }
 
 std::vector<JointLimitConfig> Robot::get_joints_limit() {
-  safety::JointsLimit resp = impl_->get_joints_limit();
+  const auto resp = impl_->get_joints_limit();
   std::vector<JointLimitConfig> joints;
-  for (auto &&joint : resp.joints()) {
+  for (auto &&joint : resp.joints) {
     joints.push_back(convertToJointLimitConfig(joint));
   }
   return joints;
@@ -1513,7 +1524,7 @@ void Robot::set_cart_limit(const CartesianLimitConfig &limit) {
 }
 
 CartesianLimitConfig Robot::get_cart_limit() {
-  safety::CartesianLimit resp = impl_->get_cart_limit();
+  const auto resp = impl_->get_cart_limit();
   return convertToCartesianLimitConfig(resp);
 }
 
