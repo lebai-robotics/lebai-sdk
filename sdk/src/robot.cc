@@ -936,10 +936,13 @@ unsigned int Robot::start_task(const std::string &name) {
   const auto resp = impl_->start_task(req);
   return resp.id;
 }
-std::vector<unsigned int> Robot::get_task_list() {
+std::vector<unsigned int> Robot::load_task_list() {
   const auto resp = impl_->load_task_list();
   return resp.ids;
 }
+
+std::vector<unsigned int> Robot::get_task_list() { return load_task_list(); }
+
 std::string Robot::wait_task(unsigned int id) {
   protos_json::control_proto::TaskIndex task_index;
   task_index.id = id;
@@ -979,16 +982,21 @@ unsigned int Robot::exec_hook(unsigned int id) {
   }
   return atoi(resp.error.c_str());
 }
-std::string Robot::get_task_state(unsigned int id) {
+std::string Robot::load_task(unsigned int id) {
   protos_json::control_proto::TaskIndex req;
   req.id = id;
   const auto resp = impl_->load_task(req);
   return convertTaskStateToString(resp.state);
 }
-std::string Robot::get_task_state() {
+
+std::string Robot::get_task_state(unsigned int id) { return load_task(id); }
+
+std::string Robot::load_task() {
   const auto resp = impl_->load_task();
   return convertTaskStateToString(resp.state);
 }
+
+std::string Robot::get_task_state() { return load_task(); }
 
 KinematicsForwardResp Robot::get_forward_kin(
     const std::vector<double> &joint_positions) {

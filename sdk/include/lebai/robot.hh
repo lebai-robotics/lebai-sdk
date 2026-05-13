@@ -955,6 +955,7 @@ class Robot {
   /**
    * @brief 查询任务列表
    */
+  std::vector<unsigned int> load_task_list();
   std::vector<unsigned int> get_task_list();
   /**
    * @brief 等待任务完成
@@ -997,12 +998,14 @@ class Robot {
   /**
    * @brief 获取任务状态.
    */
+  std::string load_task();
   std::string get_task_state();
   /**
    * @brief 获取任务状态.
    *
    * @param id 任务的ID.
    */
+  std::string load_task(unsigned int id);
   std::string get_task_state(unsigned int id);
   /** @}*/
 

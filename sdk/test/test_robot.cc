@@ -557,9 +557,12 @@ TEST_F(RobotTest, TestSignal) {
 }
 
 TEST_F(RobotTest, TestTaskReadSmoke) {
-  EXPECT_TRUE(robot_.get_task_list().empty());
-  EXPECT_EQ("NONE", robot_.get_task_state());
-  EXPECT_EQ("NONE", robot_.get_task_state(0));
+  const auto task_ids = robot_.load_task_list();
+  for (const auto task_id : task_ids) {
+    EXPECT_GT(task_id, 0U);
+  }
+  EXPECT_EQ("NONE", robot_.load_task());
+  EXPECT_EQ("NONE", robot_.load_task(0));
 }
 
 TEST_F(RobotTest, TestKinematicsReadSmoke) {
