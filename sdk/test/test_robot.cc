@@ -652,6 +652,10 @@ TEST_F(RobotTest, TestRobotics) {
 TEST_F(RobotTest, TestNetworkConnection) {
   EXPECT_TRUE(robot_.is_network_connected());
 }
+
+TEST_F(RobotTest, TestHelloSmoke) {
+  EXPECT_EQ(robot_.hello("world"), "hello, world");
+}
 }  // namespace lebai
 
 int main(int argc, char **argv) {

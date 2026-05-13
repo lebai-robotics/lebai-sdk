@@ -46,12 +46,17 @@ bool Robot::RobotImpl::isNetworkConnected() {
   try {
     protos_json::system_proto::HelloData req;
     req.data = "world";
-    const auto resp =
-        rpc_client_->Call<protos_json::system_proto::HelloData>("hello", {req});
+    const auto resp = hello(req);
     return resp.data == "hello, world";
   } catch (...) {
     return false;
   }
+}
+
+protos_json::system_proto::HelloData Robot::RobotImpl::hello(
+    const protos_json::system_proto::HelloData &req) {
+  return rpc_client_->Call<protos_json::system_proto::HelloData>("hello",
+                                                                 {req});
 }
 
 int Robot::RobotImpl::start_sys() {

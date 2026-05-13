@@ -141,6 +141,13 @@ std::tuple<int, std::string> Robot::call(const std::string &method,
                                          const std::string &params) {
   return impl_->call(method, params);
 }
+
+std::string Robot::hello(const std::string &data) {
+  protos_json::system_proto::HelloData req;
+  req.data = data;
+  return impl_->hello(req).data;
+}
+
 bool Robot::is_network_connected() { return impl_->isNetworkConnected(); }
 
 void Robot::start_sys() { impl_->start_sys(); }

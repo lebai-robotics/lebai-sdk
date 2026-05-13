@@ -45,6 +45,8 @@ class Robot::RobotImpl {
   virtual ~RobotImpl();
   std::tuple<int, std::string> call(const std::string &method,
                                     const std::string &params);
+  protos_json::system_proto::HelloData hello(
+      const protos_json::system_proto::HelloData &req);
   bool isNetworkConnected();
   int start_sys();
   int stop_sys();

@@ -209,6 +209,11 @@ class Robot {
                                     const std::string &params);
 
   /**
+   * @brief 测试 JSON-RPC 连接.
+   */
+  std::string hello(const std::string &data);
+
+  /**
    * @brief
    * 返回是否和机械臂的网络连接正常，如果网络连接异常，调用和机械臂交互的接口会抛出异常std::runtime_error。
    * @note 不建议使用，直接catch接口调用获取网络异常。
