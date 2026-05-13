@@ -50,4 +50,28 @@ struct RenameFileRequest {
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(RenameFileRequest, from, to)
 };
 
+struct ZipRequest {
+  FileIndex zip;
+  std::vector<std::string> files;
+  std::string dir;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(ZipRequest, zip, files, dir)
+};
+
+struct UnzipRequest {
+  FileIndex zip;
+  std::vector<std::string> files;
+  std::string dir;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(UnzipRequest, zip, files, dir)
+};
+
+struct LoadZipListRequest {
+  FileIndex zip;
+  std::string dir;
+  std::string prefix;
+  std::string suffix;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(LoadZipListRequest, zip, dir, prefix, suffix)
+};
+
+using LoadZipListResponse = LoadFileListResponse;
+
 }  // namespace protos_json::file_proto

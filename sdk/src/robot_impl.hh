@@ -157,9 +157,10 @@ class Robot::RobotImpl {
   file::File load_file(const protos_json::file_proto::FileIndex &req);
   file::LoadFileListResponse load_file_list(
       const protos_json::file_proto::LoadFileListRequest &req);
-  void zip(const file::ZipRequest &req);
-  void unzip(const file::UnzipRequest &req);
-  file::LoadZipListResponse loadZipList(const file::LoadZipListRequest &req);
+  void zip(const protos_json::file_proto::ZipRequest &req);
+  void unzip(const protos_json::file_proto::UnzipRequest &req);
+  file::LoadZipListResponse load_zip_list(
+      const protos_json::file_proto::LoadZipListRequest &req);
   void set_payload(const protos_json::dynamic_proto::SetPayloadRequest &req);
   void set_payload(const protos_json::dynamic_proto::SetCogRequest &req);
   void set_payload(const protos_json::dynamic_proto::SetMassRequest &req);

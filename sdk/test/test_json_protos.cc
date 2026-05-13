@@ -207,6 +207,20 @@ TEST(JsonFileProtoTest, LoadFileListParsesControllerPayload) {
   EXPECT_FALSE(parsed.files.front().is_dir);
 }
 
+TEST(JsonFileProtoTest, ZipRequestSerializesNestedZipIndex) {
+  protos_json::file_proto::ZipRequest req;
+  req.zip.dir = "";
+  req.zip.name = "archive.zip";
+  req.files = {"codex_file_smoke.txt"};
+  req.dir = "";
+
+  const nlohmann::json json = req;
+
+  EXPECT_EQ(json.at("zip").at("name"), "archive.zip");
+  ASSERT_EQ(json.at("files").size(), 1U);
+  EXPECT_EQ(json.at("files").front(), "codex_file_smoke.txt");
+}
+
 TEST(JsonSerialProtoTest, SerialRequestsSerializeExpectedFields) {
   protos_json::serial_proto::SetSerialBaudRateRequest baud;
   baud.device = "ttyS0";

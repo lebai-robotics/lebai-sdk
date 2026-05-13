@@ -653,20 +653,26 @@ file::LoadFileListResponse Robot::RobotImpl::load_file_list(
   return resp;
 }
 
-void Robot::RobotImpl::zip(const file::ZipRequest &req) {
-  json_rpc_connector_->CallRpc("zip", req.ToJSONString(), nullptr);
+void Robot::RobotImpl::zip(const protos_json::file_proto::ZipRequest &req) {
+  rpc_client_->Call<void>("zip", {req});
 }
 
-void Robot::RobotImpl::unzip(const file::UnzipRequest &req) {
-  json_rpc_connector_->CallRpc("unzip", req.ToJSONString(), nullptr);
+void Robot::RobotImpl::unzip(const protos_json::file_proto::UnzipRequest &req) {
+  rpc_client_->Call<void>("unzip", {req});
 }
 
-file::LoadZipListResponse Robot::RobotImpl::loadZipList(
-    const file::LoadZipListRequest &req) {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("load_zip_list", req.ToJSONString(), &resp_str);
+file::LoadZipListResponse Robot::RobotImpl::load_zip_list(
+    const protos_json::file_proto::LoadZipListRequest &req) {
+  const auto response =
+      rpc_client_->Call<protos_json::file_proto::LoadZipListResponse>(
+          "load_zip_list", {req});
   file::LoadZipListResponse resp;
-  resp.FromJSONString(resp_str);
+  for (const auto &file : response.files) {
+    file::FileName file_name;
+    file_name.set_is_dir(file.is_dir);
+    file_name.set_name(file.name);
+    resp.mutable_files()->push_back(file_name);
+  }
   return resp;
 }
 
