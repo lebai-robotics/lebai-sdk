@@ -20,8 +20,6 @@
 #include "protos/kinematic.hh"
 #include "protos/control.hh"
 #include "protos/file.hh"
-#include "protos/dynamic.hh"
-#include "protos/db.hh"
 #include "protos/serial.hh"
 #include "http_jsonrpc_connector.hh"
 #include "protos_json/claw_proto.hh"
@@ -156,12 +154,13 @@ class Robot::RobotImpl {
   void set_payload(const protos_json::dynamic_proto::SetPayloadRequest &req);
   void set_payload(const protos_json::dynamic_proto::SetCogRequest &req);
   void set_payload(const protos_json::dynamic_proto::SetMassRequest &req);
-  dynamic::Payload get_payload();
+  protos_json::dynamic_proto::Payload get_payload();
   void set_gravity(const protos_json::posture_proto::Position &req);
   posture::Position get_gravity();
   void save_payload(const protos_json::dynamic_proto::SavePayloadRequest &req);
-  dynamic::Payload load_payload(const protos_json::db_proto::LoadRequest &req);
-  db::LoadListResponse load_payload_list(
+  protos_json::dynamic_proto::Payload load_payload(
+      const protos_json::db_proto::LoadRequest &req);
+  protos_json::db_proto::LoadListResponse load_payload_list(
       const protos_json::db_proto::LoadListRequest &req);
   void set_tcp(const protos_json::posture_proto::CartesianPose &req);
   posture::CartesianPose get_tcp();

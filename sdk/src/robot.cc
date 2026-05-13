@@ -1266,12 +1266,12 @@ void Robot::set_payload_cog(std::map<std::string, double> cog) {
 }
 
 std::map<std::string, double> Robot::get_payload() {
-  dynamic::Payload resp = impl_->get_payload();
+  const auto resp = impl_->get_payload();
   std::map<std::string, double> cog;
-  cog["x"] = resp.cog().x();
-  cog["y"] = resp.cog().y();
-  cog["z"] = resp.cog().z();
-  cog["mass"] = resp.mass();
+  cog["x"] = resp.cog.x;
+  cog["y"] = resp.cog.y;
+  cog["z"] = resp.cog.z;
+  cog["mass"] = resp.mass;
   return cog;
 }
 

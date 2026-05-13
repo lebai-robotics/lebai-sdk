@@ -553,17 +553,9 @@ void Robot::RobotImpl::set_payload(
     const protos_json::dynamic_proto::SetMassRequest &req) {
   rpc_client_->Call<void>("set_payload", {req});
 }
-dynamic::Payload Robot::RobotImpl::get_payload() {
-  const auto response =
-      rpc_client_->Call<protos_json::dynamic_proto::Payload>("get_payload", {});
-  dynamic::Payload resp;
-  resp.set_mass(response.mass);
-  posture::Position cog;
-  cog.set_x(response.cog.x);
-  cog.set_y(response.cog.y);
-  cog.set_z(response.cog.z);
-  resp.set_cog(cog);
-  return resp;
+protos_json::dynamic_proto::Payload Robot::RobotImpl::get_payload() {
+  return rpc_client_->Call<protos_json::dynamic_proto::Payload>("get_payload",
+                                                                {});
 }
 void Robot::RobotImpl::set_gravity(
     const protos_json::posture_proto::Position &req) {
@@ -583,28 +575,15 @@ void Robot::RobotImpl::save_payload(
     const protos_json::dynamic_proto::SavePayloadRequest &req) {
   rpc_client_->Call<void>("save_payload", {req});
 }
-dynamic::Payload Robot::RobotImpl::load_payload(
+protos_json::dynamic_proto::Payload Robot::RobotImpl::load_payload(
     const protos_json::db_proto::LoadRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::dynamic_proto::Payload>("load_payload",
-                                                             {req});
-  dynamic::Payload resp;
-  resp.set_mass(response.mass);
-  posture::Position cog;
-  cog.set_x(response.cog.x);
-  cog.set_y(response.cog.y);
-  cog.set_z(response.cog.z);
-  resp.set_cog(cog);
-  return resp;
+  return rpc_client_->Call<protos_json::dynamic_proto::Payload>("load_payload",
+                                                                {req});
 }
-db::LoadListResponse Robot::RobotImpl::load_payload_list(
+protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_payload_list(
     const protos_json::db_proto::LoadListRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
-          "load_payload_list", {req});
-  db::LoadListResponse resp;
-  resp.set_data(response.names);
-  return resp;
+  return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
+      "load_payload_list", {req});
 }
 
 void Robot::RobotImpl::set_tcp(
