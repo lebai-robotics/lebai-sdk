@@ -238,43 +238,25 @@ protos_json::kinematic_proto::KinData Robot::RobotImpl::get_kin_data() {
       "get_kin_data", {});
 }
 
-io::GetDioPinResponse Robot::RobotImpl::get_di(
+protos_json::io_proto::GetDioPinResponse Robot::RobotImpl::get_di(
     const protos_json::io_proto::GetDioPinRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::io_proto::GetDioPinResponse>("get_di",
-                                                                  {req});
-  io::GetDioPinResponse get_dio_resp;
-  get_dio_resp.set_value(response.value);
-  return get_dio_resp;
+  return rpc_client_->Call<protos_json::io_proto::GetDioPinResponse>("get_di",
+                                                                     {req});
 }
-io::GetDioPinsResponse Robot::RobotImpl::get_dis(
+protos_json::io_proto::GetDioPinsResponse Robot::RobotImpl::get_dis(
     const protos_json::io_proto::GetDioPinsRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::io_proto::GetDioPinsResponse>("get_dis",
-                                                                   {req});
-  io::GetDioPinsResponse resp;
-  std::vector<unsigned int> values(response.values.begin(), response.values.end());
-  resp.set_values(values);
-  return resp;
+  return rpc_client_->Call<protos_json::io_proto::GetDioPinsResponse>(
+      "get_dis", {req});
 }
-io::GetDioPinResponse Robot::RobotImpl::get_do(
+protos_json::io_proto::GetDioPinResponse Robot::RobotImpl::get_do(
     const protos_json::io_proto::GetDioPinRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::io_proto::GetDioPinResponse>("get_do",
-                                                                  {req});
-  io::GetDioPinResponse get_dio_resp;
-  get_dio_resp.set_value(response.value);
-  return get_dio_resp;
+  return rpc_client_->Call<protos_json::io_proto::GetDioPinResponse>("get_do",
+                                                                     {req});
 }
-io::GetDioPinsResponse Robot::RobotImpl::get_dos(
+protos_json::io_proto::GetDioPinsResponse Robot::RobotImpl::get_dos(
     const protos_json::io_proto::GetDioPinsRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::io_proto::GetDioPinsResponse>("get_dos",
-                                                                   {req});
-  io::GetDioPinsResponse resp;
-  std::vector<unsigned int> values(response.values.begin(), response.values.end());
-  resp.set_values(values);
-  return resp;
+  return rpc_client_->Call<protos_json::io_proto::GetDioPinsResponse>(
+      "get_dos", {req});
 }
 
 void Robot::RobotImpl::set_do(
@@ -282,54 +264,34 @@ void Robot::RobotImpl::set_do(
   rpc_client_->Call<void>("set_do", {req});
 }
 
-io::GetAioPinResponse Robot::RobotImpl::get_ai(
+protos_json::io_proto::GetAioPinResponse Robot::RobotImpl::get_ai(
     const protos_json::io_proto::GetAioPinRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::io_proto::GetAioPinResponse>("get_ai",
-                                                                  {req});
-  io::GetAioPinResponse get_aio_resp;
-  get_aio_resp.set_value(response.value);
-  return get_aio_resp;
+  return rpc_client_->Call<protos_json::io_proto::GetAioPinResponse>("get_ai",
+                                                                     {req});
 }
-io::GetAioPinsResponse Robot::RobotImpl::get_ais(
+protos_json::io_proto::GetAioPinsResponse Robot::RobotImpl::get_ais(
     const protos_json::io_proto::GetAioPinsRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::io_proto::GetAioPinsResponse>("get_ais",
-                                                                   {req});
-  io::GetAioPinsResponse get_aio_resp;
-  get_aio_resp.set_values(response.values);
-  return get_aio_resp;
+  return rpc_client_->Call<protos_json::io_proto::GetAioPinsResponse>(
+      "get_ais", {req});
 }
-io::GetAioPinResponse Robot::RobotImpl::get_ao(
+protos_json::io_proto::GetAioPinResponse Robot::RobotImpl::get_ao(
     const protos_json::io_proto::GetAioPinRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::io_proto::GetAioPinResponse>("get_ao",
-                                                                  {req});
-  io::GetAioPinResponse get_aio_resp;
-  get_aio_resp.set_value(response.value);
-  return get_aio_resp;
+  return rpc_client_->Call<protos_json::io_proto::GetAioPinResponse>("get_ao",
+                                                                     {req});
 }
-io::GetAioPinsResponse Robot::RobotImpl::get_aos(
+protos_json::io_proto::GetAioPinsResponse Robot::RobotImpl::get_aos(
     const protos_json::io_proto::GetAioPinsRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::io_proto::GetAioPinsResponse>("get_aos",
-                                                                   {req});
-  io::GetAioPinsResponse get_aio_resp;
-  get_aio_resp.set_values(response.values);
-  return get_aio_resp;
+  return rpc_client_->Call<protos_json::io_proto::GetAioPinsResponse>(
+      "get_aos", {req});
 }
 void Robot::RobotImpl::set_dio_mode(
     const protos_json::io_proto::SetDioModeRequest &req) {
   rpc_client_->Call<void>("set_dio_mode", {req});
 }
-io::GetDiosModeResponse Robot::RobotImpl::get_dios_mode(
+protos_json::io_proto::GetDiosModeResponse Robot::RobotImpl::get_dios_mode(
     const protos_json::io_proto::GetDiosModeRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::io_proto::GetDiosModeResponse>(
-          "get_dios_mode", {req});
-  io::GetDiosModeResponse resp_;
-  resp_.set_values(response.modes);
-  return resp_;
+  return rpc_client_->Call<protos_json::io_proto::GetDiosModeResponse>(
+      "get_dios_mode", {req});
 }
 
 void Robot::RobotImpl::set_ao(

@@ -610,8 +610,8 @@ unsigned int Robot::get_do(std::string device, unsigned int pin) {
   }
 
   req.pin = pin;
-  io::GetDioPinResponse resp = impl_->get_do(req);
-  return resp.value();
+  const auto resp = impl_->get_do(req);
+  return resp.value;
 }
 
 std::vector<unsigned int> Robot::get_dos(std::string device, unsigned int pin,
@@ -628,8 +628,8 @@ std::vector<unsigned int> Robot::get_dos(std::string device, unsigned int pin,
 
   req.pin = pin;
   req.count = num;
-  io::GetDioPinsResponse resp = impl_->get_dos(req);
-  return resp.values();
+  const auto resp = impl_->get_dos(req);
+  return {resp.values.begin(), resp.values.end()};
 }
 
 unsigned int Robot::get_di(std::string device, unsigned int pin) {
@@ -643,8 +643,8 @@ unsigned int Robot::get_di(std::string device, unsigned int pin) {
   }
 
   req.pin = pin;
-  io::GetDioPinResponse resp = impl_->get_di(req);
-  return resp.value();
+  const auto resp = impl_->get_di(req);
+  return resp.value;
 }
 
 std::vector<unsigned int> Robot::get_dis(std::string device, unsigned int pin,
@@ -659,8 +659,8 @@ std::vector<unsigned int> Robot::get_dis(std::string device, unsigned int pin,
   }
   req.pin = pin;
   req.count = num;
-  io::GetDioPinsResponse resp = impl_->get_dis(req);
-  return resp.values();
+  const auto resp = impl_->get_dis(req);
+  return {resp.values.begin(), resp.values.end()};
 }
 
 void Robot::set_ao(std::string device, unsigned int pin, double value) {
@@ -687,8 +687,8 @@ double Robot::get_ao(std::string device, unsigned int pin) {
     req.device = protos_json::io_proto::IoDevice::EXTRA;
   }
   req.pin = pin;
-  io::GetAioPinResponse resp = impl_->get_ao(req);
-  return resp.value();
+  const auto resp = impl_->get_ao(req);
+  return resp.value;
 }
 
 std::vector<double> Robot::get_aos(std::string device, unsigned int pin,
@@ -703,8 +703,8 @@ std::vector<double> Robot::get_aos(std::string device, unsigned int pin,
   }
   req.pin = pin;
   req.count = num;
-  io::GetAioPinsResponse resp = impl_->get_aos(req);
-  return resp.values();
+  const auto resp = impl_->get_aos(req);
+  return resp.values;
 }
 
 double Robot::get_ai(std::string device, unsigned int pin) {
@@ -717,8 +717,8 @@ double Robot::get_ai(std::string device, unsigned int pin) {
     req.device = protos_json::io_proto::IoDevice::EXTRA;
   }
   req.pin = pin;
-  io::GetAioPinResponse resp = impl_->get_ai(req);
-  return resp.value();
+  const auto resp = impl_->get_ai(req);
+  return resp.value;
 }
 
 std::vector<double> Robot::get_ais(std::string device, unsigned int pin,
@@ -733,8 +733,8 @@ std::vector<double> Robot::get_ais(std::string device, unsigned int pin,
   }
   req.pin = pin;
   req.count = num;
-  io::GetAioPinsResponse resp = impl_->get_ais(req);
-  return resp.values();
+  const auto resp = impl_->get_ais(req);
+  return resp.values;
 }
 void Robot::set_dio_mode(std::string device, unsigned int pin, bool value) {
   protos_json::io_proto::SetDioModeRequest req;
@@ -761,8 +761,8 @@ std::vector<bool> Robot::get_dios_mode(std::string device, unsigned int pin,
   }
   req.pin = pin;
   req.count = count;
-  io::GetDiosModeResponse resp = impl_->get_dios_mode(req);
-  return resp.values();
+  const auto resp = impl_->get_dios_mode(req);
+  return resp.modes;
 }
 
 void Robot::init_claw(bool force_initilization) {

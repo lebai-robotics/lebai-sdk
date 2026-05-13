@@ -17,7 +17,6 @@
 #pragma once
 
 #include <lebai/robot.hh>
-#include "protos/io.hh"
 #include "protos/claw.hh"
 #include "protos/led.hh"
 #include "protos/kinematic.hh"
@@ -100,25 +99,25 @@ class Robot::RobotImpl {
   protos_json::system_proto::SystemInfo get_system_info();
   protos_json::system_proto::PhyData get_phy_data();
   protos_json::kinematic_proto::KinData get_kin_data();
-  io::GetDioPinResponse get_di(
+  protos_json::io_proto::GetDioPinResponse get_di(
       const protos_json::io_proto::GetDioPinRequest &req);
-  io::GetDioPinsResponse get_dis(
+  protos_json::io_proto::GetDioPinsResponse get_dis(
       const protos_json::io_proto::GetDioPinsRequest &req);
-  io::GetDioPinResponse get_do(
+  protos_json::io_proto::GetDioPinResponse get_do(
       const protos_json::io_proto::GetDioPinRequest &req);
-  io::GetDioPinsResponse get_dos(
+  protos_json::io_proto::GetDioPinsResponse get_dos(
       const protos_json::io_proto::GetDioPinsRequest &req);
   void set_do(const protos_json::io_proto::SetDoPinRequest &req);
-  io::GetAioPinResponse get_ai(
+  protos_json::io_proto::GetAioPinResponse get_ai(
       const protos_json::io_proto::GetAioPinRequest &req);
-  io::GetAioPinsResponse get_ais(
+  protos_json::io_proto::GetAioPinsResponse get_ais(
       const protos_json::io_proto::GetAioPinsRequest &req);
-  io::GetAioPinResponse get_ao(
+  protos_json::io_proto::GetAioPinResponse get_ao(
       const protos_json::io_proto::GetAioPinRequest &req);
-  io::GetAioPinsResponse get_aos(
+  protos_json::io_proto::GetAioPinsResponse get_aos(
       const protos_json::io_proto::GetAioPinsRequest &req);
   void set_dio_mode(const protos_json::io_proto::SetDioModeRequest &req);
-  io::GetDiosModeResponse get_dios_mode(
+  protos_json::io_proto::GetDiosModeResponse get_dios_mode(
       const protos_json::io_proto::GetDiosModeRequest &req);
   void set_ao(const protos_json::io_proto::SetAoPinRequest &req);
   void init_claw(const protos_json::claw_proto::InitClawRequest &req);
