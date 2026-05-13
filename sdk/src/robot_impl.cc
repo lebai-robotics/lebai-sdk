@@ -139,119 +139,72 @@ void Robot::RobotImpl::reboot() {
   rpc_client_->Call<void>("reboot", {});
 }
 
-motion::MotionIndex Robot::RobotImpl::move_joint(
+protos_json::motion_proto::MotionIndex Robot::RobotImpl::move_joint(
     const protos_json::motion_proto::MoveRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::motion_proto::MotionIndex>("move_joint",
-                                                                {req});
-  motion::MotionIndex motion_resp;
-  motion_resp.set_id(response.id);
-  return motion_resp;
+  return rpc_client_->Call<protos_json::motion_proto::MotionIndex>("move_joint",
+                                                                   {req});
 }
 
-motion::MotionIndex Robot::RobotImpl::move_joint(
+protos_json::motion_proto::MotionIndex Robot::RobotImpl::move_joint(
     const protos_json::motion_proto::CartesianMoveRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::motion_proto::MotionIndex>("move_joint",
-                                                                {req});
-  motion::MotionIndex motion_resp;
-  motion_resp.set_id(response.id);
-  return motion_resp;
+  return rpc_client_->Call<protos_json::motion_proto::MotionIndex>("move_joint",
+                                                                   {req});
 }
 
-motion::MotionIndex Robot::RobotImpl::move_linear(
+protos_json::motion_proto::MotionIndex Robot::RobotImpl::move_linear(
     const protos_json::motion_proto::MoveRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::motion_proto::MotionIndex>("move_linear",
-                                                                {req});
-  motion::MotionIndex motion_resp;
-  motion_resp.set_id(response.id);
-  return motion_resp;
+  return rpc_client_->Call<protos_json::motion_proto::MotionIndex>(
+      "move_linear", {req});
 }
 
-motion::MotionIndex Robot::RobotImpl::move_linear(
+protos_json::motion_proto::MotionIndex Robot::RobotImpl::move_linear(
     const protos_json::motion_proto::CartesianMoveRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::motion_proto::MotionIndex>("move_linear",
-                                                                {req});
-  motion::MotionIndex motion_resp;
-  motion_resp.set_id(response.id);
-  return motion_resp;
+  return rpc_client_->Call<protos_json::motion_proto::MotionIndex>(
+      "move_linear", {req});
 }
 
-motion::MotionIndex Robot::RobotImpl::move_circular(
+protos_json::motion_proto::MotionIndex Robot::RobotImpl::move_circular(
     const protos_json::motion_proto::MoveCircularRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::motion_proto::MotionIndex>(
-          "move_circular", {req});
-  motion::MotionIndex motion_resp;
-  motion_resp.set_id(response.id);
-  return motion_resp;
+  return rpc_client_->Call<protos_json::motion_proto::MotionIndex>(
+      "move_circular", {req});
 }
-motion::MotionIndex Robot::RobotImpl::move_circular(
+protos_json::motion_proto::MotionIndex Robot::RobotImpl::move_circular(
     const protos_json::motion_proto::CartesianMoveCircularRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::motion_proto::MotionIndex>(
-          "move_circular", {req});
-  motion::MotionIndex motion_resp;
-  motion_resp.set_id(response.id);
-  return motion_resp;
+  return rpc_client_->Call<protos_json::motion_proto::MotionIndex>(
+      "move_circular", {req});
 }
-motion::MotionIndex Robot::RobotImpl::toward_joint(
+protos_json::motion_proto::MotionIndex Robot::RobotImpl::toward_joint(
     const protos_json::motion_proto::MoveRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::motion_proto::MotionIndex>(
-          "toward_joint", {req});
-  motion::MotionIndex motion_resp;
-  motion_resp.set_id(response.id);
-  return motion_resp;
+  return rpc_client_->Call<protos_json::motion_proto::MotionIndex>(
+      "toward_joint", {req});
 }
-motion::MotionIndex Robot::RobotImpl::speed_joint(
+protos_json::motion_proto::MotionIndex Robot::RobotImpl::speed_joint(
     const protos_json::motion_proto::SpeedJointRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::motion_proto::MotionIndex>(
-          "speed_joint", {req});
-  motion::MotionIndex motion_resp;
-  motion_resp.set_id(response.id);
-  return motion_resp;
+  return rpc_client_->Call<protos_json::motion_proto::MotionIndex>(
+      "speed_joint", {req});
 }
-motion::MotionIndex Robot::RobotImpl::speed_linear(
+protos_json::motion_proto::MotionIndex Robot::RobotImpl::speed_linear(
     const protos_json::motion_proto::SpeedLinearRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::motion_proto::MotionIndex>(
-          "speed_linear", {req});
-  motion::MotionIndex motion_resp;
-  motion_resp.set_id(response.id);
-  return motion_resp;
+  return rpc_client_->Call<protos_json::motion_proto::MotionIndex>(
+      "speed_linear", {req});
 }
 void Robot::RobotImpl::move_pvat(
     const protos_json::motion_proto::MovePvatRequest &req) {
   rpc_client_->Call<void>("move_pvat", {req});
 }
-void Robot::RobotImpl::wait_move(const motion::MotionIndex &req) {
-  protos_json::motion_proto::MotionIndex typed_req;
-  typed_req.id = req.id();
-  rpc_client_->Call<void>("wait_move", {typed_req});
+void Robot::RobotImpl::wait_move(
+    const protos_json::motion_proto::MotionIndex &req) {
+  rpc_client_->Call<void>("wait_move", {req});
 }
-motion::MotionIndex Robot::RobotImpl::get_running_motion() {
-  const auto response =
-      rpc_client_->Call<protos_json::motion_proto::MotionIndex>(
-          "get_running_motion", {});
-  motion::MotionIndex get_running_motion_resp;
-  get_running_motion_resp.set_id(response.id);
-  return get_running_motion_resp;
+protos_json::motion_proto::MotionIndex Robot::RobotImpl::get_running_motion() {
+  return rpc_client_->Call<protos_json::motion_proto::MotionIndex>(
+      "get_running_motion", {});
 }
-motion::GetMotionStateResponse Robot::RobotImpl::get_motion_state(
-    const motion::MotionIndex &req) {
-  protos_json::motion_proto::MotionIndex typed_req;
-  typed_req.id = req.id();
-  const auto response =
-      rpc_client_->Call<protos_json::motion_proto::GetMotionStateResponse>(
-          "get_motion_state", {typed_req});
-  motion::GetMotionStateResponse get_motion_state_resp;
-  get_motion_state_resp.set_state(
-      static_cast<motion::MotionState>(response.state));
-  return get_motion_state_resp;
+protos_json::motion_proto::GetMotionStateResponse
+Robot::RobotImpl::get_motion_state(
+    const protos_json::motion_proto::MotionIndex &req) {
+  return rpc_client_->Call<protos_json::motion_proto::GetMotionStateResponse>(
+      "get_motion_state", {req});
 }
 void Robot::RobotImpl::stop_move() {
   rpc_client_->Call<void>("stop_move", {});

@@ -19,7 +19,6 @@
 #include <memory>
 #include <stdexcept>
 #include "robot_impl.hh"
-#include "protos/motion.hh"
 #include "protos/serial.hh"
 #include "protos/posture.hh"
 #include <lebai/config.hh>
@@ -128,8 +127,8 @@ int Robot::movej(const std::vector<double> &joint_positions, double a, double v,
   move_req.param.velocity = v;
   move_req.param.time = t;
   move_req.param.radius = r;
-  motion::MotionIndex resp = impl_->move_joint(move_req);
-  return resp.id();
+  const auto resp = impl_->move_joint(move_req);
+  return resp.id;
 }
 
 int Robot::movej(const CartesianPose &cart_pose, double a, double v, double t,
@@ -170,8 +169,8 @@ int Robot::movej(const CartesianPose &cart_pose, double a, double v, double t,
   } else {
     return -1;
   }
-  motion::MotionIndex resp = impl_->move_joint(move_req);
-  return resp.id();
+  const auto resp = impl_->move_joint(move_req);
+  return resp.id;
 }
 
 int Robot::movel(const std::vector<double> &joint_positions, double a, double v,
@@ -183,8 +182,8 @@ int Robot::movel(const std::vector<double> &joint_positions, double a, double v,
   move_req.param.velocity = v;
   move_req.param.time = t;
   move_req.param.radius = r;
-  motion::MotionIndex resp = impl_->move_linear(move_req);
-  return resp.id();
+  const auto resp = impl_->move_linear(move_req);
+  return resp.id;
 }
 
 int Robot::movel(const CartesianPose &cart_pose, double a, double v, double t,
@@ -225,8 +224,8 @@ int Robot::movel(const CartesianPose &cart_pose, double a, double v, double t,
   } else {
     return -1;
   }
-  motion::MotionIndex resp = impl_->move_linear(move_req);
-  return resp.id();
+  const auto resp = impl_->move_linear(move_req);
+  return resp.id;
 }
 int Robot::movec(const std::vector<double> &joint_via,
                  const std::vector<double> &joint, double rad, double a,
@@ -241,8 +240,8 @@ int Robot::movec(const std::vector<double> &joint_via,
   move_req.pose_via.joint.joint = joint_via;
   move_req.pose.kind = 1;
   move_req.pose.joint.joint = joint;
-  motion::MotionIndex resp = impl_->move_circular(move_req);
-  return resp.id();
+  const auto resp = impl_->move_circular(move_req);
+  return resp.id;
 }
 
 int Robot::movec(const CartesianPose &cart_via, const CartesianPose &cart,
@@ -315,8 +314,8 @@ int Robot::movec(const CartesianPose &cart_via, const CartesianPose &cart,
   } else {
     return -1;
   }
-  motion::MotionIndex resp = impl_->move_circular(move_req);
-  return resp.id();
+  const auto resp = impl_->move_circular(move_req);
+  return resp.id;
 }
 
 int Robot::speedj(double a, const std::vector<double> &v, double t) {
@@ -324,8 +323,8 @@ int Robot::speedj(double a, const std::vector<double> &v, double t) {
   req.param.acc = a;
   req.param.time = t;
   req.speed.joint = v;
-  lebai::motion::MotionIndex resp = impl_->speed_joint(req);
-  return resp.id();
+  const auto resp = impl_->speed_joint(req);
+  return resp.id;
 }
 
 int Robot::speedl(double a, const CartesianPose &v, double t,
@@ -415,8 +414,8 @@ int Robot::speedl(double a, const CartesianPose &v, double t,
   } else {
     return -1;
   }
-  lebai::motion::MotionIndex resp = impl_->speed_linear(req);
-  return resp.id();
+  const auto resp = impl_->speed_linear(req);
+  return resp.id;
 }
 
 int Robot::towardj(const std::vector<double> &joint_positions, double a,
@@ -428,8 +427,8 @@ int Robot::towardj(const std::vector<double> &joint_positions, double a,
   move_req.param.velocity = v;
   move_req.param.time = t;
   move_req.param.radius = r;
-  motion::MotionIndex resp = impl_->toward_joint(move_req);
-  return resp.id();
+  const auto resp = impl_->toward_joint(move_req);
+  return resp.id;
 }
 
 void Robot::move_pvat(std::vector<double> p, std::vector<double> v,
@@ -447,31 +446,31 @@ void Robot::move_pvat(std::vector<double> p, std::vector<double> v,
 }
 
 void Robot::wait_move(unsigned int id) {
-  motion::MotionIndex req;
-  req.set_id(id);
+  protos_json::motion_proto::MotionIndex req;
+  req.id = id;
   impl_->wait_move(req);
 }
 void Robot::wait_move() {
-  motion::MotionIndex req;
-  req.set_id(0);
+  protos_json::motion_proto::MotionIndex req;
+  req.id = 0;
   impl_->wait_move(req);
 }
 
 unsigned int Robot::get_running_motion() {
-  motion::MotionIndex resp = impl_->get_running_motion();
-  return resp.id();
+  const auto resp = impl_->get_running_motion();
+  return resp.id;
 }
 
 std::string Robot::get_motion_state(unsigned int id) {
-  motion::MotionIndex req;
-  req.set_id(id);
-  motion::GetMotionStateResponse resp = impl_->get_motion_state(req);
-  switch (resp.state()) {
-    case motion::WAIT:
+  protos_json::motion_proto::MotionIndex req;
+  req.id = id;
+  const auto resp = impl_->get_motion_state(req);
+  switch (resp.state) {
+    case protos_json::motion_proto::MotionState::WAIT:
       return (std::string) "WAIT";
-    case motion::RUNNING:
+    case protos_json::motion_proto::MotionState::RUNNING:
       return (std::string) "RUNNING";
-    case motion::FINISHED:
+    case protos_json::motion_proto::MotionState::FINISHED:
       return (std::string) "FINISHED";
     default:
       return (std::string) "WAIT";

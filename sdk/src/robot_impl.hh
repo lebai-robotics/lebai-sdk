@@ -17,7 +17,6 @@
 #pragma once
 
 #include <lebai/robot.hh>
-#include "protos/motion.hh"
 #include "protos/system.hh"
 #include "protos/io.hh"
 #include "protos/claw.hh"
@@ -73,29 +72,29 @@ class Robot::RobotImpl {
   void reboot();
   // // int movej(const std::vector<double> & p, double v, double a, double t,
   // double r, bool relative);
-  motion::MotionIndex move_joint(
+  protos_json::motion_proto::MotionIndex move_joint(
       const protos_json::motion_proto::MoveRequest &req);
-  motion::MotionIndex move_joint(
+  protos_json::motion_proto::MotionIndex move_joint(
       const protos_json::motion_proto::CartesianMoveRequest &req);
-  motion::MotionIndex move_linear(
+  protos_json::motion_proto::MotionIndex move_linear(
       const protos_json::motion_proto::MoveRequest &req);
-  motion::MotionIndex move_linear(
+  protos_json::motion_proto::MotionIndex move_linear(
       const protos_json::motion_proto::CartesianMoveRequest &req);
-  motion::MotionIndex move_circular(
+  protos_json::motion_proto::MotionIndex move_circular(
       const protos_json::motion_proto::MoveCircularRequest &req);
-  motion::MotionIndex move_circular(
+  protos_json::motion_proto::MotionIndex move_circular(
       const protos_json::motion_proto::CartesianMoveCircularRequest &req);
-  motion::MotionIndex toward_joint(
+  protos_json::motion_proto::MotionIndex toward_joint(
       const protos_json::motion_proto::MoveRequest &req);
-  motion::MotionIndex speed_joint(
+  protos_json::motion_proto::MotionIndex speed_joint(
       const protos_json::motion_proto::SpeedJointRequest &req);
-  motion::MotionIndex speed_linear(
+  protos_json::motion_proto::MotionIndex speed_linear(
       const protos_json::motion_proto::SpeedLinearRequest &req);
   void move_pvat(const protos_json::motion_proto::MovePvatRequest &req);
-  void wait_move(const motion::MotionIndex &req);
-  motion::MotionIndex get_running_motion();
-  motion::GetMotionStateResponse get_motion_state(
-      const motion::MotionIndex &req);
+  void wait_move(const protos_json::motion_proto::MotionIndex &req);
+  protos_json::motion_proto::MotionIndex get_running_motion();
+  protos_json::motion_proto::GetMotionStateResponse get_motion_state(
+      const protos_json::motion_proto::MotionIndex &req);
   void stop_move();
   system::RobotState get_robot_state();
   system::EstopReason get_estop_reason();
