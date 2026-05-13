@@ -19,7 +19,6 @@
 #include <memory>
 #include <stdexcept>
 #include "robot_impl.hh"
-#include "protos/serial.hh"
 #include "protos/posture.hh"
 #include <lebai/config.hh>
 
@@ -87,6 +86,30 @@ static std::string convertCollisionDetectorActionToWire(unsigned int action) {
       return "NONE";
   }
   throw std::runtime_error("unknown collision detector action");
+}
+
+static std::string convertTaskStateToString(
+    protos_json::control_proto::TaskState state) {
+  using TaskState = protos_json::control_proto::TaskState;
+  switch (state) {
+    case TaskState::NONE:
+      return "NONE";
+    case TaskState::WAIT:
+      return "WAIT";
+    case TaskState::RUNNING:
+      return "RUNNING";
+    case TaskState::PAUSE:
+      return "PAUSE";
+    case TaskState::SUCCESS:
+      return "SUCCESS";
+    case TaskState::INTERRUPT:
+      return "INTERRUPT";
+    case TaskState::FAIL:
+      return "FAIL";
+    case TaskState::INTERRUPTING:
+      return "INTERRUPTING";
+  }
+  return "Undefined State";
 }
 
 static JointLimitConfig convertToJointLimitConfig(
@@ -862,29 +885,31 @@ unsigned int Robot::start_task(const std::string &name,
   req.is_parallel = is_parallel;
   req.loop_to = loop_to;
   req.dir = dir;
-  req.kind = static_cast<unsigned int>(control::TaskKind::LUA);
+  req.kind =
+      static_cast<unsigned int>(protos_json::control_proto::TaskKind::LUA);
   req.params = params;
-  control::TaskIndex resp = impl_->start_task(req);
-  return resp.id();
+  const auto resp = impl_->start_task(req);
+  return resp.id;
 }
 unsigned int Robot::start_task(const std::string &name) {
   protos_json::control_proto::StartTaskRequest req;
   req.name = name;
   req.is_parallel = false;
   req.loop_to = 1;
-  req.kind = static_cast<unsigned int>(control::TaskKind::LUA);
-  control::TaskIndex resp = impl_->start_task(req);
-  return resp.id();
+  req.kind =
+      static_cast<unsigned int>(protos_json::control_proto::TaskKind::LUA);
+  const auto resp = impl_->start_task(req);
+  return resp.id;
 }
 std::vector<unsigned int> Robot::get_task_list() {
-  control::TaskIds resp = impl_->load_task_list();
-  return resp.ids();
+  const auto resp = impl_->load_task_list();
+  return resp.ids;
 }
 std::string Robot::wait_task(unsigned int id) {
   protos_json::control_proto::TaskIndex task_index;
   task_index.id = id;
-  control::TaskStdout resp = impl_->wait_task(task_index);
-  return resp.get_stdout();
+  const auto resp = impl_->wait_task(task_index);
+  return resp.stdout_text;
 }
 void Robot::pause_task(unsigned int id) {
   protos_json::control_proto::PauseRequest req;
@@ -913,75 +938,21 @@ void Robot::cancel_task(unsigned int id) {
 unsigned int Robot::exec_hook(unsigned int id) {
   protos_json::control_proto::TaskIndex req;
   req.id = id;
-  control::HookResponse resp = impl_->exec_hook(req);
-  if (!resp.success()) {
+  const auto resp = impl_->exec_hook(req);
+  if (!resp.success) {
     return 0;
   }
-  return atoi(resp.error().c_str());
+  return atoi(resp.error.c_str());
 }
 std::string Robot::get_task_state(unsigned int id) {
   protos_json::control_proto::TaskIndex req;
   req.id = id;
-  control::Task resp = impl_->load_task(req);
-  switch (resp.state()) {
-    case control::TaskState::NONE:
-      return "NONE";
-      break;
-    case control::TaskState::WAIT:
-      return "WAIT";
-      break;
-    case control::TaskState::RUNNING:
-      return "RUNNING";
-      break;
-    case control::TaskState::PAUSE:
-      return "PAUSE";
-      break;
-    case control::TaskState::SUCCESS:
-      return "SUCCESS";
-      break;
-    case control::TaskState::INTERRUPT:
-      return "INTERRUPT";
-      break;
-    case control::TaskState::FAIL:
-      return "FAIL";
-      break;
-    case control::TaskState::INTERRUPTING:
-      return "INTERRUPTING";
-      break;
-    default:
-      return "Undefined State";
-  }
+  const auto resp = impl_->load_task(req);
+  return convertTaskStateToString(resp.state);
 }
 std::string Robot::get_task_state() {
-  control::Task resp = impl_->load_task();
-  switch (resp.state()) {
-    case control::TaskState::NONE:
-      return "NONE";
-      break;
-    case control::TaskState::WAIT:
-      return "WAIT";
-      break;
-    case control::TaskState::RUNNING:
-      return "RUNNING";
-      break;
-    case control::TaskState::PAUSE:
-      return "PAUSE";
-      break;
-    case control::TaskState::SUCCESS:
-      return "SUCCESS";
-      break;
-    case control::TaskState::INTERRUPT:
-      return "INTERRUPT";
-      break;
-    case control::TaskState::FAIL:
-      return "FAIL";
-      break;
-    case control::TaskState::INTERRUPTING:
-      return "INTERRUPTING";
-      break;
-    default:
-      return "Undefined State";
-  }
+  const auto resp = impl_->load_task();
+  return convertTaskStateToString(resp.state);
 }
 
 KinematicsForwardResp Robot::kinematics_forward(

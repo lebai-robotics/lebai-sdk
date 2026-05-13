@@ -328,35 +328,21 @@ void Robot::RobotImpl::add_signal(
   rpc_client_->Call<void>("add_signal", {req});
 }
 
-control::TaskIndex Robot::RobotImpl::start_task(
+protos_json::control_proto::TaskIndex Robot::RobotImpl::start_task(
     const protos_json::control_proto::StartTaskRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::control_proto::TaskIndex>("start_task",
-                                                               {req});
-  control::TaskIndex start_task_resp;
-  start_task_resp.set_id(response.id);
-  return start_task_resp;
+  return rpc_client_->Call<protos_json::control_proto::TaskIndex>("start_task",
+                                                                  {req});
 }
 
-control::TaskIds Robot::RobotImpl::load_task_list() {
-  const auto response =
-      rpc_client_->Call<protos_json::control_proto::TaskIds>("load_task_list",
-                                                             {});
-  control::TaskIds list_resp;
-  list_resp.set_ids(response.ids);
-  return list_resp;
+protos_json::control_proto::TaskIds Robot::RobotImpl::load_task_list() {
+  return rpc_client_->Call<protos_json::control_proto::TaskIds>(
+      "load_task_list", {});
 }
 
-control::TaskStdout Robot::RobotImpl::wait_task(
+protos_json::control_proto::TaskStdout Robot::RobotImpl::wait_task(
     const protos_json::control_proto::TaskIndex &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::control_proto::TaskStdout>("wait_task",
-                                                                {req});
-  control::TaskStdout wait_task_resp;
-  wait_task_resp.set_id(response.id);
-  wait_task_resp.set_done(response.done);
-  wait_task_resp.set_stdout(response.stdout_text);
-  return wait_task_resp;
+  return rpc_client_->Call<protos_json::control_proto::TaskStdout>("wait_task",
+                                                                   {req});
 }
 
 void Robot::RobotImpl::pause_task(
@@ -371,54 +357,18 @@ void Robot::RobotImpl::cancel_task(
     const protos_json::control_proto::TaskIndex &req) {
   rpc_client_->Call<void>("cancel_task", {req});
 }
-control::HookResponse Robot::RobotImpl::exec_hook(
+protos_json::control_proto::HookResponse Robot::RobotImpl::exec_hook(
     const protos_json::control_proto::TaskIndex &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::control_proto::HookResponse>("exec_hook",
-                                                                  {req});
-  control::HookResponse hook_resp;
-  hook_resp.set_success(response.success);
-  hook_resp.set_error(response.error);
-  return hook_resp;
+  return rpc_client_->Call<protos_json::control_proto::HookResponse>(
+      "exec_hook", {req});
 }
-control::Task Robot::RobotImpl::load_task(
+protos_json::control_proto::Task Robot::RobotImpl::load_task(
     const protos_json::control_proto::TaskIndex &req) {
-  const auto response = rpc_client_->Call<protos_json::control_proto::Task>(
-      "load_task", {req});
-  control::Task task_resp;
-  task_resp.set_id(response.id);
-  task_resp.set_block_id(response.block_id);
-  task_resp.set_state(static_cast<control::TaskState>(response.state));
-  task_resp.set_loopc(response.loop_count);
-  task_resp.set_loopt(response.loop_to);
-  task_resp.set_is_parallel(response.is_parallel);
-  task_resp.set_is_simu(response.is_simu);
-  task_resp.set_out(response.stdout_text);
-  task_resp.set_pre_pause(response.pre_pause);
-  task_resp.set_kind(static_cast<control::TaskKind>(response.kind));
-  task_resp.set_dir(response.dir);
-  task_resp.set_name(response.name);
-  task_resp.set_params(response.params);
-  return task_resp;
+  return rpc_client_->Call<protos_json::control_proto::Task>("load_task",
+                                                             {req});
 }
-control::Task Robot::RobotImpl::load_task() {
-  const auto response =
-      rpc_client_->Call<protos_json::control_proto::Task>("load_task", {});
-  control::Task task_resp;
-  task_resp.set_id(response.id);
-  task_resp.set_block_id(response.block_id);
-  task_resp.set_state(static_cast<control::TaskState>(response.state));
-  task_resp.set_loopc(response.loop_count);
-  task_resp.set_loopt(response.loop_to);
-  task_resp.set_is_parallel(response.is_parallel);
-  task_resp.set_is_simu(response.is_simu);
-  task_resp.set_out(response.stdout_text);
-  task_resp.set_pre_pause(response.pre_pause);
-  task_resp.set_kind(static_cast<control::TaskKind>(response.kind));
-  task_resp.set_dir(response.dir);
-  task_resp.set_name(response.name);
-  task_resp.set_params(response.params);
-  return task_resp;
+protos_json::control_proto::Task Robot::RobotImpl::load_task() {
+  return rpc_client_->Call<protos_json::control_proto::Task>("load_task", {});
 }
 
 posture::CartesianPose Robot::RobotImpl::get_forward_kin(

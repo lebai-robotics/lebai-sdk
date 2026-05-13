@@ -18,8 +18,6 @@
 
 #include <lebai/robot.hh>
 #include "protos/posture.hh"
-#include "protos/control.hh"
-#include "protos/serial.hh"
 #include "http_jsonrpc_connector.hh"
 #include "protos_json/claw_proto.hh"
 #include "protos_json/control_proto.hh"
@@ -121,18 +119,19 @@ class Robot::RobotImpl {
   protos_json::signal_proto::GetSignalResponse get_signal(
       const protos_json::signal_proto::GetSignalRequest &req);
   void add_signal(const protos_json::signal_proto::SetSignalRequest &req);
-  control::TaskIndex start_task(
+  protos_json::control_proto::TaskIndex start_task(
       const protos_json::control_proto::StartTaskRequest &req);
-  control::TaskIds load_task_list();
-  control::TaskStdout wait_task(
+  protos_json::control_proto::TaskIds load_task_list();
+  protos_json::control_proto::TaskStdout wait_task(
       const protos_json::control_proto::TaskIndex &req);
   void pause_task(const protos_json::control_proto::PauseRequest &req);
   void resume_task(const protos_json::control_proto::TaskIndex &req);
   void cancel_task(const protos_json::control_proto::TaskIndex &req);
-  control::HookResponse exec_hook(
+  protos_json::control_proto::HookResponse exec_hook(
       const protos_json::control_proto::TaskIndex &req);
-  control::Task load_task(const protos_json::control_proto::TaskIndex &req);
-  control::Task load_task();
+  protos_json::control_proto::Task load_task(
+      const protos_json::control_proto::TaskIndex &req);
+  protos_json::control_proto::Task load_task();
   posture::CartesianPose get_forward_kin(
       const protos_json::kinematic_proto::PoseRequest &req);
   posture::JointPose get_inverse_kin(
