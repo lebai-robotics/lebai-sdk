@@ -21,6 +21,9 @@ FetchContent_MakeAvailable(googletest)
 
 
 add_executable(test_protos test_protos.cc)
+file(GLOB LEGACY_PROTOS_SRC CONFIGURE_DEPENDS
+  ${PROJECT_SOURCE_DIR}/sdk/src/protos/*.cc)
+target_sources(test_protos PRIVATE ${LEGACY_PROTOS_SRC})
 target_include_directories(test_protos PUBLIC 
   ${CMAKE_CURRENT_SOURCE_DIR}
   ${PROJECT_SOURCE_DIR}/sdk/src

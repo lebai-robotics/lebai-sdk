@@ -1,5 +1,4 @@
 add_library(lebai-cpp)
-file(GLOB PROTOS_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "src/protos/*.cc")
 target_sources(lebai-cpp
   PRIVATE
     src/robot.cc
@@ -10,7 +9,6 @@ target_sources(lebai-cpp
     src/lua_robot_impl.cc
     src/gripper.cc
     src/gripper_impl.cc
-    ${PROTOS_SRC}
     )
 target_include_directories(lebai-cpp
   PUBLIC
