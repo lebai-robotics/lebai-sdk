@@ -23,7 +23,6 @@
 #include "protos/claw.hh"
 #include "protos/led.hh"
 #include "protos/kinematic.hh"
-#include "jsonrpc_connector.hh"
 #include "protos/signal.hh"
 #include "protos/control.hh"
 #include "protos/file.hh"
@@ -218,10 +217,8 @@ class Robot::RobotImpl {
   safety::CartesianLimit get_cart_limit();
 
  protected:
-  std::unique_ptr<JSONRpcConnector> json_rpc_connector_;
   std::unique_ptr<HttpJsonRpcConnector> http_json_rpc_connector_;
   std::unique_ptr<RpcClient> rpc_client_;
-  double timeout_ = 1.0;
   const uint16_t simulation_port_ = 3030;
   const uint16_t physical_machine_port_ = 3031;
   // int jsonrpc_id_ = 0;

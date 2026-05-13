@@ -62,18 +62,8 @@ auto convertToSafetyCollisionDetectorAction(const std::string &action)
 
 Robot::RobotImpl::RobotImpl(const ::std::string &ip, bool simulator) {
   uint16_t port = simulator ? simulation_port_ : physical_machine_port_;
-  json_rpc_connector_ = std::make_unique<JSONRpcConnector>(ip, port);
   http_json_rpc_connector_ = std::make_unique<HttpJsonRpcConnector>(ip, port);
   rpc_client_ = std::make_unique<RpcClient>(*http_json_rpc_connector_);
-  unsigned int i = 0;
-  unsigned int count = timeout_ / 0.1;
-  while (i < count) {
-    if (json_rpc_connector_->GetConnectionStatus() == JSONRpcConnector::kOpen) {
-      break;
-    }
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    i++;
-  }
 }
 Robot::RobotImpl::~RobotImpl() {}
 
@@ -93,8 +83,15 @@ std::tuple<int, std::string> Robot::RobotImpl::call(
 }
 
 bool Robot::RobotImpl::isNetworkConnected() {
-  // return json_rpc_connector_->Ping();
-  return json_rpc_connector_->GetConnectionStatus() == JSONRpcConnector::kOpen;
+  try {
+    protos_json::system_proto::HelloData req;
+    req.data = "world";
+    const auto resp =
+        rpc_client_->Call<protos_json::system_proto::HelloData>("hello", {req});
+    return resp.data == "hello, world";
+  } catch (...) {
+    return false;
+  }
 }
 
 int Robot::RobotImpl::start_sys() {

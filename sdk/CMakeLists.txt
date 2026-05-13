@@ -4,7 +4,6 @@ target_sources(lebai-cpp
   PRIVATE
     src/robot.cc
     src/robot_impl.cc
-    src/jsonrpc_connector.cc
     src/discovery.cc
     src/discovery_impl.cc
     src/lua_robot.cc
