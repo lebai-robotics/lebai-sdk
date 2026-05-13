@@ -1590,8 +1590,8 @@ std::vector<bool> Robot::read_coils(std::string device, std::string addr,
   req.device = device;
   req.pin = addr;
   req.count = num;
-  modbus::GetCoilsResponse resp = impl_->read_coils(req);
-  return resp.values();
+  const auto resp = impl_->read_coils(req);
+  return resp.values;
 }
 std::vector<bool> Robot::read_discrete_inputs(std::string device,
                                               std::string addr,
@@ -1600,8 +1600,8 @@ std::vector<bool> Robot::read_discrete_inputs(std::string device,
   req.device = device;
   req.pin = addr;
   req.count = num;
-  modbus::GetCoilsResponse resp = impl_->read_discrete_inputs(req);
-  return resp.values();
+  const auto resp = impl_->read_discrete_inputs(req);
+  return resp.values;
 }
 void Robot::write_single_register(std::string device, std::string addr,
                                   unsigned int value) {
@@ -1627,8 +1627,8 @@ std::vector<unsigned int> Robot::read_holding_registers(std::string device,
   req.device = device;
   req.pin = addr;
   req.count = num;
-  modbus::GetRegistersResponse resp = impl_->read_holding_registers(req);
-  return resp.values();
+  const auto resp = impl_->read_holding_registers(req);
+  return resp.values;
 }
 std::vector<unsigned int> Robot::read_input_registers(std::string device,
                                                       std::string addr,
@@ -1637,8 +1637,8 @@ std::vector<unsigned int> Robot::read_input_registers(std::string device,
   req.device = device;
   req.pin = addr;
   req.count = num;
-  modbus::GetRegistersResponse resp = impl_->read_input_registers(req);
-  return resp.values();
+  const auto resp = impl_->read_input_registers(req);
+  return resp.values;
 }
 
 void Robot::set_serial_baud_rate(std::string device, unsigned int baud_rate) {

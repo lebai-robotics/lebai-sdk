@@ -23,7 +23,6 @@
 #include "protos/file.hh"
 #include "protos/dynamic.hh"
 #include "protos/db.hh"
-#include "protos/modbus.hh"
 #include "protos/serial.hh"
 #include "http_jsonrpc_connector.hh"
 #include "protos_json/claw_proto.hh"
@@ -174,17 +173,17 @@ class Robot::RobotImpl {
   void write_single_coil(const protos_json::modbus_proto::SetCoilRequest &req);
   void write_multiple_coils(
       const protos_json::modbus_proto::SetCoilsRequest &req);
-  modbus::GetCoilsResponse read_coils(
+  protos_json::modbus_proto::GetCoilsResponse read_coils(
       const protos_json::modbus_proto::GetCoilsRequest &req);
-  modbus::GetCoilsResponse read_discrete_inputs(
+  protos_json::modbus_proto::GetCoilsResponse read_discrete_inputs(
       const protos_json::modbus_proto::GetCoilsRequest &req);
   void write_single_register(
       const protos_json::modbus_proto::SetRegisterRequest &req);
   void write_multiple_registers(
       const protos_json::modbus_proto::SetRegistersRequest &req);
-  modbus::GetRegistersResponse read_input_registers(
+  protos_json::modbus_proto::GetRegistersResponse read_input_registers(
       const protos_json::modbus_proto::GetRegistersRequest &req);
-  modbus::GetRegistersResponse read_holding_registers(
+  protos_json::modbus_proto::GetRegistersResponse read_holding_registers(
       const protos_json::modbus_proto::GetRegistersRequest &req);
   void set_serial_baud_rate(
       const protos_json::serial_proto::SetSerialBaudRateRequest &req);

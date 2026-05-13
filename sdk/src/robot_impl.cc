@@ -664,23 +664,16 @@ void Robot::RobotImpl::write_multiple_coils(
     const protos_json::modbus_proto::SetCoilsRequest &req) {
   rpc_client_->Call<void>("write_multiple_coils", {req});
 }
-modbus::GetCoilsResponse Robot::RobotImpl::read_coils(
+protos_json::modbus_proto::GetCoilsResponse Robot::RobotImpl::read_coils(
     const protos_json::modbus_proto::GetCoilsRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::modbus_proto::GetCoilsResponse>(
-          "read_coils", {req});
-  modbus::GetCoilsResponse resp;
-  resp.set_values(response.values);
-  return resp;
+  return rpc_client_->Call<protos_json::modbus_proto::GetCoilsResponse>(
+      "read_coils", {req});
 }
-modbus::GetCoilsResponse Robot::RobotImpl::read_discrete_inputs(
+protos_json::modbus_proto::GetCoilsResponse
+Robot::RobotImpl::read_discrete_inputs(
     const protos_json::modbus_proto::GetCoilsRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::modbus_proto::GetCoilsResponse>(
-          "read_discrete_inputs", {req});
-  modbus::GetCoilsResponse resp;
-  resp.set_values(response.values);
-  return resp;
+  return rpc_client_->Call<protos_json::modbus_proto::GetCoilsResponse>(
+      "read_discrete_inputs", {req});
 }
 void Robot::RobotImpl::write_single_register(
     const protos_json::modbus_proto::SetRegisterRequest &req) {
@@ -690,23 +683,17 @@ void Robot::RobotImpl::write_multiple_registers(
     const protos_json::modbus_proto::SetRegistersRequest &req) {
   rpc_client_->Call<void>("write_multiple_registers", {req});
 }
-modbus::GetRegistersResponse Robot::RobotImpl::read_input_registers(
+protos_json::modbus_proto::GetRegistersResponse
+Robot::RobotImpl::read_input_registers(
     const protos_json::modbus_proto::GetRegistersRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::modbus_proto::GetRegistersResponse>(
-          "read_input_registers", {req});
-  modbus::GetRegistersResponse resp;
-  resp.set_values(response.values);
-  return resp;
+  return rpc_client_->Call<protos_json::modbus_proto::GetRegistersResponse>(
+      "read_input_registers", {req});
 }
-modbus::GetRegistersResponse Robot::RobotImpl::read_holding_registers(
+protos_json::modbus_proto::GetRegistersResponse
+Robot::RobotImpl::read_holding_registers(
     const protos_json::modbus_proto::GetRegistersRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::modbus_proto::GetRegistersResponse>(
-          "read_holding_registers", {req});
-  modbus::GetRegistersResponse resp;
-  resp.set_values(response.values);
-  return resp;
+  return rpc_client_->Call<protos_json::modbus_proto::GetRegistersResponse>(
+      "read_holding_registers", {req});
 }
 
 void Robot::RobotImpl::set_serial_baud_rate(
