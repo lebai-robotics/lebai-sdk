@@ -21,6 +21,7 @@
 #include "protos_json/dynamic_proto.hh"
 #include "protos_json/kinematic_proto.hh"
 #include "protos_json/motion_proto.hh"
+#include "protos_json/storage_proto.hh"
 #include "protos_json/system_proto.hh"
 
 TEST(JsonAutoProtoTest, SetAutoRequestSerializesToExpectedFields) {
@@ -180,6 +181,17 @@ TEST(JsonDynamicProtoTest, PayloadParsesPartialControllerPayload) {
   EXPECT_DOUBLE_EQ(parsed.cog.x, 0.0);
   EXPECT_DOUBLE_EQ(parsed.cog.y, 0.0);
   EXPECT_DOUBLE_EQ(parsed.cog.z, 0.0);
+}
+
+TEST(JsonStorageProtoTest, ItemsParsesControllerPayload) {
+  const auto json = nlohmann::json::parse(R"({
+    "items":[{"key":"codex_storage_smoke","value":"ok"}]
+  })");
+  const auto parsed = json.get<protos_json::storage_proto::Items>();
+
+  ASSERT_EQ(parsed.items.size(), 1U);
+  EXPECT_EQ(parsed.items.front().key, "codex_storage_smoke");
+  EXPECT_EQ(parsed.items.front().value, "ok");
 }
 
 int main(int argc, char** argv) {

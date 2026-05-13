@@ -1620,16 +1620,16 @@ void Robot::set_serial_parity(std::string device, unsigned int parity) {
 }
 
 void Robot::set_item(StorageItem item) {
-  storage::Item req;
-  req.set_key(item.key);
-  req.set_value(item.value);
-  impl_->setItem(req);
+  protos_json::storage_proto::Item req;
+  req.key = item.key;
+  req.value = item.value;
+  impl_->set_item(req);
 }
 
 StorageItem Robot::get_item(std::string name) {
-  storage::ItemIndex req;
-  req.set_key(name);
-  storage::Item resp = impl_->getItem(req);
+  protos_json::storage_proto::ItemIndex req;
+  req.key = name;
+  storage::Item resp = impl_->get_item(req);
   StorageItem item;
   item.key = resp.key();
   item.value = resp.value();
@@ -1637,9 +1637,9 @@ StorageItem Robot::get_item(std::string name) {
 }
 
 std::vector<StorageItem> Robot::get_items(std::string prefix) {
-  storage::GetItemsRequest req;
-  req.set_prefix(prefix);
-  storage::Items resp = impl_->getItems(req);
+  protos_json::storage_proto::GetItemsRequest req;
+  req.prefix = prefix;
+  storage::Items resp = impl_->get_items(req);
   std::vector<StorageItem> ret;
   for (const auto &item : resp.items()) {
     StorageItem storage_item;

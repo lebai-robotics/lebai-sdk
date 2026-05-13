@@ -584,6 +584,18 @@ TEST_F(RobotTest, TestTcpAndPayloadSmoke) {
   EXPECT_DOUBLE_EQ(payload.at("mass"), 0.0);
 }
 
+TEST_F(RobotTest, TestStorageSmoke) {
+  const l_master::StorageItem item{"codex_storage_smoke", "ok"};
+  EXPECT_NO_THROW(robot_.set_item(item));
+
+  const auto loaded = robot_.get_item(item.key);
+  EXPECT_EQ(loaded.key, item.key);
+  EXPECT_EQ(loaded.value, item.value);
+
+  const auto items = robot_.get_items("codex_storage");
+  EXPECT_FALSE(items.empty());
+}
+
 TEST_F(RobotTest, TestRobotics) {
   robot_.start_sys();
   std::vector<double> joint_positions(6);

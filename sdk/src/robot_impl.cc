@@ -839,22 +839,31 @@ void Robot::RobotImpl::setSerialParityRequest(
   json_rpc_connector_->CallRpc("set_serial_parity", req.ToJSONString(),
                                nullptr);
 }
-void Robot::RobotImpl::setItem(const storage::Item &req) {
-  json_rpc_connector_->CallRpc("set_item", req.ToJSONString(), nullptr);
+void Robot::RobotImpl::set_item(
+    const protos_json::storage_proto::Item &req) {
+  rpc_client_->Call<void>("set_item", {req});
 }
-storage::Item Robot::RobotImpl::getItem(const storage::ItemIndex &req) {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("get_item", req.ToJSONString(), &resp_str);
+storage::Item Robot::RobotImpl::get_item(
+    const protos_json::storage_proto::ItemIndex &req) {
+  const auto response =
+      rpc_client_->Call<protos_json::storage_proto::Item>("get_item", {req});
   storage::Item resp;
-  resp.FromJSONString(resp_str);
+  resp.set_key(response.key);
+  resp.set_value(response.value);
   return resp;
 }
 
-storage::Items Robot::RobotImpl::getItems(const storage::GetItemsRequest &req) {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("get_items", req.ToJSONString(), &resp_str);
+storage::Items Robot::RobotImpl::get_items(
+    const protos_json::storage_proto::GetItemsRequest &req) {
+  const auto response =
+      rpc_client_->Call<protos_json::storage_proto::Items>("get_items", {req});
   storage::Items resp;
-  resp.FromJSONString(resp_str);
+  for (const auto &item : response.items) {
+    storage::Item storage_item;
+    storage_item.set_key(item.key);
+    storage_item.set_value(item.value);
+    resp.mutable_items()->push_back(storage_item);
+  }
   return resp;
 }
 
