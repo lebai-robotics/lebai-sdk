@@ -613,6 +613,19 @@ TEST_F(RobotTest, TestFileSmoke) {
   EXPECT_EQ(std::get<1>(renamed), "hello");
 }
 
+TEST_F(RobotTest, TestSafetyReadSmoke) {
+  EXPECT_EQ(robot_.get_collision_torque_diff().size(), 6U);
+
+  const auto detector = robot_.get_collision_detector();
+  EXPECT_LE(detector.sensitivity, 100U);
+
+  EXPECT_EQ(robot_.get_joints_limit().size(), 6U);
+
+  const auto cart = robot_.get_cart_limit();
+  EXPECT_GE(cart.max_a, 0.0);
+  EXPECT_GE(cart.max_v, 0.0);
+}
+
 TEST_F(RobotTest, TestRobotics) {
   robot_.start_sys();
   std::vector<double> joint_positions(6);

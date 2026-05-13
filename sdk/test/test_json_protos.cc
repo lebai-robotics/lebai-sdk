@@ -24,6 +24,7 @@
 #include "protos_json/kinematic_proto.hh"
 #include "protos_json/motion_proto.hh"
 #include "protos_json/modbus_proto.hh"
+#include "protos_json/safety_proto.hh"
 #include "protos_json/serial_proto.hh"
 #include "protos_json/storage_proto.hh"
 #include "protos_json/system_proto.hh"
@@ -276,6 +277,38 @@ TEST(JsonModbusProtoTest, RequestsAndResponsesRoundTrip) {
       response_json.get<protos_json::modbus_proto::GetRegistersResponse>();
   ASSERT_EQ(response.values.size(), 3U);
   EXPECT_EQ(response.values.back(), 3U);
+}
+
+TEST(JsonSafetyProtoTest, CollisionDetectorParsesControllerPayload) {
+  const auto json = nlohmann::json::parse(
+      R"({"action":"ESTOP","pause_time":0,"sensitivity":50})");
+  const auto parsed =
+      json.get<protos_json::safety_proto::CollisionDetector>();
+
+  EXPECT_EQ(parsed.action, "ESTOP");
+  EXPECT_EQ(parsed.pause_time, 0U);
+  EXPECT_EQ(parsed.sensitivity, 50U);
+}
+
+TEST(JsonSafetyProtoTest, SafetyLimitsParseControllerPayloads) {
+  const auto joints_json = nlohmann::json::parse(R"({
+    "joints":[{"min_position":-6.28,"max_position":6.28,"max_a":6.28,"max_v":3.14}]
+  })");
+  const auto joints =
+      joints_json.get<protos_json::safety_proto::JointsLimit>();
+
+  ASSERT_EQ(joints.joints.size(), 1U);
+  EXPECT_DOUBLE_EQ(joints.joints.front().min_position, -6.28);
+  EXPECT_DOUBLE_EQ(joints.joints.front().max_v, 3.14);
+
+  const auto cart_json =
+      nlohmann::json::parse(R"({"max_a":1.5,"max_v":1.0,"eq_radius":1.0})");
+  const auto cart =
+      cart_json.get<protos_json::safety_proto::CartesianLimit>();
+
+  EXPECT_DOUBLE_EQ(cart.max_a, 1.5);
+  EXPECT_DOUBLE_EQ(cart.max_v, 1.0);
+  EXPECT_DOUBLE_EQ(cart.eq_radius, 1.0);
 }
 
 int main(int argc, char** argv) {

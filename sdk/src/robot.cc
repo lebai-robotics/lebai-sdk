@@ -17,6 +17,7 @@
 #include <lebai/robot.hh>
 #include <websocketpp/base64/base64.hpp>
 #include <memory>
+#include <stdexcept>
 #include "robot_impl.hh"
 #include "protos/motion.hh"
 #include "protos/serial.hh"
@@ -50,6 +51,20 @@ static CollisionDetectorConfig convertToCollisionDetectorConfig(
   config.pause_time = detector.pause_time();
   config.sensitivity = detector.sensitivity();
   return config;
+}
+
+static std::string convertCollisionDetectorActionToWire(unsigned int action) {
+  switch (static_cast<safety::CollisionDetectorAction>(action)) {
+    case safety::CollisionDetectorAction::ESTOP:
+      return "ESTOP";
+    case safety::CollisionDetectorAction::PAUSE:
+      return "PAUSE";
+    case safety::CollisionDetectorAction::STOP_MOVE:
+      return "STOP_MOVE";
+    case safety::CollisionDetectorAction::NONE:
+      return "NONE";
+  }
+  throw std::runtime_error("unknown collision detector action");
 }
 
 static JointLimitConfig convertToJointLimitConfig(
@@ -1422,53 +1437,53 @@ std::map<std::string, double> Robot::get_gravity() {
   return gravity;
 }
 
-void Robot::enable_collision_detector() { impl_->enableCollisionDetector(); }
+void Robot::enable_collision_detector() { impl_->enable_collision_detector(); }
 
-void Robot::disable_collision_detector() { impl_->disableCollisionDetector(); }
+void Robot::disable_collision_detector() { impl_->disable_collision_detector(); }
 
 void Robot::set_collision_torque_diff(const std::vector<double> &diffs) {
-  safety::CollisionTorqueDiff req;
-  req.set_diffs(diffs);
-  impl_->setCollisionTorqueDiff(req);
+  protos_json::safety_proto::CollisionTorqueDiff req;
+  req.diffs = diffs;
+  impl_->set_collision_torque_diff(req);
 }
 
 std::vector<double> Robot::get_collision_torque_diff() {
-  safety::CollisionTorqueDiff resp = impl_->getCollisionTorqueDiff();
+  safety::CollisionTorqueDiff resp = impl_->get_collision_torque_diff();
   return resp.diffs();
 }
 
 void Robot::set_collision_detector(const CollisionDetectorConfig &config) {
-  safety::CollisionDetector req;
-  req.set_action(static_cast<safety::CollisionDetectorAction>(config.action));
-  req.set_pause_time(config.pause_time);
-  req.set_sensitivity(config.sensitivity);
-  impl_->setCollisionDetector(req);
+  protos_json::safety_proto::CollisionDetector req;
+  req.action = convertCollisionDetectorActionToWire(config.action);
+  req.pause_time = config.pause_time;
+  req.sensitivity = config.sensitivity;
+  impl_->set_collision_detector(req);
 }
 
 CollisionDetectorConfig Robot::get_collision_detector() {
-  safety::CollisionDetector resp = impl_->getCollisionDetector();
+  safety::CollisionDetector resp = impl_->get_collision_detector();
   return convertToCollisionDetectorConfig(resp);
 }
 
-void Robot::enable_limit() { impl_->enableLimit(); }
+void Robot::enable_limit() { impl_->enable_limit(); }
 
-void Robot::disable_limit() { impl_->disableLimit(); }
+void Robot::disable_limit() { impl_->disable_limit(); }
 
 void Robot::set_joints_limit(const std::vector<JointLimitConfig> &joints) {
-  safety::JointsLimit req;
+  protos_json::safety_proto::JointsLimit req;
   for (auto &&joint : joints) {
-    safety::JointLimit joint_limit;
-    joint_limit.set_min_position(joint.min_position);
-    joint_limit.set_max_position(joint.max_position);
-    joint_limit.set_max_a(joint.max_a);
-    joint_limit.set_max_v(joint.max_v);
-    req.mutable_joints()->push_back(joint_limit);
+    protos_json::safety_proto::JointLimit joint_limit;
+    joint_limit.min_position = joint.min_position;
+    joint_limit.max_position = joint.max_position;
+    joint_limit.max_a = joint.max_a;
+    joint_limit.max_v = joint.max_v;
+    req.joints.push_back(joint_limit);
   }
-  impl_->setJointsLimit(req);
+  impl_->set_joints_limit(req);
 }
 
 std::vector<JointLimitConfig> Robot::get_joints_limit() {
-  safety::JointsLimit resp = impl_->getJointsLimit();
+  safety::JointsLimit resp = impl_->get_joints_limit();
   std::vector<JointLimitConfig> joints;
   for (auto &&joint : resp.joints()) {
     joints.push_back(convertToJointLimitConfig(joint));
@@ -1477,15 +1492,15 @@ std::vector<JointLimitConfig> Robot::get_joints_limit() {
 }
 
 void Robot::set_cart_limit(const CartesianLimitConfig &limit) {
-  safety::CartesianLimit req;
-  req.set_max_a(limit.max_a);
-  req.set_max_v(limit.max_v);
-  req.set_eq_radius(limit.eq_radius);
-  impl_->setCartLimit(req);
+  protos_json::safety_proto::CartesianLimit req;
+  req.max_a = limit.max_a;
+  req.max_v = limit.max_v;
+  req.eq_radius = limit.eq_radius;
+  impl_->set_cart_limit(req);
 }
 
 CartesianLimitConfig Robot::get_cart_limit() {
-  safety::CartesianLimit resp = impl_->getCartLimit();
+  safety::CartesianLimit resp = impl_->get_cart_limit();
   return convertToCartesianLimitConfig(resp);
 }
 

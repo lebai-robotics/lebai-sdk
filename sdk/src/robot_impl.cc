@@ -17,6 +17,7 @@
 #include <rapidjson/stringbuffer.h>
 #include <rapidjson/writer.h>
 #include <exception>
+#include <stdexcept>
 #include "robot_impl.hh"
 #include "protos/utils.hh"
 
@@ -38,6 +39,23 @@ auto convertToPostureCartesianPose(
   pose.mutable_rotation()->mutable_euler_zyx()->set_z(
       source.rotation.euler_zyx.z);
   return pose;
+}
+
+auto convertToSafetyCollisionDetectorAction(const std::string &action)
+    -> safety::CollisionDetectorAction {
+  if (action == "ESTOP") {
+    return safety::CollisionDetectorAction::ESTOP;
+  }
+  if (action == "PAUSE") {
+    return safety::CollisionDetectorAction::PAUSE;
+  }
+  if (action == "STOP_MOVE") {
+    return safety::CollisionDetectorAction::STOP_MOVE;
+  }
+  if (action == "NONE") {
+    return safety::CollisionDetectorAction::NONE;
+  }
+  throw std::runtime_error("unknown collision detector action: " + action);
 }
 
 }  // namespace
@@ -168,22 +186,6 @@ motion::MotionIndex Robot::RobotImpl::move_linear(
   return motion_resp;
 }
 
-motion::MotionIndex Robot::RobotImpl::moveJoint(
-    const motion::MoveRequest &req) {
-  std::string resp;
-  json_rpc_connector_->CallRpc("move_joint", req.ToJSONString(), &resp);
-  motion::MotionIndex motion_resp;
-  motion_resp.FromJSONString(resp);
-  return motion_resp;
-}
-motion::MotionIndex Robot::RobotImpl::moveLinear(
-    const motion::MoveRequest &req) {
-  std::string resp;
-  json_rpc_connector_->CallRpc("move_linear", req.ToJSONString(), &resp);
-  motion::MotionIndex motion_resp;
-  motion_resp.FromJSONString(resp);
-  return motion_resp;
-}
 motion::MotionIndex Robot::RobotImpl::move_circular(
     const protos_json::motion_proto::MoveCircularRequest &req) {
   const auto response =
@@ -200,14 +202,6 @@ motion::MotionIndex Robot::RobotImpl::move_circular(
           "move_circular", {req});
   motion::MotionIndex motion_resp;
   motion_resp.set_id(response.id);
-  return motion_resp;
-}
-motion::MotionIndex Robot::RobotImpl::move_circular(
-    const motion::MovecRequest &req) {
-  std::string resp;
-  json_rpc_connector_->CallRpc("move_circular", req.ToJSONString(), &resp);
-  motion::MotionIndex motion_resp;
-  motion_resp.FromJSONString(resp);
   return motion_resp;
 }
 motion::MotionIndex Robot::RobotImpl::toward_joint(
@@ -891,71 +885,86 @@ storage::Items Robot::RobotImpl::get_items(
   return resp;
 }
 
-void Robot::RobotImpl::enableCollisionDetector() {
-  json_rpc_connector_->CallRpc("enable_collision_detector", "{}", nullptr);
+void Robot::RobotImpl::enable_collision_detector() {
+  rpc_client_->Call<void>("enable_collision_detector", {});
 }
 
-void Robot::RobotImpl::disableCollisionDetector() {
-  json_rpc_connector_->CallRpc("disable_collision_detector", "{}", nullptr);
+void Robot::RobotImpl::disable_collision_detector() {
+  rpc_client_->Call<void>("disable_collision_detector", {});
 }
 
-void Robot::RobotImpl::setCollisionTorqueDiff(
-    const safety::CollisionTorqueDiff &req) {
-  json_rpc_connector_->CallRpc("set_collision_torque_diff", req.ToJSONString(),
-                               nullptr);
+void Robot::RobotImpl::set_collision_torque_diff(
+    const protos_json::safety_proto::CollisionTorqueDiff &req) {
+  rpc_client_->Call<void>("set_collision_torque_diff", {req});
 }
 
-safety::CollisionTorqueDiff Robot::RobotImpl::getCollisionTorqueDiff() {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("get_collision_torque_diff", "{}", &resp_str);
+safety::CollisionTorqueDiff Robot::RobotImpl::get_collision_torque_diff() {
+  const auto response =
+      rpc_client_->Call<protos_json::safety_proto::CollisionTorqueDiff>(
+          "get_collision_torque_diff", {});
   safety::CollisionTorqueDiff resp;
-  resp.FromJSONString(resp_str);
+  resp.set_diffs(response.diffs);
   return resp;
 }
 
-void Robot::RobotImpl::setCollisionDetector(
-    const safety::CollisionDetector &req) {
-  json_rpc_connector_->CallRpc("set_collision_detector", req.ToJSONString(),
-                               nullptr);
+void Robot::RobotImpl::set_collision_detector(
+    const protos_json::safety_proto::CollisionDetector &req) {
+  rpc_client_->Call<void>("set_collision_detector", {req});
 }
 
-safety::CollisionDetector Robot::RobotImpl::getCollisionDetector() {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("get_collision_detector", "{}", &resp_str);
+safety::CollisionDetector Robot::RobotImpl::get_collision_detector() {
+  const auto response =
+      rpc_client_->Call<protos_json::safety_proto::CollisionDetector>(
+          "get_collision_detector", {});
   safety::CollisionDetector resp;
-  resp.FromJSONString(resp_str);
+  resp.set_action(convertToSafetyCollisionDetectorAction(response.action));
+  resp.set_pause_time(response.pause_time);
+  resp.set_sensitivity(response.sensitivity);
   return resp;
 }
 
-void Robot::RobotImpl::enableLimit() {
-  json_rpc_connector_->CallRpc("enable_limit", "{}", nullptr);
+void Robot::RobotImpl::enable_limit() {
+  rpc_client_->Call<void>("enable_limit", {});
 }
 
-void Robot::RobotImpl::disableLimit() {
-  json_rpc_connector_->CallRpc("disable_limit", "{}", nullptr);
+void Robot::RobotImpl::disable_limit() {
+  rpc_client_->Call<void>("disable_limit", {});
 }
 
-void Robot::RobotImpl::setJointsLimit(const safety::JointsLimit &req) {
-  json_rpc_connector_->CallRpc("set_joints_limit", req.ToJSONString(), nullptr);
+void Robot::RobotImpl::set_joints_limit(
+    const protos_json::safety_proto::JointsLimit &req) {
+  rpc_client_->Call<void>("set_joints_limit", {req});
 }
 
-safety::JointsLimit Robot::RobotImpl::getJointsLimit() {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("get_joints_limit", "{}", &resp_str);
+safety::JointsLimit Robot::RobotImpl::get_joints_limit() {
+  const auto response =
+      rpc_client_->Call<protos_json::safety_proto::JointsLimit>(
+          "get_joints_limit", {});
   safety::JointsLimit resp;
-  resp.FromJSONString(resp_str);
+  for (const auto &joint : response.joints) {
+    safety::JointLimit joint_limit;
+    joint_limit.set_min_position(joint.min_position);
+    joint_limit.set_max_position(joint.max_position);
+    joint_limit.set_max_a(joint.max_a);
+    joint_limit.set_max_v(joint.max_v);
+    resp.mutable_joints()->push_back(joint_limit);
+  }
   return resp;
 }
 
-void Robot::RobotImpl::setCartLimit(const safety::CartesianLimit &req) {
-  json_rpc_connector_->CallRpc("set_cart_limit", req.ToJSONString(), nullptr);
+void Robot::RobotImpl::set_cart_limit(
+    const protos_json::safety_proto::CartesianLimit &req) {
+  rpc_client_->Call<void>("set_cart_limit", {req});
 }
 
-safety::CartesianLimit Robot::RobotImpl::getCartLimit() {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("get_cart_limit", "{}", &resp_str);
+safety::CartesianLimit Robot::RobotImpl::get_cart_limit() {
+  const auto response =
+      rpc_client_->Call<protos_json::safety_proto::CartesianLimit>(
+          "get_cart_limit", {});
   safety::CartesianLimit resp;
-  resp.FromJSONString(resp_str);
+  resp.set_max_a(response.max_a);
+  resp.set_max_v(response.max_v);
+  resp.set_eq_radius(response.eq_radius);
   return resp;
 }
 

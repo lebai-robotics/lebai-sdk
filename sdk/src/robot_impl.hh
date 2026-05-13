@@ -46,6 +46,7 @@
 #include "protos_json/modbus_proto.hh"
 #include "protos_json/motion_proto.hh"
 #include "protos_json/posture_proto.hh"
+#include "protos_json/safety_proto.hh"
 #include "protos_json/signal_proto.hh"
 #include "protos_json/serial_proto.hh"
 #include "protos_json/storage_proto.hh"
@@ -81,13 +82,10 @@ class Robot::RobotImpl {
       const protos_json::motion_proto::MoveRequest &req);
   motion::MotionIndex move_linear(
       const protos_json::motion_proto::CartesianMoveRequest &req);
-  motion::MotionIndex moveJoint(const motion::MoveRequest &req);
-  motion::MotionIndex moveLinear(const motion::MoveRequest &req);
   motion::MotionIndex move_circular(
       const protos_json::motion_proto::MoveCircularRequest &req);
   motion::MotionIndex move_circular(
       const protos_json::motion_proto::CartesianMoveCircularRequest &req);
-  motion::MotionIndex move_circular(const motion::MovecRequest &req);
   motion::MotionIndex toward_joint(
       const protos_json::motion_proto::MoveRequest &req);
   motion::MotionIndex speed_joint(
@@ -204,18 +202,20 @@ class Robot::RobotImpl {
   storage::Item get_item(const protos_json::storage_proto::ItemIndex &req);
   storage::Items get_items(
       const protos_json::storage_proto::GetItemsRequest &req);
-  void enableCollisionDetector();
-  void disableCollisionDetector();
-  void setCollisionTorqueDiff(const safety::CollisionTorqueDiff &req);
-  safety::CollisionTorqueDiff getCollisionTorqueDiff();
-  void setCollisionDetector(const safety::CollisionDetector &req);
-  safety::CollisionDetector getCollisionDetector();
-  void enableLimit();
-  void disableLimit();
-  void setJointsLimit(const safety::JointsLimit &req);
-  safety::JointsLimit getJointsLimit();
-  void setCartLimit(const safety::CartesianLimit &req);
-  safety::CartesianLimit getCartLimit();
+  void enable_collision_detector();
+  void disable_collision_detector();
+  void set_collision_torque_diff(
+      const protos_json::safety_proto::CollisionTorqueDiff &req);
+  safety::CollisionTorqueDiff get_collision_torque_diff();
+  void set_collision_detector(
+      const protos_json::safety_proto::CollisionDetector &req);
+  safety::CollisionDetector get_collision_detector();
+  void enable_limit();
+  void disable_limit();
+  void set_joints_limit(const protos_json::safety_proto::JointsLimit &req);
+  safety::JointsLimit get_joints_limit();
+  void set_cart_limit(const protos_json::safety_proto::CartesianLimit &req);
+  safety::CartesianLimit get_cart_limit();
 
  protected:
   std::unique_ptr<JSONRpcConnector> json_rpc_connector_;
