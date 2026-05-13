@@ -479,9 +479,13 @@ std::string Robot::get_motion_state(unsigned int id) {
 
 void Robot::stop_move() { impl_->stop_move(); }
 
-int Robot::get_robot_state() { return impl_->get_robot_state(); }
+int Robot::get_robot_state() {
+  return static_cast<int>(impl_->get_robot_state());
+}
 
-int Robot::get_estop_reason() { return impl_->get_estop_reason(); }
+int Robot::get_estop_reason() {
+  return static_cast<int>(impl_->get_estop_reason());
+}
 
 SystemInfoData Robot::get_system_info() {
   const auto info = impl_->get_system_info();
@@ -498,9 +502,9 @@ SystemInfoData Robot::get_system_info() {
 PhysicalData Robot::get_phy_data() {
   auto phy_data = impl_->get_phy_data();
   PhysicalData physical_data;
-  physical_data.joint_temperature = phy_data.joint_temp();
-  physical_data.joint_voltage = phy_data.joint_voltage();
-  physical_data.flange_voltage = phy_data.flange_voltage();
+  physical_data.joint_temperature = phy_data.joint_temp;
+  physical_data.joint_voltage = phy_data.joint_voltage;
+  physical_data.flange_voltage = phy_data.flange_voltage;
   return physical_data;
 }
 
@@ -524,9 +528,9 @@ JointMotionData Robot::get_kin_data() {
   return joint_motion_data;
 }
 
-bool Robot::is_disconnected() { return impl_->get_robot_state() == 0; }
+bool Robot::is_disconnected() { return get_robot_state() == 0; }
 
-bool Robot::is_down() { return impl_->get_robot_state() < 4; }
+bool Robot::is_down() { return get_robot_state() < 4; }
 
 std::vector<double> Robot::get_actual_joint_positions() {
   std::map<std::string, double> ret;
@@ -556,8 +560,8 @@ CartesianPose Robot::get_target_tcp_pose() {
 double Robot::get_joint_temp(unsigned int joint_index) {
   auto data = impl_->get_phy_data();
   joint_index -= 1;
-  if (data.joint_temp().size() > joint_index) {
-    return data.joint_temp()[joint_index];
+  if (data.joint_temp.size() > joint_index) {
+    return data.joint_temp[joint_index];
   }
   return 0.0;
 }

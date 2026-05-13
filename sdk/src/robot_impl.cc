@@ -209,18 +209,18 @@ Robot::RobotImpl::get_motion_state(
 void Robot::RobotImpl::stop_move() {
   rpc_client_->Call<void>("stop_move", {});
 }
-system::RobotState Robot::RobotImpl::get_robot_state() {
+protos_json::system_proto::RobotState Robot::RobotImpl::get_robot_state() {
   const auto response =
       rpc_client_->Call<protos_json::system_proto::GetRobotStateResponse>(
           "get_robot_state", {});
-  return static_cast<system::RobotState>(response.state);
+  return response.state;
 }
 
-system::EstopReason Robot::RobotImpl::get_estop_reason() {
+protos_json::system_proto::EstopReason Robot::RobotImpl::get_estop_reason() {
   const auto response =
       rpc_client_->Call<protos_json::system_proto::GetEstopReasonResponse>(
           "get_estop_reason", {});
-  return static_cast<system::EstopReason>(response.reason);
+  return response.reason;
 }
 
 protos_json::system_proto::SystemInfo Robot::RobotImpl::get_system_info() {
@@ -228,14 +228,9 @@ protos_json::system_proto::SystemInfo Robot::RobotImpl::get_system_info() {
       "get_system_info", {});
 }
 
-system::PhyData Robot::RobotImpl::get_phy_data() {
-  const auto response = rpc_client_->Call<protos_json::system_proto::PhyData>(
+protos_json::system_proto::PhyData Robot::RobotImpl::get_phy_data() {
+  return rpc_client_->Call<protos_json::system_proto::PhyData>(
       "get_phy_data", {});
-  system::PhyData phy_data;
-  phy_data.set_joint_temp(response.joint_temp);
-  phy_data.set_joint_voltage(response.joint_voltage);
-  phy_data.set_flange_voltage(response.flange_voltage);
-  return phy_data;
 }
 
 kinematic::KinData Robot::RobotImpl::get_kin_data() {
