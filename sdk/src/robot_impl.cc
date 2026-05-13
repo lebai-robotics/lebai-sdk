@@ -19,25 +19,6 @@
 
 namespace lebai {
 namespace l_master {
-namespace {
-
-auto convertToPostureCartesianPose(
-    const protos_json::kinematic_proto::CartesianPose &source)
-    -> posture::CartesianPose {
-  posture::CartesianPose pose;
-  pose.mutable_position()->set_x(source.position.x);
-  pose.mutable_position()->set_y(source.position.y);
-  pose.mutable_position()->set_z(source.position.z);
-  pose.mutable_rotation()->mutable_euler_zyx()->set_x(
-      source.rotation.euler_zyx.x);
-  pose.mutable_rotation()->mutable_euler_zyx()->set_y(
-      source.rotation.euler_zyx.y);
-  pose.mutable_rotation()->mutable_euler_zyx()->set_z(
-      source.rotation.euler_zyx.z);
-  return pose;
-}
-
-}  // namespace
 
 Robot::RobotImpl::RobotImpl(const ::std::string &ip, bool simulator) {
   uint16_t port = simulator ? simulation_port_ : physical_machine_port_;
@@ -371,66 +352,27 @@ protos_json::control_proto::Task Robot::RobotImpl::load_task() {
   return rpc_client_->Call<protos_json::control_proto::Task>("load_task", {});
 }
 
-posture::CartesianPose Robot::RobotImpl::get_forward_kin(
+protos_json::kinematic_proto::CartesianPose Robot::RobotImpl::get_forward_kin(
     const protos_json::kinematic_proto::PoseRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::kinematic_proto::CartesianPose>(
-          "get_forward_kin", {req});
-  posture::CartesianPose get_forward_kin_resp;
-  get_forward_kin_resp.mutable_position()->set_x(response.position.x);
-  get_forward_kin_resp.mutable_position()->set_y(response.position.y);
-  get_forward_kin_resp.mutable_position()->set_z(response.position.z);
-  get_forward_kin_resp.mutable_rotation()->mutable_euler_zyx()->set_x(
-      response.rotation.euler_zyx.x);
-  get_forward_kin_resp.mutable_rotation()->mutable_euler_zyx()->set_y(
-      response.rotation.euler_zyx.y);
-  get_forward_kin_resp.mutable_rotation()->mutable_euler_zyx()->set_z(
-      response.rotation.euler_zyx.z);
-  return get_forward_kin_resp;
+  return rpc_client_->Call<protos_json::kinematic_proto::CartesianPose>(
+      "get_forward_kin", {req});
 }
 
-posture::JointPose Robot::RobotImpl::get_inverse_kin(
+protos_json::kinematic_proto::JointPose Robot::RobotImpl::get_inverse_kin(
     const protos_json::kinematic_proto::GetInverseKinRequest &req) {
-  const auto response = rpc_client_->Call<protos_json::kinematic_proto::JointPose>(
+  return rpc_client_->Call<protos_json::kinematic_proto::JointPose>(
       "get_inverse_kin", {req});
-  posture::JointPose get_inverse_kin_resp;
-  get_inverse_kin_resp.set_joint(response.joint);
-  return get_inverse_kin_resp;
 }
 
-posture::CartesianPose Robot::RobotImpl::get_pose_trans(
+protos_json::kinematic_proto::CartesianPose Robot::RobotImpl::get_pose_trans(
     const protos_json::kinematic_proto::GetPoseTransRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::kinematic_proto::CartesianPose>(
-          "get_pose_trans", {req});
-  posture::CartesianPose resp;
-  resp.mutable_position()->set_x(response.position.x);
-  resp.mutable_position()->set_y(response.position.y);
-  resp.mutable_position()->set_z(response.position.z);
-  resp.mutable_rotation()->mutable_euler_zyx()->set_x(
-      response.rotation.euler_zyx.x);
-  resp.mutable_rotation()->mutable_euler_zyx()->set_y(
-      response.rotation.euler_zyx.y);
-  resp.mutable_rotation()->mutable_euler_zyx()->set_z(
-      response.rotation.euler_zyx.z);
-  return resp;
+  return rpc_client_->Call<protos_json::kinematic_proto::CartesianPose>(
+      "get_pose_trans", {req});
 }
-posture::CartesianPose Robot::RobotImpl::get_pose_inverse(
+protos_json::kinematic_proto::CartesianPose Robot::RobotImpl::get_pose_inverse(
     const protos_json::kinematic_proto::PoseRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::kinematic_proto::CartesianPose>(
-          "get_pose_inverse", {req});
-  posture::CartesianPose resp;
-  resp.mutable_position()->set_x(response.position.x);
-  resp.mutable_position()->set_y(response.position.y);
-  resp.mutable_position()->set_z(response.position.z);
-  resp.mutable_rotation()->mutable_euler_zyx()->set_x(
-      response.rotation.euler_zyx.x);
-  resp.mutable_rotation()->mutable_euler_zyx()->set_y(
-      response.rotation.euler_zyx.y);
-  resp.mutable_rotation()->mutable_euler_zyx()->set_z(
-      response.rotation.euler_zyx.z);
-  return resp;
+  return rpc_client_->Call<protos_json::kinematic_proto::CartesianPose>(
+      "get_pose_inverse", {req});
 }
 
 void Robot::RobotImpl::save_file(
@@ -488,15 +430,9 @@ void Robot::RobotImpl::set_gravity(
     const protos_json::posture_proto::Position &req) {
   rpc_client_->Call<void>("set_gravity", {req});
 }
-posture::Position Robot::RobotImpl::get_gravity() {
-  const auto response =
-      rpc_client_->Call<protos_json::posture_proto::Position>("get_gravity",
-                                                              {});
-  posture::Position resp;
-  resp.set_x(response.x);
-  resp.set_y(response.y);
-  resp.set_z(response.z);
-  return resp;
+protos_json::posture_proto::Position Robot::RobotImpl::get_gravity() {
+  return rpc_client_->Call<protos_json::posture_proto::Position>("get_gravity",
+                                                                 {});
 }
 void Robot::RobotImpl::save_payload(
     const protos_json::dynamic_proto::SavePayloadRequest &req) {
@@ -517,21 +453,9 @@ void Robot::RobotImpl::set_tcp(
     const protos_json::posture_proto::CartesianPose &req) {
   rpc_client_->Call<void>("set_tcp", {req});
 }
-posture::CartesianPose Robot::RobotImpl::get_tcp() {
-  const auto response =
-      rpc_client_->Call<protos_json::posture_proto::CartesianPose>("get_tcp",
-                                                                   {});
-  posture::CartesianPose resp;
-  resp.mutable_position()->set_x(response.position.x);
-  resp.mutable_position()->set_y(response.position.y);
-  resp.mutable_position()->set_z(response.position.z);
-  resp.mutable_rotation()->mutable_euler_zyx()->set_x(
-      response.rotation.euler_zyx.x);
-  resp.mutable_rotation()->mutable_euler_zyx()->set_y(
-      response.rotation.euler_zyx.y);
-  resp.mutable_rotation()->mutable_euler_zyx()->set_z(
-      response.rotation.euler_zyx.z);
-  return resp;
+protos_json::posture_proto::CartesianPose Robot::RobotImpl::get_tcp() {
+  return rpc_client_->Call<protos_json::posture_proto::CartesianPose>(
+      "get_tcp", {});
 }
 void Robot::RobotImpl::set_kin_factor(
     const protos_json::kin_factor_proto::KinFactor &req) {
@@ -541,22 +465,10 @@ protos_json::kin_factor_proto::KinFactor Robot::RobotImpl::get_kin_factor() {
   return rpc_client_->Call<protos_json::kin_factor_proto::KinFactor>(
       "get_kin_factor", {});
 }
-posture::CartesianPose Robot::RobotImpl::load_tcp(
+protos_json::posture_proto::CartesianPose Robot::RobotImpl::load_tcp(
     const protos_json::db_proto::LoadRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::posture_proto::CartesianPose>("load_tcp",
-                                                                   {req});
-  posture::CartesianPose resp;
-  resp.mutable_position()->set_x(response.position.x);
-  resp.mutable_position()->set_y(response.position.y);
-  resp.mutable_position()->set_z(response.position.z);
-  resp.mutable_rotation()->mutable_euler_zyx()->set_x(
-      response.rotation.euler_zyx.x);
-  resp.mutable_rotation()->mutable_euler_zyx()->set_y(
-      response.rotation.euler_zyx.y);
-  resp.mutable_rotation()->mutable_euler_zyx()->set_z(
-      response.rotation.euler_zyx.z);
-  return resp;
+  return rpc_client_->Call<protos_json::posture_proto::CartesianPose>(
+      "load_tcp", {req});
 }
 void Robot::RobotImpl::write_single_coil(
     const protos_json::modbus_proto::SetCoilRequest &req) {

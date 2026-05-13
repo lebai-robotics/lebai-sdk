@@ -19,7 +19,6 @@
 #include <memory>
 #include <stdexcept>
 #include "robot_impl.hh"
-#include "protos/posture.hh"
 #include <lebai/config.hh>
 
 namespace lebai {
@@ -28,22 +27,22 @@ namespace l_master {
 
 std::string version() { return LEBAI_SDK_VERSION_STR; }
 
+constexpr int kCartesianFrameCustom = 99;
+
 static CartesianPose convertToCartesianPose(
-    const posture::CartesianPose &pose) {
+    const protos_json::kinematic_proto::CartesianPose &pose) {
   CartesianPose cart_pose;
-  cart_pose["x"] = pose.position().x();
-  cart_pose["y"] = pose.position().y();
-  cart_pose["z"] = pose.position().z();
-  if (pose.rotation().euler_zyx()) {
-    cart_pose["rz"] = pose.rotation().euler_zyx()->z();
-    cart_pose["ry"] = pose.rotation().euler_zyx()->y();
-    cart_pose["rx"] = pose.rotation().euler_zyx()->x();
-  }
+  cart_pose["x"] = pose.position.x;
+  cart_pose["y"] = pose.position.y;
+  cart_pose["z"] = pose.position.z;
+  cart_pose["rz"] = pose.rotation.euler_zyx.z;
+  cart_pose["ry"] = pose.rotation.euler_zyx.y;
+  cart_pose["rx"] = pose.rotation.euler_zyx.x;
   return cart_pose;
 }
 
 static CartesianPose convertToCartesianPose(
-    const protos_json::kinematic_proto::CartesianPose &pose) {
+    const protos_json::posture_proto::CartesianPose &pose) {
   CartesianPose cart_pose;
   cart_pose["x"] = pose.position.x;
   cart_pose["y"] = pose.position.y;
@@ -408,27 +407,8 @@ int Robot::speedl(double a, const CartesianPose &v, double t,
   } else {
     return -1;
   }
-  // if(reference == BASE) {
-  //   req.mutable_frame()->set_position_kind(posture::CartesianFrame::Kind::BASE);
-  //   req.mutable_frame()->set_rotation_kind(posture::CartesianFrame::Kind::BASE);
-  // } else if(reference == FLANGE) {
-  //   req.mutable_frame()->set_position_kind(posture::CartesianFrame::Kind::FLANGE);
-  //   req.mutable_frame()->set_rotation_kind(posture::CartesianFrame::Kind::FLANGE);
-  // } else if(reference == TCP) {
-  //   auto tcp = get_target_tcp_pose();
-  //   req.mutable_frame()->mutable_position()->set_x(tcp["x"]);
-  //   req.mutable_frame()->mutable_position()->set_y(tcp["y"]);
-  //   req.mutable_frame()->mutable_position()->set_z(tcp["z"]);
-  //   req.mutable_frame()->mutable_rotation()->mutable_euler_zyx()->set_x(tcp["rx"]);
-  //   req.mutable_frame()->mutable_rotation()->mutable_euler_zyx()->set_y(tcp["ry"]);
-  //   req.mutable_frame()->mutable_rotation()->mutable_euler_zyx()->set_z(tcp["rz"]);
-  //   req.mutable_frame()->set_position_kind(posture::CartesianFrame::Kind::CUSTOM);
-  //   req.mutable_frame()->set_rotation_kind(posture::CartesianFrame::Kind::CUSTOM);
-  // } else {
-  //   return -1;
-  // }
-  req.frame.position_kind = posture::CartesianFrame::Kind::CUSTOM;
-  req.frame.rotation_kind = posture::CartesianFrame::Kind::CUSTOM;
+  req.frame.position_kind = kCartesianFrameCustom;
+  req.frame.rotation_kind = kCartesianFrameCustom;
 
   if (reference.find("x") != reference.end()) {
     req.frame.position.x = reference.at("x");
@@ -962,12 +942,7 @@ KinematicsForwardResp Robot::kinematics_forward(
   req.pose.joint.joint = joint_positions;
   auto resp = impl_->get_forward_kin(req);
   KinematicsForwardResp kf_resp;
-  kf_resp.pose["x"] = resp.position().x();
-  kf_resp.pose["y"] = resp.position().y();
-  kf_resp.pose["z"] = resp.position().z();
-  kf_resp.pose["rz"] = resp.rotation().euler_zyx()->z();
-  kf_resp.pose["ry"] = resp.rotation().euler_zyx()->y();
-  kf_resp.pose["rx"] = resp.rotation().euler_zyx()->x();
+  kf_resp.pose = convertToCartesianPose(resp);
   kf_resp.ok = true;
   return kf_resp;
 }
@@ -1016,7 +991,7 @@ KinematicsInverseResp Robot::kinematics_inverse(
   KinematicsInverseResp ki_resp;
   try {
     auto resp = impl_->get_inverse_kin(req);
-    ki_resp.joint_positions = resp.joint();
+    ki_resp.joint_positions = resp.joint;
     ki_resp.ok = true;
   } catch (std::exception &e) {
     ki_resp.ok = false;
@@ -1095,14 +1070,7 @@ CartesianPose Robot::pose_times(const CartesianPose &a,
   req.from_to.cart.rotation.euler_zyx.x = rx;
 
   auto resp = impl_->get_pose_trans(req);
-  CartesianPose pose;
-  pose["x"] = resp.position().x();
-  pose["y"] = resp.position().y();
-  pose["z"] = resp.position().z();
-  pose["rz"] = resp.rotation().euler_zyx()->z();
-  pose["ry"] = resp.rotation().euler_zyx()->y();
-  pose["rx"] = resp.rotation().euler_zyx()->x();
-  return pose;
+  return convertToCartesianPose(resp);
 }
 
 CartesianPose Robot::pose_inverse(const CartesianPose &in) {
@@ -1140,14 +1108,7 @@ CartesianPose Robot::pose_inverse(const CartesianPose &in) {
   req.pose.cart.rotation.euler_zyx.y = ry;
   req.pose.cart.rotation.euler_zyx.x = rx;
   auto resp = impl_->get_pose_inverse(req);
-  CartesianPose pose;
-  pose["x"] = resp.position().x();
-  pose["y"] = resp.position().y();
-  pose["z"] = resp.position().z();
-  pose["rz"] = resp.rotation().euler_zyx()->z();
-  pose["ry"] = resp.rotation().euler_zyx()->y();
-  pose["rx"] = resp.rotation().euler_zyx()->x();
-  return pose;
+  return convertToCartesianPose(resp);
 }
 
 void Robot::save_file(const std::string &dir, const std::string &name,
@@ -1235,11 +1196,11 @@ void Robot::set_gravity(std::map<std::string, double> gravity) {
 }
 
 std::map<std::string, double> Robot::get_gravity() {
-  posture::Position resp = impl_->get_gravity();
+  const auto resp = impl_->get_gravity();
   std::map<std::string, double> gravity;
-  gravity["x"] = resp.x();
-  gravity["y"] = resp.y();
-  gravity["z"] = resp.z();
+  gravity["x"] = resp.x;
+  gravity["y"] = resp.y;
+  gravity["z"] = resp.z;
   return gravity;
 }
 
@@ -1321,14 +1282,14 @@ void Robot::set_tcp(std::array<double, 6> tcp) {
   impl_->set_tcp(req);
 }
 std::array<double, 6> Robot::get_tcp() {
-  posture::CartesianPose resp = impl_->get_tcp();
+  const auto resp = impl_->get_tcp();
   std::array<double, 6> ret;
-  ret[0] = resp.position().x();
-  ret[1] = resp.position().y();
-  ret[2] = resp.position().z();
-  ret[3] = resp.rotation().euler_zyx()->z();
-  ret[4] = resp.rotation().euler_zyx()->y();
-  ret[5] = resp.rotation().euler_zyx()->x();
+  ret[0] = resp.position.x;
+  ret[1] = resp.position.y;
+  ret[2] = resp.position.z;
+  ret[3] = resp.rotation.euler_zyx.z;
+  ret[4] = resp.rotation.euler_zyx.y;
+  ret[5] = resp.rotation.euler_zyx.x;
   return ret;
 }
 

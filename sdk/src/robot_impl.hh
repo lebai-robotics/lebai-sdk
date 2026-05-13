@@ -17,7 +17,6 @@
 #pragma once
 
 #include <lebai/robot.hh>
-#include "protos/posture.hh"
 #include "http_jsonrpc_connector.hh"
 #include "protos_json/claw_proto.hh"
 #include "protos_json/control_proto.hh"
@@ -132,13 +131,13 @@ class Robot::RobotImpl {
   protos_json::control_proto::Task load_task(
       const protos_json::control_proto::TaskIndex &req);
   protos_json::control_proto::Task load_task();
-  posture::CartesianPose get_forward_kin(
+  protos_json::kinematic_proto::CartesianPose get_forward_kin(
       const protos_json::kinematic_proto::PoseRequest &req);
-  posture::JointPose get_inverse_kin(
+  protos_json::kinematic_proto::JointPose get_inverse_kin(
       const protos_json::kinematic_proto::GetInverseKinRequest &req);
-  posture::CartesianPose get_pose_trans(
+  protos_json::kinematic_proto::CartesianPose get_pose_trans(
       const protos_json::kinematic_proto::GetPoseTransRequest &req);
-  posture::CartesianPose get_pose_inverse(
+  protos_json::kinematic_proto::CartesianPose get_pose_inverse(
       const protos_json::kinematic_proto::PoseRequest &req);
   void save_file(const protos_json::file_proto::SaveFileRequest &req);
   void rename_file(const protos_json::file_proto::RenameFileRequest &req);
@@ -155,17 +154,17 @@ class Robot::RobotImpl {
   void set_payload(const protos_json::dynamic_proto::SetMassRequest &req);
   protos_json::dynamic_proto::Payload get_payload();
   void set_gravity(const protos_json::posture_proto::Position &req);
-  posture::Position get_gravity();
+  protos_json::posture_proto::Position get_gravity();
   void save_payload(const protos_json::dynamic_proto::SavePayloadRequest &req);
   protos_json::dynamic_proto::Payload load_payload(
       const protos_json::db_proto::LoadRequest &req);
   protos_json::db_proto::LoadListResponse load_payload_list(
       const protos_json::db_proto::LoadListRequest &req);
   void set_tcp(const protos_json::posture_proto::CartesianPose &req);
-  posture::CartesianPose get_tcp();
+  protos_json::posture_proto::CartesianPose get_tcp();
   void set_kin_factor(const protos_json::kin_factor_proto::KinFactor &req);
   protos_json::kin_factor_proto::KinFactor get_kin_factor();
-  posture::CartesianPose load_tcp(
+  protos_json::posture_proto::CartesianPose load_tcp(
       const protos_json::db_proto::LoadRequest &req);
   void write_single_coil(const protos_json::modbus_proto::SetCoilRequest &req);
   void write_multiple_coils(
