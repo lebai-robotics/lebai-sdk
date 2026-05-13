@@ -1188,18 +1188,6 @@ void Robot::save_file(const std::string &dir, const std::string &name,
   req.file.data = websocketpp::base64_encode(data);
   impl_->save_file(req);
 }
-/**
-void Robot::save_file(const std::string &dir,const std::string & name,file::File
-file)
-{
-  file::SaveFileRequest req;
-  req.set_dir(dir);
-  req.set_name(name);
-  req.set_file(file);
-  impl_->saveFile(req);
-}
-*/
-
 void Robot::rename_file(const std::string &from_dir,
                         const std::string &from_name, const std::string &to_dir,
                         const std::string &to_name) {
@@ -1210,23 +1198,15 @@ void Robot::rename_file(const std::string &from_dir,
   req.to.name = to_name;
   impl_->rename_file(req);
 }
-/**
-void Robot::rename_file(file::FileIndex from,file::FileIndex to)
-{
-  file::RenameFileRequest req;
-  file.set_from(from);
-  file.set_to(to);
-  impl_->renameFile(req);
-}
-*/
+
 std::tuple<bool, std::string> Robot::load_file(const std::string &dir,
                                                const std::string &name) {
   protos_json::file_proto::FileIndex req;
   req.dir = dir;
   req.name = name;
-  file::File resp = impl_->load_file(req);
+  const auto resp = impl_->load_file(req);
   std::tuple<bool, std::string> ret =
-      std::make_tuple(resp.is_dir(), websocketpp::base64_decode(resp.data()));
+      std::make_tuple(resp.is_dir, websocketpp::base64_decode(resp.data));
   return ret;
 }
 std::vector<std::tuple<bool, std::string>> Robot::load_file_list(
@@ -1236,10 +1216,10 @@ std::vector<std::tuple<bool, std::string>> Robot::load_file_list(
   req.dir = dir;
   req.prefix = prefix;
   req.suffix = suffix;
-  file::LoadFileListResponse resp = impl_->load_file_list(req);
+  const auto resp = impl_->load_file_list(req);
   std::vector<std::tuple<bool, std::string>> ret;
-  for (auto f : resp.files()) {
-    std::tuple<bool, std::string> temp = std::make_tuple(f.is_dir(), f.name());
+  for (auto f : resp.files) {
+    std::tuple<bool, std::string> temp = std::make_tuple(f.is_dir, f.name);
     ret.push_back(temp);
   }
   return ret;

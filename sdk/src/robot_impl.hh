@@ -19,7 +19,6 @@
 #include <lebai/robot.hh>
 #include "protos/kinematic.hh"
 #include "protos/control.hh"
-#include "protos/file.hh"
 #include "protos/serial.hh"
 #include "http_jsonrpc_connector.hh"
 #include "protos_json/claw_proto.hh"
@@ -144,12 +143,13 @@ class Robot::RobotImpl {
       const protos_json::kinematic_proto::PoseRequest &req);
   void save_file(const protos_json::file_proto::SaveFileRequest &req);
   void rename_file(const protos_json::file_proto::RenameFileRequest &req);
-  file::File load_file(const protos_json::file_proto::FileIndex &req);
-  file::LoadFileListResponse load_file_list(
+  protos_json::file_proto::File load_file(
+      const protos_json::file_proto::FileIndex &req);
+  protos_json::file_proto::LoadFileListResponse load_file_list(
       const protos_json::file_proto::LoadFileListRequest &req);
   void zip(const protos_json::file_proto::ZipRequest &req);
   void unzip(const protos_json::file_proto::UnzipRequest &req);
-  file::LoadZipListResponse load_zip_list(
+  protos_json::file_proto::LoadZipListResponse load_zip_list(
       const protos_json::file_proto::LoadZipListRequest &req);
   void set_payload(const protos_json::dynamic_proto::SetPayloadRequest &req);
   void set_payload(const protos_json::dynamic_proto::SetCogRequest &req);

@@ -493,29 +493,15 @@ void Robot::RobotImpl::rename_file(
   rpc_client_->Call<void>("rename_file", {req});
 }
 
-file::File Robot::RobotImpl::load_file(
+protos_json::file_proto::File Robot::RobotImpl::load_file(
     const protos_json::file_proto::FileIndex &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::file_proto::File>("load_file", {req});
-  file::File resp;
-  resp.set_is_dir(response.is_dir);
-  resp.set_data(response.data);
-  return resp;
+  return rpc_client_->Call<protos_json::file_proto::File>("load_file", {req});
 }
 
-file::LoadFileListResponse Robot::RobotImpl::load_file_list(
+protos_json::file_proto::LoadFileListResponse Robot::RobotImpl::load_file_list(
     const protos_json::file_proto::LoadFileListRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::file_proto::LoadFileListResponse>(
-          "load_file_list", {req});
-  file::LoadFileListResponse resp;
-  for (const auto &file : response.files) {
-    file::FileName file_name;
-    file_name.set_is_dir(file.is_dir);
-    file_name.set_name(file.name);
-    resp.mutable_files()->push_back(file_name);
-  }
-  return resp;
+  return rpc_client_->Call<protos_json::file_proto::LoadFileListResponse>(
+      "load_file_list", {req});
 }
 
 void Robot::RobotImpl::zip(const protos_json::file_proto::ZipRequest &req) {
@@ -526,19 +512,10 @@ void Robot::RobotImpl::unzip(const protos_json::file_proto::UnzipRequest &req) {
   rpc_client_->Call<void>("unzip", {req});
 }
 
-file::LoadZipListResponse Robot::RobotImpl::load_zip_list(
+protos_json::file_proto::LoadZipListResponse Robot::RobotImpl::load_zip_list(
     const protos_json::file_proto::LoadZipListRequest &req) {
-  const auto response =
-      rpc_client_->Call<protos_json::file_proto::LoadZipListResponse>(
-          "load_zip_list", {req});
-  file::LoadZipListResponse resp;
-  for (const auto &file : response.files) {
-    file::FileName file_name;
-    file_name.set_is_dir(file.is_dir);
-    file_name.set_name(file.name);
-    resp.mutable_files()->push_back(file_name);
-  }
-  return resp;
+  return rpc_client_->Call<protos_json::file_proto::LoadZipListResponse>(
+      "load_zip_list", {req});
 }
 
 void Robot::RobotImpl::set_payload(
