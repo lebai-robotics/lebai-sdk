@@ -167,3 +167,7 @@ lebai-sdk使用如下第三方软件:
 | ----------- | ----------- |----------- |
 | Asio      | [MPL2](https://www.mozilla.org/en-US/MPL/2.0/FAQ/)  | https://think-async.com/Asio/ |
 | mdns | public domain | https://github.com/mjansson/mdns |
+| ModbusLib | MIT | https://github.com/serhmarch/ModbusLib |
+| nlohmann/json | MIT | https://github.com/nlohmann/json |
+| cpp-httplib | MIT | https://github.com/yhirose/cpp-httplib |
+| json-rpc-cxx | MIT | https://github.com/jsonrpcx/json-rpc-cxx |
