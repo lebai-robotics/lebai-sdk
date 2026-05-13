@@ -37,7 +37,6 @@ PRIMITIVE_TYPEMAP(unsigned long int, long long);
 %template(DoubleVector) std::vector<double>;
 
 %{
-#include <protos/jsonbase.hh>
 #include <array>
 %}
 
@@ -108,12 +107,6 @@ PRIMITIVE_TYPEMAP(unsigned long int, long long);
 // %template(DoubleVector) std::vector<double>;
 %template(BSVector) std::vector<std::tuple<bool,std::string>>;
 
-%{
-#include <protos/jsonbase.hh>
-%}
-
-
-
 %define __STR__(class_name) 
 //%feature("python:slot", "tp_str", functype="reprfunc") class_name::py_to_string();
 %extend class_name{
@@ -122,6 +115,5 @@ PRIMITIVE_TYPEMAP(unsigned long int, long long);
     }
 }
 %enddef
-
 
 
