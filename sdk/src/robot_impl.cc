@@ -587,13 +587,9 @@ void Robot::RobotImpl::set_kin_factor(
     const protos_json::kin_factor_proto::KinFactor &req) {
   rpc_client_->Call<void>("set_kin_factor", {req});
 }
-kinematic::KinFactor Robot::RobotImpl::get_kin_factor() {
-  const auto response =
-      rpc_client_->Call<protos_json::kin_factor_proto::KinFactor>(
-          "get_kin_factor", {});
-  kinematic::KinFactor resp;
-  resp.set_factor(response.speed_factor);
-  return resp;
+protos_json::kin_factor_proto::KinFactor Robot::RobotImpl::get_kin_factor() {
+  return rpc_client_->Call<protos_json::kin_factor_proto::KinFactor>(
+      "get_kin_factor", {});
 }
 posture::CartesianPose Robot::RobotImpl::load_tcp(
     const protos_json::db_proto::LoadRequest &req) {

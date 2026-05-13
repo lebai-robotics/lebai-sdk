@@ -1367,8 +1367,8 @@ void Robot::set_velocity_factor(int factor) {
   impl_->set_kin_factor(req);
 }
 int Robot::get_velocity_factor() {
-  kinematic::KinFactor resp = impl_->get_kin_factor();
-  return resp.factor();
+  const auto resp = impl_->get_kin_factor();
+  return resp.speed_factor;
 }
 CartesianPose Robot::load_tcp(std::string name, std::string dir) {
   protos_json::db_proto::LoadRequest req;

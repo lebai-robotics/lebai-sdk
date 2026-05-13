@@ -17,7 +17,7 @@
 #pragma once
 
 #include <lebai/robot.hh>
-#include "protos/kinematic.hh"
+#include "protos/posture.hh"
 #include "protos/control.hh"
 #include "protos/serial.hh"
 #include "http_jsonrpc_connector.hh"
@@ -165,7 +165,7 @@ class Robot::RobotImpl {
   void set_tcp(const protos_json::posture_proto::CartesianPose &req);
   posture::CartesianPose get_tcp();
   void set_kin_factor(const protos_json::kin_factor_proto::KinFactor &req);
-  kinematic::KinFactor get_kin_factor();
+  protos_json::kin_factor_proto::KinFactor get_kin_factor();
   posture::CartesianPose load_tcp(
       const protos_json::db_proto::LoadRequest &req);
   void write_single_coil(const protos_json::modbus_proto::SetCoilRequest &req);
