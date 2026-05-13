@@ -24,9 +24,8 @@ Use the migrated SDK2-style path:
    public API changed.
 7. Add focused tests in `sdk/test`.
 
-Do not add new robot RPC DTOs under `sdk/src/protos`; that directory contains
-the legacy RapidJSON DTO layer and is no longer linked into the core
-`lebai-cpp` library.
+Do not reintroduce the old handwritten DTO layer. New robot RPC request and
+response types belong under `sdk/src/protos_json`.
 
 ## DTO Example
 

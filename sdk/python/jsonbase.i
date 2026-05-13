@@ -88,13 +88,3 @@
 %std_tuple(TupleDDB, double, double, bool);
 %std_tuple(TupleIntStr, int, std::string);
 %std_tuple(TupleBS,bool,std::string);
-%define __STR__(class_name) 
-//%feature("python:slot", "tp_str", functype="reprfunc") class_name::py_to_string();
-%extend class_name{
-    std::string __repr__() {
-      return self->ToJSONString();
-    }
-}
-%enddef
-
-

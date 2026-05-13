@@ -8,8 +8,6 @@ Project-specific guidance for coding agents working in this repository.
   `gripper.hh`, `lua_robot.hh`, `lebai.hh`)
 - `sdk/src`: core implementations, transport, and internal helpers
 - `sdk/src/protos_json`: nlohmann/json DTOs used by robot RPC calls
-- `sdk/src/protos`: legacy hand-maintained RapidJSON DTOs kept out of the
-  core library; do not add new robot RPC DTOs here
 - `sdk/python`, `sdk/dotnet`, `sdk/java`: SWIG interface layers
 - `python`, `dotnet`, `java`: packaging templates and language metadata
 - `sdk/test`: C++ tests
@@ -43,8 +41,6 @@ Project-specific guidance for coding agents working in this repository.
 
 - `sdk/include/lebai/config.hh` is generated from `sdk/config.hh.in` by
   `cmake/cpp.cmake`.
-- `sdk/src/protos` is legacy RapidJSON code and is not linked into
-  `lebai-cpp`; keep it isolated unless the task explicitly removes it.
 - Build outputs belong under ignored build directories, not source control.
 - Package metadata and build outputs are produced from templates under
   `python`, `dotnet`, and `java`.

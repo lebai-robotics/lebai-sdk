@@ -68,7 +68,6 @@
 
 // __STR__(lebai::MoveParam)
 // __STR__(lebai::MoveRequest)
-// %ignore lebai::JSONBase;
 // %import "lebai/jsonbase.hh"
 // %import "lebai/posture.hh"
 // %import "lebai/motion.hh"

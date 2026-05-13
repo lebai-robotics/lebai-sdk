@@ -104,14 +104,3 @@ PRIMITIVE_TYPEMAP(unsigned long int, unsigned long long);
 %template(IntVector) std::vector<int>;
 // %template(DoubleVector) std::vector<double>;
 %template(BSVector) std::vector<std::tuple<bool,std::string>>;
-
-%define __STR__(class_name) 
-//%feature("python:slot", "tp_str", functype="reprfunc") class_name::py_to_string();
-%extend class_name{
-    std::string __repr__() {
-      return self->ToJSONString();
-    }
-}
-%enddef
-
-

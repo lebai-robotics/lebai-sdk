@@ -20,27 +20,6 @@ FetchContent_MakeAvailable(googletest)
 # find_package(Threads)
 
 
-add_executable(test_protos test_protos.cc)
-file(GLOB LEGACY_PROTOS_SRC CONFIGURE_DEPENDS
-  ${PROJECT_SOURCE_DIR}/sdk/src/protos/*.cc)
-target_sources(test_protos PRIVATE ${LEGACY_PROTOS_SRC})
-target_include_directories(test_protos PUBLIC 
-  ${CMAKE_CURRENT_SOURCE_DIR}
-  ${PROJECT_SOURCE_DIR}/sdk/src
-)
-target_link_directories(test_protos PRIVATE  
-  ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}
-)
-target_link_libraries(test_protos PRIVATE
-  ${PROJECT_NAMESPACE}::lebai-cpp
-  gtest)
-
-
-set_target_properties(test_protos PROPERTIES
-  INSTALL_RPATH 
-  ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})  
-add_test(NAME TestProtos COMMAND test_protos WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/sdk/test)
-
 add_executable(test_json_protos test_json_protos.cc)
 target_include_directories(test_json_protos PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}

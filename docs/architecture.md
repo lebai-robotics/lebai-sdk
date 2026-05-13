@@ -54,10 +54,6 @@ These files define the `nlohmann/json` request/response objects used by the
 internal robot RPC layer. Despite the directory name, these are not generated
 protobuf sources.
 
-`sdk/src/protos` contains the older hand-written RapidJSON DTO layer. It is not
-linked into the core `lebai-cpp` library and should be treated as legacy code
-while the migration is in progress.
-
 ## Typical Robot Call Flow
 
 For a typed robot API such as `movej`:
