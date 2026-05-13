@@ -306,6 +306,7 @@ class Robot {
    * @brief 进入示教模式.
    *
    */
+  void start_teach_mode();
   void teach_mode();
   /**
    * @brief 退出示教模式.
@@ -316,11 +317,13 @@ class Robot {
    * @brief 暂停运动.
    *
    */
+  void pause_move();
   void pause();
   /**
    * @brief 恢复运动.
    *
    */
+  void resume_move();
   void resume();
   /**
    * @brief 重新启动机箱
@@ -353,6 +356,8 @@ class Robot {
    * @return  <=0 发送失败
    *
    */
+  int move_joint(const std::vector<double> &joint_positions, double a, double v,
+                 double t, double r);
   int movej(const std::vector<double> &joint_positions, double a, double v,
             double t, double r);
   /**
@@ -377,6 +382,8 @@ class Robot {
    * @return >0 发送成功
    * @return <=0 发送失败
    */
+  int move_joint(const CartesianPose &cart_pose, double a, double v, double t,
+                 double r);
   int movej(const CartesianPose &cart_pose, double a, double v, double t,
             double r);
   /**
@@ -399,6 +406,8 @@ class Robot {
    * @return >0 发送成功
    * @return <=0 发送失败
    */
+  int move_linear(const std::vector<double> &joint_positions, double a,
+                  double v, double t, double r);
   int movel(const std::vector<double> &joint_positions, double a, double v,
             double t, double r);
   /**
@@ -423,6 +432,8 @@ class Robot {
    * @return >0 发送成功.
    * @return <=0 发送失败.
    */
+  int move_linear(const CartesianPose &cart_pose, double a, double v, double t,
+                  double r);
   int movel(const CartesianPose &cart_pose, double a, double v, double t,
             double r);
   /**
@@ -449,6 +460,9 @@ class Robot {
    * @return >0 发送成功.
    * @return <=0 发送失败.
    */
+  int move_circular(const std::vector<double> &joint_via,
+                    const std::vector<double> &joint, double rad, double a,
+                    double v, double t, double r);
   int movec(const std::vector<double> &joint_via,
             const std::vector<double> &joint, double rad, double a, double v,
             double t, double r);
@@ -469,6 +483,8 @@ class Robot {
    * @return >0 发送成功.
    * @return <=0 发送失败.
    */
+  int move_circular(const CartesianPose &cart_via, const CartesianPose &cart,
+                    double rad, double a, double v, double t, double r);
   int movec(const CartesianPose &cart_via, const CartesianPose &cart,
             double rad, double a, double v, double t, double r);
   /**
@@ -483,6 +499,7 @@ class Robot {
    * @return  >0 发送成功.返回运动号
    * @return  <=0 发送失败.
    */
+  int speed_joint(double a, const std::vector<double> &v, double t = 0.0);
   int speedj(double a, const std::vector<double> &v, double t = 0.0);
   /**
    *
@@ -499,6 +516,13 @@ class Robot {
    * @return  >0 发送成功.返回运动号
    * @return  <=0 发送失败.
    */
+  int speed_linear(double a, const CartesianPose &v, double t = 0.0,
+                   const CartesianPose &reference = {{"x", 0.0},
+                                                     {"y", 0.0},
+                                                     {"z", 0.0},
+                                                     {"rx", 0.0},
+                                                     {"ry", 0.0},
+                                                     {"rz", 0.0}});
   int speedl(double a, const CartesianPose &v, double t = 0.0,
              const CartesianPose &reference = {{"x", 0.0},
                                                {"y", 0.0},
@@ -527,6 +551,8 @@ class Robot {
    * @return  <=0 发送失败.
    *
    */
+  int toward_joint(const std::vector<double> &joint_positions, double a,
+                   double v, double t, double r);
   int towardj(const std::vector<double> &joint_positions, double a, double v,
               double t, double r);
   /**

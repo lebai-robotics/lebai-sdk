@@ -45,7 +45,7 @@ TEST_F(RobotTest, TestStartStop) {
   robot_.start_sys();
   std::this_thread::sleep_for(std::chrono::seconds(1));
   EXPECT_EQ(5, robot_.get_robot_state());
-  robot_.teach_mode();
+  robot_.start_teach_mode();
   std::this_thread::sleep_for(std::chrono::seconds(1));
   EXPECT_EQ(11, robot_.get_robot_state());
   robot_.end_teach_mode();
@@ -104,8 +104,8 @@ TEST_F(RobotTest, TestStopSmoke) {
 TEST_F(RobotTest, TestPauseResumeSmoke) {
   EXPECT_NO_THROW(robot_.start_sys());
   std::this_thread::sleep_for(std::chrono::seconds(1));
-  EXPECT_NO_THROW(robot_.pause());
-  EXPECT_NO_THROW(robot_.resume());
+  EXPECT_NO_THROW(robot_.pause_move());
+  EXPECT_NO_THROW(robot_.resume_move());
   EXPECT_EQ(5, robot_.get_robot_state());
 }
 
@@ -121,7 +121,7 @@ TEST_F(RobotTest, TestTeachModeSmoke) {
   EXPECT_NO_THROW(robot_.start_sys());
   std::this_thread::sleep_for(std::chrono::seconds(1));
   EXPECT_EQ(5, robot_.get_robot_state());
-  EXPECT_NO_THROW(robot_.teach_mode());
+  EXPECT_NO_THROW(robot_.start_teach_mode());
   std::this_thread::sleep_for(std::chrono::seconds(1));
   EXPECT_EQ(11, robot_.get_robot_state());
   EXPECT_NO_THROW(robot_.end_teach_mode());
@@ -166,7 +166,8 @@ TEST_F(RobotTest, TestMovejSmoke) {
   EXPECT_NO_THROW(robot_.start_sys());
   std::this_thread::sleep_for(std::chrono::seconds(1));
   const auto motion_id =
-      robot_.movej({0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, 1.0, 0.5, 0.0, 0.0);
+      robot_.move_joint({0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, 1.0, 0.5, 0.0,
+                        0.0);
   EXPECT_GE(motion_id, 0);
 }
 
@@ -174,14 +175,15 @@ TEST_F(RobotTest, TestMovelSmoke) {
   EXPECT_NO_THROW(robot_.start_sys());
   std::this_thread::sleep_for(std::chrono::seconds(1));
   const auto motion_id =
-      robot_.movel({0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, 1.0, 0.5, 0.0, 0.0);
+      robot_.move_linear({0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, 1.0, 0.5, 0.0,
+                         0.0);
   EXPECT_GE(motion_id, 0);
 }
 
 TEST_F(RobotTest, TestMovejCartesianSmoke) {
   EXPECT_NO_THROW(robot_.start_sys());
   std::this_thread::sleep_for(std::chrono::seconds(1));
-  const auto motion_id = robot_.movej(
+  const auto motion_id = robot_.move_joint(
       {{"x", -0.296},
        {"y", -0.295},
        {"z", 0.285},
@@ -195,7 +197,7 @@ TEST_F(RobotTest, TestMovejCartesianSmoke) {
 TEST_F(RobotTest, TestMovelCartesianSmoke) {
   EXPECT_NO_THROW(robot_.start_sys());
   std::this_thread::sleep_for(std::chrono::seconds(1));
-  const auto motion_id = robot_.movel(
+  const auto motion_id = robot_.move_linear(
       {{"x", -0.306},
        {"y", -0.295},
        {"z", 0.285},
@@ -210,22 +212,23 @@ TEST_F(RobotTest, TestTowardjSmoke) {
   EXPECT_NO_THROW(robot_.start_sys());
   std::this_thread::sleep_for(std::chrono::seconds(1));
   const auto motion_id =
-      robot_.towardj({0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, 1.0, 0.5, 0.0, 0.0);
+      robot_.toward_joint({0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, 1.0, 0.5, 0.0,
+                          0.0);
   EXPECT_GE(motion_id, 0);
 }
 
 TEST_F(RobotTest, TestSpeedjSmoke) {
   EXPECT_NO_THROW(robot_.start_sys());
   std::this_thread::sleep_for(std::chrono::seconds(1));
-  const auto motion_id = robot_.speedj(1.0, {0.0, 0.0, 0.0, 0.0, 0.0, 0.0},
-                                       0.1);
+  const auto motion_id =
+      robot_.speed_joint(1.0, {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, 0.1);
   EXPECT_GE(motion_id, 0);
 }
 
 TEST_F(RobotTest, TestSpeedlSmoke) {
   EXPECT_NO_THROW(robot_.start_sys());
   std::this_thread::sleep_for(std::chrono::seconds(1));
-  const auto motion_id = robot_.speedl(
+  const auto motion_id = robot_.speed_linear(
       1.0,
       {{"x", 0.0}, {"y", 0.0}, {"z", 0.0}, {"rx", 0.0}, {"ry", 0.0},
        {"rz", 0.0}},
@@ -246,11 +249,11 @@ TEST_F(RobotTest, TestMovePvatSmoke) {
 TEST_F(RobotTest, TestMovecSmoke) {
   EXPECT_NO_THROW(robot_.start_sys());
   std::this_thread::sleep_for(std::chrono::seconds(1));
-  EXPECT_NO_THROW(robot_.movej(
+  EXPECT_NO_THROW(robot_.move_joint(
       {13.0 / 180.0 * M_PI, -52.0 / 180.0 * M_PI, 86.0 / 180.0 * M_PI,
        8.0 / 180.0 * M_PI, -59.0 / 180.0 * M_PI, -11.0 / 180.0 * M_PI},
       1.0, 0.5, 0.0, 0.0));
-  const auto motion_id = robot_.movec(
+  const auto motion_id = robot_.move_circular(
       {3.0 / 180.0 * M_PI, -48.0 / 180.0 * M_PI, 78.0 / 180.0 * M_PI,
        9.0 / 180.0 * M_PI, -67.0 / 180.0 * M_PI, -3.0 / 180.0 * M_PI},
       {-28.0 / 180.0 * M_PI, -59.0 / 180.0 * M_PI, 96.0 / 180.0 * M_PI,
@@ -262,12 +265,12 @@ TEST_F(RobotTest, TestMovecSmoke) {
 TEST_F(RobotTest, TestMovecCartesianSmoke) {
   EXPECT_NO_THROW(robot_.start_sys());
   std::this_thread::sleep_for(std::chrono::seconds(1));
-  EXPECT_NO_THROW(robot_.movej(
+  EXPECT_NO_THROW(robot_.move_joint(
       {13.0 / 180.0 * M_PI, -52.0 / 180.0 * M_PI, 86.0 / 180.0 * M_PI,
        8.0 / 180.0 * M_PI, -59.0 / 180.0 * M_PI, -11.0 / 180.0 * M_PI},
       1.0, 0.5, 0.0, 0.0));
   EXPECT_NO_THROW(robot_.wait_move());
-  const auto motion_id = robot_.movec(
+  const auto motion_id = robot_.move_circular(
       {{"x", -0.282541},
        {"y", -0.168246},
        {"z", 0.265824},
@@ -287,7 +290,7 @@ TEST_F(RobotTest, TestMovecCartesianSmoke) {
 TEST_F(RobotTest, TestMotionTrackingSmoke) {
   EXPECT_NO_THROW(robot_.start_sys());
   std::this_thread::sleep_for(std::chrono::seconds(1));
-  const auto motion_id = robot_.movej(
+  const auto motion_id = robot_.move_joint(
       {0.0, -60.0 / 180.0 * M_PI, 80.0 / 180.0 * M_PI, -10.0 / 180.0 * M_PI,
        -60.0 / 180.0 * M_PI, 0.0},
       1.0, 0.5, 0.0, 0.0);
@@ -322,14 +325,14 @@ TEST_F(RobotTest, TestMove) {
     joint_positions[3] = 0.0;
     joint_positions[4] = 0.0;
     joint_positions[5] = 0.0;
-    robot_.movej(joint_positions, 1.0, 0.5, 0.0, 0.0);
+    robot_.move_joint(joint_positions, 1.0, 0.5, 0.0, 0.0);
     joint_positions[0] = 0.0;
     joint_positions[1] = -60.0 / 180.0 * M_PI;
     joint_positions[2] = 80.0 / 180.0 * M_PI;
     joint_positions[3] = -10.0 / 180.0 * M_PI;
     joint_positions[4] = -60.0 / 180.0 * M_PI;
     joint_positions[5] = 0.0;
-    robot_.movej(joint_positions, 1.0, 0.5, 0.0, 0.0);
+    robot_.move_joint(joint_positions, 1.0, 0.5, 0.0, 0.0);
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
     EXPECT_EQ(7, robot_.get_robot_state());
     robot_.wait_move();
@@ -350,13 +353,13 @@ TEST_F(RobotTest, TestMove) {
     EXPECT_NEAR(jp[5], joint_positions[5], 1e-3);
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
     EXPECT_EQ(5, robot_.get_robot_state());
-    robot_.movej({{"x", -0.296},
-                  {"y", -0.295},
-                  {"z", 0.285},
-                  {"rx", 60.0 / 180.0 * M_PI},
-                  {"ry", -5.0 / 180.0 * M_PI},
-                  {"rz", 81.0 / 180.0 * M_PI}},
-                 3.0, 1.0, 0.0, 0.0);
+    robot_.move_joint({{"x", -0.296},
+                       {"y", -0.295},
+                       {"z", 0.285},
+                       {"rx", 60.0 / 180.0 * M_PI},
+                       {"ry", -5.0 / 180.0 * M_PI},
+                       {"rz", 81.0 / 180.0 * M_PI}},
+                      3.0, 1.0, 0.0, 0.0);
     // std::this_thread::sleep_for(std::chrono::milliseconds(100));
     EXPECT_EQ(7, robot_.get_robot_state());
     robot_.wait_move(0);
@@ -373,7 +376,7 @@ TEST_F(RobotTest, TestMove) {
     joint_positions[3] = -10.0 / 180.0 * M_PI;
     joint_positions[4] = -60.0 / 180.0 * M_PI;
     joint_positions[5] = 0.0;
-    robot_.movel(joint_positions, 0.3, 1.0, 0.0, 0.0);
+    robot_.move_linear(joint_positions, 0.3, 1.0, 0.0, 0.0);
     // std::this_thread::sleep_for(std::chrono::milliseconds(100));
     // EXPECT_EQ(7, robot_.get_robot_mode());
     robot_.wait_move();
@@ -384,13 +387,13 @@ TEST_F(RobotTest, TestMove) {
     EXPECT_NEAR(jp[3], joint_positions[3], 1e-3);
     EXPECT_NEAR(jp[4], joint_positions[4], 1e-3);
     EXPECT_NEAR(jp[5], joint_positions[5], 1e-3);
-    robot_.movel({{"x", -0.306},
-                  {"y", -0.295},
-                  {"z", 0.285},
-                  {"rx", 60.0 / 180.0 * M_PI},
-                  {"ry", -5.0 / 180.0 * M_PI},
-                  {"rz", 81.0 / 180.0 * M_PI}},
-                 1.0, 0.5, 0.0, 0.0);
+    robot_.move_linear({{"x", -0.306},
+                        {"y", -0.295},
+                        {"z", 0.285},
+                        {"rx", 60.0 / 180.0 * M_PI},
+                        {"ry", -5.0 / 180.0 * M_PI},
+                        {"rz", 81.0 / 180.0 * M_PI}},
+                       1.0, 0.5, 0.0, 0.0);
     // std::this_thread::sleep_for(std::chrono::milliseconds(100));
     EXPECT_EQ(7, robot_.get_robot_state());
     robot_.wait_move();
@@ -403,11 +406,11 @@ TEST_F(RobotTest, TestMove) {
     EXPECT_NEAR(tcp["rz"], 81.0 / 180.0 * M_PI, 1e-2);
     std::this_thread::sleep_for(std::chrono::milliseconds(200));
     EXPECT_EQ(5, robot_.get_robot_state());
-    robot_.movej(
+    robot_.move_joint(
         {13.0 / 180.0 * M_PI, -52.0 / 180.0 * M_PI, 86.0 / 180.0 * M_PI,
          8.0 / 180.0 * M_PI, -59.0 / 180.0 * M_PI, -11.0 / 180.0 * M_PI},
         1.0, 0.5, 0.0, 0.0);
-    robot_.movec(
+    robot_.move_circular(
         {3.0 / 180.0 * M_PI, -48.0 / 180.0 * M_PI, 78.0 / 180.0 * M_PI,
          9.0 / 180.0 * M_PI, -67.0 / 180.0 * M_PI, -3.0 / 180.0 * M_PI},
         {-28 / 180.0 * M_PI, -59.0 / 180.0 * M_PI, 96.0 / 180.0 * M_PI,
@@ -426,23 +429,23 @@ TEST_F(RobotTest, TestMove) {
     EXPECT_NEAR(joint_positions[5], 16.0 / 180.0 * M_PI, 1e-3);
     auto fk_resp = robot_.kinematics_forward(joint_positions);
 
-    robot_.movej(
+    robot_.move_joint(
         {13.0 / 180.0 * M_PI, -52.0 / 180.0 * M_PI, 86.0 / 180.0 * M_PI,
          8.0 / 180.0 * M_PI, -59.0 / 180.0 * M_PI, -11.0 / 180.0 * M_PI},
         1.0, 0.5, 0.0, 0.0);
-    robot_.movec({{"x", -0.282541},
-                  {"y", -0.168246},
-                  {"z", 0.265824},
-                  {"rx", 1.27256},
-                  {"ry", -0.206353},
-                  {"rz", 0.937445}},
-                 {{"x", -0.255832},
-                  {"y", 0.00270435},
-                  {"z", 0.266642},
-                  {"rz", 1.27293},
-                  {"ry", -0.20805},
-                  {"rx", 0.94485}},
-                 0.0, 1.0, 0.5, 0.0, 0.0);
+    robot_.move_circular({{"x", -0.282541},
+                          {"y", -0.168246},
+                          {"z", 0.265824},
+                          {"rx", 1.27256},
+                          {"ry", -0.206353},
+                          {"rz", 0.937445}},
+                         {{"x", -0.255832},
+                          {"y", 0.00270435},
+                          {"z", 0.266642},
+                          {"rz", 1.27293},
+                          {"ry", -0.20805},
+                          {"rx", 0.94485}},
+                         0.0, 1.0, 0.5, 0.0, 0.0);
     robot_.wait_move();
     joint_positions = robot_.get_target_joint_positions();
     ASSERT_EQ(6, joint_positions.size());
@@ -462,21 +465,22 @@ TEST_F(RobotTest, TestMove) {
     // kinematics_forward: -0.282541, -0.168246, 0.265824, 1.27256, -0.206353,
     // 0.937445 kinematics_forward: -0.255832, 0.00270435, 0.266642, 1.27293,
     // -0.20805, 0.94485
-    robot_.speedj(1.0, {0.5, 0.0, 0.0, 0.0, 0.0, 0.0}, 0.0);
+    robot_.speed_joint(1.0, {0.5, 0.0, 0.0, 0.0, 0.0, 0.0}, 0.0);
     std::this_thread::sleep_for(std::chrono::seconds(2));
     robot_.stop_move();
-    robot_.speedl(1.0,
-                  {{"x", 0.0},
-                   {"y", 0.0},
-                   {"z", 0.1},
-                   {"rx", 0.0},
-                   {"ry", 0.0},
-                   {"rz", 0.0}},
-                  0.0);
+    robot_.speed_linear(1.0,
+                        {{"x", 0.0},
+                         {"y", 0.0},
+                         {"z", 0.1},
+                         {"rx", 0.0},
+                         {"ry", 0.0},
+                         {"rz", 0.0}},
+                        0.0);
     std::this_thread::sleep_for(std::chrono::seconds(2));
     robot_.stop_move();
 
-    robot_.towardj({0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, 1.0, 1.0, 0.0, 0.0);
+    robot_.toward_joint({0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, 1.0, 1.0, 0.0,
+                        0.0);
     robot_.wait_move();
     joint_positions.clear();
     joint_positions = robot_.get_target_joint_positions();

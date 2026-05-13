@@ -153,18 +153,24 @@ void Robot::stop() { impl_->stop(); }
 
 void Robot::estop() { impl_->estop(); }
 
-void Robot::teach_mode() { impl_->start_teach_mode(); }
+void Robot::start_teach_mode() { impl_->start_teach_mode(); }
+
+void Robot::teach_mode() { start_teach_mode(); }
 
 void Robot::end_teach_mode() { impl_->end_teach_mode(); }
 
-void Robot::pause() { impl_->pause_move(); }
+void Robot::pause_move() { impl_->pause_move(); }
 
-void Robot::resume() { impl_->resume_move(); }
+void Robot::pause() { pause_move(); }
+
+void Robot::resume_move() { impl_->resume_move(); }
+
+void Robot::resume() { resume_move(); }
 
 void Robot::reboot() { impl_->reboot(); }
 
-int Robot::movej(const std::vector<double> &joint_positions, double a, double v,
-                 double t, double r) {
+int Robot::move_joint(const std::vector<double> &joint_positions, double a,
+                      double v, double t, double r) {
   protos_json::motion_proto::MoveRequest move_req;
   move_req.pose.kind = 1;
   move_req.pose.joint.joint = joint_positions;
@@ -172,54 +178,64 @@ int Robot::movej(const std::vector<double> &joint_positions, double a, double v,
   move_req.param.velocity = v;
   move_req.param.time = t;
   move_req.param.radius = r;
+  const auto resp = impl_->move_joint(move_req);
+  return resp.id;
+}
+
+int Robot::movej(const std::vector<double> &joint_positions, double a, double v,
+                 double t, double r) {
+  return move_joint(joint_positions, a, v, t, r);
+}
+
+int Robot::move_joint(const CartesianPose &cart_pose, double a, double v,
+                      double t, double r) {
+  protos_json::motion_proto::CartesianMoveRequest move_req;
+  move_req.pose.kind = 0;
+  move_req.param.acc = a;
+  move_req.param.velocity = v;
+  move_req.param.time = t;
+  move_req.param.radius = r;
+  if (cart_pose.find("x") != cart_pose.end()) {
+    move_req.pose.cart.position.x = cart_pose.at("x");
+  } else {
+    return -1;
+  }
+  if (cart_pose.find("y") != cart_pose.end()) {
+    move_req.pose.cart.position.y = cart_pose.at("y");
+  } else {
+    return -1;
+  }
+  if (cart_pose.find("z") != cart_pose.end()) {
+    move_req.pose.cart.position.z = cart_pose.at("z");
+  } else {
+    return -1;
+  }
+  if (cart_pose.find("rx") != cart_pose.end()) {
+    move_req.pose.cart.rotation.euler_zyx.x = cart_pose.at("rx");
+  } else {
+    return -1;
+  }
+  if (cart_pose.find("ry") != cart_pose.end()) {
+    move_req.pose.cart.rotation.euler_zyx.y = cart_pose.at("ry");
+  } else {
+    return -1;
+  }
+  if (cart_pose.find("rz") != cart_pose.end()) {
+    move_req.pose.cart.rotation.euler_zyx.z = cart_pose.at("rz");
+  } else {
+    return -1;
+  }
   const auto resp = impl_->move_joint(move_req);
   return resp.id;
 }
 
 int Robot::movej(const CartesianPose &cart_pose, double a, double v, double t,
                  double r) {
-  protos_json::motion_proto::CartesianMoveRequest move_req;
-  move_req.pose.kind = 0;
-  move_req.param.acc = a;
-  move_req.param.velocity = v;
-  move_req.param.time = t;
-  move_req.param.radius = r;
-  if (cart_pose.find("x") != cart_pose.end()) {
-    move_req.pose.cart.position.x = cart_pose.at("x");
-  } else {
-    return -1;
-  }
-  if (cart_pose.find("y") != cart_pose.end()) {
-    move_req.pose.cart.position.y = cart_pose.at("y");
-  } else {
-    return -1;
-  }
-  if (cart_pose.find("z") != cart_pose.end()) {
-    move_req.pose.cart.position.z = cart_pose.at("z");
-  } else {
-    return -1;
-  }
-  if (cart_pose.find("rx") != cart_pose.end()) {
-    move_req.pose.cart.rotation.euler_zyx.x = cart_pose.at("rx");
-  } else {
-    return -1;
-  }
-  if (cart_pose.find("ry") != cart_pose.end()) {
-    move_req.pose.cart.rotation.euler_zyx.y = cart_pose.at("ry");
-  } else {
-    return -1;
-  }
-  if (cart_pose.find("rz") != cart_pose.end()) {
-    move_req.pose.cart.rotation.euler_zyx.z = cart_pose.at("rz");
-  } else {
-    return -1;
-  }
-  const auto resp = impl_->move_joint(move_req);
-  return resp.id;
+  return move_joint(cart_pose, a, v, t, r);
 }
 
-int Robot::movel(const std::vector<double> &joint_positions, double a, double v,
-                 double t, double r) {
+int Robot::move_linear(const std::vector<double> &joint_positions, double a,
+                       double v, double t, double r) {
   protos_json::motion_proto::MoveRequest move_req;
   move_req.pose.kind = 1;
   move_req.pose.joint.joint = joint_positions;
@@ -231,8 +247,13 @@ int Robot::movel(const std::vector<double> &joint_positions, double a, double v,
   return resp.id;
 }
 
-int Robot::movel(const CartesianPose &cart_pose, double a, double v, double t,
-                 double r) {
+int Robot::movel(const std::vector<double> &joint_positions, double a, double v,
+                 double t, double r) {
+  return move_linear(joint_positions, a, v, t, r);
+}
+
+int Robot::move_linear(const CartesianPose &cart_pose, double a, double v,
+                       double t, double r) {
   protos_json::motion_proto::CartesianMoveRequest move_req;
   move_req.pose.kind = 0;
   move_req.param.acc = a;
@@ -272,9 +293,15 @@ int Robot::movel(const CartesianPose &cart_pose, double a, double v, double t,
   const auto resp = impl_->move_linear(move_req);
   return resp.id;
 }
-int Robot::movec(const std::vector<double> &joint_via,
-                 const std::vector<double> &joint, double rad, double a,
-                 double v, double t, double r) {
+
+int Robot::movel(const CartesianPose &cart_pose, double a, double v, double t,
+                 double r) {
+  return move_linear(cart_pose, a, v, t, r);
+}
+
+int Robot::move_circular(const std::vector<double> &joint_via,
+                         const std::vector<double> &joint, double rad,
+                         double a, double v, double t, double r) {
   protos_json::motion_proto::MoveCircularRequest move_req;
   move_req.param.acc = a;
   move_req.param.velocity = v;
@@ -289,8 +316,15 @@ int Robot::movec(const std::vector<double> &joint_via,
   return resp.id;
 }
 
-int Robot::movec(const CartesianPose &cart_via, const CartesianPose &cart,
-                 double rad, double a, double v, double t, double r) {
+int Robot::movec(const std::vector<double> &joint_via,
+                 const std::vector<double> &joint, double rad, double a,
+                 double v, double t, double r) {
+  return move_circular(joint_via, joint, rad, a, v, t, r);
+}
+
+int Robot::move_circular(const CartesianPose &cart_via,
+                         const CartesianPose &cart, double rad, double a,
+                         double v, double t, double r) {
   protos_json::motion_proto::CartesianMoveCircularRequest move_req;
   move_req.param.acc = a;
   move_req.param.velocity = v;
@@ -363,7 +397,12 @@ int Robot::movec(const CartesianPose &cart_via, const CartesianPose &cart,
   return resp.id;
 }
 
-int Robot::speedj(double a, const std::vector<double> &v, double t) {
+int Robot::movec(const CartesianPose &cart_via, const CartesianPose &cart,
+                 double rad, double a, double v, double t, double r) {
+  return move_circular(cart_via, cart, rad, a, v, t, r);
+}
+
+int Robot::speed_joint(double a, const std::vector<double> &v, double t) {
   protos_json::motion_proto::SpeedJointRequest req;
   req.param.acc = a;
   req.param.time = t;
@@ -372,8 +411,12 @@ int Robot::speedj(double a, const std::vector<double> &v, double t) {
   return resp.id;
 }
 
-int Robot::speedl(double a, const CartesianPose &v, double t,
-                  const CartesianPose &reference) {
+int Robot::speedj(double a, const std::vector<double> &v, double t) {
+  return speed_joint(a, v, t);
+}
+
+int Robot::speed_linear(double a, const CartesianPose &v, double t,
+                        const CartesianPose &reference) {
   protos_json::motion_proto::SpeedLinearRequest req;
   req.param.acc = a;
   req.param.time = t;
@@ -444,8 +487,13 @@ int Robot::speedl(double a, const CartesianPose &v, double t,
   return resp.id;
 }
 
-int Robot::towardj(const std::vector<double> &joint_positions, double a,
-                   double v, double t, double r) {
+int Robot::speedl(double a, const CartesianPose &v, double t,
+                  const CartesianPose &reference) {
+  return speed_linear(a, v, t, reference);
+}
+
+int Robot::toward_joint(const std::vector<double> &joint_positions, double a,
+                        double v, double t, double r) {
   protos_json::motion_proto::MoveRequest move_req;
   move_req.pose.kind = 1;
   move_req.pose.joint.joint = joint_positions;
@@ -455,6 +503,11 @@ int Robot::towardj(const std::vector<double> &joint_positions, double a,
   move_req.param.radius = r;
   const auto resp = impl_->toward_joint(move_req);
   return resp.id;
+}
+
+int Robot::towardj(const std::vector<double> &joint_positions, double a,
+                   double v, double t, double r) {
+  return toward_joint(joint_positions, a, v, t, r);
 }
 
 void Robot::move_pvat(std::vector<double> p, std::vector<double> v,
