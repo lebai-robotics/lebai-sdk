@@ -148,6 +148,25 @@ std::string Robot::hello(const std::string &data) {
   return impl_->hello(req).data;
 }
 
+void Robot::set_auto(int name, bool value) {
+  if (name < 1 || name > 3) {
+    throw std::invalid_argument("auto config name must be 1, 2, or 3");
+  }
+  protos_json::auto_proto::SetAutoRequest req;
+  req.name = static_cast<protos_json::auto_proto::AutoCfg>(name - 1);
+  req.value = value;
+  impl_->set_auto(req);
+}
+
+bool Robot::get_auto(int name) {
+  if (name < 1 || name > 3) {
+    throw std::invalid_argument("auto config name must be 1, 2, or 3");
+  }
+  protos_json::auto_proto::GetAutoRequest req;
+  req.name = static_cast<protos_json::auto_proto::AutoCfg>(name - 1);
+  return impl_->get_auto(req).value;
+}
+
 bool Robot::is_network_connected() { return impl_->isNetworkConnected(); }
 
 void Robot::start_sys() { impl_->start_sys(); }

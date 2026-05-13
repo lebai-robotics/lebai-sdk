@@ -59,6 +59,17 @@ protos_json::system_proto::HelloData Robot::RobotImpl::hello(
                                                                  {req});
 }
 
+void Robot::RobotImpl::set_auto(
+    const protos_json::auto_proto::SetAutoRequest &req) {
+  rpc_client_->Call<void>("set_auto", {req});
+}
+
+protos_json::auto_proto::GetAutoResponse Robot::RobotImpl::get_auto(
+    const protos_json::auto_proto::GetAutoRequest &req) {
+  return rpc_client_->Call<protos_json::auto_proto::GetAutoResponse>(
+      "get_auto", {req});
+}
+
 int Robot::RobotImpl::start_sys() {
   rpc_client_->Call<void>("start_sys", {});
   return 0;

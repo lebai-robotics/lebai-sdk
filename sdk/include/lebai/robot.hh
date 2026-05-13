@@ -214,6 +214,16 @@ class Robot {
   std::string hello(const std::string &data);
 
   /**
+   * @brief 设置自动配置项，name 取值与 SDK2 保持一致: 1, 2, 3.
+   */
+  void set_auto(int name, bool value);
+
+  /**
+   * @brief 获取自动配置项，name 取值与 SDK2 保持一致: 1, 2, 3.
+   */
+  bool get_auto(int name);
+
+  /**
    * @brief
    * 返回是否和机械臂的网络连接正常，如果网络连接异常，调用和机械臂交互的接口会抛出异常std::runtime_error。
    * @note 不建议使用，直接catch接口调用获取网络异常。

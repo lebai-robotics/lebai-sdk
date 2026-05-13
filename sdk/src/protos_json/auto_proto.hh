@@ -17,8 +17,15 @@ struct GetAutoRequest {
 
 struct GetAutoResponse {
   bool value{};
-  NLOHMANN_DEFINE_TYPE_INTRUSIVE(GetAutoResponse, value)
 };
+
+inline void to_json(nlohmann::json &json, const GetAutoResponse &response) {
+  json = nlohmann::json{{"value", response.value}};
+}
+
+inline void from_json(const nlohmann::json &json, GetAutoResponse &response) {
+  response.value = json.value("value", false);
+}
 
 struct SetAutoRequest {
   AutoCfg name{};

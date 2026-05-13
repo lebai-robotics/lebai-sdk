@@ -49,6 +49,13 @@ TEST(JsonAutoProtoTest, SetAutoRequestSerializesToExpectedFields) {
   EXPECT_TRUE(json.contains("name"));
 }
 
+TEST(JsonAutoProtoTest, GetAutoResponseDefaultsMissingValueToFalse) {
+  const auto parsed =
+      nlohmann::json::object().get<protos_json::auto_proto::GetAutoResponse>();
+
+  EXPECT_FALSE(parsed.value);
+}
+
 TEST(JsonSystemProtoTest, HelloDataRoundTripsThroughJson) {
   protos_json::system_proto::HelloData hello;
   hello.data = "world";

@@ -18,6 +18,7 @@
 
 #include <lebai/robot.hh>
 #include "http_jsonrpc_connector.hh"
+#include "protos_json/auto_proto.hh"
 #include "protos_json/claw_proto.hh"
 #include "protos_json/control_proto.hh"
 #include "protos_json/db_proto.hh"
@@ -47,6 +48,9 @@ class Robot::RobotImpl {
                                     const std::string &params);
   protos_json::system_proto::HelloData hello(
       const protos_json::system_proto::HelloData &req);
+  void set_auto(const protos_json::auto_proto::SetAutoRequest &req);
+  protos_json::auto_proto::GetAutoResponse get_auto(
+      const protos_json::auto_proto::GetAutoRequest &req);
   bool isNetworkConnected();
   int start_sys();
   int stop_sys();
