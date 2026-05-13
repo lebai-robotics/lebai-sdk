@@ -839,15 +839,13 @@ modbus::GetRegistersResponse Robot::RobotImpl::readHoldingRegisters(
   return resp;
 }
 
-void Robot::RobotImpl::setSerialBaudRateRequest(
-    const serial::SetSerialBaudRateRequest &req) {
-  json_rpc_connector_->CallRpc("set_serial_baud_rate", req.ToJSONString(),
-                               nullptr);
+void Robot::RobotImpl::set_serial_baud_rate(
+    const protos_json::serial_proto::SetSerialBaudRateRequest &req) {
+  rpc_client_->Call<void>("set_serial_baud_rate", {req});
 }
-void Robot::RobotImpl::setSerialParityRequest(
-    const serial::SetSerialParityRequest &req) {
-  json_rpc_connector_->CallRpc("set_serial_parity", req.ToJSONString(),
-                               nullptr);
+void Robot::RobotImpl::set_serial_parity(
+    const protos_json::serial_proto::SetSerialParityRequest &req) {
+  rpc_client_->Call<void>("set_serial_parity", {req});
 }
 void Robot::RobotImpl::set_item(
     const protos_json::storage_proto::Item &req) {

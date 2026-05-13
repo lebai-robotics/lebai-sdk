@@ -22,6 +22,7 @@
 #include "protos_json/file_proto.hh"
 #include "protos_json/kinematic_proto.hh"
 #include "protos_json/motion_proto.hh"
+#include "protos_json/serial_proto.hh"
 #include "protos_json/storage_proto.hh"
 #include "protos_json/system_proto.hh"
 
@@ -204,6 +205,19 @@ TEST(JsonFileProtoTest, LoadFileListParsesControllerPayload) {
   ASSERT_EQ(parsed.files.size(), 1U);
   EXPECT_EQ(parsed.files.front().name, "codex_file_smoke.txt");
   EXPECT_FALSE(parsed.files.front().is_dir);
+}
+
+TEST(JsonSerialProtoTest, SerialRequestsSerializeExpectedFields) {
+  protos_json::serial_proto::SetSerialBaudRateRequest baud;
+  baud.device = "ttyS0";
+  baud.baud_rate = 115200;
+  EXPECT_EQ(nlohmann::json(baud).at("device"), "ttyS0");
+  EXPECT_EQ(nlohmann::json(baud).at("baud_rate"), 115200);
+
+  protos_json::serial_proto::SetSerialParityRequest parity;
+  parity.device = "ttyS0";
+  parity.parity = 2;
+  EXPECT_EQ(nlohmann::json(parity).at("parity"), 2);
 }
 
 int main(int argc, char** argv) {

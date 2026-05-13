@@ -46,6 +46,7 @@
 #include "protos_json/motion_proto.hh"
 #include "protos_json/posture_proto.hh"
 #include "protos_json/signal_proto.hh"
+#include "protos_json/serial_proto.hh"
 #include "protos_json/storage_proto.hh"
 #include "protos_json/system_proto.hh"
 #include "rpc_client.hh"
@@ -186,8 +187,10 @@ class Robot::RobotImpl {
       const modbus::GetRegistersRequest &req);
   modbus::GetRegistersResponse readHoldingRegisters(
       const modbus::GetRegistersRequest &req);
-  void setSerialBaudRateRequest(const serial::SetSerialBaudRateRequest &req);
-  void setSerialParityRequest(const serial::SetSerialParityRequest &req);
+  void set_serial_baud_rate(
+      const protos_json::serial_proto::SetSerialBaudRateRequest &req);
+  void set_serial_parity(
+      const protos_json::serial_proto::SetSerialParityRequest &req);
   void set_item(const protos_json::storage_proto::Item &req);
   storage::Item get_item(const protos_json::storage_proto::ItemIndex &req);
   storage::Items get_items(

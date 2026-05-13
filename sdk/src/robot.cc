@@ -1601,17 +1601,17 @@ std::vector<unsigned int> Robot::read_input_registers(std::string device,
 }
 
 void Robot::set_serial_baud_rate(std::string device, unsigned int baud_rate) {
-  serial::SetSerialBaudRateRequest req;
-  req.set_device(device);
-  req.set_baud_rate(baud_rate);
-  impl_->setSerialBaudRateRequest(req);
+  protos_json::serial_proto::SetSerialBaudRateRequest req;
+  req.device = device;
+  req.baud_rate = baud_rate;
+  impl_->set_serial_baud_rate(req);
 }
 
 void Robot::set_serial_parity(std::string device, unsigned int parity) {
-  serial::SetSerialParityRequest req;
-  req.set_device(device);
-  req.set_parity(static_cast<serial::Parity>(parity));
-  impl_->setSerialParityRequest(req);
+  protos_json::serial_proto::SetSerialParityRequest req;
+  req.device = device;
+  req.parity = parity;
+  impl_->set_serial_parity(req);
 }
 
 void Robot::set_item(StorageItem item) {
