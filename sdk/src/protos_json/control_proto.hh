@@ -67,6 +67,50 @@ struct TaskIndex {
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(TaskIndex, id)
 };
 
+struct StartTaskRequest {
+  std::string name;
+  bool is_parallel{};
+  unsigned int loop_to{1};
+  std::string dir;
+  unsigned int kind{};
+  std::vector<std::string> params;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(StartTaskRequest, name, is_parallel, loop_to,
+                                 dir, kind, params)
+};
+
+struct TaskStdout {
+  unsigned int id{};
+  bool done{};
+  std::string stdout_text;
+};
+
+inline void from_json(const nlohmann::json& json, TaskStdout& stdout_data) {
+  json.at("id").get_to(stdout_data.id);
+  json.at("done").get_to(stdout_data.done);
+  if (json.contains("stdout")) {
+    json.at("stdout").get_to(stdout_data.stdout_text);
+  }
+}
+
+inline void to_json(nlohmann::json& json, const TaskStdout& stdout_data) {
+  json = nlohmann::json{{"id", stdout_data.id},
+                        {"done", stdout_data.done},
+                        {"stdout", stdout_data.stdout_text}};
+}
+
+struct PauseRequest {
+  unsigned int id{};
+  unsigned long time{};
+  bool wait{};
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(PauseRequest, id, time, wait)
+};
+
+struct HookResponse {
+  bool success{};
+  std::string error;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(HookResponse, success, error)
+};
+
 struct Task {
   unsigned int id{};
   std::string block_id;

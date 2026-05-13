@@ -987,21 +987,23 @@ unsigned int Robot::start_task(const std::string &name,
                                const std::vector<std::string> &params,
                                const std::string &dir, bool is_parallel,
                                unsigned int loop_to) {
-  control::StartTaskRequest req;
-  req.set_name(name);
-  req.set_is_parallel(is_parallel);
-  req.set_loop_to(loop_to);
-  req.set_dir(dir);
-  req.set_params(params);
-  control::TaskIndex resp = impl_->scene(req);
+  protos_json::control_proto::StartTaskRequest req;
+  req.name = name;
+  req.is_parallel = is_parallel;
+  req.loop_to = loop_to;
+  req.dir = dir;
+  req.kind = static_cast<unsigned int>(control::TaskKind::LUA);
+  req.params = params;
+  control::TaskIndex resp = impl_->start_task(req);
   return resp.id();
 }
 unsigned int Robot::start_task(const std::string &name) {
-  control::StartTaskRequest req;
-  req.set_name(name);
-  req.set_is_parallel(false);
-  req.set_loop_to(1);
-  control::TaskIndex resp = impl_->scene(req);
+  protos_json::control_proto::StartTaskRequest req;
+  req.name = name;
+  req.is_parallel = false;
+  req.loop_to = 1;
+  req.kind = static_cast<unsigned int>(control::TaskKind::LUA);
+  control::TaskIndex resp = impl_->start_task(req);
   return resp.id();
 }
 std::vector<unsigned int> Robot::get_task_list() {
@@ -1009,39 +1011,39 @@ std::vector<unsigned int> Robot::get_task_list() {
   return resp.ids();
 }
 std::string Robot::wait_task(unsigned int id) {
-  control::TaskIndex task_index;
-  task_index.set_id(id);
-  control::TaskStdout resp = impl_->waitTask(task_index);
+  protos_json::control_proto::TaskIndex task_index;
+  task_index.id = id;
+  control::TaskStdout resp = impl_->wait_task(task_index);
   return resp.get_stdout();
 }
 void Robot::pause_task(unsigned int id) {
-  control::PauseRequest req;
-  req.set_id(id);
-  req.set_time(0);
-  req.set_wait(false);
-  impl_->pauseTask(req);
+  protos_json::control_proto::PauseRequest req;
+  req.id = id;
+  req.time = 0;
+  req.wait = false;
+  impl_->pause_task(req);
 }
 void Robot::pause_task(unsigned int id, unsigned long time, bool wait) {
-  control::PauseRequest req;
-  req.set_id(id);
-  req.set_time(time);
-  req.set_wait(wait);
-  impl_->pauseTask(req);
+  protos_json::control_proto::PauseRequest req;
+  req.id = id;
+  req.time = time;
+  req.wait = wait;
+  impl_->pause_task(req);
 }
 void Robot::resume_task(unsigned int id) {
-  control::TaskIndex req;
-  req.set_id(id);
-  impl_->resumeTask(req);
+  protos_json::control_proto::TaskIndex req;
+  req.id = id;
+  impl_->resume_task(req);
 }
 void Robot::cancel_task(unsigned int id) {
-  control::TaskIndex req;
-  req.set_id(id);
-  impl_->cancelTask(req);
+  protos_json::control_proto::TaskIndex req;
+  req.id = id;
+  impl_->cancel_task(req);
 }
 unsigned int Robot::exec_hook(unsigned int id) {
-  control::Exec req;
-  req.set_id(id);
-  control::HookResponse resp = impl_->execHook(req);
+  protos_json::control_proto::TaskIndex req;
+  req.id = id;
+  control::HookResponse resp = impl_->exec_hook(req);
   if (!resp.success()) {
     return 0;
   }

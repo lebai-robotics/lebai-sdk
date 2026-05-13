@@ -474,12 +474,13 @@ void Robot::RobotImpl::add_signal(
   rpc_client_->Call<void>("add_signal", {req});
 }
 
-control::TaskIndex Robot::RobotImpl::scene(
-    const control::StartTaskRequest &req) {
-  std::string resp;
-  json_rpc_connector_->CallRpc("start_task", req.ToJSONString(), &resp);
+control::TaskIndex Robot::RobotImpl::start_task(
+    const protos_json::control_proto::StartTaskRequest &req) {
+  const auto response =
+      rpc_client_->Call<protos_json::control_proto::TaskIndex>("start_task",
+                                                               {req});
   control::TaskIndex start_task_resp;
-  start_task_resp.FromJSONString(resp);
+  start_task_resp.set_id(response.id);
   return start_task_resp;
 }
 
@@ -492,28 +493,38 @@ control::TaskIds Robot::RobotImpl::load_task_list() {
   return list_resp;
 }
 
-control::TaskStdout Robot::RobotImpl::waitTask(const control::TaskIndex &req) {
-  std::string resp;
-  json_rpc_connector_->CallRpc("wait_task", req.ToJSONString(), &resp);
+control::TaskStdout Robot::RobotImpl::wait_task(
+    const protos_json::control_proto::TaskIndex &req) {
+  const auto response =
+      rpc_client_->Call<protos_json::control_proto::TaskStdout>("wait_task",
+                                                                {req});
   control::TaskStdout wait_task_resp;
-  wait_task_resp.FromJSONString(resp);
+  wait_task_resp.set_id(response.id);
+  wait_task_resp.set_done(response.done);
+  wait_task_resp.set_stdout(response.stdout_text);
   return wait_task_resp;
 }
 
-void Robot::RobotImpl::pauseTask(const control::PauseRequest &req) {
-  json_rpc_connector_->CallRpc("pause_task", req.ToJSONString(), nullptr);
+void Robot::RobotImpl::pause_task(
+    const protos_json::control_proto::PauseRequest &req) {
+  rpc_client_->Call<void>("pause_task", {req});
 }
-void Robot::RobotImpl::resumeTask(const control::TaskIndex &req) {
-  json_rpc_connector_->CallRpc("resume_task", req.ToJSONString(), nullptr);
+void Robot::RobotImpl::resume_task(
+    const protos_json::control_proto::TaskIndex &req) {
+  rpc_client_->Call<void>("resume_task", {req});
 }
-void Robot::RobotImpl::cancelTask(const control::TaskIndex &req) {
-  json_rpc_connector_->CallRpc("cancel_task", req.ToJSONString(), nullptr);
+void Robot::RobotImpl::cancel_task(
+    const protos_json::control_proto::TaskIndex &req) {
+  rpc_client_->Call<void>("cancel_task", {req});
 }
-control::HookResponse Robot::RobotImpl::execHook(const control::Exec &req) {
-  std::string resp;
-  json_rpc_connector_->CallRpc("exec_hook", req.ToJSONString(), &resp);
+control::HookResponse Robot::RobotImpl::exec_hook(
+    const protos_json::control_proto::TaskIndex &req) {
+  const auto response =
+      rpc_client_->Call<protos_json::control_proto::HookResponse>("exec_hook",
+                                                                  {req});
   control::HookResponse hook_resp;
-  hook_resp.FromJSONString(resp);
+  hook_resp.set_success(response.success);
+  hook_resp.set_error(response.error);
   return hook_resp;
 }
 control::Task Robot::RobotImpl::load_task(

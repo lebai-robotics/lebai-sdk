@@ -17,6 +17,7 @@
 #include <nlohmann/json.hpp>
 
 #include "protos_json/auto_proto.hh"
+#include "protos_json/control_proto.hh"
 #include "protos_json/db_proto.hh"
 #include "protos_json/dynamic_proto.hh"
 #include "protos_json/file_proto.hh"
@@ -85,6 +86,32 @@ TEST(JsonSystemProtoTest, EstopReasonParsesControllerPayload) {
       json.get<protos_json::system_proto::GetEstopReasonResponse>();
 
   EXPECT_EQ(parsed.reason, protos_json::system_proto::EstopReason::NONE);
+}
+
+TEST(JsonControlProtoTest, StartTaskRequestSerializesExpectedFields) {
+  protos_json::control_proto::StartTaskRequest req;
+  req.name = "demo";
+  req.is_parallel = false;
+  req.loop_to = 1;
+  req.dir = "";
+  req.kind = 0;
+  req.params = {"a", "b"};
+
+  const nlohmann::json json = req;
+
+  EXPECT_EQ(json.at("name"), "demo");
+  EXPECT_EQ(json.at("kind"), 0);
+  ASSERT_EQ(json.at("params").size(), 2U);
+}
+
+TEST(JsonControlProtoTest, TaskStdoutParsesControllerPayload) {
+  const auto json =
+      nlohmann::json::parse(R"({"id":1,"done":true,"stdout":"ok"})");
+  const auto parsed = json.get<protos_json::control_proto::TaskStdout>();
+
+  EXPECT_EQ(parsed.id, 1U);
+  EXPECT_TRUE(parsed.done);
+  EXPECT_EQ(parsed.stdout_text, "ok");
 }
 
 TEST(JsonSystemProtoTest, PhyDataParsesControllerPayload) {
