@@ -38,6 +38,7 @@
 #include "protos_json/control_proto.hh"
 #include "protos_json/db_proto.hh"
 #include "protos_json/dynamic_proto.hh"
+#include "protos_json/file_proto.hh"
 #include "protos_json/io_proto.hh"
 #include "protos_json/kin_factor_proto.hh"
 #include "protos_json/kinematic_proto.hh"
@@ -150,10 +151,11 @@ class Robot::RobotImpl {
       const protos_json::kinematic_proto::GetPoseTransRequest &req);
   posture::CartesianPose get_pose_inverse(
       const protos_json::kinematic_proto::PoseRequest &req);
-  void saveFile(const file::SaveFileRequest &req);
-  void renameFile(const file::RenameFileRequest &req);
-  file::File loadFile(const file::FileIndex &req);
-  file::LoadFileListResponse loadFileList(const file::LoadFileListRequest &req);
+  void save_file(const protos_json::file_proto::SaveFileRequest &req);
+  void rename_file(const protos_json::file_proto::RenameFileRequest &req);
+  file::File load_file(const protos_json::file_proto::FileIndex &req);
+  file::LoadFileListResponse load_file_list(
+      const protos_json::file_proto::LoadFileListRequest &req);
   void zip(const file::ZipRequest &req);
   void unzip(const file::UnzipRequest &req);
   file::LoadZipListResponse loadZipList(const file::LoadZipListRequest &req);

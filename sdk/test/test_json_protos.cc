@@ -19,6 +19,7 @@
 #include "protos_json/auto_proto.hh"
 #include "protos_json/db_proto.hh"
 #include "protos_json/dynamic_proto.hh"
+#include "protos_json/file_proto.hh"
 #include "protos_json/kinematic_proto.hh"
 #include "protos_json/motion_proto.hh"
 #include "protos_json/storage_proto.hh"
@@ -192,6 +193,17 @@ TEST(JsonStorageProtoTest, ItemsParsesControllerPayload) {
   ASSERT_EQ(parsed.items.size(), 1U);
   EXPECT_EQ(parsed.items.front().key, "codex_storage_smoke");
   EXPECT_EQ(parsed.items.front().value, "ok");
+}
+
+TEST(JsonFileProtoTest, LoadFileListParsesControllerPayload) {
+  const auto json = nlohmann::json::parse(R"({
+    "files":[{"name":"codex_file_smoke.txt","is_dir":false}]
+  })");
+  const auto parsed = json.get<protos_json::file_proto::LoadFileListResponse>();
+
+  ASSERT_EQ(parsed.files.size(), 1U);
+  EXPECT_EQ(parsed.files.front().name, "codex_file_smoke.txt");
+  EXPECT_FALSE(parsed.files.front().is_dir);
 }
 
 int main(int argc, char** argv) {

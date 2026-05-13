@@ -596,6 +596,23 @@ TEST_F(RobotTest, TestStorageSmoke) {
   EXPECT_FALSE(items.empty());
 }
 
+TEST_F(RobotTest, TestFileSmoke) {
+  EXPECT_NO_THROW(
+      robot_.save_file("", "codex_file_smoke.txt", false, "hello"));
+
+  const auto loaded = robot_.load_file("", "codex_file_smoke.txt");
+  EXPECT_FALSE(std::get<0>(loaded));
+  EXPECT_EQ(std::get<1>(loaded), "hello");
+
+  const auto files = robot_.load_file_list("", "codex_file", ".txt");
+  EXPECT_FALSE(files.empty());
+
+  EXPECT_NO_THROW(robot_.rename_file("", "codex_file_smoke.txt", "",
+                                     "codex_file_smoke_renamed.txt"));
+  const auto renamed = robot_.load_file("", "codex_file_smoke_renamed.txt");
+  EXPECT_EQ(std::get<1>(renamed), "hello");
+}
+
 TEST_F(RobotTest, TestRobotics) {
   robot_.start_sys();
   std::vector<double> joint_positions(6);

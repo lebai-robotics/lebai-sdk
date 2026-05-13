@@ -618,28 +618,38 @@ posture::CartesianPose Robot::RobotImpl::get_pose_inverse(
   return resp;
 }
 
-void Robot::RobotImpl::saveFile(const file::SaveFileRequest &req) {
-  json_rpc_connector_->CallRpc("save_file", req.ToJSONString(), nullptr);
+void Robot::RobotImpl::save_file(
+    const protos_json::file_proto::SaveFileRequest &req) {
+  rpc_client_->Call<void>("save_file", {req});
 }
 
-void Robot::RobotImpl::renameFile(const file::RenameFileRequest &req) {
-  json_rpc_connector_->CallRpc("rename_file", req.ToJSONString(), nullptr);
+void Robot::RobotImpl::rename_file(
+    const protos_json::file_proto::RenameFileRequest &req) {
+  rpc_client_->Call<void>("rename_file", {req});
 }
 
-file::File Robot::RobotImpl::loadFile(const file::FileIndex &req) {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("load_file", req.ToJSONString(), &resp_str);
+file::File Robot::RobotImpl::load_file(
+    const protos_json::file_proto::FileIndex &req) {
+  const auto response =
+      rpc_client_->Call<protos_json::file_proto::File>("load_file", {req});
   file::File resp;
-  resp.FromJSONString(resp_str);
+  resp.set_is_dir(response.is_dir);
+  resp.set_data(response.data);
   return resp;
 }
 
-file::LoadFileListResponse Robot::RobotImpl::loadFileList(
-    const file::LoadFileListRequest &req) {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("load_file_list", req.ToJSONString(), &resp_str);
+file::LoadFileListResponse Robot::RobotImpl::load_file_list(
+    const protos_json::file_proto::LoadFileListRequest &req) {
+  const auto response =
+      rpc_client_->Call<protos_json::file_proto::LoadFileListResponse>(
+          "load_file_list", {req});
   file::LoadFileListResponse resp;
-  resp.FromJSONString(resp_str);
+  for (const auto &file : response.files) {
+    file::FileName file_name;
+    file_name.set_is_dir(file.is_dir);
+    file_name.set_name(file.name);
+    resp.mutable_files()->push_back(file_name);
+  }
   return resp;
 }
 

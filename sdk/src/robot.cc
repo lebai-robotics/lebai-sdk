@@ -15,6 +15,7 @@
  */
 
 #include <lebai/robot.hh>
+#include <websocketpp/base64/base64.hpp>
 #include <memory>
 #include "robot_impl.hh"
 #include "protos/motion.hh"
@@ -1308,14 +1309,12 @@ CartesianPose Robot::pose_inverse(const CartesianPose &in) {
 
 void Robot::save_file(const std::string &dir, const std::string &name,
                       bool is_dir, const std::string &data) {
-  file::SaveFileRequest req;
-  req.set_dir(dir);
-  req.set_name(name);
-  file::File file;
-  file.set_is_dir(is_dir);
-  file.set_data(data);
-  req.set_file(file);
-  impl_->saveFile(req);
+  protos_json::file_proto::SaveFileRequest req;
+  req.dir = dir;
+  req.name = name;
+  req.file.is_dir = is_dir;
+  req.file.data = websocketpp::base64_encode(data);
+  impl_->save_file(req);
 }
 /**
 void Robot::save_file(const std::string &dir,const std::string & name,file::File
@@ -1332,16 +1331,12 @@ file)
 void Robot::rename_file(const std::string &from_dir,
                         const std::string &from_name, const std::string &to_dir,
                         const std::string &to_name) {
-  file::RenameFileRequest req;
-  file::FileIndex from;
-  file::FileIndex to;
-  from.set_dir(from_dir);
-  from.set_name(from_name);
-  to.set_dir(to_dir);
-  to.set_name(to_name);
-  req.set_from(from);
-  req.set_to(to);
-  impl_->renameFile(req);
+  protos_json::file_proto::RenameFileRequest req;
+  req.from.dir = from_dir;
+  req.from.name = from_name;
+  req.to.dir = to_dir;
+  req.to.name = to_name;
+  impl_->rename_file(req);
 }
 /**
 void Robot::rename_file(file::FileIndex from,file::FileIndex to)
@@ -1354,22 +1349,22 @@ void Robot::rename_file(file::FileIndex from,file::FileIndex to)
 */
 std::tuple<bool, std::string> Robot::load_file(const std::string &dir,
                                                const std::string &name) {
-  file::FileIndex req;
-  req.set_dir(dir);
-  req.set_name(name);
-  file::File resp = impl_->loadFile(req);
+  protos_json::file_proto::FileIndex req;
+  req.dir = dir;
+  req.name = name;
+  file::File resp = impl_->load_file(req);
   std::tuple<bool, std::string> ret =
-      std::make_tuple(resp.is_dir(), resp.data());
+      std::make_tuple(resp.is_dir(), websocketpp::base64_decode(resp.data()));
   return ret;
 }
 std::vector<std::tuple<bool, std::string>> Robot::load_file_list(
     const std::string &dir, const std::string &prefix,
     const std::string &suffix) {
-  file::LoadFileListRequest req;
-  req.set_dir(dir);
-  req.set_prefix(prefix);
-  req.set_suffix(suffix);
-  file::LoadFileListResponse resp = impl_->loadFileList(req);
+  protos_json::file_proto::LoadFileListRequest req;
+  req.dir = dir;
+  req.prefix = prefix;
+  req.suffix = suffix;
+  file::LoadFileListResponse resp = impl_->load_file_list(req);
   std::vector<std::tuple<bool, std::string>> ret;
   for (auto f : resp.files()) {
     std::tuple<bool, std::string> temp = std::make_tuple(f.is_dir(), f.name());
