@@ -83,9 +83,9 @@ std::tuple<int, std::string> Robot::call(const std::string &method,
 }
 bool Robot::is_network_connected() { return impl_->isNetworkConnected(); }
 
-void Robot::start_sys() { impl_->startSys(); }
+void Robot::start_sys() { impl_->start_sys(); }
 
-void Robot::stop_sys() { impl_->stopSys(); }
+void Robot::stop_sys() { impl_->stop_sys(); }
 
 void Robot::powerdown() { impl_->powerdown(); }
 
@@ -93,323 +93,257 @@ void Robot::stop() { impl_->stop(); }
 
 void Robot::estop() { impl_->estop(); }
 
-void Robot::teach_mode() { impl_->teachMode(); }
+void Robot::teach_mode() { impl_->start_teach_mode(); }
 
-void Robot::end_teach_mode() { impl_->endTeachMode(); }
+void Robot::end_teach_mode() { impl_->end_teach_mode(); }
 
-void Robot::pause() { impl_->pause(); }
+void Robot::pause() { impl_->pause_move(); }
 
-void Robot::resume() { impl_->resume(); }
+void Robot::resume() { impl_->resume_move(); }
 
 void Robot::reboot() { impl_->reboot(); }
 
 int Robot::movej(const std::vector<double> &joint_positions, double a, double v,
                  double t, double r) {
-  motion::MoveRequest move_req;
-  move_req.mutable_param()->set_acc(a);
-  move_req.mutable_param()->set_velocity(v);
-  move_req.mutable_param()->set_time(t);
-  move_req.mutable_param()->set_radius(r);
-  motion::MotionIndex resp;
-  for (auto &&p : joint_positions) {
-    move_req.mutable_pose()->mutable_joint()->mutable_joint()->push_back(p);
-  }
-  resp = impl_->moveJoint(move_req);
+  protos_json::motion_proto::MoveRequest move_req;
+  move_req.pose.kind = 1;
+  move_req.pose.joint.joint = joint_positions;
+  move_req.param.acc = a;
+  move_req.param.velocity = v;
+  move_req.param.time = t;
+  move_req.param.radius = r;
+  motion::MotionIndex resp = impl_->move_joint(move_req);
   return resp.id();
 }
 
 int Robot::movej(const CartesianPose &cart_pose, double a, double v, double t,
                  double r) {
-  motion::MoveRequest move_req;
-  move_req.mutable_param()->set_acc(a);
-  move_req.mutable_param()->set_velocity(v);
-  move_req.mutable_param()->set_time(t);
-  move_req.mutable_param()->set_radius(r);
+  protos_json::motion_proto::CartesianMoveRequest move_req;
+  move_req.pose.kind = 0;
+  move_req.param.acc = a;
+  move_req.param.velocity = v;
+  move_req.param.time = t;
+  move_req.param.radius = r;
   if (cart_pose.find("x") != cart_pose.end()) {
-    move_req.mutable_pose()->mutable_cart()->mutable_position()->set_x(
-        cart_pose.at("x"));
+    move_req.pose.cart.position.x = cart_pose.at("x");
   } else {
     return -1;
   }
   if (cart_pose.find("y") != cart_pose.end()) {
-    move_req.mutable_pose()->mutable_cart()->mutable_position()->set_y(
-        cart_pose.at("y"));
+    move_req.pose.cart.position.y = cart_pose.at("y");
   } else {
     return -1;
   }
   if (cart_pose.find("z") != cart_pose.end()) {
-    move_req.mutable_pose()->mutable_cart()->mutable_position()->set_z(
-        cart_pose.at("z"));
+    move_req.pose.cart.position.z = cart_pose.at("z");
   } else {
     return -1;
   }
   if (cart_pose.find("rx") != cart_pose.end()) {
-    move_req.mutable_pose()
-        ->mutable_cart()
-        ->mutable_rotation()
-        ->mutable_euler_zyx()
-        ->set_x(cart_pose.at("rx"));
+    move_req.pose.cart.rotation.euler_zyx.x = cart_pose.at("rx");
   } else {
     return -1;
   }
   if (cart_pose.find("ry") != cart_pose.end()) {
-    move_req.mutable_pose()
-        ->mutable_cart()
-        ->mutable_rotation()
-        ->mutable_euler_zyx()
-        ->set_y(cart_pose.at("ry"));
+    move_req.pose.cart.rotation.euler_zyx.y = cart_pose.at("ry");
   } else {
     return -1;
   }
   if (cart_pose.find("rz") != cart_pose.end()) {
-    move_req.mutable_pose()
-        ->mutable_cart()
-        ->mutable_rotation()
-        ->mutable_euler_zyx()
-        ->set_z(cart_pose.at("rz"));
+    move_req.pose.cart.rotation.euler_zyx.z = cart_pose.at("rz");
   } else {
     return -1;
   }
-  motion::MotionIndex resp = impl_->moveJoint(move_req);
+  motion::MotionIndex resp = impl_->move_joint(move_req);
   return resp.id();
 }
 
 int Robot::movel(const std::vector<double> &joint_positions, double a, double v,
                  double t, double r) {
-  motion::MoveRequest move_req;
-  move_req.mutable_param()->set_acc(a);
-  move_req.mutable_param()->set_velocity(v);
-  move_req.mutable_param()->set_time(t);
-  move_req.mutable_param()->set_radius(r);
-  for (auto &&p : joint_positions) {
-    move_req.mutable_pose()->mutable_joint()->mutable_joint()->push_back(p);
-  }
-  motion::MotionIndex resp = impl_->moveLinear(move_req);
+  protos_json::motion_proto::MoveRequest move_req;
+  move_req.pose.kind = 1;
+  move_req.pose.joint.joint = joint_positions;
+  move_req.param.acc = a;
+  move_req.param.velocity = v;
+  move_req.param.time = t;
+  move_req.param.radius = r;
+  motion::MotionIndex resp = impl_->move_linear(move_req);
   return resp.id();
 }
 
 int Robot::movel(const CartesianPose &cart_pose, double a, double v, double t,
                  double r) {
-  motion::MoveRequest move_req;
-  move_req.mutable_param()->set_acc(a);
-  move_req.mutable_param()->set_velocity(v);
-  move_req.mutable_param()->set_time(t);
-  move_req.mutable_param()->set_radius(r);
+  protos_json::motion_proto::CartesianMoveRequest move_req;
+  move_req.pose.kind = 0;
+  move_req.param.acc = a;
+  move_req.param.velocity = v;
+  move_req.param.time = t;
+  move_req.param.radius = r;
   if (cart_pose.find("x") != cart_pose.end()) {
-    move_req.mutable_pose()->mutable_cart()->mutable_position()->set_x(
-        cart_pose.at("x"));
+    move_req.pose.cart.position.x = cart_pose.at("x");
   } else {
     return -1;
   }
   if (cart_pose.find("y") != cart_pose.end()) {
-    move_req.mutable_pose()->mutable_cart()->mutable_position()->set_y(
-        cart_pose.at("y"));
+    move_req.pose.cart.position.y = cart_pose.at("y");
   } else {
     return -1;
   }
   if (cart_pose.find("z") != cart_pose.end()) {
-    move_req.mutable_pose()->mutable_cart()->mutable_position()->set_z(
-        cart_pose.at("z"));
+    move_req.pose.cart.position.z = cart_pose.at("z");
   } else {
     return -1;
   }
   if (cart_pose.find("rx") != cart_pose.end()) {
-    move_req.mutable_pose()
-        ->mutable_cart()
-        ->mutable_rotation()
-        ->mutable_euler_zyx()
-        ->set_x(cart_pose.at("rx"));
+    move_req.pose.cart.rotation.euler_zyx.x = cart_pose.at("rx");
   } else {
     return -1;
   }
   if (cart_pose.find("ry") != cart_pose.end()) {
-    move_req.mutable_pose()
-        ->mutable_cart()
-        ->mutable_rotation()
-        ->mutable_euler_zyx()
-        ->set_y(cart_pose.at("ry"));
+    move_req.pose.cart.rotation.euler_zyx.y = cart_pose.at("ry");
   } else {
     return -1;
   }
   if (cart_pose.find("rz") != cart_pose.end()) {
-    move_req.mutable_pose()
-        ->mutable_cart()
-        ->mutable_rotation()
-        ->mutable_euler_zyx()
-        ->set_z(cart_pose.at("rz"));
+    move_req.pose.cart.rotation.euler_zyx.z = cart_pose.at("rz");
   } else {
     return -1;
   }
-  motion::MotionIndex resp = impl_->moveLinear(move_req);
+  motion::MotionIndex resp = impl_->move_linear(move_req);
   return resp.id();
 }
 int Robot::movec(const std::vector<double> &joint_via,
                  const std::vector<double> &joint, double rad, double a,
                  double v, double t, double r) {
-  motion::MovecRequest move_req;
-  move_req.mutable_param()->set_acc(a);
-  move_req.mutable_param()->set_velocity(v);
-  move_req.mutable_param()->set_time(t);
-  move_req.mutable_param()->set_radius(r);
-  move_req.set_rad(rad);
-  for (auto &&p : joint_via) {
-    move_req.mutable_pose_via()->mutable_joint()->mutable_joint()->push_back(p);
-  }
-  for (auto &&p : joint) {
-    move_req.mutable_pose()->mutable_joint()->mutable_joint()->push_back(p);
-  }
-  motion::MotionIndex resp = impl_->moveCircular(move_req);
+  protos_json::motion_proto::MoveCircularRequest move_req;
+  move_req.param.acc = a;
+  move_req.param.velocity = v;
+  move_req.param.time = t;
+  move_req.param.radius = r;
+  move_req.rad = rad;
+  move_req.pose_via.kind = 1;
+  move_req.pose_via.joint.joint = joint_via;
+  move_req.pose.kind = 1;
+  move_req.pose.joint.joint = joint;
+  motion::MotionIndex resp = impl_->move_circular(move_req);
   return resp.id();
 }
 
 int Robot::movec(const CartesianPose &cart_via, const CartesianPose &cart,
                  double rad, double a, double v, double t, double r) {
-  motion::MovecRequest move_req;
-  move_req.mutable_param()->set_acc(a);
-  move_req.mutable_param()->set_velocity(v);
-  move_req.mutable_param()->set_time(t);
-  move_req.mutable_param()->set_radius(r);
-  move_req.set_rad(rad);
+  protos_json::motion_proto::CartesianMoveCircularRequest move_req;
+  move_req.param.acc = a;
+  move_req.param.velocity = v;
+  move_req.param.time = t;
+  move_req.param.radius = r;
+  move_req.rad = rad;
+  move_req.pose_via.kind = 0;
+  move_req.pose.kind = 0;
   if (cart_via.find("x") != cart_via.end()) {
-    move_req.mutable_pose_via()->mutable_cart()->mutable_position()->set_x(
-        cart_via.at("x"));
+    move_req.pose_via.cart.position.x = cart_via.at("x");
   } else {
     return -1;
   }
   if (cart_via.find("y") != cart_via.end()) {
-    move_req.mutable_pose_via()->mutable_cart()->mutable_position()->set_y(
-        cart_via.at("y"));
+    move_req.pose_via.cart.position.y = cart_via.at("y");
   } else {
     return -1;
   }
   if (cart_via.find("z") != cart_via.end()) {
-    move_req.mutable_pose_via()->mutable_cart()->mutable_position()->set_z(
-        cart_via.at("z"));
+    move_req.pose_via.cart.position.z = cart_via.at("z");
   } else {
     return -1;
   }
   if (cart_via.find("rx") != cart_via.end()) {
-    move_req.mutable_pose_via()
-        ->mutable_cart()
-        ->mutable_rotation()
-        ->mutable_euler_zyx()
-        ->set_x(cart_via.at("rx"));
+    move_req.pose_via.cart.rotation.euler_zyx.x = cart_via.at("rx");
   } else {
     return -1;
   }
   if (cart_via.find("ry") != cart_via.end()) {
-    move_req.mutable_pose_via()
-        ->mutable_cart()
-        ->mutable_rotation()
-        ->mutable_euler_zyx()
-        ->set_y(cart_via.at("ry"));
+    move_req.pose_via.cart.rotation.euler_zyx.y = cart_via.at("ry");
   } else {
     return -1;
   }
   if (cart_via.find("rz") != cart_via.end()) {
-    move_req.mutable_pose_via()
-        ->mutable_cart()
-        ->mutable_rotation()
-        ->mutable_euler_zyx()
-        ->set_z(cart_via.at("rz"));
+    move_req.pose_via.cart.rotation.euler_zyx.z = cart_via.at("rz");
   } else {
     return -1;
   }
   if (cart.find("x") != cart.end()) {
-    move_req.mutable_pose()->mutable_cart()->mutable_position()->set_x(
-        cart.at("x"));
+    move_req.pose.cart.position.x = cart.at("x");
   } else {
     return -1;
   }
   if (cart.find("y") != cart.end()) {
-    move_req.mutable_pose()->mutable_cart()->mutable_position()->set_y(
-        cart.at("y"));
+    move_req.pose.cart.position.y = cart.at("y");
   } else {
     return -1;
   }
   if (cart.find("z") != cart.end()) {
-    move_req.mutable_pose()->mutable_cart()->mutable_position()->set_z(
-        cart.at("z"));
+    move_req.pose.cart.position.z = cart.at("z");
   } else {
     return -1;
   }
   if (cart.find("rx") != cart.end()) {
-    move_req.mutable_pose()
-        ->mutable_cart()
-        ->mutable_rotation()
-        ->mutable_euler_zyx()
-        ->set_x(cart.at("rx"));
+    move_req.pose.cart.rotation.euler_zyx.x = cart.at("rx");
   } else {
     return -1;
   }
   if (cart.find("ry") != cart.end()) {
-    move_req.mutable_pose()
-        ->mutable_cart()
-        ->mutable_rotation()
-        ->mutable_euler_zyx()
-        ->set_y(cart.at("ry"));
+    move_req.pose.cart.rotation.euler_zyx.y = cart.at("ry");
   } else {
     return -1;
   }
   if (cart.find("rz") != cart.end()) {
-    move_req.mutable_pose()
-        ->mutable_cart()
-        ->mutable_rotation()
-        ->mutable_euler_zyx()
-        ->set_z(cart.at("rz"));
+    move_req.pose.cart.rotation.euler_zyx.z = cart.at("rz");
   } else {
     return -1;
   }
-  motion::MotionIndex resp = impl_->moveCircular(move_req);
+  motion::MotionIndex resp = impl_->move_circular(move_req);
   return resp.id();
 }
 
 int Robot::speedj(double a, const std::vector<double> &v, double t) {
-  motion::SpeedJRequest req;
-  req.mutable_param()->set_acc(a);
-  req.mutable_param()->set_time(t);
-  for (auto &&p : v) {
-    req.mutable_speed()->mutable_joint()->push_back(p);
-  }
-  lebai::motion::MotionIndex resp = impl_->speedJoint(req);
+  protos_json::motion_proto::SpeedJointRequest req;
+  req.param.acc = a;
+  req.param.time = t;
+  req.speed.joint = v;
+  lebai::motion::MotionIndex resp = impl_->speed_joint(req);
   return resp.id();
 }
 
 int Robot::speedl(double a, const CartesianPose &v, double t,
                   const CartesianPose &reference) {
-  motion::SpeedLRequest req;
-  req.mutable_param()->set_acc(a);
-  req.mutable_param()->set_time(t);
+  protos_json::motion_proto::SpeedLinearRequest req;
+  req.param.acc = a;
+  req.param.time = t;
   if (v.find("x") != v.end()) {
-    req.mutable_speed()->mutable_position()->set_x(v.at("x"));
+    req.speed.position.x = v.at("x");
   } else {
     return -1;
   }
   if (v.find("y") != v.end()) {
-    req.mutable_speed()->mutable_position()->set_y(v.at("y"));
+    req.speed.position.y = v.at("y");
   } else {
     return -1;
   }
   if (v.find("z") != v.end()) {
-    req.mutable_speed()->mutable_position()->set_z(v.at("z"));
+    req.speed.position.z = v.at("z");
   } else {
     return -1;
   }
   if (v.find("rx") != v.end()) {
-    req.mutable_speed()->mutable_rotation()->mutable_euler_zyx()->set_x(
-        v.at("rx"));
+    req.speed.rotation.euler_zyx.x = v.at("rx");
   } else {
     return -1;
   }
   if (v.find("ry") != v.end()) {
-    req.mutable_speed()->mutable_rotation()->mutable_euler_zyx()->set_y(
-        v.at("ry"));
+    req.speed.rotation.euler_zyx.y = v.at("ry");
   } else {
     return -1;
   }
   if (v.find("rz") != v.end()) {
-    req.mutable_speed()->mutable_rotation()->mutable_euler_zyx()->set_z(
-        v.at("rz"));
+    req.speed.rotation.euler_zyx.z = v.at("rz");
   } else {
     return -1;
   }
@@ -432,96 +366,90 @@ int Robot::speedl(double a, const CartesianPose &v, double t,
   // } else {
   //   return -1;
   // }
-  req.mutable_frame()->set_position_kind(posture::CartesianFrame::Kind::CUSTOM);
-  req.mutable_frame()->set_rotation_kind(posture::CartesianFrame::Kind::CUSTOM);
+  req.frame.position_kind = posture::CartesianFrame::Kind::CUSTOM;
+  req.frame.rotation_kind = posture::CartesianFrame::Kind::CUSTOM;
 
   if (reference.find("x") != reference.end()) {
-    req.mutable_frame()->mutable_position()->set_x(reference.at("x"));
+    req.frame.position.x = reference.at("x");
   } else {
     return -1;
   }
   if (reference.find("y") != reference.end()) {
-    req.mutable_frame()->mutable_position()->set_y(reference.at("y"));
+    req.frame.position.y = reference.at("y");
   } else {
     return -1;
   }
   if (reference.find("z") != reference.end()) {
-    req.mutable_frame()->mutable_position()->set_z(reference.at("z"));
+    req.frame.position.z = reference.at("z");
   } else {
     return -1;
   }
   if (reference.find("rx") != reference.end()) {
-    req.mutable_frame()->mutable_rotation()->mutable_euler_zyx()->set_x(
-        reference.at("rx"));
+    req.frame.rotation.euler_zyx.x = reference.at("rx");
   } else {
     return -1;
   }
   if (reference.find("ry") != reference.end()) {
-    req.mutable_frame()->mutable_rotation()->mutable_euler_zyx()->set_y(
-        reference.at("ry"));
+    req.frame.rotation.euler_zyx.y = reference.at("ry");
   } else {
     return -1;
   }
   if (reference.find("rz") != reference.end()) {
-    req.mutable_frame()->mutable_rotation()->mutable_euler_zyx()->set_z(
-        reference.at("rz"));
+    req.frame.rotation.euler_zyx.z = reference.at("rz");
   } else {
     return -1;
   }
-  lebai::motion::MotionIndex resp = impl_->speedLinear(req);
+  lebai::motion::MotionIndex resp = impl_->speed_linear(req);
   return resp.id();
 }
 
 int Robot::towardj(const std::vector<double> &joint_positions, double a,
                    double v, double t, double r) {
-  motion::MoveRequest move_req;
-  move_req.mutable_param()->set_acc(a);
-  move_req.mutable_param()->set_velocity(v);
-  move_req.mutable_param()->set_time(t);
-  move_req.mutable_param()->set_radius(r);
-  for (auto &&p : joint_positions) {
-    move_req.mutable_pose()->mutable_joint()->mutable_joint()->push_back(p);
-  }
-  motion::MotionIndex resp = impl_->towardJoint(move_req);
+  protos_json::motion_proto::MoveRequest move_req;
+  move_req.pose.kind = 1;
+  move_req.pose.joint.joint = joint_positions;
+  move_req.param.acc = a;
+  move_req.param.velocity = v;
+  move_req.param.time = t;
+  move_req.param.radius = r;
+  motion::MotionIndex resp = impl_->toward_joint(move_req);
   return resp.id();
 }
 
 void Robot::move_pvat(std::vector<double> p, std::vector<double> v,
                       std::vector<double> a, double t) {
-  motion::MovePvatRequest req;
-  std::vector<motion::JointMove> joints;
+  protos_json::motion_proto::MovePvatRequest req;
   for (int i = 0; i < p.size(); i++) {
-    motion::JointMove joint;
-    joint.set_pose(p[i]);
-    joint.set_velocity(v[i]);
-    joint.set_acc(a[i]);
-    joints.push_back(joint);
+    protos_json::motion_proto::JointMove joint;
+    joint.pose = p[i];
+    joint.velocity = v[i];
+    joint.acc = a[i];
+    req.joints.push_back(joint);
   }
-  req.set_duration(t);
-  req.set_joints(joints);
-  impl_->movePvat(req);
+  req.duration = t;
+  impl_->move_pvat(req);
 }
 
 void Robot::wait_move(unsigned int id) {
   motion::MotionIndex req;
   req.set_id(id);
-  impl_->waitMove(req);
+  impl_->wait_move(req);
 }
 void Robot::wait_move() {
   motion::MotionIndex req;
   req.set_id(0);
-  impl_->waitMove(req);
+  impl_->wait_move(req);
 }
 
 unsigned int Robot::get_running_motion() {
-  motion::MotionIndex resp = impl_->getRunningMotion();
+  motion::MotionIndex resp = impl_->get_running_motion();
   return resp.id();
 }
 
 std::string Robot::get_motion_state(unsigned int id) {
   motion::MotionIndex req;
   req.set_id(id);
-  motion::GetMotionStateResponse resp = impl_->getMotionState(req);
+  motion::GetMotionStateResponse resp = impl_->get_motion_state(req);
   switch (resp.state()) {
     case motion::WAIT:
       return (std::string) "WAIT";
@@ -534,14 +462,26 @@ std::string Robot::get_motion_state(unsigned int id) {
   }
 }
 
-void Robot::stop_move() { impl_->stopMove(); }
+void Robot::stop_move() { impl_->stop_move(); }
 
-int Robot::get_robot_state() { return impl_->getRobotState(); }
+int Robot::get_robot_state() { return impl_->get_robot_state(); }
 
-int Robot::get_estop_reason() { return impl_->getEstopReason(); }
+int Robot::get_estop_reason() { return impl_->get_estop_reason(); }
+
+SystemInfoData Robot::get_system_info() {
+  const auto info = impl_->get_system_info();
+  SystemInfoData system_info;
+  system_info.name = info.name;
+  system_info.kernel_version = info.kernel_version;
+  system_info.os_version = info.os_version;
+  system_info.host_name = info.host_name;
+  system_info.used_memory = info.memory.used;
+  system_info.total_memory = info.memory.total;
+  return system_info;
+}
 
 PhysicalData Robot::get_phy_data() {
-  auto phy_data = impl_->getPhyData();
+  auto phy_data = impl_->get_phy_data();
   PhysicalData physical_data;
   physical_data.joint_temperature = phy_data.joint_temp();
   physical_data.joint_voltage = phy_data.joint_voltage();
@@ -550,7 +490,7 @@ PhysicalData Robot::get_phy_data() {
 }
 
 JointMotionData Robot::get_kin_data() {
-  auto kin_data = impl_->getKinData();
+  auto kin_data = impl_->get_kin_data();
   JointMotionData joint_motion_data;
   joint_motion_data.actual_joint_pose = kin_data.actual_joint_pose();
   joint_motion_data.actual_joint_speed = kin_data.actual_joint_speed();
@@ -569,37 +509,37 @@ JointMotionData Robot::get_kin_data() {
   return joint_motion_data;
 }
 
-bool Robot::is_disconnected() { return impl_->getRobotState() == 0; }
+bool Robot::is_disconnected() { return impl_->get_robot_state() == 0; }
 
-bool Robot::is_down() { return impl_->getRobotState() < 4; }
+bool Robot::is_down() { return impl_->get_robot_state() < 4; }
 
 std::vector<double> Robot::get_actual_joint_positions() {
   std::map<std::string, double> ret;
-  return *impl_->getKinData().mutable_actual_joint_pose();
+  return *impl_->get_kin_data().mutable_actual_joint_pose();
 }
 
 std::vector<double> Robot::get_target_joint_positions() {
   std::map<std::string, double> ret;
-  return *impl_->getKinData().mutable_target_joint_pose();
+  return *impl_->get_kin_data().mutable_target_joint_pose();
 }
 std::vector<double> Robot::get_actual_joint_speed() {
-  return *impl_->getKinData().mutable_actual_joint_speed();
+  return *impl_->get_kin_data().mutable_actual_joint_speed();
 }
 std::vector<double> Robot::get_target_joint_speed() {
-  return *impl_->getKinData().mutable_target_joint_speed();
+  return *impl_->get_kin_data().mutable_target_joint_speed();
 }
 
 CartesianPose Robot::get_actual_tcp_pose() {
-  auto pose = impl_->getKinData().actual_tcp_pose();
+  auto pose = impl_->get_kin_data().actual_tcp_pose();
   return convertToCartesianPose(pose);
 }
 CartesianPose Robot::get_target_tcp_pose() {
-  auto pose = impl_->getKinData().target_tcp_pose();
+  auto pose = impl_->get_kin_data().target_tcp_pose();
   return convertToCartesianPose(pose);
 }
 
 double Robot::get_joint_temp(unsigned int joint_index) {
-  auto data = impl_->getPhyData();
+  auto data = impl_->get_phy_data();
   joint_index -= 1;
   if (data.joint_temp().size() > joint_index) {
     return data.joint_temp()[joint_index];
@@ -608,209 +548,209 @@ double Robot::get_joint_temp(unsigned int joint_index) {
 }
 
 std::vector<double> Robot::get_actual_joint_torques() {
-  return impl_->getKinData().actual_joint_torque();
+  return impl_->get_kin_data().actual_joint_torque();
 }
 
 std::vector<double> Robot::get_target_joint_torques() {
-  return impl_->getKinData().target_joint_torque();
+  return impl_->get_kin_data().target_joint_torque();
 }
 
 void Robot::set_do(std::string device, unsigned int pin, unsigned int value) {
-  io::SetDoPinRequest req;
+  protos_json::io_proto::SetDoPinRequest req;
   if (device == "ROBOT") {
-    req.set_device(io::IoDevice::ROBOT);
+    req.device = protos_json::io_proto::IoDevice::ROBOT;
   } else if (device == "FLANGE") {
-    req.set_device(io::IoDevice::FLANGE);
+    req.device = protos_json::io_proto::IoDevice::FLANGE;
   } else if (device == "EXTRA") {
-    req.set_device(io::IoDevice::EXTRA);
+    req.device = protos_json::io_proto::IoDevice::EXTRA;
   }
-  req.set_pin(pin);
-  req.set_value(value);
-  impl_->setDO(req);
+  req.pin = pin;
+  req.value = value;
+  impl_->set_do(req);
 }
 
 unsigned int Robot::get_do(std::string device, unsigned int pin) {
-  io::GetDioPinRequest req;
+  protos_json::io_proto::GetDioPinRequest req;
 
   if (device == "ROBOT") {
-    req.set_device(io::IoDevice::ROBOT);
+    req.device = protos_json::io_proto::IoDevice::ROBOT;
   } else if (device == "FLANGE") {
-    req.set_device(io::IoDevice::FLANGE);
+    req.device = protos_json::io_proto::IoDevice::FLANGE;
   } else if (device == "EXTRA") {
-    req.set_device(io::IoDevice::EXTRA);
+    req.device = protos_json::io_proto::IoDevice::EXTRA;
   }
 
-  req.set_pin(pin);
-  io::GetDioPinResponse resp = impl_->getDO(req);
+  req.pin = pin;
+  io::GetDioPinResponse resp = impl_->get_do(req);
   return resp.value();
 }
 
 std::vector<unsigned int> Robot::get_dos(std::string device, unsigned int pin,
                                          unsigned int num) {
-  io::GetDioPinsRequest req;
+  protos_json::io_proto::GetDioPinsRequest req;
 
   if (device == "ROBOT") {
-    req.set_device(io::IoDevice::ROBOT);
+    req.device = protos_json::io_proto::IoDevice::ROBOT;
   } else if (device == "FLANGE") {
-    req.set_device(io::IoDevice::FLANGE);
+    req.device = protos_json::io_proto::IoDevice::FLANGE;
   } else if (device == "EXTRA") {
-    req.set_device(io::IoDevice::EXTRA);
+    req.device = protos_json::io_proto::IoDevice::EXTRA;
   }
 
-  req.set_pin(pin);
-  req.set_count(num);
-  io::GetDioPinsResponse resp = impl_->getDOS(req);
+  req.pin = pin;
+  req.count = num;
+  io::GetDioPinsResponse resp = impl_->get_dos(req);
   return resp.values();
 }
 
 unsigned int Robot::get_di(std::string device, unsigned int pin) {
-  io::GetDioPinRequest req;
+  protos_json::io_proto::GetDioPinRequest req;
   if (device == "ROBOT") {
-    req.set_device(io::IoDevice::ROBOT);
+    req.device = protos_json::io_proto::IoDevice::ROBOT;
   } else if (device == "FLANGE") {
-    req.set_device(io::IoDevice::FLANGE);
+    req.device = protos_json::io_proto::IoDevice::FLANGE;
   } else if (device == "EXTRA") {
-    req.set_device(io::IoDevice::EXTRA);
+    req.device = protos_json::io_proto::IoDevice::EXTRA;
   }
 
-  req.set_pin(pin);
-  io::GetDioPinResponse resp = impl_->getDI(req);
+  req.pin = pin;
+  io::GetDioPinResponse resp = impl_->get_di(req);
   return resp.value();
 }
 
 std::vector<unsigned int> Robot::get_dis(std::string device, unsigned int pin,
                                          unsigned int num) {
-  io::GetDioPinsRequest req;
+  protos_json::io_proto::GetDioPinsRequest req;
   if (device == "ROBOT") {
-    req.set_device(io::IoDevice::ROBOT);
+    req.device = protos_json::io_proto::IoDevice::ROBOT;
   } else if (device == "FLANGE") {
-    req.set_device(io::IoDevice::FLANGE);
+    req.device = protos_json::io_proto::IoDevice::FLANGE;
   } else if (device == "EXTRA") {
-    req.set_device(io::IoDevice::EXTRA);
+    req.device = protos_json::io_proto::IoDevice::EXTRA;
   }
-  req.set_pin(pin);
-  req.set_count(num);
-  io::GetDioPinsResponse resp = impl_->getDIS(req);
+  req.pin = pin;
+  req.count = num;
+  io::GetDioPinsResponse resp = impl_->get_dis(req);
   return resp.values();
 }
 
 void Robot::set_ao(std::string device, unsigned int pin, double value) {
-  io::SetAoPinRequest req;
+  protos_json::io_proto::SetAoPinRequest req;
   if (device == "ROBOT") {
-    req.set_device(io::IoDevice::ROBOT);
+    req.device = protos_json::io_proto::IoDevice::ROBOT;
   } else if (device == "FLANGE") {
-    req.set_device(io::IoDevice::FLANGE);
+    req.device = protos_json::io_proto::IoDevice::FLANGE;
   } else if (device == "EXTRA") {
-    req.set_device(io::IoDevice::EXTRA);
+    req.device = protos_json::io_proto::IoDevice::EXTRA;
   }
-  req.set_pin(pin);
-  req.set_value(value);
-  impl_->setAO(req);
+  req.pin = pin;
+  req.value = value;
+  impl_->set_ao(req);
 }
 
 double Robot::get_ao(std::string device, unsigned int pin) {
-  io::GetAioPinRequest req;
+  protos_json::io_proto::GetAioPinRequest req;
   if (device == "ROBOT") {
-    req.set_device(io::IoDevice::ROBOT);
+    req.device = protos_json::io_proto::IoDevice::ROBOT;
   } else if (device == "FLANGE") {
-    req.set_device(io::IoDevice::FLANGE);
+    req.device = protos_json::io_proto::IoDevice::FLANGE;
   } else if (device == "EXTRA") {
-    req.set_device(io::IoDevice::EXTRA);
+    req.device = protos_json::io_proto::IoDevice::EXTRA;
   }
-  req.set_pin(pin);
-  io::GetAioPinResponse resp = impl_->getAO(req);
+  req.pin = pin;
+  io::GetAioPinResponse resp = impl_->get_ao(req);
   return resp.value();
 }
 
 std::vector<double> Robot::get_aos(std::string device, unsigned int pin,
                                    unsigned int num) {
-  io::GetAioPinsRequest req;
+  protos_json::io_proto::GetAioPinsRequest req;
   if (device == "ROBOT") {
-    req.set_device(io::IoDevice::ROBOT);
+    req.device = protos_json::io_proto::IoDevice::ROBOT;
   } else if (device == "FLANGE") {
-    req.set_device(io::IoDevice::FLANGE);
+    req.device = protos_json::io_proto::IoDevice::FLANGE;
   } else if (device == "EXTRA") {
-    req.set_device(io::IoDevice::EXTRA);
+    req.device = protos_json::io_proto::IoDevice::EXTRA;
   }
-  req.set_pin(pin);
-  req.set_count(num);
-  io::GetAioPinsResponse resp = impl_->getAOS(req);
+  req.pin = pin;
+  req.count = num;
+  io::GetAioPinsResponse resp = impl_->get_aos(req);
   return resp.values();
 }
 
 double Robot::get_ai(std::string device, unsigned int pin) {
-  io::GetAioPinRequest req;
+  protos_json::io_proto::GetAioPinRequest req;
   if (device == "ROBOT") {
-    req.set_device(io::IoDevice::ROBOT);
+    req.device = protos_json::io_proto::IoDevice::ROBOT;
   } else if (device == "FLANGE") {
-    req.set_device(io::IoDevice::FLANGE);
+    req.device = protos_json::io_proto::IoDevice::FLANGE;
   } else if (device == "EXTRA") {
-    req.set_device(io::IoDevice::EXTRA);
+    req.device = protos_json::io_proto::IoDevice::EXTRA;
   }
-  req.set_pin(pin);
-  io::GetAioPinResponse resp = impl_->getAI(req);
+  req.pin = pin;
+  io::GetAioPinResponse resp = impl_->get_ai(req);
   return resp.value();
 }
 
 std::vector<double> Robot::get_ais(std::string device, unsigned int pin,
                                    unsigned int num) {
-  io::GetAioPinsRequest req;
+  protos_json::io_proto::GetAioPinsRequest req;
   if (device == "ROBOT") {
-    req.set_device(io::IoDevice::ROBOT);
+    req.device = protos_json::io_proto::IoDevice::ROBOT;
   } else if (device == "FLANGE") {
-    req.set_device(io::IoDevice::FLANGE);
+    req.device = protos_json::io_proto::IoDevice::FLANGE;
   } else if (device == "EXTRA") {
-    req.set_device(io::IoDevice::EXTRA);
+    req.device = protos_json::io_proto::IoDevice::EXTRA;
   }
-  req.set_pin(pin);
-  req.set_count(num);
-  io::GetAioPinsResponse resp = impl_->getAIS(req);
+  req.pin = pin;
+  req.count = num;
+  io::GetAioPinsResponse resp = impl_->get_ais(req);
   return resp.values();
 }
 void Robot::set_dio_mode(std::string device, unsigned int pin, bool value) {
-  io::SetDioModeRequest req;
+  protos_json::io_proto::SetDioModeRequest req;
   if (device == "ROBOT") {
-    req.set_device(io::IoDevice::ROBOT);
+    req.device = protos_json::io_proto::IoDevice::ROBOT;
   } else if (device == "FLANGE") {
-    req.set_device(io::IoDevice::FLANGE);
+    req.device = protos_json::io_proto::IoDevice::FLANGE;
   } else if (device == "EXTRA") {
-    req.set_device(io::IoDevice::EXTRA);
+    req.device = protos_json::io_proto::IoDevice::EXTRA;
   }
-  req.set_pin(pin);
-  req.set_value(value);
-  impl_->setDioMode(req);
+  req.pin = pin;
+  req.value = value;
+  impl_->set_dio_mode(req);
 }
 std::vector<bool> Robot::get_dios_mode(std::string device, unsigned int pin,
                                        unsigned int count) {
-  io::GetDiosModeRequest req;
+  protos_json::io_proto::GetDiosModeRequest req;
   if (device == "ROBOT") {
-    req.set_device(io::IoDevice::ROBOT);
+    req.device = protos_json::io_proto::IoDevice::ROBOT;
   } else if (device == "FLANGE") {
-    req.set_device(io::IoDevice::FLANGE);
+    req.device = protos_json::io_proto::IoDevice::FLANGE;
   } else if (device == "EXTRA") {
-    req.set_device(io::IoDevice::EXTRA);
+    req.device = protos_json::io_proto::IoDevice::EXTRA;
   }
-  req.set_pin(pin);
-  req.set_count(count);
-  io::GetDiosModeResponse resp = impl_->getDiosMode(req);
+  req.pin = pin;
+  req.count = count;
+  io::GetDiosModeResponse resp = impl_->get_dios_mode(req);
   return resp.values();
 }
 
 void Robot::init_claw(bool force_initilization) {
-  claw::InitClawRequest req;
-  req.set_force_initilization(force_initilization);
-  impl_->initClaw(req);
+  protos_json::claw_proto::InitClawRequest req;
+  req.force_initilization = force_initilization;
+  impl_->init_claw(req);
 }
 
 void Robot::set_claw(double force, double amplitude) {
-  claw::SetClawRequest req;
-  req.set_force(force);
-  req.set_amplitude(amplitude);
-  impl_->setClaw(req);
+  protos_json::claw_proto::SetClawRequest req;
+  req.force = force;
+  req.amplitude = amplitude;
+  impl_->set_claw(req);
 }
 
 ClawData Robot::get_claw_data() {
-  auto resp = impl_->getClaw();
+  auto resp = impl_->get_claw();
   ClawData claw_data;
   claw_data.force = resp.force();
   claw_data.amplitude = resp.amplitude();
@@ -918,7 +858,13 @@ void Robot::set_led(unsigned int mode, unsigned int speed,
     }
   }
   req.set_colors(_color);
-  impl_->setLed(req);
+  protos_json::led_proto::LedData typed_req;
+  typed_req.mode = static_cast<int>(req.mode());
+  typed_req.speed = static_cast<int>(req.speed());
+  for (const auto color_value : req.colors()) {
+    typed_req.colors.push_back(static_cast<int>(color_value));
+  }
+  impl_->set_led(typed_req);
 }
 
 void Robot::set_voice(unsigned int voice, unsigned int volume) {
@@ -991,7 +937,10 @@ void Robot::set_voice(unsigned int voice, unsigned int volume) {
     default:
       return;
   }
-  impl_->setVoice(req);
+  protos_json::led_proto::VoiceData typed_req;
+  typed_req.voice = static_cast<int>(req.voice());
+  typed_req.volume = static_cast<int>(req.volume());
+  impl_->set_voice(typed_req);
 }
 
 void Robot::set_fan(unsigned int status) {
@@ -1009,26 +958,28 @@ void Robot::set_fan(unsigned int status) {
     default:
       return;
   }
-  impl_->setFan(req);
+  protos_json::led_proto::FanData typed_req;
+  typed_req.fan = static_cast<int>(req.fan());
+  impl_->set_fan(typed_req);
 }
 
 void Robot::set_signal(unsigned int index, int value) {
-  signal::SetSignalRequest req;
-  req.set_key(index);
-  req.set_value(value);
-  impl_->setSignal(req);
+  protos_json::signal_proto::SetSignalRequest req;
+  req.key = index;
+  req.value = value;
+  impl_->set_signal(req);
 }
 int Robot::get_signal(unsigned int index) {
-  signal::GetSignalRequest req;
-  req.set_key(index);
-  signal::GetSignalResponse resp = impl_->getSignal(req);
+  protos_json::signal_proto::GetSignalRequest req;
+  req.key = index;
+  signal::GetSignalResponse resp = impl_->get_signal(req);
   return resp.value();
 }
 void Robot::add_signal(unsigned int index, int value) {
-  signal::SetSignalRequest req;
-  req.set_key(index);
-  req.set_value(value);
-  impl_->addSignal(req);
+  protos_json::signal_proto::SetSignalRequest req;
+  req.key = index;
+  req.value = value;
+  impl_->add_signal(req);
 }
 
 unsigned int Robot::start_task(const std::string &name,
@@ -1053,7 +1004,7 @@ unsigned int Robot::start_task(const std::string &name) {
   return resp.id();
 }
 std::vector<unsigned int> Robot::get_task_list() {
-  control::TaskIds resp = impl_->loadTaskList();
+  control::TaskIds resp = impl_->load_task_list();
   return resp.ids();
 }
 std::string Robot::wait_task(unsigned int id) {
@@ -1096,9 +1047,9 @@ unsigned int Robot::exec_hook(unsigned int id) {
   return atoi(resp.error().c_str());
 }
 std::string Robot::get_task_state(unsigned int id) {
-  control::TaskIndex req;
-  req.set_id(id);
-  control::Task resp = impl_->loadTask(req);
+  protos_json::control_proto::TaskIndex req;
+  req.id = id;
+  control::Task resp = impl_->load_task(req);
   switch (resp.state()) {
     case control::TaskState::NONE:
       return "NONE";
@@ -1129,7 +1080,7 @@ std::string Robot::get_task_state(unsigned int id) {
   }
 }
 std::string Robot::get_task_state() {
-  control::Task resp = impl_->loadTask();
+  control::Task resp = impl_->load_task();
   switch (resp.state()) {
     case control::TaskState::NONE:
       return "NONE";
@@ -1162,11 +1113,10 @@ std::string Robot::get_task_state() {
 
 KinematicsForwardResp Robot::kinematics_forward(
     const std::vector<double> &joint_positions) {
-  posture::PoseRequest req;
-  for (auto &&p : joint_positions) {
-    req.mutable_pose()->mutable_joint()->mutable_joint()->push_back(p);
-  }
-  auto resp = impl_->getForwardKin(req);
+  protos_json::kinematic_proto::PoseRequest req;
+  req.pose.kind = 1;
+  req.pose.joint.joint = joint_positions;
+  auto resp = impl_->get_forward_kin(req);
   KinematicsForwardResp kf_resp;
   kf_resp.pose["x"] = resp.position().x();
   kf_resp.pose["y"] = resp.position().y();
@@ -1181,7 +1131,8 @@ KinematicsForwardResp Robot::kinematics_forward(
 KinematicsInverseResp Robot::kinematics_inverse(
     const CartesianPose &pose,
     const std::vector<double> &joint_init_positions) {
-  posture::GetInverseKinRequest req;
+  protos_json::kinematic_proto::GetInverseKinRequest req;
+  req.pose.kind = 0;
   double x = 0.0;
   if (pose.find("x") != pose.end()) {
     x = pose.at("x");
@@ -1207,32 +1158,20 @@ KinematicsInverseResp Robot::kinematics_inverse(
     rz = pose.at("rz");
   }
 
-  req.mutable_pose()->mutable_cart()->mutable_position()->set_x(x);
-  req.mutable_pose()->mutable_cart()->mutable_position()->set_y(y);
-  req.mutable_pose()->mutable_cart()->mutable_position()->set_z(z);
-  req.mutable_pose()
-      ->mutable_cart()
-      ->mutable_rotation()
-      ->mutable_euler_zyx()
-      ->set_z(rz);
-  req.mutable_pose()
-      ->mutable_cart()
-      ->mutable_rotation()
-      ->mutable_euler_zyx()
-      ->set_y(ry);
-  req.mutable_pose()
-      ->mutable_cart()
-      ->mutable_rotation()
-      ->mutable_euler_zyx()
-      ->set_x(rx);
+  req.pose.cart.position.x = x;
+  req.pose.cart.position.y = y;
+  req.pose.cart.position.z = z;
+  req.pose.cart.rotation.euler_zyx.z = rz;
+  req.pose.cart.rotation.euler_zyx.y = ry;
+  req.pose.cart.rotation.euler_zyx.x = rx;
 
   for (auto &&p : joint_init_positions) {
-    req.mutable_refer()->mutable_joint()->push_back(p);
+    req.refer.joint.push_back(p);
   }
   // std::vector<double> joint_positions;
   KinematicsInverseResp ki_resp;
   try {
-    auto resp = impl_->getInverseKin(req);
+    auto resp = impl_->get_inverse_kin(req);
     ki_resp.joint_positions = resp.joint();
     ki_resp.ok = true;
   } catch (std::exception &e) {
@@ -1244,7 +1183,9 @@ KinematicsInverseResp Robot::kinematics_inverse(
 
 CartesianPose Robot::pose_times(const CartesianPose &a,
                                 const CartesianPose &b) {
-  posture::GetPoseTransRequest req;
+  protos_json::kinematic_proto::GetPoseTransRequest req;
+  req.from.kind = 0;
+  req.from_to.kind = 0;
   double x = 0.0;
   if (a.find("x") != a.end()) {
     x = a.at("x");
@@ -1270,24 +1211,12 @@ CartesianPose Robot::pose_times(const CartesianPose &a,
     rz = a.at("rz");
   }
 
-  req.mutable_from()->mutable_cart()->mutable_position()->set_x(x);
-  req.mutable_from()->mutable_cart()->mutable_position()->set_y(y);
-  req.mutable_from()->mutable_cart()->mutable_position()->set_z(z);
-  req.mutable_from()
-      ->mutable_cart()
-      ->mutable_rotation()
-      ->mutable_euler_zyx()
-      ->set_z(rz);
-  req.mutable_from()
-      ->mutable_cart()
-      ->mutable_rotation()
-      ->mutable_euler_zyx()
-      ->set_y(ry);
-  req.mutable_from()
-      ->mutable_cart()
-      ->mutable_rotation()
-      ->mutable_euler_zyx()
-      ->set_x(rx);
+  req.from.cart.position.x = x;
+  req.from.cart.position.y = y;
+  req.from.cart.position.z = z;
+  req.from.cart.rotation.euler_zyx.z = rz;
+  req.from.cart.rotation.euler_zyx.y = ry;
+  req.from.cart.rotation.euler_zyx.x = rx;
 
   x = 0.0;
   if (b.find("x") != b.end()) {
@@ -1314,26 +1243,14 @@ CartesianPose Robot::pose_times(const CartesianPose &a,
     rz = b.at("rz");
   }
 
-  req.mutable_from_to()->mutable_cart()->mutable_position()->set_x(x);
-  req.mutable_from_to()->mutable_cart()->mutable_position()->set_y(y);
-  req.mutable_from_to()->mutable_cart()->mutable_position()->set_z(z);
-  req.mutable_from_to()
-      ->mutable_cart()
-      ->mutable_rotation()
-      ->mutable_euler_zyx()
-      ->set_z(rz);
-  req.mutable_from_to()
-      ->mutable_cart()
-      ->mutable_rotation()
-      ->mutable_euler_zyx()
-      ->set_y(ry);
-  req.mutable_from_to()
-      ->mutable_cart()
-      ->mutable_rotation()
-      ->mutable_euler_zyx()
-      ->set_x(rx);
+  req.from_to.cart.position.x = x;
+  req.from_to.cart.position.y = y;
+  req.from_to.cart.position.z = z;
+  req.from_to.cart.rotation.euler_zyx.z = rz;
+  req.from_to.cart.rotation.euler_zyx.y = ry;
+  req.from_to.cart.rotation.euler_zyx.x = rx;
 
-  auto resp = impl_->getPoseTrans(req);
+  auto resp = impl_->get_pose_trans(req);
   CartesianPose pose;
   pose["x"] = resp.position().x();
   pose["y"] = resp.position().y();
@@ -1345,7 +1262,8 @@ CartesianPose Robot::pose_times(const CartesianPose &a,
 }
 
 CartesianPose Robot::pose_inverse(const CartesianPose &in) {
-  posture::PoseRequest req;
+  protos_json::kinematic_proto::PoseRequest req;
+  req.pose.kind = 0;
   double x = 0.0;
   if (in.find("x") != in.end()) {
     x = in.at("x");
@@ -1371,25 +1289,13 @@ CartesianPose Robot::pose_inverse(const CartesianPose &in) {
     rz = in.at("rz");
   }
 
-  req.mutable_pose()->mutable_cart()->mutable_position()->set_x(x);
-  req.mutable_pose()->mutable_cart()->mutable_position()->set_y(y);
-  req.mutable_pose()->mutable_cart()->mutable_position()->set_z(z);
-  req.mutable_pose()
-      ->mutable_cart()
-      ->mutable_rotation()
-      ->mutable_euler_zyx()
-      ->set_z(rz);
-  req.mutable_pose()
-      ->mutable_cart()
-      ->mutable_rotation()
-      ->mutable_euler_zyx()
-      ->set_y(ry);
-  req.mutable_pose()
-      ->mutable_cart()
-      ->mutable_rotation()
-      ->mutable_euler_zyx()
-      ->set_x(rx);
-  auto resp = impl_->getPoseInverse(req);
+  req.pose.cart.position.x = x;
+  req.pose.cart.position.y = y;
+  req.pose.cart.position.z = z;
+  req.pose.cart.rotation.euler_zyx.z = rz;
+  req.pose.cart.rotation.euler_zyx.y = ry;
+  req.pose.cart.rotation.euler_zyx.x = rx;
+  auto resp = impl_->get_pose_inverse(req);
   CartesianPose pose;
   pose["x"] = resp.position().x();
   pose["y"] = resp.position().y();
@@ -1472,32 +1378,28 @@ std::vector<std::tuple<bool, std::string>> Robot::load_file_list(
   return ret;
 }
 void Robot::set_payload(double mass, std::map<std::string, double> cog) {
-  dynamic::SetPayloadRequest req;
-  req.set_mass(mass);
-  posture::Position c;
-  c.set_x(cog.at("x"));
-  c.set_y(cog.at("y"));
-  c.set_z(cog.at("z"));
-  req.set_cog(c);
-  impl_->setPayload(req);
+  protos_json::dynamic_proto::SetPayloadRequest req;
+  req.mass = mass;
+  req.cog.x = cog.at("x");
+  req.cog.y = cog.at("y");
+  req.cog.z = cog.at("z");
+  impl_->set_payload(req);
 }
 void Robot::set_payload_mass(double mass) {
-  dynamic::SetMassRequest req;
-  req.set_mass(mass);
-  impl_->setPayload(req);
+  protos_json::dynamic_proto::SetMassRequest req;
+  req.mass = mass;
+  impl_->set_payload(req);
 }
 void Robot::set_payload_cog(std::map<std::string, double> cog) {
-  dynamic::SetCogRequest req;
-  posture::Position c;
-  c.set_x(cog.at("x"));
-  c.set_y(cog.at("y"));
-  c.set_z(cog.at("z"));
-  req.set_cog(c);
-  impl_->setPayload(req);
+  protos_json::dynamic_proto::SetCogRequest req;
+  req.cog.x = cog.at("x");
+  req.cog.y = cog.at("y");
+  req.cog.z = cog.at("z");
+  impl_->set_payload(req);
 }
 
 std::map<std::string, double> Robot::get_payload() {
-  dynamic::Payload resp = impl_->getPayload();
+  dynamic::Payload resp = impl_->get_payload();
   std::map<std::string, double> cog;
   cog["x"] = resp.cog().x();
   cog["y"] = resp.cog().y();
@@ -1507,15 +1409,15 @@ std::map<std::string, double> Robot::get_payload() {
 }
 
 void Robot::set_gravity(std::map<std::string, double> gravity) {
-  posture::Position req;
-  req.set_x(gravity.at("x"));
-  req.set_y(gravity.at("y"));
-  req.set_z(gravity.at("z"));
-  impl_->setGravity(req);
+  protos_json::posture_proto::Position req;
+  req.x = gravity.at("x");
+  req.y = gravity.at("y");
+  req.z = gravity.at("z");
+  impl_->set_gravity(req);
 }
 
 std::map<std::string, double> Robot::get_gravity() {
-  posture::Position resp = impl_->getGravity();
+  posture::Position resp = impl_->get_gravity();
   std::map<std::string, double> gravity;
   gravity["x"] = resp.x();
   gravity["y"] = resp.y();
@@ -1591,23 +1493,17 @@ CartesianLimitConfig Robot::get_cart_limit() {
 }
 
 void Robot::set_tcp(std::array<double, 6> tcp) {
-  posture::CartesianPose req;
-  posture::Position pos;
-  posture::Rotation rot;
-  pos.set_x(tcp[0]);
-  pos.set_y(tcp[1]);
-  pos.set_z(tcp[2]);
-  req.set_position(pos);
-  posture::Position p;
-  p.set_z(tcp[3]);
-  p.set_y(tcp[4]);
-  p.set_x(tcp[5]);
-  rot.set_euler_zyx(p);
-  req.set_rotation(rot);
-  impl_->setTcp(req);
+  protos_json::posture_proto::CartesianPose req;
+  req.position.x = tcp[0];
+  req.position.y = tcp[1];
+  req.position.z = tcp[2];
+  req.rotation.euler_zyx.z = tcp[3];
+  req.rotation.euler_zyx.y = tcp[4];
+  req.rotation.euler_zyx.x = tcp[5];
+  impl_->set_tcp(req);
 }
 std::array<double, 6> Robot::get_tcp() {
-  posture::CartesianPose resp = impl_->getTcp();
+  posture::CartesianPose resp = impl_->get_tcp();
   std::array<double, 6> ret;
   ret[0] = resp.position().x();
   ret[1] = resp.position().y();
@@ -1619,12 +1515,12 @@ std::array<double, 6> Robot::get_tcp() {
 }
 
 void Robot::set_velocity_factor(int factor) {
-  kinematic::KinFactor req;
-  req.set_factor(factor);
-  impl_->setKinFactor(req);
+  protos_json::kin_factor_proto::KinFactor req;
+  req.speed_factor = factor;
+  impl_->set_kin_factor(req);
 }
 int Robot::get_velocity_factor() {
-  kinematic::KinFactor resp = impl_->getKinFactor();
+  kinematic::KinFactor resp = impl_->get_kin_factor();
   return resp.factor();
 }
 CartesianPose Robot::load_tcp(std::string name, std::string dir) {

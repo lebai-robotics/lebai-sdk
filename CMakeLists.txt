@@ -132,7 +132,6 @@ endif()
 # Disable CTest targets
 set_property(GLOBAL PROPERTY CTEST_TARGETS_ADDED 1)
 include(CTest)
-include(cpp)
 
 # Fetch ModbusLib
 message(STATUS "Fetching ModbusLib...")
@@ -156,6 +155,42 @@ set_target_properties(modbus PROPERTIES
   EXCLUDE_FROM_ALL TRUE
 )
 set(BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS_SAVE})
+
+find_package(nlohmann_json QUIET)
+if(NOT nlohmann_json_FOUND)
+  message(STATUS "Fetching nlohmann-json...")
+  FetchContent_Declare(
+    nlohmann-json
+    GIT_REPOSITORY https://github.com/nlohmann/json.git
+    GIT_TAG v3.11.2)
+  FetchContent_MakeAvailable(nlohmann-json)
+endif()
+
+find_package(httplib QUIET)
+if(NOT httplib_FOUND)
+  message(STATUS "Fetching cpp-httplib...")
+  FetchContent_Declare(
+    cpp-httplib
+    GIT_REPOSITORY https://github.com/yhirose/cpp-httplib.git
+    GIT_TAG v0.20.0)
+  FetchContent_MakeAvailable(cpp-httplib)
+endif()
+
+find_package(jsonrpc-cpp QUIET)
+if(NOT jsonrpc-cpp_FOUND)
+  message(STATUS "Fetching json-rpc-cxx...")
+  FetchContent_Declare(
+    json-rpc-cxx
+    GIT_REPOSITORY https://github.com/jsonrpcx/json-rpc-cxx.git
+    GIT_TAG v0.3.2)
+  set(COMPILE_TESTS OFF CACHE BOOL "Disable json-rpc-cxx tests" FORCE)
+  set(COMPILE_EXAMPLES OFF CACHE BOOL "Disable json-rpc-cxx examples" FORCE)
+  FetchContent_MakeAvailable(json-rpc-cxx)
+  unset(COMPILE_TESTS CACHE)
+  unset(COMPILE_EXAMPLES CACHE)
+endif()
+
+include(cpp)
 
 if(WIN32
    AND (BUILD_DOTNET

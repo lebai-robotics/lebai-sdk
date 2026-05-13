@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This file is a quick build and verification guide for contributors and AI agents. It complements `README.md`, `doc/python.md`, `doc/dotnet.md`, and the CI workflows under `.github/workflows`.
+This file is a quick build and verification guide for contributors and AI agents. It complements `README.md`, `docs/python.md`, `docs/dotnet.md`, and the CI workflows under `.github/workflows`.
 
 ## Prerequisites
 
@@ -75,6 +75,13 @@ CTest names are:
 
 `TEST_ROBOT_IP` is compiled into the robot-facing tests; if not set, they default to `127.0.0.1`.
 
+### Local simulator endpoint
+
+For the local simulated L master controller, use host endpoint `127.0.0.1:3030`.
+The controller container may report an internal Docker IP such as `172.17.0.3`,
+but the useful SDK test target is the forwarded localhost port. Do not use
+`3031` for this simulator setup unless the container explicitly exposes it.
+
 ## Python Build
 
 ```bash
@@ -102,7 +109,7 @@ Notes:
 - generated projects live under `build/dotnet`
 - package projects are built and packed with the `dotnet` CLI
 - current configuration targets `net48` and `net8.0` when `USE_DOTNET_8=ON`
-- existing `doc/dotnet.md` says the supported path is Linux-first and Windows should be verified carefully
+- existing `docs/dotnet.md` says the supported path is Linux-first and Windows should be verified carefully
 
 ## Java Build
 

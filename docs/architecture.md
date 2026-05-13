@@ -96,7 +96,7 @@ Edit all of the following together:
 3. `sdk/src/robot.cc` for parameter-to-DTO conversion
 4. `sdk/src/robot_impl.hh` and `sdk/src/robot_impl.cc` for the JSON-RPC call
 
-Use `doc/develop.md` as the primary repo-specific reference for this workflow.
+Use `docs/develop.md` as the primary repo-specific reference for this workflow.
 
 ### Change transport behavior
 
@@ -115,12 +115,12 @@ Review:
 - `sdk/python/*.i`
 - `sdk/dotnet/*.i`
 - `sdk/java/*.i`
-- `doc/bindings.md`
+- `docs/bindings.md`
 
 Public API changes in C++ often require matching wrapper updates.
 
 ## Generated And External Sources
 
 - `sdk/include/lebai/config.hh` is generated from `sdk/config.hh.in`
-- the authoritative RPC schema lives outside this repository; see `doc/develop.md`
+- the authoritative RPC schema lives outside this repository; see `docs/develop.md`
 - `sdk/src/protos` is a maintained translation layer for that external schema, not the source of truth

@@ -17,6 +17,7 @@
 #pragma once
 
 #include <memory>
+#include <cstdint>
 #include <string>
 #include <vector>
 #include <array>
@@ -87,6 +88,19 @@ struct PhysicalData {
   DoubleVector joint_temperature; /*!< 关节温度. */
   DoubleVector joint_voltage;     /*!< 关节电压. */
   double flange_voltage;          /*!< 法兰电压. */
+};
+
+/**
+ * @brief 控制器系统信息数据结构.
+ *
+ */
+struct SystemInfoData {
+  std::string name;            /*!< 操作系统名字. */
+  std::string kernel_version;  /*!< 内核版本. */
+  std::string os_version;      /*!< 系统版本. */
+  std::string host_name;       /*!< 主机名. */
+  uint64_t used_memory = 0;    /*!< 已使用内存. */
+  uint64_t total_memory = 0;   /*!< 总内存. */
 };
 
 /**
@@ -587,6 +601,12 @@ class Robot {
    *  @return 急停原因
    */
   int get_estop_reason();
+  /**
+   * @brief 获取控制器系统信息
+   *
+   * @return 控制器系统信息
+   */
+  SystemInfoData get_system_info();
   /**
    * @brief 获取机械臂物理数据
    *

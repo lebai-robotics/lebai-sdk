@@ -20,10 +20,29 @@ target_include_directories(lebai-cpp
     $<INSTALL_INTERFACE:include>
   PRIVATE
     ${CMAKE_BINARY_DIR}/_deps/modbuslib-src/src)
-target_compile_features(lebai-cpp PUBLIC cxx_std_14)
+target_compile_features(lebai-cpp PUBLIC cxx_std_17)
 
 # Link modbus as a static library - use $<BUILD_INTERFACE:> to exclude from export
-target_link_libraries(lebai-cpp PRIVATE $<BUILD_INTERFACE:modbus>)
+target_link_libraries(
+  lebai-cpp
+  PRIVATE
+    $<BUILD_INTERFACE:modbus>)
+
+if(TARGET nlohmann_json::nlohmann_json)
+  target_link_libraries(lebai-cpp PRIVATE nlohmann_json::nlohmann_json)
+elseif(TARGET nlohmann_json)
+  target_link_libraries(lebai-cpp PRIVATE nlohmann_json)
+endif()
+
+if(TARGET httplib::httplib)
+  target_link_libraries(lebai-cpp PRIVATE httplib::httplib)
+endif()
+
+if(TARGET unofficial::json-rpc-cxx::json-rpc-cxx)
+  target_link_libraries(lebai-cpp PRIVATE unofficial::json-rpc-cxx::json-rpc-cxx)
+elseif(TARGET json-rpc-cxx)
+  target_link_libraries(lebai-cpp PRIVATE json-rpc-cxx)
+endif()
 
 if(WIN32)
   target_link_libraries(lebai-cpp INTERFACE iphlpapi ws2_32)

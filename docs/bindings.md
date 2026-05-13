@@ -121,4 +121,4 @@ For a public API addition or signature change:
 - start by deciding whether the change is C++-only or must be visible in bindings
 - do not assume all three bindings expose the exact same surface without checking the SWIG files
 - prefer validating the packaged build target, because successful SWIG generation alone does not prove the final package is correct
-- when changing language-facing behavior, check the corresponding docs in `doc/python.md` and `doc/dotnet.md`
+- when changing language-facing behavior, check the corresponding docs in `docs/python.md` and `docs/dotnet.md`

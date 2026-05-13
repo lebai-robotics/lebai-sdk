@@ -13,7 +13,7 @@ lebai-sdk依赖的RPC定义可以通过[lebai-proto](https://lebai-robotics.gith
 
 查阅[lebai-proto](https://lebai-robotics.github.io/lebai-proto/)可以看到`MoveJoint`定义如下
 
-![image-20230109095057824](D:\work\lebai\rc\workspace\lebai-sdk\doc\develop.assets\image-20230109095057824.png)
+![image-20230109095057824](develop.assets/image-20230109095057824.png)
 
 可以看出该`RPC`的输入为`MoveRequest`，输出为`MotionIndex`
 
@@ -255,7 +255,6 @@ motion::MotionIndex moveJoint(const motion::MoveRequest & req);
 该实现中，将`MoveReuqest`转换为`JSON`字符串，然后通过相应的网络通讯接口，然后获取返回字符串，再将其转换为`MotionIndex`并且返回。
 
 至此，`MoveJoint`实现完成
-
 
 
 
