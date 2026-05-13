@@ -2,7 +2,9 @@
 
 ## Overview
 
-`lebai-sdk` is a C++ SDK that talks to a Lebai controller over JSON-RPC on top of a websocket transport. The C++ library is the core implementation, and Python, .NET, and Java bindings are layered on top through SWIG.
+`lebai-sdk` is a C++ SDK that talks to a Lebai controller over HTTP JSON-RPC
+using `json-rpc-cxx`. The C++ library is the core implementation, and Python,
+.NET, and Java bindings are layered on top through SWIG.
 
 ## Main Layers
 
@@ -33,32 +35,40 @@ These files convert public API calls into internal request objects and return si
 - `sdk/src/gripper_impl.hh`
 - `sdk/src/lua_robot_impl.hh`
 
-This layer owns the controller-facing operations. For robot calls, it usually serializes a request DTO to JSON, calls the transport, then parses the JSON response back into a DTO.
+This layer owns the controller-facing operations. For robot calls, it passes
+`nlohmann/json` DTOs to the RPC client and receives typed DTO responses.
 
 ### Transport
 
-- `sdk/src/jsonrpc_connector.hh`
-- `sdk/src/jsonrpc_connector.cc`
-- `sdk/src/websocket.hh`
+- `sdk/src/http_jsonrpc_connector.hh`
+- `sdk/src/rpc_client.hh`
 
-This is the network transport and JSON-RPC plumbing used by the SDK implementation.
+This is the HTTP transport and JSON-RPC plumbing used by the robot SDK
+implementation.
 
 ### Request/Response DTOs
 
-- `sdk/src/protos/*.hh`
-- `sdk/src/protos/*.cc`
+- `sdk/src/protos_json/*.hh`
 
-These files define the hand-written JSON-serializable request/response objects used by the internal RPC layer. Despite the directory name, these are not generated protobuf sources.
+These files define the `nlohmann/json` request/response objects used by the
+internal robot RPC layer. Despite the directory name, these are not generated
+protobuf sources.
+
+`sdk/src/protos` contains the older hand-written RapidJSON DTO layer. It is not
+linked into the core `lebai-cpp` library and should be treated as legacy code
+while the migration is in progress.
 
 ## Typical Robot Call Flow
 
 For a typed robot API such as `movej`:
 
 1. A public method is declared in `sdk/include/lebai/robot.hh`.
-2. `sdk/src/robot.cc` builds a DTO from public parameters.
-3. `sdk/src/robot_impl.cc` serializes the DTO and calls a JSON-RPC method name such as `move_joint`.
-4. `sdk/src/jsonrpc_connector.cc` sends the request over the websocket connection.
-5. The JSON response is parsed back into a DTO and returned up the stack.
+2. `sdk/src/robot.cc` builds a `protos_json` DTO from public parameters.
+3. `sdk/src/robot_impl.cc` calls a JSON-RPC method name such as `move_joint`.
+4. `sdk/src/rpc_client.hh` serializes parameters through `json-rpc-cxx`.
+5. `sdk/src/http_jsonrpc_connector.hh` posts the request to `/jsonrpc`.
+6. The JSON response is parsed back into a `protos_json` DTO and returned up
+   the stack.
 
 There is also a generic escape hatch on the robot API for raw method calls, which is useful when the typed wrapper for a controller RPC does not exist yet.
 
@@ -91,7 +101,7 @@ This path mirrors parts of the Lua-facing API design used by the broader Lebai e
 
 Edit all of the following together:
 
-1. `sdk/src/protos` for request/response objects
+1. `sdk/src/protos_json` for request/response objects
 2. `sdk/include/lebai/robot.hh` for the public declaration
 3. `sdk/src/robot.cc` for parameter-to-DTO conversion
 4. `sdk/src/robot_impl.hh` and `sdk/src/robot_impl.cc` for the JSON-RPC call
@@ -102,9 +112,8 @@ Use `docs/develop.md` as the primary repo-specific reference for this workflow.
 
 Start with:
 
-- `sdk/src/jsonrpc_connector.hh`
-- `sdk/src/jsonrpc_connector.cc`
-- `sdk/src/websocket.hh`
+- `sdk/src/http_jsonrpc_connector.hh`
+- `sdk/src/rpc_client.hh`
 
 Be careful here because transport changes affect all bindings and all controller operations.
 
@@ -122,5 +131,7 @@ Public API changes in C++ often require matching wrapper updates.
 ## Generated And External Sources
 
 - `sdk/include/lebai/config.hh` is generated from `sdk/config.hh.in`
-- the authoritative RPC schema lives outside this repository; see `docs/develop.md`
-- `sdk/src/protos` is a maintained translation layer for that external schema, not the source of truth
+- the authoritative RPC schema lives outside this repository; see
+  `docs/rpc-protocol.md`
+- `sdk/src/protos_json` is a maintained translation layer for that external
+  schema, not the source of truth

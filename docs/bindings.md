@@ -12,7 +12,7 @@ In practice, a public API change is not fully integrated until the C++ headers, 
 
 - public headers: `sdk/include/lebai/*.hh`
 - implementation: `sdk/src/*.cc`, `sdk/src/*.hh`
-- DTOs: `sdk/src/protos/*.hh`, `sdk/src/protos/*.cc`
+- internal robot DTOs: `sdk/src/protos_json/*.hh`
 
 ### SWIG interface files
 
@@ -111,7 +111,8 @@ For a public API addition or signature change:
 
 1. update the C++ public header in `sdk/include/lebai`
 2. update the C++ implementation in `sdk/src`
-3. update request/response DTOs in `sdk/src/protos` if the RPC shape changed
+3. update request/response DTOs in `sdk/src/protos_json` if the RPC shape
+   changed
 4. update the relevant SWIG interface files under `sdk/python`, `sdk/dotnet`, and `sdk/java`
 5. rebuild the affected package targets
 6. verify at least one example in `examples`

@@ -7,8 +7,9 @@ Project-specific guidance for coding agents working in this repository.
 - `sdk/include/lebai`: public C++ API surface (`robot.hh`, `discovery.hh`,
   `gripper.hh`, `lua_robot.hh`, `lebai.hh`)
 - `sdk/src`: core implementations, transport, and internal helpers
-- `sdk/src/protos`: hand-maintained RapidJSON DTOs used by legacy RPC calls
-- `sdk/src/protos_json`: nlohmann/json DTOs used by migrated RPC calls
+- `sdk/src/protos_json`: nlohmann/json DTOs used by robot RPC calls
+- `sdk/src/protos`: legacy hand-maintained RapidJSON DTOs kept out of the
+  core library; do not add new robot RPC DTOs here
 - `sdk/python`, `sdk/dotnet`, `sdk/java`: SWIG interface layers
 - `python`, `dotnet`, `java`: packaging templates and language metadata
 - `sdk/test`: C++ tests
@@ -23,8 +24,7 @@ Project-specific guidance for coding agents working in this repository.
 ### Add or change a robot RPC
 
 1. Check `docs/rpc-protocol.md` and the external proto/API definition.
-2. Add or update DTOs in `sdk/src/protos_json` for migrated code, or
-   `sdk/src/protos` only for legacy code that has not been migrated yet.
+2. Add or update DTOs in `sdk/src/protos_json`.
 3. Add or update the public API in `sdk/include/lebai/robot.hh`.
 4. Implement the public wrapper in `sdk/src/robot.cc`.
 5. Add the JSON-RPC call in `sdk/src/robot_impl.hh` and `sdk/src/robot_impl.cc`.
@@ -43,6 +43,8 @@ Project-specific guidance for coding agents working in this repository.
 
 - `sdk/include/lebai/config.hh` is generated from `sdk/config.hh.in` by
   `cmake/cpp.cmake`.
+- `sdk/src/protos` is legacy RapidJSON code and is not linked into
+  `lebai-cpp`; keep it isolated unless the task explicitly removes it.
 - Build outputs belong under ignored build directories, not source control.
 - Package metadata and build outputs are produced from templates under
   `python`, `dotnet`, and `java`.
