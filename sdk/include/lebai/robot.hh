@@ -867,6 +867,7 @@ class Robot {
    *
    * @return ClawData 数据
    */
+  ClawData get_claw();
   ClawData get_claw_data();
   /** @}*/
 
@@ -1014,6 +1015,8 @@ class Robot {
    * @return 返回计算结果 \ref KinematicsForwardResp "KinematicsForwardResp".
    *
    */
+  KinematicsForwardResp get_forward_kin(
+      const std::vector<double> &joint_positions);
   KinematicsForwardResp kinematics_forward(
       const std::vector<double> &joint_positions);
 
@@ -1023,6 +1026,9 @@ class Robot {
    * @param joint_init_positions: 机械臂关节初始位置, 以数组形式传入.
    * @return 返回计算结果 \ref KinematicsInverseResp "KinematicsInverseResp".
    */
+  KinematicsInverseResp get_inverse_kin(
+      const CartesianPose &pose,
+      const std::vector<double> &joint_init_positions = {});
   KinematicsInverseResp kinematics_inverse(
       const CartesianPose &pose,
       const std::vector<double> &joint_init_positions = {});
@@ -1034,6 +1040,7 @@ class Robot {
    * @param[in] b: 位姿，应当包括键为x,y,z,rz,ry,rx的值.
    * @return CartesianPose 返回的位姿，应当包括键为x,y,z,rz,ry,rx的值.
    */
+  CartesianPose get_pose_trans(const CartesianPose &a, const CartesianPose &b);
   CartesianPose pose_times(const CartesianPose &a, const CartesianPose &b);
 
   /**
@@ -1042,6 +1049,7 @@ class Robot {
    * @param in: 位姿，应当包括键为x,y,z,rz,ry,rx的值.
    * @return CartesianPose 返回位姿变换的逆，应当包括键为x,y,z,rz,ry,rx的值.
    */
+  CartesianPose get_pose_inverse(const CartesianPose &in);
   CartesianPose pose_inverse(const CartesianPose &in);
   /** @}*/
 
@@ -1148,12 +1156,14 @@ class Robot {
    *
    *  @param factor 速度因子百分比，范围0-100.
    */
+  void set_kin_factor(int factor);
   void set_velocity_factor(int factor);
   /**
    *  @brief 获取当前的速度因子.
    *
    *  @return 速度因子百分比.
    */
+  int get_kin_factor();
   int get_velocity_factor();
   /**
    *  @brief 设置机器人末端负载.
@@ -1289,6 +1299,8 @@ class Robot {
    * @param addr 寄存器地址.
    * @param values 待设置的值.
    */
+  void write_multiple_coils(std::string device, std::string addr,
+                             std::vector<bool> values);
   void wirte_multiple_coils(std::string device, std::string addr,
                             std::vector<bool> values);
 

@@ -427,7 +427,7 @@ TEST_F(RobotTest, TestMove) {
     EXPECT_NEAR(joint_positions[3], -2.0 / 180.0 * M_PI, 1e-3);
     EXPECT_NEAR(joint_positions[4], -92.0 / 180.0 * M_PI, 1e-3);
     EXPECT_NEAR(joint_positions[5], 16.0 / 180.0 * M_PI, 1e-3);
-    auto fk_resp = robot_.kinematics_forward(joint_positions);
+    auto fk_resp = robot_.get_forward_kin(joint_positions);
 
     robot_.move_joint(
         {13.0 / 180.0 * M_PI, -52.0 / 180.0 * M_PI, 86.0 / 180.0 * M_PI,
@@ -449,7 +449,7 @@ TEST_F(RobotTest, TestMove) {
     robot_.wait_move();
     joint_positions = robot_.get_target_joint_positions();
     ASSERT_EQ(6, joint_positions.size());
-    fk_resp = robot_.kinematics_forward(joint_positions);
+    fk_resp = robot_.get_forward_kin(joint_positions);
     // -0.255832, 0.00270435, 0.266642, 1.27293, -0.20805, 0.94485
     // -28/ 180.0 * M_PI, -59.0/ 180.0 * M_PI, 96.0/ 180.0 * M_PI, -2.0/ 180.0 *
     // M_PI, -92.0/ 180.0 * M_PI, 16.0/ 180.0 * M_PI
@@ -534,7 +534,7 @@ TEST_F(RobotTest, TestExtraIO) {
 TEST_F(RobotTest, TestClaw) {
   robot_.start_sys();
   robot_.set_claw(0, 0);
-  auto claw_data = robot_.get_claw_data();
+  auto claw_data = robot_.get_claw();
 }
 TEST_F(RobotTest, TestLed) {
   robot_.start_sys();
@@ -564,10 +564,10 @@ TEST_F(RobotTest, TestTaskReadSmoke) {
 
 TEST_F(RobotTest, TestKinematicsReadSmoke) {
   const auto fk_resp =
-      robot_.kinematics_forward({0.0, 0.0, 0.0, 0.0, 0.0, 0.0});
+      robot_.get_forward_kin({0.0, 0.0, 0.0, 0.0, 0.0, 0.0});
   EXPECT_TRUE(fk_resp.ok);
   EXPECT_EQ(fk_resp.pose.size(), 6U);
-  const auto inverse_pose = robot_.pose_inverse(
+  const auto inverse_pose = robot_.get_pose_inverse(
       {{"x", 0.0}, {"y", 0.0}, {"z", 0.0}, {"rx", 0.0}, {"ry", 0.0},
        {"rz", 0.0}});
   EXPECT_EQ(inverse_pose.size(), 6U);
@@ -580,8 +580,8 @@ TEST_F(RobotTest, TestTcpAndPayloadSmoke) {
   const auto loaded_tcp = robot_.load_tcp("", "");
   EXPECT_EQ(loaded_tcp.size(), 6U);
 
-  robot_.set_velocity_factor(100);
-  EXPECT_EQ(robot_.get_velocity_factor(), 100);
+  robot_.set_kin_factor(100);
+  EXPECT_EQ(robot_.get_kin_factor(), 100);
 
   robot_.set_payload(0.0, {{"x", 0.0}, {"y", 0.0}, {"z", 0.0}});
   const auto payload = robot_.get_payload();
@@ -639,12 +639,12 @@ TEST_F(RobotTest, TestRobotics) {
   joint_positions[3] = -10.0 / 180.0 * M_PI;
   joint_positions[4] = -60.0 / 180.0 * M_PI;
   joint_positions[5] = 0.0;
-  auto kf_resp = robot_.kinematics_forward(joint_positions);
+  auto kf_resp = robot_.get_forward_kin(joint_positions);
   EXPECT_TRUE(kf_resp.ok);
-  auto ki_resp = robot_.kinematics_inverse(kf_resp.pose, joint_positions);
+  auto ki_resp = robot_.get_inverse_kin(kf_resp.pose, joint_positions);
   EXPECT_TRUE(ki_resp.ok);
-  kf_resp.pose = robot_.pose_times(kf_resp.pose, kf_resp.pose);
-  kf_resp.pose = robot_.pose_inverse(kf_resp.pose);
+  kf_resp.pose = robot_.get_pose_trans(kf_resp.pose, kf_resp.pose);
+  kf_resp.pose = robot_.get_pose_inverse(kf_resp.pose);
 }
 TEST_F(RobotTest, TestNetworkConnection) {
   EXPECT_TRUE(robot_.is_network_connected());

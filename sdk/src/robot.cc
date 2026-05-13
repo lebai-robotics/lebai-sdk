@@ -845,7 +845,7 @@ void Robot::set_claw(double force, double amplitude) {
   impl_->set_claw(req);
 }
 
-ClawData Robot::get_claw_data() {
+ClawData Robot::get_claw() {
   auto resp = impl_->get_claw();
   ClawData claw_data;
   claw_data.force = resp.force;
@@ -853,6 +853,8 @@ ClawData Robot::get_claw_data() {
   claw_data.hold_on = resp.hold_on;
   return claw_data;
 }
+
+ClawData Robot::get_claw_data() { return get_claw(); }
 
 void Robot::set_led(unsigned int mode, unsigned int speed,
                     const std::vector<unsigned int> &color) {
@@ -988,7 +990,7 @@ std::string Robot::get_task_state() {
   return convertTaskStateToString(resp.state);
 }
 
-KinematicsForwardResp Robot::kinematics_forward(
+KinematicsForwardResp Robot::get_forward_kin(
     const std::vector<double> &joint_positions) {
   protos_json::kinematic_proto::PoseRequest req;
   req.pose.kind = 1;
@@ -1000,7 +1002,12 @@ KinematicsForwardResp Robot::kinematics_forward(
   return kf_resp;
 }
 
-KinematicsInverseResp Robot::kinematics_inverse(
+KinematicsForwardResp Robot::kinematics_forward(
+    const std::vector<double> &joint_positions) {
+  return get_forward_kin(joint_positions);
+}
+
+KinematicsInverseResp Robot::get_inverse_kin(
     const CartesianPose &pose,
     const std::vector<double> &joint_init_positions) {
   protos_json::kinematic_proto::GetInverseKinRequest req;
@@ -1053,8 +1060,14 @@ KinematicsInverseResp Robot::kinematics_inverse(
   return ki_resp;
 }
 
-CartesianPose Robot::pose_times(const CartesianPose &a,
-                                const CartesianPose &b) {
+KinematicsInverseResp Robot::kinematics_inverse(
+    const CartesianPose &pose,
+    const std::vector<double> &joint_init_positions) {
+  return get_inverse_kin(pose, joint_init_positions);
+}
+
+CartesianPose Robot::get_pose_trans(const CartesianPose &a,
+                                    const CartesianPose &b) {
   protos_json::kinematic_proto::GetPoseTransRequest req;
   req.from.kind = 0;
   req.from_to.kind = 0;
@@ -1126,7 +1139,12 @@ CartesianPose Robot::pose_times(const CartesianPose &a,
   return convertToCartesianPose(resp);
 }
 
-CartesianPose Robot::pose_inverse(const CartesianPose &in) {
+CartesianPose Robot::pose_times(const CartesianPose &a,
+                                const CartesianPose &b) {
+  return get_pose_trans(a, b);
+}
+
+CartesianPose Robot::get_pose_inverse(const CartesianPose &in) {
   protos_json::kinematic_proto::PoseRequest req;
   req.pose.kind = 0;
   double x = 0.0;
@@ -1162,6 +1180,10 @@ CartesianPose Robot::pose_inverse(const CartesianPose &in) {
   req.pose.cart.rotation.euler_zyx.x = rx;
   auto resp = impl_->get_pose_inverse(req);
   return convertToCartesianPose(resp);
+}
+
+CartesianPose Robot::pose_inverse(const CartesianPose &in) {
+  return get_pose_inverse(in);
 }
 
 void Robot::save_file(const std::string &dir, const std::string &name,
@@ -1346,15 +1368,20 @@ std::array<double, 6> Robot::get_tcp() {
   return ret;
 }
 
-void Robot::set_velocity_factor(int factor) {
+void Robot::set_kin_factor(int factor) {
   protos_json::kin_factor_proto::KinFactor req;
   req.speed_factor = factor;
   impl_->set_kin_factor(req);
 }
-int Robot::get_velocity_factor() {
+
+void Robot::set_velocity_factor(int factor) { set_kin_factor(factor); }
+
+int Robot::get_kin_factor() {
   const auto resp = impl_->get_kin_factor();
   return resp.speed_factor;
 }
+
+int Robot::get_velocity_factor() { return get_kin_factor(); }
 CartesianPose Robot::load_tcp(std::string name, std::string dir) {
   protos_json::db_proto::LoadRequest req;
   req.name = name;
@@ -1372,13 +1399,18 @@ void Robot::write_single_coil(std::string device, std::string addr,
   impl_->write_single_coil(req);
 }
 
-void Robot::wirte_multiple_coils(std::string device, std::string addr,
-                                 std::vector<bool> values) {
+void Robot::write_multiple_coils(std::string device, std::string addr,
+                                  std::vector<bool> values) {
   protos_json::modbus_proto::SetCoilsRequest req;
   req.device = device;
   req.pin = addr;
   req.values = values;
   impl_->write_multiple_coils(req);
+}
+
+void Robot::wirte_multiple_coils(std::string device, std::string addr,
+                                 std::vector<bool> values) {
+  write_multiple_coils(device, addr, values);
 }
 std::vector<bool> Robot::read_coils(std::string device, std::string addr,
                                     unsigned int num) {
