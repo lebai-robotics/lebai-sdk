@@ -17,7 +17,6 @@
 #pragma once
 
 #include <lebai/robot.hh>
-#include "protos/led.hh"
 #include "protos/kinematic.hh"
 #include "protos/control.hh"
 #include "protos/file.hh"

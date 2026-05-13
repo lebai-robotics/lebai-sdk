@@ -800,206 +800,37 @@ ClawData Robot::get_claw_data() {
 
 void Robot::set_led(unsigned int mode, unsigned int speed,
                     const std::vector<unsigned int> &color) {
-  led::LedData req;
-  switch (mode) {
-    case 0:
-      req.set_mode(led::LedMode::HOLD_LED);
-      break;
-    case 1:
-      req.set_mode(led::LedMode::CLOSE_LED);
-      break;
-    case 2:
-      req.set_mode(led::LedMode::OPEN_LED);
-      break;
-    case 3:
-      req.set_mode(led::LedMode::BREATH);
-      break;
-    case 4:
-      req.set_mode(led::LedMode::FOUR);
-      break;
-    case 5:
-      req.set_mode(led::LedMode::WATER);
-      break;
-    case 6:
-      req.set_mode(led::LedMode::BLINK);
-      break;
-    default:
-      return;
-  }
-  switch (speed) {
-    case 0:
-      req.set_speed(led::LedSpeed::HOLD_LED_SPEED);
-      break;
-    case 1:
-      req.set_speed(led::LedSpeed::FAST);
-      break;
-    case 2:
-      req.set_speed(led::LedSpeed::NORMAL);
-      break;
-    case 3:
-      req.set_speed(led::LedSpeed::SLOW);
-      break;
-    default:
-      return;
-  }
-  std::vector<led::LedColor> _color;
-  for (auto _c : color) {
-    switch (_c) {
-      case 0:
-        _color.push_back(led::LedColor::RED);
-        break;
-      case 1:
-        _color.push_back(led::LedColor::GREEN);
-        break;
-      case 2:
-        _color.push_back(led::LedColor::BLUE);
-        break;
-      case 3:
-        _color.push_back(led::LedColor::PINK);
-        break;
-      case 4:
-        _color.push_back(led::LedColor::YELLOW);
-        break;
-      case 5:
-        _color.push_back(led::LedColor::CYAN);
-        break;
-      case 6:
-        _color.push_back(led::LedColor::GRAY);
-        break;
-      case 7:
-        _color.push_back(led::LedColor::BROWN);
-        break;
-      case 8:
-        _color.push_back(led::LedColor::ORANGE);
-        break;
-      case 9:
-        _color.push_back(led::LedColor::GOLD);
-        break;
-      case 10:
-        _color.push_back(led::LedColor::INDIGO);
-        break;
-      case 11:
-        _color.push_back(led::LedColor::LIGHT_SKY_BLUE);
-        break;
-      case 12:
-        _color.push_back(led::LedColor::DARK_VIOLET);
-        break;
-      case 13:
-        _color.push_back(led::LedColor::CHOCOLATE);
-        break;
-      case 14:
-        _color.push_back(led::LedColor::LIGHT_RED);
-        break;
-      case 15:
-        _color.push_back(led::LedColor::WHITE);
-        break;
-      default:
-        return;
-    }
-  }
-  req.set_colors(_color);
   protos_json::led_proto::LedData typed_req;
-  typed_req.mode = static_cast<int>(req.mode());
-  typed_req.speed = static_cast<int>(req.speed());
-  for (const auto color_value : req.colors()) {
+  if (mode > 6 || speed > 3) {
+    return;
+  }
+  typed_req.mode = static_cast<int>(mode);
+  typed_req.speed = static_cast<int>(speed);
+  for (const auto color_value : color) {
+    if (color_value > 15) {
+      return;
+    }
     typed_req.colors.push_back(static_cast<int>(color_value));
   }
   impl_->set_led(typed_req);
 }
 
 void Robot::set_voice(unsigned int voice, unsigned int volume) {
-  led::VoiceData req;
-  switch (voice) {
-    case 0:
-      req.set_voice(led::VoiceKind::OFF);
-      break;
-    case 1:
-      req.set_voice(led::VoiceKind::BOOTING);
-      break;
-    case 2:
-      req.set_voice(led::VoiceKind::STOPING);
-      break;
-    case 3:
-      req.set_voice(led::VoiceKind::COLLISION_DETECTED);
-      break;
-    case 4:
-      req.set_voice(led::VoiceKind::UPGRADE);
-      break;
-    case 5:
-      req.set_voice(led::VoiceKind::TEACH_MODE_ON);
-      break;
-    case 6:
-      req.set_voice(led::VoiceKind::TEACH_MODE_OFF);
-      break;
-    case 7:
-      req.set_voice(led::VoiceKind::FINE_TUNNING_ON);
-      break;
-    case 8:
-      req.set_voice(led::VoiceKind::FINE_TUNNING_OFF);
-      break;
-    case 9:
-      req.set_voice(led::VoiceKind::FINE_TUNNING_CHANGE);
-      break;
-    case 10:
-      req.set_voice(led::VoiceKind::BORING);
-      break;
-    case 11:
-      req.set_voice(led::VoiceKind::CUSTOM1);
-      break;
-    case 12:
-      req.set_voice(led::VoiceKind::CUSTOM2);
-      break;
-    case 13:
-      req.set_voice(led::VoiceKind::CUSTOM3);
-      break;
-    case 14:
-      req.set_voice(led::VoiceKind::CUSTOM4);
-      break;
-    case 15:
-      req.set_voice(led::VoiceKind::CUSTOM5);
-      break;
-    default:
-      return;
-  }
-  switch (volume) {
-    case 0:
-      req.set_volume(led::Volume::MUTE);
-      break;
-    case 1:
-      req.set_volume(led::Volume::LOW);
-      break;
-    case 2:
-      req.set_volume(led::Volume::MID);
-      break;
-    case 3:
-      req.set_volume(led::Volume::HIGH);
-      break;
-    default:
-      return;
+  if (voice > 15 || volume > 3) {
+    return;
   }
   protos_json::led_proto::VoiceData typed_req;
-  typed_req.voice = static_cast<int>(req.voice());
-  typed_req.volume = static_cast<int>(req.volume());
+  typed_req.voice = static_cast<int>(voice);
+  typed_req.volume = static_cast<int>(volume);
   impl_->set_voice(typed_req);
 }
 
 void Robot::set_fan(unsigned int status) {
-  led::FanData req;
-  switch (status) {
-    case 0:
-      req.set_fan(led::FanMode::HOLD_FAN);
-      break;
-    case 1:
-      req.set_fan(led::FanMode::CLOSE_FAN);
-      break;
-    case 2:
-      req.set_fan(led::FanMode::OPEN_FAN);
-      break;
-    default:
-      return;
+  if (status > 2) {
+    return;
   }
   protos_json::led_proto::FanData typed_req;
-  typed_req.fan = static_cast<int>(req.fan());
+  typed_req.fan = static_cast<int>(status);
   impl_->set_fan(typed_req);
 }
 
