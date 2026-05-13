@@ -17,6 +17,8 @@
 #include <nlohmann/json.hpp>
 
 #include "protos_json/auto_proto.hh"
+#include "protos_json/db_proto.hh"
+#include "protos_json/dynamic_proto.hh"
 #include "protos_json/kinematic_proto.hh"
 #include "protos_json/motion_proto.hh"
 #include "protos_json/system_proto.hh"
@@ -130,6 +132,54 @@ TEST(JsonMotionProtoTest, MoveRequestSerializesJointPoseInProtoShape) {
   EXPECT_EQ(json.at("pose").at("kind"), 1);
   ASSERT_TRUE(json.at("pose").at("joint").at("joint").is_array());
   EXPECT_EQ(json.at("pose").at("joint").at("joint").size(), 6U);
+}
+
+TEST(JsonDbProtoTest, LoadRequestSerializesNameAndDir) {
+  protos_json::db_proto::LoadRequest req;
+  req.name = "tool0";
+  req.dir = "default";
+
+  const nlohmann::json json = req;
+  const auto parsed = json.get<protos_json::db_proto::LoadRequest>();
+
+  EXPECT_EQ(json.at("name"), "tool0");
+  EXPECT_EQ(json.at("dir"), "default");
+  EXPECT_EQ(parsed.name, "tool0");
+  EXPECT_EQ(parsed.dir, "default");
+}
+
+TEST(JsonDynamicProtoTest, SavePayloadRequestSerializesNestedPayload) {
+  protos_json::dynamic_proto::SavePayloadRequest req;
+  req.name = "payload0";
+  req.dir = "default";
+  req.data.mass = 1.5;
+  req.data.cog.x = 0.1;
+  req.data.cog.y = 0.2;
+  req.data.cog.z = 0.3;
+
+  const nlohmann::json json = req;
+
+  EXPECT_EQ(json.at("name"), "payload0");
+  EXPECT_DOUBLE_EQ(json.at("data").at("mass"), 1.5);
+  EXPECT_DOUBLE_EQ(json.at("data").at("cog").at("z"), 0.3);
+}
+
+TEST(JsonDbProtoTest, LoadListResponseParsesControllerNamesField) {
+  const auto json = nlohmann::json::parse(R"({"names":["payload0"]})");
+  const auto parsed = json.get<protos_json::db_proto::LoadListResponse>();
+
+  ASSERT_EQ(parsed.names.size(), 1U);
+  EXPECT_EQ(parsed.names.front(), "payload0");
+}
+
+TEST(JsonDynamicProtoTest, PayloadParsesPartialControllerPayload) {
+  const auto json = nlohmann::json::parse(R"({"mass":0.0})");
+  const auto parsed = json.get<protos_json::dynamic_proto::Payload>();
+
+  EXPECT_DOUBLE_EQ(parsed.mass, 0.0);
+  EXPECT_DOUBLE_EQ(parsed.cog.x, 0.0);
+  EXPECT_DOUBLE_EQ(parsed.cog.y, 0.0);
+  EXPECT_DOUBLE_EQ(parsed.cog.z, 0.0);
 }
 
 int main(int argc, char** argv) {

@@ -1524,10 +1524,10 @@ int Robot::get_velocity_factor() {
   return resp.factor();
 }
 CartesianPose Robot::load_tcp(std::string name, std::string dir) {
-  db::LoadRequest req;
-  req.set_name(name);
-  req.set_dir(dir);
-  const auto &pose = impl_->loadTcp(req);
+  protos_json::db_proto::LoadRequest req;
+  req.name = name;
+  req.dir = dir;
+  const auto &pose = impl_->load_tcp(req);
   return convertToCartesianPose(pose);
 }
 

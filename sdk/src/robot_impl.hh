@@ -36,6 +36,7 @@
 #include "http_jsonrpc_connector.hh"
 #include "protos_json/claw_proto.hh"
 #include "protos_json/control_proto.hh"
+#include "protos_json/db_proto.hh"
 #include "protos_json/dynamic_proto.hh"
 #include "protos_json/io_proto.hh"
 #include "protos_json/kin_factor_proto.hh"
@@ -161,14 +162,16 @@ class Robot::RobotImpl {
   dynamic::Payload get_payload();
   void set_gravity(const protos_json::posture_proto::Position &req);
   posture::Position get_gravity();
-  void savePayload(const dynamic::SavePayloadRequest &req);
-  dynamic::Payload loadPayload(const db::LoadRequest &req);
-  db::LoadListResponse loadPayloadList(const db::LoadListRequest &req);
+  void save_payload(const protos_json::dynamic_proto::SavePayloadRequest &req);
+  dynamic::Payload load_payload(const protos_json::db_proto::LoadRequest &req);
+  db::LoadListResponse load_payload_list(
+      const protos_json::db_proto::LoadListRequest &req);
   void set_tcp(const protos_json::posture_proto::CartesianPose &req);
   posture::CartesianPose get_tcp();
   void set_kin_factor(const protos_json::kin_factor_proto::KinFactor &req);
   kinematic::KinFactor get_kin_factor();
-  posture::CartesianPose loadTcp(const db::LoadRequest &req);
+  posture::CartesianPose load_tcp(
+      const protos_json::db_proto::LoadRequest &req);
   void writeSingleCoil(const modbus::SetCoilRequest &req);
   void writeMultipleCoils(const modbus::SetCoilsRequest &req);
   modbus::GetCoilsResponse readCoils(const modbus::GetCoilsRequest &req);

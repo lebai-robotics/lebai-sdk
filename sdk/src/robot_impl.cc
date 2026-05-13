@@ -698,23 +698,31 @@ posture::Position Robot::RobotImpl::get_gravity() {
   resp.set_z(response.z);
   return resp;
 }
-void Robot::RobotImpl::savePayload(const dynamic::SavePayloadRequest &req) {
-  json_rpc_connector_->CallRpc("save_payload", req.ToJSONString(), nullptr);
+void Robot::RobotImpl::save_payload(
+    const protos_json::dynamic_proto::SavePayloadRequest &req) {
+  rpc_client_->Call<void>("save_payload", {req});
 }
-dynamic::Payload Robot::RobotImpl::loadPayload(const db::LoadRequest &req) {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("load_payload", req.ToJSONString(), &resp_str);
+dynamic::Payload Robot::RobotImpl::load_payload(
+    const protos_json::db_proto::LoadRequest &req) {
+  const auto response =
+      rpc_client_->Call<protos_json::dynamic_proto::Payload>("load_payload",
+                                                             {req});
   dynamic::Payload resp;
-  resp.FromJSONString(resp_str);
+  resp.set_mass(response.mass);
+  posture::Position cog;
+  cog.set_x(response.cog.x);
+  cog.set_y(response.cog.y);
+  cog.set_z(response.cog.z);
+  resp.set_cog(cog);
   return resp;
 }
-db::LoadListResponse Robot::RobotImpl::loadPayloadList(
-    const db::LoadListRequest &req) {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("load_payload_list", req.ToJSONString(),
-                               &resp_str);
+db::LoadListResponse Robot::RobotImpl::load_payload_list(
+    const protos_json::db_proto::LoadListRequest &req) {
+  const auto response =
+      rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
+          "load_payload_list", {req});
   db::LoadListResponse resp;
-  resp.FromJSONString(resp_str);
+  resp.set_data(response.names);
   return resp;
 }
 
@@ -750,11 +758,21 @@ kinematic::KinFactor Robot::RobotImpl::get_kin_factor() {
   resp.set_factor(response.speed_factor);
   return resp;
 }
-posture::CartesianPose Robot::RobotImpl::loadTcp(const db::LoadRequest &req) {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("get_tcp", req.ToJSONString(), &resp_str);
+posture::CartesianPose Robot::RobotImpl::load_tcp(
+    const protos_json::db_proto::LoadRequest &req) {
+  const auto response =
+      rpc_client_->Call<protos_json::posture_proto::CartesianPose>("load_tcp",
+                                                                   {req});
   posture::CartesianPose resp;
-  resp.FromJSONString(resp_str);
+  resp.mutable_position()->set_x(response.position.x);
+  resp.mutable_position()->set_y(response.position.y);
+  resp.mutable_position()->set_z(response.position.z);
+  resp.mutable_rotation()->mutable_euler_zyx()->set_x(
+      response.rotation.euler_zyx.x);
+  resp.mutable_rotation()->mutable_euler_zyx()->set_y(
+      response.rotation.euler_zyx.y);
+  resp.mutable_rotation()->mutable_euler_zyx()->set_z(
+      response.rotation.euler_zyx.z);
   return resp;
 }
 void Robot::RobotImpl::writeSingleCoil(const modbus::SetCoilRequest &req) {
