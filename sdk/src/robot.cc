@@ -43,6 +43,18 @@ static CartesianPose convertToCartesianPose(
   return cart_pose;
 }
 
+static CartesianPose convertToCartesianPose(
+    const protos_json::kinematic_proto::CartesianPose &pose) {
+  CartesianPose cart_pose;
+  cart_pose["x"] = pose.position.x;
+  cart_pose["y"] = pose.position.y;
+  cart_pose["z"] = pose.position.z;
+  cart_pose["rz"] = pose.rotation.euler_zyx.z;
+  cart_pose["ry"] = pose.rotation.euler_zyx.y;
+  cart_pose["rx"] = pose.rotation.euler_zyx.x;
+  return cart_pose;
+}
+
 static CollisionDetectorConfig convertToCollisionDetectorConfig(
     const safety::CollisionDetector &detector) {
   CollisionDetectorConfig config;
@@ -511,20 +523,20 @@ PhysicalData Robot::get_phy_data() {
 JointMotionData Robot::get_kin_data() {
   auto kin_data = impl_->get_kin_data();
   JointMotionData joint_motion_data;
-  joint_motion_data.actual_joint_pose = kin_data.actual_joint_pose();
-  joint_motion_data.actual_joint_speed = kin_data.actual_joint_speed();
-  joint_motion_data.actual_joint_acc = kin_data.actual_joint_acc();
-  joint_motion_data.actual_joint_torque = kin_data.actual_joint_torque();
-  joint_motion_data.target_joint_pose = kin_data.target_joint_pose();
-  joint_motion_data.target_joint_speed = kin_data.target_joint_speed();
-  joint_motion_data.target_joint_acc = kin_data.target_joint_acc();
-  joint_motion_data.target_joint_torque = kin_data.target_joint_torque();
+  joint_motion_data.actual_joint_pose = kin_data.actual_joint_pose;
+  joint_motion_data.actual_joint_speed = kin_data.actual_joint_speed;
+  joint_motion_data.actual_joint_acc = kin_data.actual_joint_acc;
+  joint_motion_data.actual_joint_torque = kin_data.actual_joint_torque;
+  joint_motion_data.target_joint_pose = kin_data.target_joint_pose;
+  joint_motion_data.target_joint_speed = kin_data.target_joint_speed;
+  joint_motion_data.target_joint_acc = kin_data.target_joint_acc;
+  joint_motion_data.target_joint_torque = kin_data.target_joint_torque;
   joint_motion_data.actual_tcp_pose =
-      convertToCartesianPose(kin_data.actual_tcp_pose());
+      convertToCartesianPose(kin_data.actual_tcp_pose);
   joint_motion_data.target_tcp_pose =
-      convertToCartesianPose(kin_data.target_tcp_pose());
+      convertToCartesianPose(kin_data.target_tcp_pose);
   joint_motion_data.actual_flange_pose =
-      convertToCartesianPose(kin_data.actual_flange_pose());
+      convertToCartesianPose(kin_data.actual_flange_pose);
   return joint_motion_data;
 }
 
@@ -533,27 +545,25 @@ bool Robot::is_disconnected() { return get_robot_state() == 0; }
 bool Robot::is_down() { return get_robot_state() < 4; }
 
 std::vector<double> Robot::get_actual_joint_positions() {
-  std::map<std::string, double> ret;
-  return *impl_->get_kin_data().mutable_actual_joint_pose();
+  return impl_->get_kin_data().actual_joint_pose;
 }
 
 std::vector<double> Robot::get_target_joint_positions() {
-  std::map<std::string, double> ret;
-  return *impl_->get_kin_data().mutable_target_joint_pose();
+  return impl_->get_kin_data().target_joint_pose;
 }
 std::vector<double> Robot::get_actual_joint_speed() {
-  return *impl_->get_kin_data().mutable_actual_joint_speed();
+  return impl_->get_kin_data().actual_joint_speed;
 }
 std::vector<double> Robot::get_target_joint_speed() {
-  return *impl_->get_kin_data().mutable_target_joint_speed();
+  return impl_->get_kin_data().target_joint_speed;
 }
 
 CartesianPose Robot::get_actual_tcp_pose() {
-  auto pose = impl_->get_kin_data().actual_tcp_pose();
+  auto pose = impl_->get_kin_data().actual_tcp_pose;
   return convertToCartesianPose(pose);
 }
 CartesianPose Robot::get_target_tcp_pose() {
-  auto pose = impl_->get_kin_data().target_tcp_pose();
+  auto pose = impl_->get_kin_data().target_tcp_pose;
   return convertToCartesianPose(pose);
 }
 
@@ -567,11 +577,11 @@ double Robot::get_joint_temp(unsigned int joint_index) {
 }
 
 std::vector<double> Robot::get_actual_joint_torques() {
-  return impl_->get_kin_data().actual_joint_torque();
+  return impl_->get_kin_data().actual_joint_torque;
 }
 
 std::vector<double> Robot::get_target_joint_torques() {
-  return impl_->get_kin_data().target_joint_torque();
+  return impl_->get_kin_data().target_joint_torque;
 }
 
 void Robot::set_do(std::string device, unsigned int pin, unsigned int value) {

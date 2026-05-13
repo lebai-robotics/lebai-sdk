@@ -99,7 +99,7 @@ class Robot::RobotImpl {
   protos_json::system_proto::EstopReason get_estop_reason();
   protos_json::system_proto::SystemInfo get_system_info();
   protos_json::system_proto::PhyData get_phy_data();
-  kinematic::KinData get_kin_data();
+  protos_json::kinematic_proto::KinData get_kin_data();
   io::GetDioPinResponse get_di(
       const protos_json::io_proto::GetDioPinRequest &req);
   io::GetDioPinsResponse get_dis(

@@ -233,25 +233,9 @@ protos_json::system_proto::PhyData Robot::RobotImpl::get_phy_data() {
       "get_phy_data", {});
 }
 
-kinematic::KinData Robot::RobotImpl::get_kin_data() {
-  const auto response = rpc_client_->Call<protos_json::kinematic_proto::KinData>(
+protos_json::kinematic_proto::KinData Robot::RobotImpl::get_kin_data() {
+  return rpc_client_->Call<protos_json::kinematic_proto::KinData>(
       "get_kin_data", {});
-  kinematic::KinData kin_data;
-  kin_data.set_actual_joint_pose(response.actual_joint_pose);
-  kin_data.set_actual_joint_speed(response.actual_joint_speed);
-  kin_data.set_actual_joint_acc(response.actual_joint_acc);
-  kin_data.set_actual_joint_torque(response.actual_joint_torque);
-  kin_data.set_target_joint_pose(response.target_joint_pose);
-  kin_data.set_target_joint_speed(response.target_joint_speed);
-  kin_data.set_target_joint_acc(response.target_joint_acc);
-  kin_data.set_target_joint_torque(response.target_joint_torque);
-  kin_data.set_actual_tcp_pose(
-      convertToPostureCartesianPose(response.actual_tcp_pose));
-  kin_data.set_target_tcp_pose(
-      convertToPostureCartesianPose(response.target_tcp_pose));
-  kin_data.set_actual_flange_pose(
-      convertToPostureCartesianPose(response.actual_flange_pose));
-  return kin_data;
 }
 
 io::GetDioPinResponse Robot::RobotImpl::get_di(
