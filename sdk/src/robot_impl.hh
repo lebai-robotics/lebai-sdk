@@ -210,8 +210,6 @@ class Robot::RobotImpl {
   std::unique_ptr<RpcClient> rpc_client_;
   const uint16_t simulation_port_ = 3030;
   const uint16_t physical_machine_port_ = 3031;
-  // int jsonrpc_id_ = 0;
-  // WebSocketEndPoint endpoint_;
 };
 }  // namespace l_master
 }  // namespace lebai

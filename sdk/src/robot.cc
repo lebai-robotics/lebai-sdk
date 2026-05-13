@@ -15,9 +15,9 @@
  */
 
 #include <lebai/robot.hh>
-#include <websocketpp/base64/base64.hpp>
 #include <memory>
 #include <stdexcept>
+#include "base64.hh"
 #include "robot_impl.hh"
 #include <lebai/config.hh>
 
@@ -1117,7 +1117,7 @@ void Robot::save_file(const std::string &dir, const std::string &name,
   req.dir = dir;
   req.name = name;
   req.file.is_dir = is_dir;
-  req.file.data = websocketpp::base64_encode(data);
+  req.file.data = base64::encode(data);
   impl_->save_file(req);
 }
 void Robot::rename_file(const std::string &from_dir,
@@ -1138,7 +1138,7 @@ std::tuple<bool, std::string> Robot::load_file(const std::string &dir,
   req.name = name;
   const auto resp = impl_->load_file(req);
   std::tuple<bool, std::string> ret =
-      std::make_tuple(resp.is_dir, websocketpp::base64_decode(resp.data));
+      std::make_tuple(resp.is_dir, base64::decode(resp.data));
   return ret;
 }
 std::vector<std::tuple<bool, std::string>> Robot::load_file_list(

@@ -28,6 +28,15 @@
 #include "protos_json/serial_proto.hh"
 #include "protos_json/storage_proto.hh"
 #include "protos_json/system_proto.hh"
+#include "base64.hh"
+
+TEST(Base64Test, EncodesAndDecodesFilePayloads) {
+  const std::string input = "hello";
+  const auto encoded = lebai::base64::encode(input);
+
+  EXPECT_EQ(encoded, "aGVsbG8=");
+  EXPECT_EQ(lebai::base64::decode(encoded), input);
+}
 
 TEST(JsonAutoProtoTest, SetAutoRequestSerializesToExpectedFields) {
   protos_json::auto_proto::SetAutoRequest req;

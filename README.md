@@ -167,5 +167,4 @@ lebai-sdk使用如下第三方软件:
 | ----------- | ----------- |----------- |
 | Asio      | [MPL2](https://www.mozilla.org/en-US/MPL/2.0/FAQ/)  | https://think-async.com/Asio/ |
 | rapidjson      | MIT  | https://rapidjson.org/ |
-| websocketpp      | BSD  | https://www.zaphoyd.com/websocketpp |
 | mdns | public domain | https://github.com/mjansson/mdns |
