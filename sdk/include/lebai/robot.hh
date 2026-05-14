@@ -1927,6 +1927,13 @@ class Robot {
    */
   void set_serial_baud_rate(std::string device, unsigned int baud_rate);
   /**
+   * @brief 设置串口超时时间.
+   *
+   * @param device 设备名称.
+   * @param timeout 超时时间，单位毫秒.
+   */
+  void set_serial_timeout(std::string device, unsigned int timeout);
+  /**
    * @brief 设置串口校验位.
    *
    * @param device 设备名称.
@@ -1934,6 +1941,26 @@ class Robot {
    *
    */
   void set_serial_parity(std::string device, unsigned int parity);
+  /**
+   * @brief 串口发送数据.
+   *
+   * @param device 设备名称.
+   * @param data u8数组.
+   */
+  void write_serial(std::string device, std::vector<unsigned int> data);
+  /**
+   * @brief 串口读取数据.
+   *
+   * @param device 设备名称.
+   * @param len 单次接收的最大缓冲长度.
+   */
+  std::vector<unsigned int> read_serial(std::string device, unsigned int len);
+  /**
+   * @brief 清除串口收发缓存.
+   *
+   * @param device 设备名称.
+   */
+  void clear_serial(std::string device);
   /** @}*/
 
   /** \addtogroup STORAGE

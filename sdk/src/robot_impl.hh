@@ -274,8 +274,14 @@ class Robot::RobotImpl {
       const protos_json::modbus_proto::GetRegistersRequest &req);
   void set_serial_baud_rate(
       const protos_json::serial_proto::SetSerialBaudRateRequest &req);
+  void set_serial_timeout(
+      const protos_json::serial_proto::SetSerialTimeoutRequest &req);
   void set_serial_parity(
       const protos_json::serial_proto::SetSerialParityRequest &req);
+  void write_serial(const protos_json::serial_proto::WriteSerialRequest &req);
+  protos_json::serial_proto::ReadSerialResponse read_serial(
+      const protos_json::serial_proto::ReadSerialRequest &req);
+  void clear_serial(const protos_json::serial_proto::ClearSerialRequest &req);
   void set_item(const protos_json::storage_proto::Item &req);
   protos_json::storage_proto::Item get_item(
       const protos_json::storage_proto::ItemIndex &req);

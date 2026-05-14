@@ -584,6 +584,20 @@ TEST(JsonSerialProtoTest, SerialRequestsSerializeExpectedFields) {
   parity.device = "ttyS0";
   parity.parity = 2;
   EXPECT_EQ(nlohmann::json(parity).at("parity"), 2);
+
+  protos_json::serial_proto::SetSerialTimeoutRequest timeout;
+  timeout.device = "ttyS0";
+  timeout.timeout = 800;
+  EXPECT_EQ(nlohmann::json(timeout).at("timeout"), 800);
+
+  protos_json::serial_proto::WriteSerialRequest write;
+  write.device = "ttyS0";
+  write.data = {1, 2, 3};
+  EXPECT_EQ(nlohmann::json(write).at("data").size(), 3U);
+
+  const auto read = nlohmann::json::parse(R"({"data":[1,2,3]})")
+                        .get<protos_json::serial_proto::ReadSerialResponse>();
+  EXPECT_EQ(read.data, std::vector<unsigned int>({1, 2, 3}));
 }
 
 TEST(JsonShortcutProtoTest, ShortcutListParsesControllerPayload) {

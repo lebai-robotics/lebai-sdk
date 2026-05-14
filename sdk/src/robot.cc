@@ -2089,11 +2089,39 @@ void Robot::set_serial_baud_rate(std::string device, unsigned int baud_rate) {
   impl_->set_serial_baud_rate(req);
 }
 
+void Robot::set_serial_timeout(std::string device, unsigned int timeout) {
+  protos_json::serial_proto::SetSerialTimeoutRequest req;
+  req.device = device;
+  req.timeout = timeout;
+  impl_->set_serial_timeout(req);
+}
+
 void Robot::set_serial_parity(std::string device, unsigned int parity) {
   protos_json::serial_proto::SetSerialParityRequest req;
   req.device = device;
   req.parity = parity;
   impl_->set_serial_parity(req);
+}
+
+void Robot::write_serial(std::string device, std::vector<unsigned int> data) {
+  protos_json::serial_proto::WriteSerialRequest req;
+  req.device = device;
+  req.data = data;
+  impl_->write_serial(req);
+}
+
+std::vector<unsigned int> Robot::read_serial(std::string device,
+                                             unsigned int len) {
+  protos_json::serial_proto::ReadSerialRequest req;
+  req.device = device;
+  req.len = len;
+  return impl_->read_serial(req).data;
+}
+
+void Robot::clear_serial(std::string device) {
+  protos_json::serial_proto::ClearSerialRequest req;
+  req.device = device;
+  impl_->clear_serial(req);
 }
 
 void Robot::set_item(StorageItem item) {

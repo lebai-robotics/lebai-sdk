@@ -798,9 +798,26 @@ void Robot::RobotImpl::set_serial_baud_rate(
     const protos_json::serial_proto::SetSerialBaudRateRequest &req) {
   rpc_client_->Call<void>("set_serial_baud_rate", {req});
 }
+void Robot::RobotImpl::set_serial_timeout(
+    const protos_json::serial_proto::SetSerialTimeoutRequest &req) {
+  rpc_client_->Call<void>("set_serial_timeout", {req});
+}
 void Robot::RobotImpl::set_serial_parity(
     const protos_json::serial_proto::SetSerialParityRequest &req) {
   rpc_client_->Call<void>("set_serial_parity", {req});
+}
+void Robot::RobotImpl::write_serial(
+    const protos_json::serial_proto::WriteSerialRequest &req) {
+  rpc_client_->Call<void>("write_serial", {req});
+}
+protos_json::serial_proto::ReadSerialResponse Robot::RobotImpl::read_serial(
+    const protos_json::serial_proto::ReadSerialRequest &req) {
+  return rpc_client_->Call<protos_json::serial_proto::ReadSerialResponse>(
+      "read_serial", {req});
+}
+void Robot::RobotImpl::clear_serial(
+    const protos_json::serial_proto::ClearSerialRequest &req) {
+  rpc_client_->Call<void>("clear_serial", {req});
 }
 void Robot::RobotImpl::set_item(
     const protos_json::storage_proto::Item &req) {
