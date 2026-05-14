@@ -23,6 +23,7 @@
 #include "protos_json/file_proto.hh"
 #include "protos_json/io_proto.hh"
 #include "protos_json/kinematic_proto.hh"
+#include "protos_json/message_proto.hh"
 #include "protos_json/motion_proto.hh"
 #include "protos_json/modbus_proto.hh"
 #include "protos_json/safety_proto.hh"
@@ -267,6 +268,27 @@ TEST(JsonKinematicProtoTest, KinDataParsesControllerPayload) {
   ASSERT_EQ(parsed.actual_joint_pose.size(), 6U);
   EXPECT_DOUBLE_EQ(parsed.actual_tcp_pose.position.x, -0.54);
   EXPECT_DOUBLE_EQ(parsed.actual_tcp_pose.rotation.euler_zyx.x, 1.5708);
+}
+
+TEST(JsonMessageProtoTest, MessagesParseControllerPayload) {
+  const auto json = nlohmann::json::parse(R"({
+    "messages":[
+      {
+        "level":"ERROR",
+        "kind":"TRAJECTOR_ERROR",
+        "detail":"trajector error code: 6",
+        "time":"2026-04-14T05:01:28.573084023+00:00"
+      }
+    ]
+  })");
+
+  const auto parsed = json.get<protos_json::message_proto::Messages>();
+
+  ASSERT_EQ(parsed.messages.size(), 1U);
+  EXPECT_EQ(parsed.messages.front().level, "ERROR");
+  EXPECT_EQ(parsed.messages.front().kind, "TRAJECTOR_ERROR");
+  EXPECT_EQ(parsed.messages.front().time,
+            "2026-04-14T05:01:28.573084023+00:00");
 }
 
 TEST(JsonMotionProtoTest, MoveRequestSerializesJointPoseInProtoShape) {

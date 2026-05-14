@@ -149,6 +149,13 @@ struct SoftwareInfoData {
   std::map<std::string, SoftwareItemInfoData> software; /*!< 软件信息. */
 };
 
+struct MessageData {
+  std::string level;  /*!< 消息等级. */
+  std::string kind;   /*!< 消息类型. */
+  std::string detail; /*!< 详细信息. */
+  std::string time;   /*!< 消息产生时间. */
+};
+
 /**
  * @brief 机械臂关节运动数据结构.
  *
@@ -723,6 +730,12 @@ class Robot {
    * @return 设备名列表
    */
   std::vector<std::string> get_box_devices(const std::string &prefix);
+  /**
+   * @brief 获取控制器消息列表
+   *
+   * @return 消息列表
+   */
+  std::vector<MessageData> get_messages();
   /**
    * @brief 获取机械臂物理数据
    *

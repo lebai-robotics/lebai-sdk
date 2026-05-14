@@ -91,6 +91,11 @@ TEST_F(RobotTest, TestBoxDevicesSmoke) {
   EXPECT_FALSE(devices.empty());
 }
 
+TEST_F(RobotTest, TestMessagesSmoke) {
+  const auto messages = robot_.get_messages();
+  EXPECT_FALSE(messages.empty());
+}
+
 TEST_F(RobotTest, TestEstopReasonSmoke) {
   EXPECT_EQ(robot_.get_estop_reason(), 0);
 }

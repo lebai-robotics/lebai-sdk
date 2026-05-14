@@ -28,6 +28,7 @@
 #include "protos_json/kin_factor_proto.hh"
 #include "protos_json/kinematic_proto.hh"
 #include "protos_json/led_proto.hh"
+#include "protos_json/message_proto.hh"
 #include "protos_json/modbus_proto.hh"
 #include "protos_json/motion_proto.hh"
 #include "protos_json/posture_proto.hh"
@@ -97,6 +98,7 @@ class Robot::RobotImpl {
   protos_json::system_proto::SoftwareInfo get_software_info();
   protos_json::system_proto::GetBoxDevicesResponse get_box_devices(
       const protos_json::system_proto::GetBoxDevicesRequest &req);
+  protos_json::message_proto::Messages get_messages();
   protos_json::system_proto::PhyData get_phy_data();
   protos_json::kinematic_proto::KinData get_kin_data();
   protos_json::io_proto::GetDioPinResponse get_di(

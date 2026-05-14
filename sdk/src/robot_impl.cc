@@ -233,6 +233,11 @@ Robot::RobotImpl::get_box_devices(
       "get_box_devices", {req});
 }
 
+protos_json::message_proto::Messages Robot::RobotImpl::get_messages() {
+  return rpc_client_->Call<protos_json::message_proto::Messages>(
+      "get_messages", {});
+}
+
 protos_json::system_proto::PhyData Robot::RobotImpl::get_phy_data() {
   return rpc_client_->Call<protos_json::system_proto::PhyData>(
       "get_phy_data", {});

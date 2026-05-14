@@ -664,6 +664,20 @@ std::vector<std::string> Robot::get_box_devices(const std::string &prefix) {
   return impl_->get_box_devices(req).devices;
 }
 
+std::vector<MessageData> Robot::get_messages() {
+  const auto response = impl_->get_messages();
+  std::vector<MessageData> messages;
+  for (const auto &message : response.messages) {
+    MessageData data;
+    data.level = message.level;
+    data.kind = message.kind;
+    data.detail = message.detail;
+    data.time = message.time;
+    messages.push_back(data);
+  }
+  return messages;
+}
+
 PhysicalData Robot::get_phy_data() {
   auto phy_data = impl_->get_phy_data();
   PhysicalData physical_data;
