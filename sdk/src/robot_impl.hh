@@ -94,6 +94,8 @@ class Robot::RobotImpl {
   void move_pvat(const protos_json::motion_proto::MovePvatRequest &req);
   protos_json::motion_proto::Trajectory load_trajectory(
       const protos_json::db_proto::LoadRequest &req);
+  void save_trajectory(
+      const protos_json::motion_proto::SaveTrajectoryRequest &req);
   protos_json::db_proto::LoadListResponse load_trajectory_list(
       const protos_json::db_proto::LoadListRequest &req);
   void wait_move(const protos_json::motion_proto::MotionIndex &req);

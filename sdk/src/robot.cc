@@ -627,6 +627,25 @@ static JointMoveData convertToJointMoveData(
   return data;
 }
 
+static protos_json::motion_proto::Trajectory convertToMotionTrajectory(
+    const TrajectoryData &trajectory) {
+  protos_json::motion_proto::Trajectory data;
+  data.kind = trajectory.kind;
+  for (const auto &point : trajectory.data) {
+    protos_json::motion_proto::MovePvatRequest point_data;
+    point_data.duration = point.duration;
+    for (const auto &joint : point.joints) {
+      protos_json::motion_proto::JointMove joint_data;
+      joint_data.pose = joint.pose;
+      joint_data.velocity = joint.velocity;
+      joint_data.acc = joint.acc;
+      point_data.joints.push_back(joint_data);
+    }
+    data.data.push_back(point_data);
+  }
+  return data;
+}
+
 void Robot::wait_move(unsigned int id) {
   protos_json::motion_proto::MotionIndex req;
   req.id = id;
@@ -1937,6 +1956,15 @@ TrajectoryData Robot::load_trajectory(std::string name, std::string dir) {
     trajectory.data.push_back(point_data);
   }
   return trajectory;
+}
+
+void Robot::save_trajectory(std::string name, TrajectoryData trajectory,
+                            std::string dir) {
+  protos_json::motion_proto::SaveTrajectoryRequest req;
+  req.name = name;
+  req.data = convertToMotionTrajectory(trajectory);
+  req.dir = dir;
+  impl_->save_trajectory(req);
 }
 
 std::vector<std::string> Robot::load_pose_list(std::string dir) {

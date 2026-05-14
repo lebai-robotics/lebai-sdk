@@ -223,6 +223,13 @@ TEST_F(RobotTest, TestResourceListsSmoke) {
 }
 
 TEST_F(RobotTest, TestTrajectoryResourceSmoke) {
+  l_master::TrajectoryData trajectory_data;
+  trajectory_data.kind = "PVAT";
+  EXPECT_NO_THROW(
+      robot_.save_trajectory("codex_trajectory_smoke", trajectory_data, ""));
+  const auto saved_trajectory =
+      robot_.load_trajectory("codex_trajectory_smoke", "");
+  EXPECT_EQ(saved_trajectory.kind, "PVAT");
   const auto trajectory = robot_.load_trajectory("", "");
   EXPECT_FALSE(trajectory.kind.empty());
 }

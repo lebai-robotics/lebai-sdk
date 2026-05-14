@@ -152,6 +152,13 @@ struct Trajectory {
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(Trajectory, kind, data)
 };
 
+struct SaveTrajectoryRequest {
+  std::string name;
+  Trajectory data;
+  std::string dir;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(SaveTrajectoryRequest, name, data, dir)
+};
+
 enum class MotionState {
   WAIT = 0,
   RUNNING = 1,

@@ -177,6 +177,10 @@ protos_json::motion_proto::Trajectory Robot::RobotImpl::load_trajectory(
   return rpc_client_->Call<protos_json::motion_proto::Trajectory>(
       "load_trajectory", {req});
 }
+void Robot::RobotImpl::save_trajectory(
+    const protos_json::motion_proto::SaveTrajectoryRequest &req) {
+  rpc_client_->Call<void>("save_trajectory", {req});
+}
 protos_json::db_proto::LoadListResponse
 Robot::RobotImpl::load_trajectory_list(
     const protos_json::db_proto::LoadListRequest &req) {

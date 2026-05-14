@@ -1779,6 +1779,15 @@ class Robot {
    */
   TrajectoryData load_trajectory(std::string name, std::string dir = "");
   /**
+   * @brief 保存轨迹.
+   *
+   * @param name 轨迹名称.
+   * @param trajectory 轨迹数据.
+   * @param dir 轨迹目录.
+   */
+  void save_trajectory(std::string name, TrajectoryData trajectory,
+                       std::string dir = "");
+  /**
    * @brief 查询路点列表.
    *
    * @param dir 路点目录.
