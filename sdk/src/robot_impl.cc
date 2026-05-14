@@ -237,6 +237,18 @@ protos_json::db_proto::Dirs Robot::RobotImpl::get_dirs() {
   return rpc_client_->Call<protos_json::db_proto::Dirs>("get_dirs", {});
 }
 
+protos_json::shortcut_proto::ShortcutList
+Robot::RobotImpl::get_short_poses() {
+  return rpc_client_->Call<protos_json::shortcut_proto::ShortcutList>(
+      "get_short_poses", {});
+}
+
+protos_json::shortcut_proto::ShortcutList
+Robot::RobotImpl::get_short_tasks() {
+  return rpc_client_->Call<protos_json::shortcut_proto::ShortcutList>(
+      "get_short_tasks", {});
+}
+
 protos_json::message_proto::Messages Robot::RobotImpl::get_messages() {
   return rpc_client_->Call<protos_json::message_proto::Messages>(
       "get_messages", {});

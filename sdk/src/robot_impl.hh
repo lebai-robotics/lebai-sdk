@@ -36,6 +36,7 @@
 #include "protos_json/safety_proto.hh"
 #include "protos_json/signal_proto.hh"
 #include "protos_json/serial_proto.hh"
+#include "protos_json/shortcut_proto.hh"
 #include "protos_json/storage_proto.hh"
 #include "protos_json/system_proto.hh"
 #include "protos_json/upgrade_proto.hh"
@@ -101,6 +102,8 @@ class Robot::RobotImpl {
   protos_json::system_proto::GetBoxDevicesResponse get_box_devices(
       const protos_json::system_proto::GetBoxDevicesRequest &req);
   protos_json::db_proto::Dirs get_dirs();
+  protos_json::shortcut_proto::ShortcutList get_short_poses();
+  protos_json::shortcut_proto::ShortcutList get_short_tasks();
   protos_json::message_proto::Messages get_messages();
   protos_json::hardware_proto::OtaState get_ota_state();
   protos_json::upgrade_proto::CheckUpgradeResponse check_upgrade();

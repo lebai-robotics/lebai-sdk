@@ -96,6 +96,11 @@ TEST_F(RobotTest, TestDbDirsSmoke) {
   EXPECT_NO_THROW(robot_.get_dirs());
 }
 
+TEST_F(RobotTest, TestShortcutReadsSmoke) {
+  EXPECT_NO_THROW(robot_.get_short_poses());
+  EXPECT_NO_THROW(robot_.get_short_tasks());
+}
+
 TEST_F(RobotTest, TestMessagesSmoke) {
   const auto messages = robot_.get_messages();
   EXPECT_FALSE(messages.empty());

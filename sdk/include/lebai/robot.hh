@@ -178,6 +178,12 @@ struct DirData {
   uint32_t id = 0;  /*!< 目录内部ID. */
 };
 
+struct ShortcutData {
+  uint32_t id = 0;  /*!< 快捷方式ID. */
+  std::string dir;  /*!< 目标目录. */
+  std::string name; /*!< 目标名称. */
+};
+
 /**
  * @brief 机械臂关节运动数据结构.
  *
@@ -758,6 +764,18 @@ class Robot {
    * @return 目录列表
    */
   std::vector<DirData> get_dirs();
+  /**
+   * @brief 获取所有快捷路点
+   *
+   * @return 快捷路点列表
+   */
+  std::vector<ShortcutData> get_short_poses();
+  /**
+   * @brief 获取所有快捷任务
+   *
+   * @return 快捷任务列表
+   */
+  std::vector<ShortcutData> get_short_tasks();
   /**
    * @brief 获取控制器消息列表
    *

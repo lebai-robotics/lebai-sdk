@@ -676,6 +676,27 @@ std::vector<DirData> Robot::get_dirs() {
   return dirs;
 }
 
+static std::vector<ShortcutData> convertShortcuts(
+    const protos_json::shortcut_proto::ShortcutList &response) {
+  std::vector<ShortcutData> shortcuts;
+  for (const auto &shortcut : response.list) {
+    ShortcutData data;
+    data.id = shortcut.id;
+    data.dir = shortcut.dir;
+    data.name = shortcut.name;
+    shortcuts.push_back(data);
+  }
+  return shortcuts;
+}
+
+std::vector<ShortcutData> Robot::get_short_poses() {
+  return convertShortcuts(impl_->get_short_poses());
+}
+
+std::vector<ShortcutData> Robot::get_short_tasks() {
+  return convertShortcuts(impl_->get_short_tasks());
+}
+
 std::vector<MessageData> Robot::get_messages() {
   const auto response = impl_->get_messages();
   std::vector<MessageData> messages;

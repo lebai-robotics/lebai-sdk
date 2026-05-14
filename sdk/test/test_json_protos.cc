@@ -29,6 +29,7 @@
 #include "protos_json/modbus_proto.hh"
 #include "protos_json/safety_proto.hh"
 #include "protos_json/serial_proto.hh"
+#include "protos_json/shortcut_proto.hh"
 #include "protos_json/signal_proto.hh"
 #include "protos_json/storage_proto.hh"
 #include "protos_json/system_proto.hh"
@@ -422,6 +423,17 @@ TEST(JsonSerialProtoTest, SerialRequestsSerializeExpectedFields) {
   parity.device = "ttyS0";
   parity.parity = 2;
   EXPECT_EQ(nlohmann::json(parity).at("parity"), 2);
+}
+
+TEST(JsonShortcutProtoTest, ShortcutListParsesControllerPayload) {
+  const auto json = nlohmann::json::parse(
+      R"({"list":[{"id":1,"dir":"default","name":"home"}]})");
+  const auto parsed = json.get<protos_json::shortcut_proto::ShortcutList>();
+
+  ASSERT_EQ(parsed.list.size(), 1U);
+  EXPECT_EQ(parsed.list.front().id, 1U);
+  EXPECT_EQ(parsed.list.front().dir, "default");
+  EXPECT_EQ(parsed.list.front().name, "home");
 }
 
 TEST(JsonUpgradeProtoTest, UpgradeResponsesParseControllerPayloads) {
