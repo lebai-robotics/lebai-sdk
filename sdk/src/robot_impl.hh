@@ -88,6 +88,7 @@ class Robot::RobotImpl {
   protos_json::motion_proto::GetMotionStateResponse get_motion_state(
       const protos_json::motion_proto::MotionIndex &req);
   void stop_move();
+  void skip_move();
   protos_json::system_proto::RobotState get_robot_state();
   protos_json::system_proto::EstopReason get_estop_reason();
   protos_json::system_proto::SystemInfo get_system_info();

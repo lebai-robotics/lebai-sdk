@@ -584,6 +584,8 @@ std::string Robot::get_motion_state(unsigned int id) {
 
 void Robot::stop_move() { impl_->stop_move(); }
 
+void Robot::skip_move() { impl_->skip_move(); }
+
 int Robot::get_robot_state() {
   return static_cast<int>(impl_->get_robot_state());
 }

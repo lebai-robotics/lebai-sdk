@@ -162,6 +162,7 @@ TEST_F(RobotTest, TestDioModeSmoke) {
 TEST_F(RobotTest, TestStopMoveSmoke) {
   EXPECT_NO_THROW(robot_.start_sys());
   std::this_thread::sleep_for(std::chrono::seconds(1));
+  EXPECT_NO_THROW(robot_.skip_move());
   EXPECT_NO_THROW(robot_.stop_move());
 }
 

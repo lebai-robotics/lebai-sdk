@@ -605,6 +605,10 @@ class Robot {
    * @brief 停止所有运动.
    */
   void stop_move();
+  /**
+   * @brief 跳过当前运动.
+   */
+  void skip_move();
   /** @}*/
 
   /** \addtogroup STATUS

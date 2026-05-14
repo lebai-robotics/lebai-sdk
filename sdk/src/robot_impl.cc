@@ -189,6 +189,9 @@ Robot::RobotImpl::get_motion_state(
 void Robot::RobotImpl::stop_move() {
   rpc_client_->Call<void>("stop_move", {});
 }
+void Robot::RobotImpl::skip_move() {
+  rpc_client_->Call<void>("skip_move", {});
+}
 protos_json::system_proto::RobotState Robot::RobotImpl::get_robot_state() {
   const auto response =
       rpc_client_->Call<protos_json::system_proto::GetRobotStateResponse>(
