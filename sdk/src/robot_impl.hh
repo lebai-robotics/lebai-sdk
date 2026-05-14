@@ -267,6 +267,10 @@ class Robot::RobotImpl {
   protos_json::modbus_proto::Modbus load_modbus(
       const protos_json::db_proto::LoadRequest &req);
   void save_modbus(const protos_json::modbus_proto::SaveModbusRequest &req);
+  void set_modbus_timeout(
+      const protos_json::modbus_proto::SetModbusTimeoutRequest &req);
+  void set_modbus_retry(
+      const protos_json::modbus_proto::SetModbusRetryRequest &req);
   protos_json::db_proto::LoadListResponse load_modbus_list(
       const protos_json::db_proto::LoadListRequest &req);
   protos_json::modbus_proto::ModbusRegister load_modbus_register(

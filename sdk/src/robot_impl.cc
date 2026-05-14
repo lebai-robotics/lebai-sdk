@@ -793,6 +793,14 @@ void Robot::RobotImpl::save_modbus(
     const protos_json::modbus_proto::SaveModbusRequest &req) {
   rpc_client_->Call<void>("save_modbus", {req});
 }
+void Robot::RobotImpl::set_modbus_timeout(
+    const protos_json::modbus_proto::SetModbusTimeoutRequest &req) {
+  rpc_client_->Call<void>("set_modbus_timeout", {req});
+}
+void Robot::RobotImpl::set_modbus_retry(
+    const protos_json::modbus_proto::SetModbusRetryRequest &req) {
+  rpc_client_->Call<void>("set_modbus_retry", {req});
+}
 protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_modbus_list(
     const protos_json::db_proto::LoadListRequest &req) {
   return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(

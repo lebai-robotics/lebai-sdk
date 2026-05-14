@@ -2191,6 +2191,20 @@ void Robot::save_modbus(std::string name, ModbusData modbus) {
   impl_->save_modbus(req);
 }
 
+void Robot::set_modbus_timeout(std::string device, unsigned int timeout) {
+  protos_json::modbus_proto::SetModbusTimeoutRequest req;
+  req.device = device;
+  req.timeout = timeout;
+  impl_->set_modbus_timeout(req);
+}
+
+void Robot::set_modbus_retry(std::string device, unsigned int retry) {
+  protos_json::modbus_proto::SetModbusRetryRequest req;
+  req.device = device;
+  req.retry = retry;
+  impl_->set_modbus_retry(req);
+}
+
 std::vector<std::string> Robot::load_modbus_register_list(std::string device) {
   protos_json::modbus_proto::LoadModbusRegisterListRequest req;
   req.device = device;

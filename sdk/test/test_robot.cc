@@ -260,6 +260,8 @@ TEST_F(RobotTest, TestModbusResourceSmoke) {
   EXPECT_NO_THROW(robot_.save_modbus("codex_modbus_smoke", modbus));
   const auto saved_modbus = robot_.load_modbus("codex_modbus_smoke", "");
   EXPECT_EQ(saved_modbus.kind, "ROBOT");
+  EXPECT_NO_THROW(robot_.set_modbus_timeout("codex_modbus_smoke", 600));
+  EXPECT_NO_THROW(robot_.set_modbus_retry("codex_modbus_smoke", 2));
 
   l_master::ModbusRegisterData reg;
   reg.kind = "DISCRETE_INPUT";

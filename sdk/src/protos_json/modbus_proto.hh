@@ -34,6 +34,18 @@ struct SaveModbusRegisterRequest {
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(SaveModbusRegisterRequest, device, name, data)
 };
 
+struct SetModbusTimeoutRequest {
+  std::string device;
+  unsigned int timeout{};
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(SetModbusTimeoutRequest, device, timeout)
+};
+
+struct SetModbusRetryRequest {
+  std::string device;
+  unsigned int retry{};
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(SetModbusRetryRequest, device, retry)
+};
+
 struct SetCoilRequest {
   std::string device;
   std::string pin;

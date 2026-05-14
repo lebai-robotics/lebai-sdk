@@ -1907,6 +1907,20 @@ class Robot {
    */
   void save_modbus(std::string name, ModbusData modbus);
   /**
+   * @brief 设置Modbus设备超时时间.
+   *
+   * @param device Modbus设备名称.
+   * @param timeout 超时时间，单位毫秒.
+   */
+  void set_modbus_timeout(std::string device, unsigned int timeout);
+  /**
+   * @brief 设置Modbus设备重试次数.
+   *
+   * @param device Modbus设备名称.
+   * @param retry 重试次数.
+   */
+  void set_modbus_retry(std::string device, unsigned int retry);
+  /**
    * @brief 查询Modbus寄存器列表.
    *
    * @param device Modbus设备名称.

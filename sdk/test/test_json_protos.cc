@@ -736,6 +736,20 @@ TEST(JsonUpgradeProtoTest, UpgradeResponsesParseControllerPayloads) {
 }
 
 TEST(JsonModbusProtoTest, RequestsAndResponsesRoundTrip) {
+  protos_json::modbus_proto::SetModbusTimeoutRequest timeout_req;
+  timeout_req.device = "modbus0";
+  timeout_req.timeout = 600;
+  const nlohmann::json timeout_json = timeout_req;
+  EXPECT_EQ(timeout_json.at("device"), "modbus0");
+  EXPECT_EQ(timeout_json.at("timeout"), 600);
+
+  protos_json::modbus_proto::SetModbusRetryRequest retry_req;
+  retry_req.device = "modbus0";
+  retry_req.retry = 2;
+  const nlohmann::json retry_json = retry_req;
+  EXPECT_EQ(retry_json.at("device"), "modbus0");
+  EXPECT_EQ(retry_json.at("retry"), 2);
+
   protos_json::modbus_proto::SetRegisterRequest set_req;
   set_req.device = "modbus0";
   set_req.pin = "40001";
