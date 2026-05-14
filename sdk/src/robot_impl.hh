@@ -112,6 +112,8 @@ class Robot::RobotImpl {
   protos_json::shortcut_proto::ShortcutList get_short_tasks();
   protos_json::trigger_proto::Triggers get_triggers();
   protos_json::led_proto::LedStyles get_led_styles();
+  protos_json::led_proto::LedStyle load_led_style(
+      const protos_json::db_proto::LoadRequest &req);
   protos_json::db_proto::LoadListResponse load_led_style_list(
       const protos_json::db_proto::LoadListRequest &req);
   protos_json::motor_proto::ServoParams get_servo_params();

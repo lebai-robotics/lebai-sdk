@@ -37,8 +37,19 @@ struct LedStyle {
   LedStyleLedData led;
   std::string voice;
   std::string volume;
-  NLOHMANN_DEFINE_TYPE_INTRUSIVE(LedStyle, led, voice, volume)
 };
+
+inline void to_json(nlohmann::json &json, const LedStyle &style) {
+  json = nlohmann::json{{"led", style.led},
+                        {"voice", style.voice},
+                        {"volume", style.volume}};
+}
+
+inline void from_json(const nlohmann::json &json, LedStyle &style) {
+  style.led = json.value("led", LedStyleLedData{});
+  style.voice = json.value("voice", std::string{});
+  style.volume = json.value("volume", std::string{});
+}
 
 struct LedStyles {
   std::map<std::string, LedStyle> styles;

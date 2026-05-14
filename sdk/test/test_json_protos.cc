@@ -598,6 +598,17 @@ TEST(JsonLedProtoTest, LedStylesParseControllerPayload) {
   EXPECT_EQ(parsed.styles.at("5").volume, "MID");
 }
 
+TEST(JsonLedProtoTest, LedStyleParsesControllerDefaults) {
+  const auto parsed =
+      nlohmann::json{{"voice", "OFF"}, {"volume", "MUTE"}}
+          .get<protos_json::led_proto::LedStyle>();
+
+  EXPECT_EQ(parsed.voice, "OFF");
+  EXPECT_EQ(parsed.volume, "MUTE");
+  EXPECT_TRUE(parsed.led.mode.empty());
+  EXPECT_TRUE(parsed.led.colors.empty());
+}
+
 TEST(JsonMotorProtoTest, ServoParamsParseControllerPayload) {
   const auto json = nlohmann::json::parse(R"({
     "params":[

@@ -887,6 +887,13 @@ class Robot {
    */
   std::map<std::string, LedStyleData> get_led_styles();
   /**
+   * @brief 查询声光样式.
+   *
+   * @param name 样式名称.
+   * @param dir 样式目录.
+   */
+  LedStyleData load_led_style(std::string name, std::string dir = "");
+  /**
    * @brief 查询声光样式列表.
    *
    * @param dir 声光样式目录.

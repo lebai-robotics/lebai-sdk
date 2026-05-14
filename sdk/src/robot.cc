@@ -748,6 +748,20 @@ std::map<std::string, LedStyleData> Robot::get_led_styles() {
   return styles;
 }
 
+LedStyleData Robot::load_led_style(std::string name, std::string dir) {
+  protos_json::db_proto::LoadRequest req;
+  req.name = name;
+  req.dir = dir;
+  const auto style = impl_->load_led_style(req);
+  LedStyleData data;
+  data.mode = style.led.mode;
+  data.speed = style.led.speed;
+  data.colors = style.led.colors;
+  data.voice = style.voice;
+  data.volume = style.volume;
+  return data;
+}
+
 std::vector<std::string> Robot::load_led_style_list(std::string dir) {
   protos_json::db_proto::LoadListRequest req;
   req.dir = dir;

@@ -110,6 +110,11 @@ TEST_F(RobotTest, TestLedStylesSmoke) {
   EXPECT_FALSE(styles.empty());
 }
 
+TEST_F(RobotTest, TestLedStyleResourceSmoke) {
+  const auto style = robot_.load_led_style("", "");
+  EXPECT_FALSE(style.voice.empty());
+}
+
 TEST_F(RobotTest, TestServoParamsSmoke) {
   const auto params = robot_.get_servo_params();
   EXPECT_EQ(params.size(), 6U);
