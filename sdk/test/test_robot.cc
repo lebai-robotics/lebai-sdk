@@ -209,6 +209,11 @@ TEST_F(RobotTest, TestResourceListsSmoke) {
   EXPECT_NO_THROW(robot_.load_modbus_register_list(""));
 }
 
+TEST_F(RobotTest, TestModbusResourceSmoke) {
+  EXPECT_NO_THROW(robot_.load_modbus("", ""));
+  EXPECT_NO_THROW(robot_.load_modbus_register("", ""));
+}
+
 TEST_F(RobotTest, TestStopSmoke) {
   EXPECT_NO_THROW(robot_.start_sys());
   std::this_thread::sleep_for(std::chrono::seconds(1));

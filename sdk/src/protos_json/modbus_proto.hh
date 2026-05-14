@@ -7,6 +7,20 @@
 
 namespace protos_json::modbus_proto {
 
+struct Modbus {
+  std::string kind;
+  std::string address;
+  unsigned int port{};
+  unsigned int slave_id{};
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(Modbus, kind, address, port, slave_id)
+};
+
+struct ModbusRegister {
+  std::string kind;
+  unsigned int address{};
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(ModbusRegister, kind, address)
+};
+
 struct SetCoilRequest {
   std::string device;
   std::string pin;
@@ -62,6 +76,12 @@ struct GetRegistersResponse {
 struct LoadModbusRegisterListRequest {
   std::string device;
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(LoadModbusRegisterListRequest, device)
+};
+
+struct LoadModbusRegisterRequest {
+  std::string device;
+  std::string name;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(LoadModbusRegisterRequest, device, name)
 };
 
 }  // namespace protos_json::modbus_proto

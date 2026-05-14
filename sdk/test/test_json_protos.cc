@@ -686,6 +686,23 @@ TEST(JsonModbusProtoTest, RequestsAndResponsesRoundTrip) {
   EXPECT_EQ(response.values.back(), 3U);
 }
 
+TEST(JsonModbusProtoTest, ModbusResourcesParseControllerPayloads) {
+  const auto modbus =
+      nlohmann::json{{"kind", "ROBOT"},
+                     {"address", ""},
+                     {"port", 0},
+                     {"slave_id", 0}}
+          .get<protos_json::modbus_proto::Modbus>();
+  const auto reg =
+      nlohmann::json{{"kind", "DISCRETE_INPUT"}, {"address", 0}}
+          .get<protos_json::modbus_proto::ModbusRegister>();
+
+  EXPECT_EQ(modbus.kind, "ROBOT");
+  EXPECT_EQ(modbus.slave_id, 0U);
+  EXPECT_EQ(reg.kind, "DISCRETE_INPUT");
+  EXPECT_EQ(reg.address, 0U);
+}
+
 TEST(JsonSafetyProtoTest, CollisionDetectorParsesControllerPayload) {
   const auto json = nlohmann::json::parse(
       R"({"action":"ESTOP","pause_time":0,"sensitivity":50})");

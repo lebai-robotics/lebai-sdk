@@ -1876,10 +1876,35 @@ std::vector<std::string> Robot::load_modbus_list(std::string dir) {
   return impl_->load_modbus_list(req).names;
 }
 
+ModbusData Robot::load_modbus(std::string name, std::string dir) {
+  protos_json::db_proto::LoadRequest req;
+  req.name = name;
+  req.dir = dir;
+  const auto resp = impl_->load_modbus(req);
+  ModbusData data;
+  data.kind = resp.kind;
+  data.address = resp.address;
+  data.port = resp.port;
+  data.slave_id = resp.slave_id;
+  return data;
+}
+
 std::vector<std::string> Robot::load_modbus_register_list(std::string device) {
   protos_json::modbus_proto::LoadModbusRegisterListRequest req;
   req.device = device;
   return impl_->load_modbus_register_list(req).names;
+}
+
+ModbusRegisterData Robot::load_modbus_register(std::string device,
+                                               std::string name) {
+  protos_json::modbus_proto::LoadModbusRegisterRequest req;
+  req.device = device;
+  req.name = name;
+  const auto resp = impl_->load_modbus_register(req);
+  ModbusRegisterData data;
+  data.kind = resp.kind;
+  data.address = resp.address;
+  return data;
 }
 
 void Robot::write_single_coil(std::string device, std::string addr,

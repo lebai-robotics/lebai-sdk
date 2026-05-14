@@ -677,10 +677,21 @@ protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_structure_list(
   return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
       "load_structure_list", {req});
 }
+protos_json::modbus_proto::Modbus Robot::RobotImpl::load_modbus(
+    const protos_json::db_proto::LoadRequest &req) {
+  return rpc_client_->Call<protos_json::modbus_proto::Modbus>("load_modbus",
+                                                              {req});
+}
 protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_modbus_list(
     const protos_json::db_proto::LoadListRequest &req) {
   return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
       "load_modbus_list", {req});
+}
+protos_json::modbus_proto::ModbusRegister
+Robot::RobotImpl::load_modbus_register(
+    const protos_json::modbus_proto::LoadModbusRegisterRequest &req) {
+  return rpc_client_->Call<protos_json::modbus_proto::ModbusRegister>(
+      "load_modbus_register", {req});
 }
 protos_json::db_proto::LoadListResponse
 Robot::RobotImpl::load_modbus_register_list(

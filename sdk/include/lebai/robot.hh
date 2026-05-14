@@ -270,6 +270,18 @@ struct TaskStdoutData {
   std::string stdout_text; /*!< 标准输出. */
 };
 
+struct ModbusData {
+  std::string kind;    /*!< Modbus设备类型. */
+  std::string address; /*!< IP地址或串口地址. */
+  unsigned int port = 0;     /*!< TCP端口号. */
+  unsigned int slave_id = 0; /*!< Modbus从机地址. */
+};
+
+struct ModbusRegisterData {
+  std::string kind;        /*!< Modbus寄存器类型. */
+  unsigned int address = 0; /*!< Modbus内存地址. */
+};
+
 /**
  * @brief 机械臂关节运动数据结构.
  *
@@ -1676,11 +1688,26 @@ class Robot {
    */
   std::vector<std::string> load_modbus_list(std::string dir = "");
   /**
+   * @brief 查询Modbus设备.
+   *
+   * @param name Modbus设备名称.
+   * @param dir Modbus配置目录.
+   */
+  ModbusData load_modbus(std::string name, std::string dir = "");
+  /**
    * @brief 查询Modbus寄存器列表.
    *
    * @param device Modbus设备名称.
    */
   std::vector<std::string> load_modbus_register_list(std::string device);
+  /**
+   * @brief 查询Modbus寄存器.
+   *
+   * @param device Modbus设备名称.
+   * @param name 寄存器名称.
+   */
+  ModbusRegisterData load_modbus_register(std::string device,
+                                          std::string name);
 
   /**
    * @brief 写单个线圈.
