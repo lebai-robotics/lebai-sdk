@@ -115,6 +115,10 @@ TEST_F(RobotTest, TestServoParamsSmoke) {
   EXPECT_EQ(params.size(), 6U);
 }
 
+TEST_F(RobotTest, TestPluginsSmoke) {
+  EXPECT_NO_THROW(robot_.load_plugins());
+}
+
 TEST_F(RobotTest, TestMessagesSmoke) {
   const auto messages = robot_.get_messages();
   EXPECT_FALSE(messages.empty());

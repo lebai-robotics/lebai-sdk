@@ -29,6 +29,7 @@
 #include "protos_json/motion_proto.hh"
 #include "protos_json/modbus_proto.hh"
 #include "protos_json/motor_proto.hh"
+#include "protos_json/plugin_proto.hh"
 #include "protos_json/safety_proto.hh"
 #include "protos_json/serial_proto.hh"
 #include "protos_json/shortcut_proto.hh"
@@ -491,6 +492,29 @@ TEST(JsonMotorProtoTest, ServoParamsParseControllerPayload) {
   ASSERT_EQ(parsed.params.size(), 1U);
   EXPECT_DOUBLE_EQ(parsed.params.front().position_kp, 10.0);
   EXPECT_DOUBLE_EQ(parsed.params.front().speed_it, 300.0);
+}
+
+TEST(JsonPluginProtoTest, PluginsParseControllerPayload) {
+  const auto json = nlohmann::json::parse(R"({
+    "plugins":[
+      {
+        "name":"demo",
+        "description":"Demo plugin",
+        "homepage":"https://example.invalid",
+        "auto_restart":true,
+        "web":false,
+        "daemon":true,
+        "cmd":false,
+        "enable":true
+      }
+    ]
+  })");
+  const auto parsed = json.get<protos_json::plugin_proto::Plugins>();
+
+  ASSERT_EQ(parsed.plugins.size(), 1U);
+  EXPECT_EQ(parsed.plugins.front().name, "demo");
+  EXPECT_TRUE(parsed.plugins.front().auto_restart);
+  EXPECT_TRUE(parsed.plugins.front().daemon);
 }
 
 TEST(JsonUpgradeProtoTest, UpgradeResponsesParseControllerPayloads) {

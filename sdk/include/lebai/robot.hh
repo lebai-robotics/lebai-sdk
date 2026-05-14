@@ -220,6 +220,17 @@ struct ServoParamData {
   double torque_cmd_filter = 0.0; /*!< 力矩命令滤波. */
 };
 
+struct PluginInfoData {
+  std::string name;        /*!< 插件名称. */
+  std::string description; /*!< 插件描述. */
+  std::string homepage;    /*!< 项目主页. */
+  bool auto_restart = false; /*!< daemon异常退出后是否自动启动. */
+  bool web = false;          /*!< 是否具备Web功能. */
+  bool daemon = false;       /*!< 是否具备Daemon功能. */
+  bool cmd = false;          /*!< 是否具备Cmd功能. */
+  bool enable = false;       /*!< 是否启用. */
+};
+
 /**
  * @brief 机械臂关节运动数据结构.
  *
@@ -830,6 +841,12 @@ class Robot {
    * @return 伺服参数列表
    */
   std::vector<ServoParamData> get_servo_params();
+  /**
+   * @brief 查询已安装插件列表
+   *
+   * @return 插件信息列表
+   */
+  std::vector<PluginInfoData> load_plugins();
   /**
    * @brief 获取控制器消息列表
    *

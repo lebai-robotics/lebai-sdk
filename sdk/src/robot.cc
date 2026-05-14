@@ -751,6 +751,24 @@ std::vector<ServoParamData> Robot::get_servo_params() {
   return params;
 }
 
+std::vector<PluginInfoData> Robot::load_plugins() {
+  const auto response = impl_->load_plugins();
+  std::vector<PluginInfoData> plugins;
+  for (const auto &plugin : response.plugins) {
+    PluginInfoData data;
+    data.name = plugin.name;
+    data.description = plugin.description;
+    data.homepage = plugin.homepage;
+    data.auto_restart = plugin.auto_restart;
+    data.web = plugin.web;
+    data.daemon = plugin.daemon;
+    data.cmd = plugin.cmd;
+    data.enable = plugin.enable;
+    plugins.push_back(data);
+  }
+  return plugins;
+}
+
 std::vector<MessageData> Robot::get_messages() {
   const auto response = impl_->get_messages();
   std::vector<MessageData> messages;
