@@ -111,6 +111,14 @@ TEST_F(RobotTest, TestLedStylesSmoke) {
 }
 
 TEST_F(RobotTest, TestLedStyleResourceSmoke) {
+  l_master::LedStyleData led_style;
+  led_style.mode = "HOLD_LED";
+  led_style.speed = "SLOW";
+  led_style.voice = "OFF";
+  led_style.volume = "MUTE";
+  EXPECT_NO_THROW(robot_.save_led_style("codex_led_smoke", led_style, ""));
+  const auto saved_style = robot_.load_led_style("codex_led_smoke", "");
+  EXPECT_EQ(saved_style.mode, "HOLD_LED");
   const auto style = robot_.load_led_style("", "");
   EXPECT_FALSE(style.voice.empty());
 }

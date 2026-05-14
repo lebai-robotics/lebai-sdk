@@ -933,6 +933,15 @@ class Robot {
    */
   LedStyleData load_led_style(std::string name, std::string dir = "");
   /**
+   * @brief 保存声光样式.
+   *
+   * @param name 样式名称.
+   * @param style 样式数据.
+   * @param dir 样式目录.
+   */
+  void save_led_style(std::string name, LedStyleData style,
+                      std::string dir = "");
+  /**
    * @brief 查询声光样式列表.
    *
    * @param dir 声光样式目录.

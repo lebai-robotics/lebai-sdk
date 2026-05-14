@@ -832,6 +832,19 @@ LedStyleData Robot::load_led_style(std::string name, std::string dir) {
   return data;
 }
 
+void Robot::save_led_style(std::string name, LedStyleData style,
+                           std::string dir) {
+  protos_json::led_proto::SaveLedStyleRequest req;
+  req.name = name;
+  req.dir = dir;
+  req.data.led.mode = style.mode;
+  req.data.led.speed = style.speed;
+  req.data.led.colors = style.colors;
+  req.data.voice = style.voice;
+  req.data.volume = style.volume;
+  impl_->save_led_style(req);
+}
+
 std::vector<std::string> Robot::load_led_style_list(std::string dir) {
   protos_json::db_proto::LoadListRequest req;
   req.dir = dir;

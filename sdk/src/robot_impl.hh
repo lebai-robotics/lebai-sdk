@@ -119,6 +119,7 @@ class Robot::RobotImpl {
   protos_json::led_proto::LedStyles get_led_styles();
   protos_json::led_proto::LedStyle load_led_style(
       const protos_json::db_proto::LoadRequest &req);
+  void save_led_style(const protos_json::led_proto::SaveLedStyleRequest &req);
   protos_json::db_proto::LoadListResponse load_led_style_list(
       const protos_json::db_proto::LoadListRequest &req);
   protos_json::motor_proto::ServoParams get_servo_params();

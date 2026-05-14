@@ -51,6 +51,13 @@ inline void from_json(const nlohmann::json &json, LedStyle &style) {
   style.volume = json.value("volume", std::string{});
 }
 
+struct SaveLedStyleRequest {
+  std::string name;
+  LedStyle data;
+  std::string dir;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(SaveLedStyleRequest, name, data, dir)
+};
+
 struct LedStyles {
   std::map<std::string, LedStyle> styles;
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(LedStyles, styles)
