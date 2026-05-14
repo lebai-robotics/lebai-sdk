@@ -233,6 +233,7 @@ class Robot::RobotImpl {
   protos_json::posture_proto::CartesianPose get_tcp();
   void set_kin_factor(const protos_json::kin_factor_proto::KinFactor &req);
   protos_json::kin_factor_proto::KinFactor get_kin_factor();
+  void save_tcp(const protos_json::kinematic_proto::SaveTcpRequest &req);
   protos_json::posture_proto::CartesianPose load_tcp(
       const protos_json::db_proto::LoadRequest &req);
   protos_json::db_proto::LoadListResponse load_tcp_list(

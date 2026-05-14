@@ -65,6 +65,18 @@ static CartesianPose convertToCartesianPose(
   return cart_pose;
 }
 
+static protos_json::posture_proto::CartesianPose convertToPosturePose(
+    const CartesianPose &pose) {
+  protos_json::posture_proto::CartesianPose typed_pose;
+  typed_pose.position.x = pose.count("x") ? pose.at("x") : 0.0;
+  typed_pose.position.y = pose.count("y") ? pose.at("y") : 0.0;
+  typed_pose.position.z = pose.count("z") ? pose.at("z") : 0.0;
+  typed_pose.rotation.euler_zyx.x = pose.count("rx") ? pose.at("rx") : 0.0;
+  typed_pose.rotation.euler_zyx.y = pose.count("ry") ? pose.at("ry") : 0.0;
+  typed_pose.rotation.euler_zyx.z = pose.count("rz") ? pose.at("rz") : 0.0;
+  return typed_pose;
+}
+
 static CartesianPose convertToPositionPose(
     const protos_json::posture_proto::Position &position) {
   CartesianPose pose;
@@ -1881,6 +1893,14 @@ int Robot::get_kin_factor() {
 }
 
 int Robot::get_velocity_factor() { return get_kin_factor(); }
+void Robot::save_tcp(std::string name, CartesianPose tcp, std::string dir) {
+  protos_json::kinematic_proto::SaveTcpRequest req;
+  req.name = name;
+  req.data = convertToPosturePose(tcp);
+  req.dir = dir;
+  impl_->save_tcp(req);
+}
+
 CartesianPose Robot::load_tcp(std::string name, std::string dir) {
   protos_json::db_proto::LoadRequest req;
   req.name = name;

@@ -753,6 +753,13 @@ TEST_F(RobotTest, TestTcpAndPayloadSmoke) {
   EXPECT_NO_THROW(robot_.set_tcp({0.0, 0.0, 0.0, 0.0, 0.0, 0.0}));
   const auto tcp = robot_.get_tcp();
   EXPECT_EQ(tcp.size(), 6U);
+  EXPECT_NO_THROW(robot_.save_tcp(
+      "codex_tcp_smoke",
+      {{"x", 0.0}, {"y", 0.0}, {"z", 0.0}, {"rx", 0.0}, {"ry", 0.0},
+       {"rz", 0.0}},
+      ""));
+  const auto saved_tcp = robot_.load_tcp("codex_tcp_smoke", "");
+  EXPECT_EQ(saved_tcp.size(), 6U);
   const auto loaded_tcp = robot_.load_tcp("", "");
   EXPECT_EQ(loaded_tcp.size(), 6U);
 

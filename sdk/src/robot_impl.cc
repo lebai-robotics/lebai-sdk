@@ -692,6 +692,10 @@ protos_json::kin_factor_proto::KinFactor Robot::RobotImpl::get_kin_factor() {
   return rpc_client_->Call<protos_json::kin_factor_proto::KinFactor>(
       "get_kin_factor", {});
 }
+void Robot::RobotImpl::save_tcp(
+    const protos_json::kinematic_proto::SaveTcpRequest &req) {
+  rpc_client_->Call<void>("save_tcp", {req});
+}
 protos_json::posture_proto::CartesianPose Robot::RobotImpl::load_tcp(
     const protos_json::db_proto::LoadRequest &req) {
   return rpc_client_->Call<protos_json::posture_proto::CartesianPose>(

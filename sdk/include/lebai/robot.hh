@@ -1752,6 +1752,14 @@ class Robot {
    */
   CartesianPose load_tcp(std::string name, std::string dir = "");
   /**
+   * @brief 保存tcp.
+   *
+   * @param name tcp名称.
+   * @param tcp tcp数据，包含x,y,z,rx,ry,rz.
+   * @param dir tcp目录.
+   */
+  void save_tcp(std::string name, CartesianPose tcp, std::string dir = "");
+  /**
    * @brief 查询工具中心点列表.
    *
    * @param dir 工具中心点目录.

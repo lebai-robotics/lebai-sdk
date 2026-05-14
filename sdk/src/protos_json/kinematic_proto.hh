@@ -2,7 +2,10 @@
 
 #include <nlohmann/json.hpp>
 
+#include <string>
 #include <vector>
+
+#include "posture_proto.hh"
 
 namespace protos_json::kinematic_proto {
 
@@ -84,6 +87,13 @@ struct CalcFrameRequest {
   CartesianPose x;
   CartesianPose xy;
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(CalcFrameRequest, o, x, xy)
+};
+
+struct SaveTcpRequest {
+  std::string name;
+  protos_json::posture_proto::CartesianPose data;
+  std::string dir;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(SaveTcpRequest, name, data, dir)
 };
 
 struct KinData {
