@@ -123,8 +123,11 @@ class Robot::RobotImpl {
   void set_voice(const protos_json::led_proto::VoiceData &req);
   void set_fan(const protos_json::led_proto::FanData &req);
   void set_signal(const protos_json::signal_proto::SetSignalRequest &req);
+  void set_signals(const protos_json::signal_proto::SetSignalsRequest &req);
   protos_json::signal_proto::GetSignalResponse get_signal(
       const protos_json::signal_proto::GetSignalRequest &req);
+  protos_json::signal_proto::GetSignalsResponse get_signals(
+      const protos_json::signal_proto::GetSignalsRequest &req);
   void add_signal(const protos_json::signal_proto::SetSignalRequest &req);
   protos_json::control_proto::TaskIndex start_task(
       const protos_json::control_proto::StartTaskRequest &req);

@@ -954,12 +954,28 @@ void Robot::set_signal(unsigned int index, int value) {
   req.value = value;
   impl_->set_signal(req);
 }
+
+void Robot::set_signals(unsigned int index, std::vector<int> values) {
+  protos_json::signal_proto::SetSignalsRequest req;
+  req.key = index;
+  req.values = values;
+  impl_->set_signals(req);
+}
+
 int Robot::get_signal(unsigned int index) {
   protos_json::signal_proto::GetSignalRequest req;
   req.key = index;
   const auto resp = impl_->get_signal(req);
   return resp.value;
 }
+
+std::vector<int> Robot::get_signals(unsigned int index, unsigned int len) {
+  protos_json::signal_proto::GetSignalsRequest req;
+  req.key = index;
+  req.len = len;
+  return impl_->get_signals(req).values;
+}
+
 void Robot::add_signal(unsigned int index, int value) {
   protos_json::signal_proto::SetSignalRequest req;
   req.key = index;

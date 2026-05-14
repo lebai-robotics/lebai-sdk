@@ -936,12 +936,20 @@ class Robot {
    */
   void set_signal(unsigned int index, int value);
   /**
+   * @brief 设置多个连续信号量
+   */
+  void set_signals(unsigned int index, std::vector<int> values);
+  /**
    * @brief 获取信号量
    *
    * @param index: 信号量下标（取值范围0~255)
    * @return 返回对应的信号量
    */
   int get_signal(unsigned int index);
+  /**
+   * @brief 获取多个连续信号量
+   */
+  std::vector<int> get_signals(unsigned int index, unsigned int len);
   /**
    * @brief 增加指定下标的信号量值，该操作是原子的.
    *

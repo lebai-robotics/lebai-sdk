@@ -557,6 +557,9 @@ TEST_F(RobotTest, TestSignal) {
   robot_.set_signal(10, 60);
   std::this_thread::sleep_for(std::chrono::milliseconds(100));
   EXPECT_EQ(60, robot_.get_signal(10));
+  robot_.set_signals(20, {7, 8});
+  std::this_thread::sleep_for(std::chrono::milliseconds(100));
+  EXPECT_EQ(robot_.get_signals(20, 2), std::vector<int>({7, 8}));
 }
 
 TEST_F(RobotTest, TestTaskReadSmoke) {

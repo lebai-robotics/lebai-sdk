@@ -27,6 +27,7 @@
 #include "protos_json/modbus_proto.hh"
 #include "protos_json/safety_proto.hh"
 #include "protos_json/serial_proto.hh"
+#include "protos_json/signal_proto.hh"
 #include "protos_json/storage_proto.hh"
 #include "protos_json/system_proto.hh"
 #include "base64.hh"
@@ -79,6 +80,26 @@ TEST(JsonIoProtoTest, SetAosRequestSerializesValues) {
 
   EXPECT_EQ(json.at("pin"), 1);
   EXPECT_EQ(json.at("values").size(), 2U);
+}
+
+TEST(JsonSignalProtoTest, SetSignalsRequestSerializesValues) {
+  protos_json::signal_proto::SetSignalsRequest req;
+  req.key = 10;
+  req.values = {1, 2};
+
+  const nlohmann::json json = req;
+
+  EXPECT_EQ(json.at("key"), 10);
+  EXPECT_EQ(json.at("values").size(), 2U);
+}
+
+TEST(JsonSignalProtoTest, GetSignalsResponseParsesValues) {
+  const auto parsed =
+      nlohmann::json{{"values", {1, 2}}}
+          .get<protos_json::signal_proto::GetSignalsResponse>();
+
+  EXPECT_EQ(parsed.values.size(), 2U);
+  EXPECT_EQ(parsed.values.at(0), 1);
 }
 
 TEST(JsonSystemProtoTest, HelloDataRoundTripsThroughJson) {

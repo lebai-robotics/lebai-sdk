@@ -2,6 +2,8 @@
 
 #include <nlohmann/json.hpp>
 
+#include <vector>
+
 namespace protos_json::signal_proto {
 
 struct SetSignalRequest {
@@ -10,14 +12,31 @@ struct SetSignalRequest {
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(SetSignalRequest, key, value)
 };
 
+struct SetSignalsRequest {
+  unsigned int key{};
+  std::vector<int> values;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(SetSignalsRequest, key, values)
+};
+
 struct GetSignalRequest {
   unsigned int key{};
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(GetSignalRequest, key)
 };
 
+struct GetSignalsRequest {
+  unsigned int key{};
+  unsigned int len{};
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(GetSignalsRequest, key, len)
+};
+
 struct GetSignalResponse {
   int value{};
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(GetSignalResponse, value)
+};
+
+struct GetSignalsResponse {
+  std::vector<int> values;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(GetSignalsResponse, values)
 };
 
 }  // namespace protos_json::signal_proto

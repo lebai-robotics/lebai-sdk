@@ -325,11 +325,24 @@ void Robot::RobotImpl::set_signal(
     const protos_json::signal_proto::SetSignalRequest &req) {
   rpc_client_->Call<void>("set_signal", {req});
 }
+
+void Robot::RobotImpl::set_signals(
+    const protos_json::signal_proto::SetSignalsRequest &req) {
+  rpc_client_->Call<void>("set_signals", {req});
+}
+
 protos_json::signal_proto::GetSignalResponse Robot::RobotImpl::get_signal(
     const protos_json::signal_proto::GetSignalRequest &req) {
   return rpc_client_->Call<protos_json::signal_proto::GetSignalResponse>(
       "get_signal", {req});
 }
+
+protos_json::signal_proto::GetSignalsResponse Robot::RobotImpl::get_signals(
+    const protos_json::signal_proto::GetSignalsRequest &req) {
+  return rpc_client_->Call<protos_json::signal_proto::GetSignalsResponse>(
+      "get_signals", {req});
+}
+
 void Robot::RobotImpl::add_signal(
     const protos_json::signal_proto::SetSignalRequest &req) {
   rpc_client_->Call<void>("add_signal", {req});
