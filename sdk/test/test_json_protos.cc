@@ -121,6 +121,20 @@ TEST(JsonPostureProtoTest, ManipulationRequestAndResponseRoundTrip) {
   EXPECT_DOUBLE_EQ(response.manipulation, 0.25);
 }
 
+TEST(JsonPostureProtoTest, PoseAndFrameParseControllerDefaults) {
+  const auto pose =
+      nlohmann::json{{"kind", "UNKNOWN"}}
+          .get<protos_json::posture_proto::Pose>();
+  const auto frame =
+      nlohmann::json{{"position_kind", "BASE"}, {"rotation_kind", "BASE"}}
+          .get<protos_json::posture_proto::CartesianFrame>();
+
+  EXPECT_EQ(pose.kind, "UNKNOWN");
+  EXPECT_TRUE(pose.joint.joint.empty());
+  EXPECT_EQ(frame.position_kind, "BASE");
+  EXPECT_EQ(frame.rotation_kind, "BASE");
+}
+
 TEST(JsonStructureProtoTest, StructureParsesControllerPayload) {
   const auto parsed =
       nlohmann::json{{"active", false},

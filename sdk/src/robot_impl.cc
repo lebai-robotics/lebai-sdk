@@ -668,10 +668,20 @@ protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_tcp_list(
   return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
       "load_tcp_list", {req});
 }
+protos_json::posture_proto::Pose Robot::RobotImpl::load_pose(
+    const protos_json::db_proto::LoadRequest &req) {
+  return rpc_client_->Call<protos_json::posture_proto::Pose>("load_pose",
+                                                             {req});
+}
 protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_pose_list(
     const protos_json::db_proto::LoadListRequest &req) {
   return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
       "load_pose_list", {req});
+}
+protos_json::posture_proto::CartesianFrame Robot::RobotImpl::load_frame(
+    const protos_json::db_proto::LoadRequest &req) {
+  return rpc_client_->Call<protos_json::posture_proto::CartesianFrame>(
+      "load_frame", {req});
 }
 protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_frame_list(
     const protos_json::db_proto::LoadListRequest &req) {

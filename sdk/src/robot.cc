@@ -53,6 +53,24 @@ static CartesianPose convertToCartesianPose(
   return cart_pose;
 }
 
+static CartesianPose convertToPositionPose(
+    const protos_json::posture_proto::Position &position) {
+  CartesianPose pose;
+  pose["x"] = position.x;
+  pose["y"] = position.y;
+  pose["z"] = position.z;
+  return pose;
+}
+
+static CartesianPose convertToRotationPose(
+    const protos_json::posture_proto::Rotation &rotation) {
+  CartesianPose pose;
+  pose["rx"] = rotation.euler_zyx.x;
+  pose["ry"] = rotation.euler_zyx.y;
+  pose["rz"] = rotation.euler_zyx.z;
+  return pose;
+}
+
 static DeviceInfoData convertToDeviceInfoData(
     const protos_json::system_proto::DeviceInfo &info) {
   DeviceInfoData data;
@@ -1886,10 +1904,35 @@ std::vector<std::string> Robot::load_pose_list(std::string dir) {
   return impl_->load_pose_list(req).names;
 }
 
+PoseData Robot::load_pose(std::string name, std::string dir) {
+  protos_json::db_proto::LoadRequest req;
+  req.name = name;
+  req.dir = dir;
+  const auto resp = impl_->load_pose(req);
+  PoseData data;
+  data.kind = resp.kind;
+  data.cart = convertToCartesianPose(resp.cart);
+  data.joint = resp.joint.joint;
+  return data;
+}
+
 std::vector<std::string> Robot::load_frame_list(std::string dir) {
   protos_json::db_proto::LoadListRequest req;
   req.dir = dir;
   return impl_->load_frame_list(req).names;
+}
+
+FrameData Robot::load_frame(std::string name, std::string dir) {
+  protos_json::db_proto::LoadRequest req;
+  req.name = name;
+  req.dir = dir;
+  const auto resp = impl_->load_frame(req);
+  FrameData data;
+  data.position_kind = resp.position_kind;
+  data.position = convertToPositionPose(resp.position);
+  data.rotation_kind = resp.rotation_kind;
+  data.rotation = convertToRotationPose(resp.rotation);
+  return data;
 }
 
 StructureData Robot::load_structure(std::string name, std::string dir) {

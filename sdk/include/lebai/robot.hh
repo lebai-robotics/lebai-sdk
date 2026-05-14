@@ -292,6 +292,19 @@ struct StructureData {
   std::string servo;        /*!< 伺服参数资源名. */
 };
 
+struct PoseData {
+  std::string kind;                 /*!< 位姿类型. */
+  CartesianPose cart;               /*!< 笛卡尔位姿. */
+  std::vector<double> joint;        /*!< 关节位姿. */
+};
+
+struct FrameData {
+  std::string position_kind; /*!< 位置参考系类型. */
+  CartesianPose position;    /*!< 自定义位置，使用x/y/z键. */
+  std::string rotation_kind; /*!< 姿态参考系类型. */
+  CartesianPose rotation;    /*!< 自定义姿态，使用rx/ry/rz键. */
+};
+
 /**
  * @brief 机械臂关节运动数据结构.
  *
@@ -1689,11 +1702,25 @@ class Robot {
    */
   std::vector<std::string> load_pose_list(std::string dir = "");
   /**
+   * @brief 查询路点.
+   *
+   * @param name 路点名称.
+   * @param dir 路点目录.
+   */
+  PoseData load_pose(std::string name, std::string dir = "");
+  /**
    * @brief 查询特征列表.
    *
    * @param dir 特征目录.
    */
   std::vector<std::string> load_frame_list(std::string dir = "");
+  /**
+   * @brief 查询特征.
+   *
+   * @param name 特征名称.
+   * @param dir 特征目录.
+   */
+  FrameData load_frame(std::string name, std::string dir = "");
   /**
    * @brief 查询机器人结构列表.
    *

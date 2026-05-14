@@ -224,6 +224,13 @@ TEST_F(RobotTest, TestStructureResourceSmoke) {
   EXPECT_FALSE(structure.kind.empty());
 }
 
+TEST_F(RobotTest, TestPostureResourceSmoke) {
+  const auto pose = robot_.load_pose("", "");
+  EXPECT_FALSE(pose.kind.empty());
+  const auto frame = robot_.load_frame("", "");
+  EXPECT_FALSE(frame.position_kind.empty());
+}
+
 TEST_F(RobotTest, TestStopSmoke) {
   EXPECT_NO_THROW(robot_.start_sys());
   std::this_thread::sleep_for(std::chrono::seconds(1));

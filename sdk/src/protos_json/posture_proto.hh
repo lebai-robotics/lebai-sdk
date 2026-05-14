@@ -2,6 +2,7 @@
 
 #include <nlohmann/json.hpp>
 
+#include <string>
 #include <vector>
 
 namespace protos_json::posture_proto {
@@ -63,6 +64,61 @@ inline void from_json(const nlohmann::json &json, CartesianPose &pose) {
     pose.rotation = json.at("rotation").get<Rotation>();
   } else {
     pose.rotation = Rotation{};
+  }
+}
+
+struct CartesianFrame {
+  std::string position_kind;
+  Position position;
+  std::string rotation_kind;
+  Rotation rotation;
+};
+
+inline void to_json(nlohmann::json &json, const CartesianFrame &frame) {
+  json = nlohmann::json{{"position_kind", frame.position_kind},
+                        {"position", frame.position},
+                        {"rotation_kind", frame.rotation_kind},
+                        {"rotation", frame.rotation}};
+}
+
+inline void from_json(const nlohmann::json &json, CartesianFrame &frame) {
+  frame.position_kind = json.value("position_kind", std::string{});
+  if (json.contains("position") && !json.at("position").is_null()) {
+    frame.position = json.at("position").get<Position>();
+  } else {
+    frame.position = Position{};
+  }
+  frame.rotation_kind = json.value("rotation_kind", std::string{});
+  if (json.contains("rotation") && !json.at("rotation").is_null()) {
+    frame.rotation = json.at("rotation").get<Rotation>();
+  } else {
+    frame.rotation = Rotation{};
+  }
+}
+
+struct Pose {
+  std::string kind;
+  CartesianPose cart;
+  JointPose joint;
+};
+
+inline void to_json(nlohmann::json &json, const Pose &pose) {
+  json = nlohmann::json{{"kind", pose.kind},
+                        {"cart", pose.cart},
+                        {"joint", pose.joint}};
+}
+
+inline void from_json(const nlohmann::json &json, Pose &pose) {
+  pose.kind = json.value("kind", std::string{});
+  if (json.contains("cart") && !json.at("cart").is_null()) {
+    pose.cart = json.at("cart").get<CartesianPose>();
+  } else {
+    pose.cart = CartesianPose{};
+  }
+  if (json.contains("joint") && !json.at("joint").is_null()) {
+    pose.joint = json.at("joint").get<JointPose>();
+  } else {
+    pose.joint = JointPose{};
   }
 }
 

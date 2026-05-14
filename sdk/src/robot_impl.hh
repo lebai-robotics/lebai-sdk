@@ -225,8 +225,12 @@ class Robot::RobotImpl {
       const protos_json::db_proto::LoadRequest &req);
   protos_json::db_proto::LoadListResponse load_tcp_list(
       const protos_json::db_proto::LoadListRequest &req);
+  protos_json::posture_proto::Pose load_pose(
+      const protos_json::db_proto::LoadRequest &req);
   protos_json::db_proto::LoadListResponse load_pose_list(
       const protos_json::db_proto::LoadListRequest &req);
+  protos_json::posture_proto::CartesianFrame load_frame(
+      const protos_json::db_proto::LoadRequest &req);
   protos_json::db_proto::LoadListResponse load_frame_list(
       const protos_json::db_proto::LoadListRequest &req);
   protos_json::structure_proto::Structure load_structure(
