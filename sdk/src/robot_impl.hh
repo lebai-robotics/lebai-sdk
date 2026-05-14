@@ -24,6 +24,7 @@
 #include "protos_json/db_proto.hh"
 #include "protos_json/dynamic_proto.hh"
 #include "protos_json/file_proto.hh"
+#include "protos_json/hardware_proto.hh"
 #include "protos_json/io_proto.hh"
 #include "protos_json/kin_factor_proto.hh"
 #include "protos_json/kinematic_proto.hh"
@@ -99,6 +100,7 @@ class Robot::RobotImpl {
   protos_json::system_proto::GetBoxDevicesResponse get_box_devices(
       const protos_json::system_proto::GetBoxDevicesRequest &req);
   protos_json::message_proto::Messages get_messages();
+  protos_json::hardware_proto::OtaState get_ota_state();
   protos_json::system_proto::PhyData get_phy_data();
   protos_json::kinematic_proto::KinData get_kin_data();
   protos_json::io_proto::GetDioPinResponse get_di(

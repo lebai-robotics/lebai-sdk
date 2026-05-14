@@ -96,6 +96,12 @@ TEST_F(RobotTest, TestMessagesSmoke) {
   EXPECT_FALSE(messages.empty());
 }
 
+TEST_F(RobotTest, TestOtaStateSmoke) {
+  const auto state = robot_.get_ota_state();
+  EXPECT_LE(state.progress, 100U);
+  EXPECT_FALSE(state.step.empty());
+}
+
 TEST_F(RobotTest, TestEstopReasonSmoke) {
   EXPECT_EQ(robot_.get_estop_reason(), 0);
 }

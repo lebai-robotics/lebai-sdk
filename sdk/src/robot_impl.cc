@@ -238,6 +238,11 @@ protos_json::message_proto::Messages Robot::RobotImpl::get_messages() {
       "get_messages", {});
 }
 
+protos_json::hardware_proto::OtaState Robot::RobotImpl::get_ota_state() {
+  return rpc_client_->Call<protos_json::hardware_proto::OtaState>(
+      "get_ota_state", {});
+}
+
 protos_json::system_proto::PhyData Robot::RobotImpl::get_phy_data() {
   return rpc_client_->Call<protos_json::system_proto::PhyData>(
       "get_phy_data", {});

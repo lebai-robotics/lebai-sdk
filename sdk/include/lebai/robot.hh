@@ -156,6 +156,11 @@ struct MessageData {
   std::string time;   /*!< 消息产生时间. */
 };
 
+struct OtaStateData {
+  std::string step;     /*!< 升级步骤. */
+  uint32_t progress = 0; /*!< 升级进度. */
+};
+
 /**
  * @brief 机械臂关节运动数据结构.
  *
@@ -736,6 +741,12 @@ class Robot {
    * @return 消息列表
    */
   std::vector<MessageData> get_messages();
+  /**
+   * @brief 获取OTA升级状态
+   *
+   * @return OTA升级状态
+   */
+  OtaStateData get_ota_state();
   /**
    * @brief 获取机械臂物理数据
    *

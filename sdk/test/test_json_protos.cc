@@ -21,6 +21,7 @@
 #include "protos_json/db_proto.hh"
 #include "protos_json/dynamic_proto.hh"
 #include "protos_json/file_proto.hh"
+#include "protos_json/hardware_proto.hh"
 #include "protos_json/io_proto.hh"
 #include "protos_json/kinematic_proto.hh"
 #include "protos_json/message_proto.hh"
@@ -81,6 +82,14 @@ TEST(JsonIoProtoTest, SetAosRequestSerializesValues) {
 
   EXPECT_EQ(json.at("pin"), 1);
   EXPECT_EQ(json.at("values").size(), 2U);
+}
+
+TEST(JsonHardwareProtoTest, OtaStateParsesControllerPayload) {
+  const auto json = nlohmann::json::parse(R"({"step":"NONE","progress":0})");
+  const auto parsed = json.get<protos_json::hardware_proto::OtaState>();
+
+  EXPECT_EQ(parsed.step, "NONE");
+  EXPECT_EQ(parsed.progress, 0U);
 }
 
 TEST(JsonSignalProtoTest, SetSignalsRequestSerializesValues) {

@@ -678,6 +678,14 @@ std::vector<MessageData> Robot::get_messages() {
   return messages;
 }
 
+OtaStateData Robot::get_ota_state() {
+  const auto state = impl_->get_ota_state();
+  OtaStateData data;
+  data.step = state.step;
+  data.progress = state.progress;
+  return data;
+}
+
 PhysicalData Robot::get_phy_data() {
   auto phy_data = impl_->get_phy_data();
   PhysicalData physical_data;
