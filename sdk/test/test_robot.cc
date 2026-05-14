@@ -243,6 +243,21 @@ TEST_F(RobotTest, TestTrajectoryResourceSmoke) {
 }
 
 TEST_F(RobotTest, TestModbusResourceSmoke) {
+  l_master::ModbusData modbus;
+  modbus.kind = "ROBOT";
+  EXPECT_NO_THROW(robot_.save_modbus("codex_modbus_smoke", modbus));
+  const auto saved_modbus = robot_.load_modbus("codex_modbus_smoke", "");
+  EXPECT_EQ(saved_modbus.kind, "ROBOT");
+
+  l_master::ModbusRegisterData reg;
+  reg.kind = "DISCRETE_INPUT";
+  reg.address = 0;
+  EXPECT_NO_THROW(robot_.save_modbus_register(
+      "codex_modbus_smoke", "codex_register_smoke", reg));
+  const auto saved_reg =
+      robot_.load_modbus_register("codex_modbus_smoke", "codex_register_smoke");
+  EXPECT_EQ(saved_reg.kind, "DISCRETE_INPUT");
+
   EXPECT_NO_THROW(robot_.load_modbus("", ""));
   EXPECT_NO_THROW(robot_.load_modbus_register("", ""));
 }

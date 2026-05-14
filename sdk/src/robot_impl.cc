@@ -762,6 +762,10 @@ protos_json::modbus_proto::Modbus Robot::RobotImpl::load_modbus(
   return rpc_client_->Call<protos_json::modbus_proto::Modbus>("load_modbus",
                                                               {req});
 }
+void Robot::RobotImpl::save_modbus(
+    const protos_json::modbus_proto::SaveModbusRequest &req) {
+  rpc_client_->Call<void>("save_modbus", {req});
+}
 protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_modbus_list(
     const protos_json::db_proto::LoadListRequest &req) {
   return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
@@ -772,6 +776,10 @@ Robot::RobotImpl::load_modbus_register(
     const protos_json::modbus_proto::LoadModbusRegisterRequest &req) {
   return rpc_client_->Call<protos_json::modbus_proto::ModbusRegister>(
       "load_modbus_register", {req});
+}
+void Robot::RobotImpl::save_modbus_register(
+    const protos_json::modbus_proto::SaveModbusRegisterRequest &req) {
+  rpc_client_->Call<void>("save_modbus_register", {req});
 }
 protos_json::db_proto::LoadListResponse
 Robot::RobotImpl::load_modbus_register_list(

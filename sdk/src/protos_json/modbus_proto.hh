@@ -21,6 +21,19 @@ struct ModbusRegister {
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(ModbusRegister, kind, address)
 };
 
+struct SaveModbusRequest {
+  std::string name;
+  Modbus data;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(SaveModbusRequest, name, data)
+};
+
+struct SaveModbusRegisterRequest {
+  std::string device;
+  std::string name;
+  ModbusRegister data;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(SaveModbusRegisterRequest, device, name, data)
+};
+
 struct SetCoilRequest {
   std::string device;
   std::string pin;

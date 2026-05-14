@@ -2104,6 +2104,16 @@ ModbusData Robot::load_modbus(std::string name, std::string dir) {
   return data;
 }
 
+void Robot::save_modbus(std::string name, ModbusData modbus) {
+  protos_json::modbus_proto::SaveModbusRequest req;
+  req.name = name;
+  req.data.kind = modbus.kind;
+  req.data.address = modbus.address;
+  req.data.port = modbus.port;
+  req.data.slave_id = modbus.slave_id;
+  impl_->save_modbus(req);
+}
+
 std::vector<std::string> Robot::load_modbus_register_list(std::string device) {
   protos_json::modbus_proto::LoadModbusRegisterListRequest req;
   req.device = device;
@@ -2120,6 +2130,16 @@ ModbusRegisterData Robot::load_modbus_register(std::string device,
   data.kind = resp.kind;
   data.address = resp.address;
   return data;
+}
+
+void Robot::save_modbus_register(std::string device, std::string name,
+                                 ModbusRegisterData reg) {
+  protos_json::modbus_proto::SaveModbusRegisterRequest req;
+  req.device = device;
+  req.name = name;
+  req.data.kind = reg.kind;
+  req.data.address = reg.address;
+  impl_->save_modbus_register(req);
 }
 
 void Robot::write_single_coil(std::string device, std::string addr,

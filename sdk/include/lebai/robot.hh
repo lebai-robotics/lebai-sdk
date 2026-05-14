@@ -1880,6 +1880,13 @@ class Robot {
    */
   ModbusData load_modbus(std::string name, std::string dir = "");
   /**
+   * @brief 保存Modbus设备.
+   *
+   * @param name Modbus设备名称.
+   * @param modbus Modbus设备数据.
+   */
+  void save_modbus(std::string name, ModbusData modbus);
+  /**
    * @brief 查询Modbus寄存器列表.
    *
    * @param device Modbus设备名称.
@@ -1893,6 +1900,15 @@ class Robot {
    */
   ModbusRegisterData load_modbus_register(std::string device,
                                           std::string name);
+  /**
+   * @brief 保存Modbus寄存器.
+   *
+   * @param device Modbus设备名称.
+   * @param name 寄存器名称.
+   * @param reg Modbus寄存器数据.
+   */
+  void save_modbus_register(std::string device, std::string name,
+                            ModbusRegisterData reg);
 
   /**
    * @brief 写单个线圈.
