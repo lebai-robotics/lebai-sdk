@@ -613,6 +613,11 @@ protos_json::posture_proto::CartesianPose Robot::RobotImpl::load_tcp(
   return rpc_client_->Call<protos_json::posture_proto::CartesianPose>(
       "load_tcp", {req});
 }
+protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_tcp_list(
+    const protos_json::db_proto::LoadListRequest &req) {
+  return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
+      "load_tcp_list", {req});
+}
 protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_pose_list(
     const protos_json::db_proto::LoadListRequest &req) {
   return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(

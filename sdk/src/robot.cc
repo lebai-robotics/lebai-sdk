@@ -1604,6 +1604,12 @@ std::map<std::string, double> Robot::get_payload() {
   return cog;
 }
 
+std::vector<std::string> Robot::load_payload_list(std::string dir) {
+  protos_json::db_proto::LoadListRequest req;
+  req.dir = dir;
+  return impl_->load_payload_list(req).names;
+}
+
 void Robot::set_gravity(std::map<std::string, double> gravity) {
   protos_json::posture_proto::Position req;
   req.x = gravity.at("x");
@@ -1744,6 +1750,12 @@ CartesianPose Robot::load_tcp(std::string name, std::string dir) {
   req.dir = dir;
   const auto &pose = impl_->load_tcp(req);
   return convertToCartesianPose(pose);
+}
+
+std::vector<std::string> Robot::load_tcp_list(std::string dir) {
+  protos_json::db_proto::LoadListRequest req;
+  req.dir = dir;
+  return impl_->load_tcp_list(req).names;
 }
 
 std::vector<std::string> Robot::load_trajectory_list(std::string dir) {

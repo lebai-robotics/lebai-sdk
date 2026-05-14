@@ -173,6 +173,8 @@ TEST_F(RobotTest, TestResourceListsSmoke) {
   EXPECT_NO_THROW(robot_.load_trajectory_list(""));
   EXPECT_NO_THROW(robot_.load_pose_list(""));
   EXPECT_NO_THROW(robot_.load_frame_list(""));
+  EXPECT_NO_THROW(robot_.load_tcp_list(""));
+  EXPECT_NO_THROW(robot_.load_payload_list(""));
 }
 
 TEST_F(RobotTest, TestStopSmoke) {

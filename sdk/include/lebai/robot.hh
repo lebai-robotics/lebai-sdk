@@ -1473,6 +1473,12 @@ class Robot {
    */
   std::map<std::string, double> get_payload();
   /**
+   * @brief 查询负载列表.
+   *
+   * @param dir 负载目录.
+   */
+  std::vector<std::string> load_payload_list(std::string dir = "");
+  /**
    *  @brief 设置机器人重力加速度方向.
    *
    *  @param gravity 相对于机器人基座标的重力方向.
@@ -1559,6 +1565,12 @@ class Robot {
    * @param dir 点位目录.
    */
   CartesianPose load_tcp(std::string name, std::string dir = "");
+  /**
+   * @brief 查询工具中心点列表.
+   *
+   * @param dir 工具中心点目录.
+   */
+  std::vector<std::string> load_tcp_list(std::string dir = "");
   /**
    * @brief 查询轨迹列表.
    *
