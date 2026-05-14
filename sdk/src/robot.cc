@@ -783,6 +783,20 @@ std::vector<PluginInfoData> Robot::load_plugins() {
   return plugins;
 }
 
+std::vector<DiscoveredRobotData> Robot::discover_robots() {
+  const auto response = impl_->discover_robots();
+  std::vector<DiscoveredRobotData> devices;
+  for (const auto &device : response.devices) {
+    DiscoveredRobotData data;
+    data.name = device.name;
+    data.mac = device.mac;
+    data.ip = device.ip;
+    data.online = device.online;
+    devices.push_back(data);
+  }
+  return devices;
+}
+
 std::vector<MessageData> Robot::get_messages() {
   const auto response = impl_->get_messages();
   std::vector<MessageData> messages;

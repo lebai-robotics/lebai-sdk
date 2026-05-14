@@ -125,6 +125,12 @@ TEST_F(RobotTest, TestPluginsSmoke) {
   EXPECT_NO_THROW(robot_.load_plugins());
 }
 
+TEST_F(RobotTest, TestDiscoverRobotsSmoke) {
+  const auto devices = robot_.discover_robots();
+  EXPECT_FALSE(devices.empty());
+  EXPECT_FALSE(devices.front().ip.empty());
+}
+
 TEST_F(RobotTest, TestMessagesSmoke) {
   const auto messages = robot_.get_messages();
   EXPECT_FALSE(messages.empty());

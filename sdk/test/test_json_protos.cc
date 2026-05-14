@@ -29,6 +29,7 @@
 #include "protos_json/motion_proto.hh"
 #include "protos_json/modbus_proto.hh"
 #include "protos_json/motor_proto.hh"
+#include "protos_json/multi_devices_proto.hh"
 #include "protos_json/plugin_proto.hh"
 #include "protos_json/safety_proto.hh"
 #include "protos_json/serial_proto.hh"
@@ -64,6 +65,22 @@ TEST(JsonAutoProtoTest, GetAutoResponseDefaultsMissingValueToFalse) {
       nlohmann::json::object().get<protos_json::auto_proto::GetAutoResponse>();
 
   EXPECT_FALSE(parsed.value);
+}
+
+TEST(JsonMultiDevicesProtoTest, DiscoverRobotsResponseParsesDevices) {
+  const auto parsed = nlohmann::json{
+      {"devices", nlohmann::json::array({{{"name", "lebai"},
+                                          {"mac", "aa"},
+                                          {"ip", "1.2.3.4"},
+                                          {"online", true}}})}}
+                          .get<protos_json::multi_devices_proto::
+                                   DiscoverRobotsResponse>();
+
+  ASSERT_EQ(parsed.devices.size(), 1U);
+  EXPECT_EQ(parsed.devices.front().name, "lebai");
+  EXPECT_EQ(parsed.devices.front().mac, "aa");
+  EXPECT_EQ(parsed.devices.front().ip, "1.2.3.4");
+  EXPECT_TRUE(parsed.devices.front().online);
 }
 
 TEST(JsonIoProtoTest, SetDosRequestSerializesValues) {

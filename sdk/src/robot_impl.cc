@@ -286,6 +286,13 @@ protos_json::plugin_proto::Plugins Robot::RobotImpl::load_plugins() {
       "load_plugins", {});
 }
 
+protos_json::multi_devices_proto::DiscoverRobotsResponse
+Robot::RobotImpl::discover_robots() {
+  return rpc_client_
+      ->Call<protos_json::multi_devices_proto::DiscoverRobotsResponse>(
+          "discover_robots", {});
+}
+
 protos_json::message_proto::Messages Robot::RobotImpl::get_messages() {
   return rpc_client_->Call<protos_json::message_proto::Messages>(
       "get_messages", {});

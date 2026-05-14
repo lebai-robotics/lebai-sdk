@@ -123,6 +123,13 @@ struct RobotInfoData {
   std::string arm_sn;    /*!< 手臂序列号. */
 };
 
+struct DiscoveredRobotData {
+  std::string name; /*!< 设备名称. */
+  std::string mac;  /*!< 设备物理唯一标识. */
+  std::string ip;   /*!< 设备IP地址. */
+  bool online = false; /*!< 设备是否在线. */
+};
+
 /**
  * @brief 控制器硬件设备信息.
  *
@@ -871,6 +878,12 @@ class Robot {
    * @return 插件信息列表
    */
   std::vector<PluginInfoData> load_plugins();
+  /**
+   * @brief 通过控制器RPC发现机器人设备.
+   *
+   * @return 设备信息列表.
+   */
+  std::vector<DiscoveredRobotData> discover_robots();
   /**
    * @brief 获取控制器消息列表
    *
