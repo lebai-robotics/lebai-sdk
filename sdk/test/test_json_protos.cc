@@ -17,6 +17,7 @@
 #include <nlohmann/json.hpp>
 
 #include "protos_json/auto_proto.hh"
+#include "protos_json/claw_proto.hh"
 #include "protos_json/control_proto.hh"
 #include "protos_json/db_proto.hh"
 #include "protos_json/dynamic_proto.hh"
@@ -90,6 +91,19 @@ TEST(JsonModbusProtoTest, LoadModbusRegisterListRequestSerializesDevice) {
   const nlohmann::json json = req;
 
   EXPECT_EQ(json.at("device"), "modbus0");
+}
+
+TEST(JsonClawProtoTest, ClawAiRequestAndResponseUseAddressAndValue) {
+  protos_json::claw_proto::GetClawAiRequest req;
+  req.address = 2;
+
+  const nlohmann::json json = req;
+  const auto response =
+      nlohmann::json{{"value", 1.5}}
+          .get<protos_json::claw_proto::GetClawAiResponse>();
+
+  EXPECT_EQ(json.at("address"), 2);
+  EXPECT_DOUBLE_EQ(response.value, 1.5);
 }
 
 TEST(JsonIoProtoTest, SetDosRequestSerializesValues) {

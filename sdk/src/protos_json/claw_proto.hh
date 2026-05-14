@@ -2,6 +2,8 @@
 
 #include <nlohmann/json.hpp>
 
+#include <cstdint>
+
 namespace protos_json::claw_proto {
 
 struct InitClawRequest {
@@ -21,6 +23,16 @@ struct Claw {
   double weight{};
   bool hold_on{};
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(Claw, force, amplitude, weight, hold_on)
+};
+
+struct GetClawAiRequest {
+  uint32_t address{};
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(GetClawAiRequest, address)
+};
+
+struct GetClawAiResponse {
+  double value{};
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(GetClawAiResponse, value)
 };
 
 }  // namespace protos_json::claw_proto

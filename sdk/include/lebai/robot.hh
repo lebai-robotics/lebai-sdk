@@ -1160,6 +1160,12 @@ class Robot {
    */
   ClawData get_claw();
   ClawData get_claw_data();
+  /**
+   * @brief 读取夹爪指定模拟输入数据.
+   *
+   * @param address 夹爪地址.
+   */
+  double get_claw_ai(unsigned int address);
   /** @}*/
 
   /** \addtogroup LED

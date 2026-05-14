@@ -1157,6 +1157,12 @@ ClawData Robot::get_claw() {
 
 ClawData Robot::get_claw_data() { return get_claw(); }
 
+double Robot::get_claw_ai(unsigned int address) {
+  protos_json::claw_proto::GetClawAiRequest req;
+  req.address = address;
+  return impl_->get_claw_ai(req).value;
+}
+
 void Robot::set_led(unsigned int mode, unsigned int speed,
                     const std::vector<unsigned int> &color) {
   protos_json::led_proto::LedData typed_req;

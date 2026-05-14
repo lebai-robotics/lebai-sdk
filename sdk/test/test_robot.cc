@@ -131,6 +131,10 @@ TEST_F(RobotTest, TestDiscoverRobotsSmoke) {
   EXPECT_FALSE(devices.front().ip.empty());
 }
 
+TEST_F(RobotTest, TestClawAiSmoke) {
+  EXPECT_GE(robot_.get_claw_ai(0), 0.0);
+}
+
 TEST_F(RobotTest, TestMessagesSmoke) {
   const auto messages = robot_.get_messages();
   EXPECT_FALSE(messages.empty());

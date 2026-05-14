@@ -426,6 +426,12 @@ protos_json::claw_proto::Claw Robot::RobotImpl::get_claw() {
   return rpc_client_->Call<protos_json::claw_proto::Claw>("get_claw", {});
 }
 
+protos_json::claw_proto::GetClawAiResponse Robot::RobotImpl::get_claw_ai(
+    const protos_json::claw_proto::GetClawAiRequest &req) {
+  return rpc_client_->Call<protos_json::claw_proto::GetClawAiResponse>(
+      "get_claw_ai", {req});
+}
+
 void Robot::RobotImpl::set_led(const protos_json::led_proto::LedData &req) {
   rpc_client_->Call<void>("set_led", {req});
 }
