@@ -21,6 +21,7 @@
 #include "protos_json/db_proto.hh"
 #include "protos_json/dynamic_proto.hh"
 #include "protos_json/file_proto.hh"
+#include "protos_json/io_proto.hh"
 #include "protos_json/kinematic_proto.hh"
 #include "protos_json/motion_proto.hh"
 #include "protos_json/modbus_proto.hh"
@@ -54,6 +55,30 @@ TEST(JsonAutoProtoTest, GetAutoResponseDefaultsMissingValueToFalse) {
       nlohmann::json::object().get<protos_json::auto_proto::GetAutoResponse>();
 
   EXPECT_FALSE(parsed.value);
+}
+
+TEST(JsonIoProtoTest, SetDosRequestSerializesValues) {
+  protos_json::io_proto::SetDoPinsRequest req;
+  req.device = protos_json::io_proto::IoDevice::ROBOT;
+  req.pin = 1;
+  req.values = {1, 0};
+
+  const nlohmann::json json = req;
+
+  EXPECT_EQ(json.at("pin"), 1);
+  EXPECT_EQ(json.at("values").size(), 2U);
+}
+
+TEST(JsonIoProtoTest, SetAosRequestSerializesValues) {
+  protos_json::io_proto::SetAoPinsRequest req;
+  req.device = protos_json::io_proto::IoDevice::ROBOT;
+  req.pin = 1;
+  req.values = {0.2, 0.0};
+
+  const nlohmann::json json = req;
+
+  EXPECT_EQ(json.at("pin"), 1);
+  EXPECT_EQ(json.at("values").size(), 2U);
 }
 
 TEST(JsonSystemProtoTest, HelloDataRoundTripsThroughJson) {

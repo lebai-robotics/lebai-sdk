@@ -35,6 +35,13 @@ struct SetDoPinRequest {
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(SetDoPinRequest, device, pin, value)
 };
 
+struct SetDoPinsRequest {
+  IoDevice device{IoDevice::ROBOT};
+  uint32_t pin{};
+  std::vector<uint32_t> values;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(SetDoPinsRequest, device, pin, values)
+};
+
 struct GetDioPinResponse {
   uint32_t value{};
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(GetDioPinResponse, value)
@@ -63,6 +70,13 @@ struct SetAoPinRequest {
   uint32_t pin{};
   double value{};
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(SetAoPinRequest, device, pin, value)
+};
+
+struct SetAoPinsRequest {
+  IoDevice device{IoDevice::ROBOT};
+  uint32_t pin{};
+  std::vector<double> values;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(SetAoPinsRequest, device, pin, values)
 };
 
 struct GetAioPinResponse {

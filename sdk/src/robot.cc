@@ -691,6 +691,21 @@ void Robot::set_do(std::string device, unsigned int pin, unsigned int value) {
   impl_->set_do(req);
 }
 
+void Robot::set_dos(std::string device, unsigned int pin,
+                    std::vector<unsigned int> values) {
+  protos_json::io_proto::SetDoPinsRequest req;
+  if (device == "ROBOT") {
+    req.device = protos_json::io_proto::IoDevice::ROBOT;
+  } else if (device == "FLANGE") {
+    req.device = protos_json::io_proto::IoDevice::FLANGE;
+  } else if (device == "EXTRA") {
+    req.device = protos_json::io_proto::IoDevice::EXTRA;
+  }
+  req.pin = pin;
+  req.values = {values.begin(), values.end()};
+  impl_->set_dos(req);
+}
+
 unsigned int Robot::get_do(std::string device, unsigned int pin) {
   protos_json::io_proto::GetDioPinRequest req;
 
@@ -768,6 +783,21 @@ void Robot::set_ao(std::string device, unsigned int pin, double value) {
   req.pin = pin;
   req.value = value;
   impl_->set_ao(req);
+}
+
+void Robot::set_aos(std::string device, unsigned int pin,
+                    std::vector<double> values) {
+  protos_json::io_proto::SetAoPinsRequest req;
+  if (device == "ROBOT") {
+    req.device = protos_json::io_proto::IoDevice::ROBOT;
+  } else if (device == "FLANGE") {
+    req.device = protos_json::io_proto::IoDevice::FLANGE;
+  } else if (device == "EXTRA") {
+    req.device = protos_json::io_proto::IoDevice::EXTRA;
+  }
+  req.pin = pin;
+  req.values = values;
+  impl_->set_aos(req);
 }
 
 double Robot::get_ao(std::string device, unsigned int pin) {

@@ -758,6 +758,11 @@ class Robot {
    */
   void set_do(std::string device, unsigned int pin, unsigned int value);
   /**
+   * @brief 设置多个数字输出
+   */
+  void set_dos(std::string device, unsigned int pin,
+               std::vector<unsigned int> values);
+  /**
    * @brief 获取数字输出
    * @param device 设备名字，查看 @ref DEVICENAME ，可以进一步查看 <a
    * href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
@@ -802,6 +807,10 @@ class Robot {
    * @param value: 待设置的模拟输出值
    */
   void set_ao(std::string device, unsigned int pin, double value);
+  /**
+   * @brief 设置多个模拟输出
+   */
+  void set_aos(std::string device, unsigned int pin, std::vector<double> values);
   /**
    * @brief 获取模拟输出
    * @param device 设备名字，查看 @ref DEVICENAME ，可以进一步查看 <a

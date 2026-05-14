@@ -244,6 +244,11 @@ void Robot::RobotImpl::set_do(
   rpc_client_->Call<void>("set_do", {req});
 }
 
+void Robot::RobotImpl::set_dos(
+    const protos_json::io_proto::SetDoPinsRequest &req) {
+  rpc_client_->Call<void>("set_dos", {req});
+}
+
 protos_json::io_proto::GetAioPinResponse Robot::RobotImpl::get_ai(
     const protos_json::io_proto::GetAioPinRequest &req) {
   return rpc_client_->Call<protos_json::io_proto::GetAioPinResponse>("get_ai",
@@ -277,6 +282,11 @@ protos_json::io_proto::GetDiosModeResponse Robot::RobotImpl::get_dios_mode(
 void Robot::RobotImpl::set_ao(
     const protos_json::io_proto::SetAoPinRequest &req) {
   rpc_client_->Call<void>("set_ao", {req});
+}
+
+void Robot::RobotImpl::set_aos(
+    const protos_json::io_proto::SetAoPinsRequest &req) {
+  rpc_client_->Call<void>("set_aos", {req});
 }
 
 void Robot::RobotImpl::init_claw(

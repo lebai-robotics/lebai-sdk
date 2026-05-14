@@ -133,6 +133,8 @@ TEST_F(RobotTest, TestDigitalIoSmoke) {
   EXPECT_NO_THROW(robot_.start_sys());
   std::this_thread::sleep_for(std::chrono::seconds(1));
   EXPECT_NO_THROW(robot_.set_do("ROBOT", 0, static_cast<unsigned int>(1)));
+  EXPECT_NO_THROW(
+      robot_.set_dos("ROBOT", 0, std::vector<unsigned int>{1U, 0U}));
   EXPECT_GE(robot_.get_do("ROBOT", 0), 0U);
   EXPECT_GE(robot_.get_di("ROBOT", 0), 0U);
   EXPECT_EQ(robot_.get_dos("ROBOT", 0, 2).size(), 2U);
@@ -143,6 +145,7 @@ TEST_F(RobotTest, TestAnalogIoSmoke) {
   EXPECT_NO_THROW(robot_.start_sys());
   std::this_thread::sleep_for(std::chrono::seconds(1));
   EXPECT_NO_THROW(robot_.set_ao("ROBOT", 0, 0.2));
+  EXPECT_NO_THROW(robot_.set_aos("ROBOT", 0, std::vector<double>{0.2, 0.0}));
   EXPECT_GE(robot_.get_ao("ROBOT", 0), 0.0);
   EXPECT_GE(robot_.get_ai("ROBOT", 0), 0.0);
   EXPECT_EQ(robot_.get_aos("ROBOT", 0, 2).size(), 2U);
