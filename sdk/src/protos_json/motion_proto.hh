@@ -52,6 +52,12 @@ struct Position {
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(Position, x, y, z)
 };
 
+struct Wrench {
+  Position force;
+  Position torque;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(Wrench, force, torque)
+};
+
 struct Rotation {
   Position euler_zyx;
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(Rotation, euler_zyx)

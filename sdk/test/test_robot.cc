@@ -115,6 +115,12 @@ TEST_F(RobotTest, TestServoParamsSmoke) {
   EXPECT_EQ(params.size(), 6U);
 }
 
+TEST_F(RobotTest, TestTcpForceSmoke) {
+  const auto wrench = robot_.get_tcp_force();
+  EXPECT_EQ(wrench.force.size(), 3U);
+  EXPECT_EQ(wrench.torque.size(), 3U);
+}
+
 TEST_F(RobotTest, TestPluginsSmoke) {
   EXPECT_NO_THROW(robot_.load_plugins());
 }

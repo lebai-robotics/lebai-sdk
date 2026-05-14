@@ -322,6 +322,17 @@ TEST(JsonMotionProtoTest, MoveRequestSerializesJointPoseInProtoShape) {
   EXPECT_EQ(json.at("pose").at("joint").at("joint").size(), 6U);
 }
 
+TEST(JsonMotionProtoTest, WrenchParsesControllerPayload) {
+  const auto json = nlohmann::json::parse(R"({
+    "force":{"x":1.0,"y":2.0,"z":3.0},
+    "torque":{"x":4.0,"y":5.0,"z":6.0}
+  })");
+  const auto parsed = json.get<protos_json::motion_proto::Wrench>();
+
+  EXPECT_DOUBLE_EQ(parsed.force.x, 1.0);
+  EXPECT_DOUBLE_EQ(parsed.torque.z, 6.0);
+}
+
 TEST(JsonDbProtoTest, LoadRequestSerializesNameAndDir) {
   protos_json::db_proto::LoadRequest req;
   req.name = "tool0";

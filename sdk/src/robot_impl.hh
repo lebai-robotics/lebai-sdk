@@ -110,6 +110,7 @@ class Robot::RobotImpl {
   protos_json::trigger_proto::Triggers get_triggers();
   protos_json::led_proto::LedStyles get_led_styles();
   protos_json::motor_proto::ServoParams get_servo_params();
+  protos_json::motion_proto::Wrench get_tcp_force();
   protos_json::plugin_proto::Plugins load_plugins();
   protos_json::message_proto::Messages get_messages();
   protos_json::hardware_proto::OtaState get_ota_state();

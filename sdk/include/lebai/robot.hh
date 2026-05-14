@@ -220,6 +220,11 @@ struct ServoParamData {
   double torque_cmd_filter = 0.0; /*!< 力矩命令滤波. */
 };
 
+struct WrenchData {
+  DoubleVector force;  /*!< 受力大小[x,y,z]. */
+  DoubleVector torque; /*!< 扭矩大小[x,y,z]. */
+};
+
 struct PluginInfoData {
   std::string name;        /*!< 插件名称. */
   std::string description; /*!< 插件描述. */
@@ -841,6 +846,12 @@ class Robot {
    * @return 伺服参数列表
    */
   std::vector<ServoParamData> get_servo_params();
+  /**
+   * @brief 获取末端受力
+   *
+   * @return 末端受力和力矩
+   */
+  WrenchData get_tcp_force();
   /**
    * @brief 查询已安装插件列表
    *

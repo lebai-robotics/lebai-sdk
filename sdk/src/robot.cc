@@ -751,6 +751,14 @@ std::vector<ServoParamData> Robot::get_servo_params() {
   return params;
 }
 
+WrenchData Robot::get_tcp_force() {
+  const auto response = impl_->get_tcp_force();
+  WrenchData data;
+  data.force = {response.force.x, response.force.y, response.force.z};
+  data.torque = {response.torque.x, response.torque.y, response.torque.z};
+  return data;
+}
+
 std::vector<PluginInfoData> Robot::load_plugins() {
   const auto response = impl_->load_plugins();
   std::vector<PluginInfoData> plugins;

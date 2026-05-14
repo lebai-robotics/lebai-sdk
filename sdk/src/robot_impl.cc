@@ -264,6 +264,11 @@ protos_json::motor_proto::ServoParams Robot::RobotImpl::get_servo_params() {
       "get_servo_params", {});
 }
 
+protos_json::motion_proto::Wrench Robot::RobotImpl::get_tcp_force() {
+  return rpc_client_->Call<protos_json::motion_proto::Wrench>(
+      "get_tcp_force", {});
+}
+
 protos_json::plugin_proto::Plugins Robot::RobotImpl::load_plugins() {
   return rpc_client_->Call<protos_json::plugin_proto::Plugins>(
       "load_plugins", {});
