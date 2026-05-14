@@ -140,6 +140,10 @@ TEST_F(RobotTest, TestMessagesSmoke) {
   EXPECT_FALSE(messages.empty());
 }
 
+TEST_F(RobotTest, TestRunningTasksSmoke) {
+  EXPECT_NO_THROW(robot_.load_running_tasks());
+}
+
 TEST_F(RobotTest, TestOtaStateSmoke) {
   const auto state = robot_.get_ota_state();
   EXPECT_LE(state.progress, 100U);

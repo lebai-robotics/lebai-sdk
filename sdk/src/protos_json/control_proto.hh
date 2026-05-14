@@ -170,4 +170,9 @@ inline void to_json(nlohmann::json& json, const Task& task) {
                         {"params", task.params}};
 }
 
+struct Tasks {
+  std::vector<Task> tasks;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(Tasks, tasks)
+};
+
 }  // namespace protos_json::control_proto

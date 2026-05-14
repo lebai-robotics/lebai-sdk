@@ -322,6 +322,30 @@ TEST(JsonControlProtoTest, TaskStdoutParsesControllerPayload) {
   EXPECT_EQ(parsed.stdout_text, "ok");
 }
 
+TEST(JsonControlProtoTest, TasksParseControllerPayload) {
+  const auto json = nlohmann::json::parse(R"({
+    "tasks":[{
+      "id":7,
+      "block_id":"block",
+      "state":"RUNNING",
+      "loop_count":1,
+      "loop_to":2,
+      "is_parallel":false,
+      "is_simu":true,
+      "stdout":"ok",
+      "kind":"LUA",
+      "dir":"tasks",
+      "name":"main",
+      "params":[]
+    }]
+  })");
+  const auto parsed = json.get<protos_json::control_proto::Tasks>();
+
+  ASSERT_EQ(parsed.tasks.size(), 1U);
+  EXPECT_EQ(parsed.tasks.front().id, 7U);
+  EXPECT_EQ(parsed.tasks.front().stdout_text, "ok");
+}
+
 TEST(JsonSystemProtoTest, PhyDataParsesControllerPayload) {
   const auto json = nlohmann::json::parse(R"({
     "joint_temp":[0.0,0.0,0.0,0.0,0.0,0.0],

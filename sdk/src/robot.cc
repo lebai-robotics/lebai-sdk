@@ -126,6 +126,17 @@ static std::string convertTaskStateToString(
   return "Undefined State";
 }
 
+static std::string convertTaskKindToString(
+    protos_json::control_proto::TaskKind kind) {
+  switch (kind) {
+    case protos_json::control_proto::TaskKind::LUA:
+      return "LUA";
+    case protos_json::control_proto::TaskKind::APP:
+      return "APP";
+  }
+  return "Undefined Kind";
+}
+
 static JointLimitConfig convertToJointLimitConfig(
     const protos_json::safety_proto::JointLimit &joint_limit) {
   JointLimitConfig config;
@@ -1265,6 +1276,27 @@ std::vector<unsigned int> Robot::load_task_list() {
 }
 
 std::vector<unsigned int> Robot::get_task_list() { return load_task_list(); }
+
+std::vector<TaskData> Robot::load_running_tasks() {
+  const auto resp = impl_->load_running_tasks();
+  std::vector<TaskData> tasks;
+  for (const auto &task : resp.tasks) {
+    TaskData data;
+    data.id = task.id;
+    data.state = convertTaskStateToString(task.state);
+    data.loop_count = task.loop_count;
+    data.loop_to = task.loop_to;
+    data.is_parallel = task.is_parallel;
+    data.is_simu = task.is_simu;
+    data.stdout_text = task.stdout_text;
+    data.kind = convertTaskKindToString(task.kind);
+    data.dir = task.dir;
+    data.name = task.name;
+    data.params = task.params;
+    tasks.push_back(data);
+  }
+  return tasks;
+}
 
 std::string Robot::wait_task(unsigned int id) {
   protos_json::control_proto::TaskIndex task_index;

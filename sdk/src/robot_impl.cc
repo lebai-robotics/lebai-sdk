@@ -482,6 +482,11 @@ protos_json::control_proto::TaskIds Robot::RobotImpl::load_task_list() {
       "load_task_list", {});
 }
 
+protos_json::control_proto::Tasks Robot::RobotImpl::load_running_tasks() {
+  return rpc_client_->Call<protos_json::control_proto::Tasks>(
+      "load_running_tasks", {});
+}
+
 protos_json::control_proto::TaskStdout Robot::RobotImpl::wait_task(
     const protos_json::control_proto::TaskIndex &req) {
   return rpc_client_->Call<protos_json::control_proto::TaskStdout>("wait_task",

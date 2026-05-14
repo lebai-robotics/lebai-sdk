@@ -250,6 +250,20 @@ struct PluginInfoData {
   bool enable = false;       /*!< 是否启用. */
 };
 
+struct TaskData {
+  unsigned int id = 0;         /*!< 任务ID. */
+  std::string state;           /*!< 任务状态. */
+  unsigned int loop_count = 0; /*!< 已完成循环次数. */
+  unsigned int loop_to = 0;    /*!< 目标循环次数. */
+  bool is_parallel = false;    /*!< 是否并行运行. */
+  bool is_simu = false;        /*!< 是否为仿真模式. */
+  std::string stdout_text;     /*!< 任务输出. */
+  std::string kind;            /*!< 任务类型. */
+  std::string dir;             /*!< 任务目录. */
+  std::string name;            /*!< 任务名称. */
+  std::vector<std::string> params; /*!< 任务参数. */
+};
+
 /**
  * @brief 机械臂关节运动数据结构.
  *
@@ -1262,6 +1276,10 @@ class Robot {
    */
   std::vector<unsigned int> load_task_list();
   std::vector<unsigned int> get_task_list();
+  /**
+   * @brief 查询运行中的任务列表.
+   */
+  std::vector<TaskData> load_running_tasks();
   /**
    * @brief 等待任务完成
    *
