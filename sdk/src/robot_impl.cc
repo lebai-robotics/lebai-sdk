@@ -748,6 +748,10 @@ protos_json::structure_proto::Structure Robot::RobotImpl::load_structure(
   return rpc_client_->Call<protos_json::structure_proto::Structure>(
       "load_structure", {req});
 }
+void Robot::RobotImpl::save_structure(
+    const protos_json::structure_proto::SaveStructureRequest &req) {
+  rpc_client_->Call<void>("save_structure", {req});
+}
 protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_structure_list(
     const protos_json::db_proto::LoadListRequest &req) {
   return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(

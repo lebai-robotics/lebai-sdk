@@ -2064,6 +2064,21 @@ StructureData Robot::load_structure(std::string name, std::string dir) {
   return data;
 }
 
+void Robot::save_structure(std::string name, StructureData structure,
+                           std::string dir) {
+  protos_json::structure_proto::SaveStructureRequest req;
+  req.name = name;
+  req.dir = dir;
+  req.data.active = structure.active;
+  req.data.name = structure.name;
+  req.data.kind = structure.kind;
+  req.data.dof = structure.dof;
+  req.data.dh = structure.dh;
+  req.data.dyn = structure.dyn;
+  req.data.servo = structure.servo;
+  impl_->save_structure(req);
+}
+
 std::vector<std::string> Robot::load_structure_list(std::string dir) {
   protos_json::db_proto::LoadListRequest req;
   req.dir = dir;

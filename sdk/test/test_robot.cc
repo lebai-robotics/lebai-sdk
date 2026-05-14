@@ -250,6 +250,11 @@ TEST_F(RobotTest, TestModbusResourceSmoke) {
 TEST_F(RobotTest, TestStructureResourceSmoke) {
   const auto structure = robot_.load_structure("", "");
   EXPECT_FALSE(structure.kind.empty());
+  EXPECT_NO_THROW(
+      robot_.save_structure("codex_structure_smoke", structure, ""));
+  const auto saved_structure =
+      robot_.load_structure("codex_structure_smoke", "");
+  EXPECT_EQ(saved_structure.kind, structure.kind);
 }
 
 TEST_F(RobotTest, TestPostureResourceSmoke) {

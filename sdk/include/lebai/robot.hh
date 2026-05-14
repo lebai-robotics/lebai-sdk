@@ -1851,6 +1851,15 @@ class Robot {
    * @param dir 机器人结构目录.
    */
   StructureData load_structure(std::string name, std::string dir = "");
+  /**
+   * @brief 保存机器人结构.
+   *
+   * @param name 机器人结构名称.
+   * @param structure 机器人结构数据.
+   * @param dir 机器人结构目录.
+   */
+  void save_structure(std::string name, StructureData structure,
+                      std::string dir = "");
   /** @}*/
 
   /** \addtogroup MODBUS

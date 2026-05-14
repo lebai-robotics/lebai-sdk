@@ -253,6 +253,8 @@ class Robot::RobotImpl {
       const protos_json::db_proto::LoadListRequest &req);
   protos_json::structure_proto::Structure load_structure(
       const protos_json::db_proto::LoadRequest &req);
+  void save_structure(
+      const protos_json::structure_proto::SaveStructureRequest &req);
   protos_json::db_proto::LoadListResponse load_structure_list(
       const protos_json::db_proto::LoadListRequest &req);
   protos_json::modbus_proto::Modbus load_modbus(

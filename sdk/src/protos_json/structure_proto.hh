@@ -18,4 +18,11 @@ struct Structure {
                                  servo)
 };
 
+struct SaveStructureRequest {
+  std::string name;
+  Structure data;
+  std::string dir;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(SaveStructureRequest, name, data, dir)
+};
+
 }  // namespace protos_json::structure_proto
