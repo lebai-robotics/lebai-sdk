@@ -83,6 +83,15 @@ TEST(JsonMultiDevicesProtoTest, DiscoverRobotsResponseParsesDevices) {
   EXPECT_TRUE(parsed.devices.front().online);
 }
 
+TEST(JsonModbusProtoTest, LoadModbusRegisterListRequestSerializesDevice) {
+  protos_json::modbus_proto::LoadModbusRegisterListRequest req;
+  req.device = "modbus0";
+
+  const nlohmann::json json = req;
+
+  EXPECT_EQ(json.at("device"), "modbus0");
+}
+
 TEST(JsonIoProtoTest, SetDosRequestSerializesValues) {
   protos_json::io_proto::SetDoPinsRequest req;
   req.device = protos_json::io_proto::IoDevice::ROBOT;

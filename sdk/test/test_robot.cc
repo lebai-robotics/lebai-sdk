@@ -184,6 +184,7 @@ TEST_F(RobotTest, TestResourceListsSmoke) {
   EXPECT_NO_THROW(robot_.load_led_style_list(""));
   EXPECT_NO_THROW(robot_.load_modbus_list(""));
   EXPECT_NO_THROW(robot_.load_structure_list(""));
+  EXPECT_NO_THROW(robot_.load_modbus_register_list(""));
 }
 
 TEST_F(RobotTest, TestStopSmoke) {

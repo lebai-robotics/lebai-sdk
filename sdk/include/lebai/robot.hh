@@ -1626,6 +1626,12 @@ class Robot {
    * @param dir Modbus配置目录.
    */
   std::vector<std::string> load_modbus_list(std::string dir = "");
+  /**
+   * @brief 查询Modbus寄存器列表.
+   *
+   * @param device Modbus设备名称.
+   */
+  std::vector<std::string> load_modbus_register_list(std::string device);
 
   /**
    * @brief 写单个线圈.

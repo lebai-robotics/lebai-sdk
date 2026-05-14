@@ -59,4 +59,9 @@ struct GetRegistersResponse {
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(GetRegistersResponse, values)
 };
 
+struct LoadModbusRegisterListRequest {
+  std::string device;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(LoadModbusRegisterListRequest, device)
+};
+
 }  // namespace protos_json::modbus_proto

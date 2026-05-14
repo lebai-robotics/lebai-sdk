@@ -1808,6 +1808,12 @@ std::vector<std::string> Robot::load_modbus_list(std::string dir) {
   return impl_->load_modbus_list(req).names;
 }
 
+std::vector<std::string> Robot::load_modbus_register_list(std::string device) {
+  protos_json::modbus_proto::LoadModbusRegisterListRequest req;
+  req.device = device;
+  return impl_->load_modbus_register_list(req).names;
+}
+
 void Robot::write_single_coil(std::string device, std::string addr,
                               bool value) {
   protos_json::modbus_proto::SetCoilRequest req;

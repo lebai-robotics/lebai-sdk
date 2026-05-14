@@ -651,6 +651,12 @@ protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_modbus_list(
   return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
       "load_modbus_list", {req});
 }
+protos_json::db_proto::LoadListResponse
+Robot::RobotImpl::load_modbus_register_list(
+    const protos_json::modbus_proto::LoadModbusRegisterListRequest &req) {
+  return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
+      "load_modbus_register_list", {req});
+}
 void Robot::RobotImpl::write_single_coil(
     const protos_json::modbus_proto::SetCoilRequest &req) {
   rpc_client_->Call<void>("write_single_coil", {req});

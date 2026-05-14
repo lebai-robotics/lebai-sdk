@@ -221,6 +221,8 @@ class Robot::RobotImpl {
       const protos_json::db_proto::LoadListRequest &req);
   protos_json::db_proto::LoadListResponse load_modbus_list(
       const protos_json::db_proto::LoadListRequest &req);
+  protos_json::db_proto::LoadListResponse load_modbus_register_list(
+      const protos_json::modbus_proto::LoadModbusRegisterListRequest &req);
   void write_single_coil(const protos_json::modbus_proto::SetCoilRequest &req);
   void write_multiple_coils(
       const protos_json::modbus_proto::SetCoilsRequest &req);
