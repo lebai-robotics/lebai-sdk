@@ -258,10 +258,32 @@ Robot::RobotImpl::get_short_poses() {
       "get_short_poses", {});
 }
 
+void Robot::RobotImpl::set_short_pose(
+    const protos_json::shortcut_proto::Shortcut &req) {
+  rpc_client_->Call<void>("set_short_pose", {req});
+}
+
+protos_json::shortcut_proto::Shortcut Robot::RobotImpl::get_short_pose(
+    const protos_json::shortcut_proto::ShortcutIndex &req) {
+  return rpc_client_->Call<protos_json::shortcut_proto::Shortcut>(
+      "get_short_pose", {req});
+}
+
 protos_json::shortcut_proto::ShortcutList
 Robot::RobotImpl::get_short_tasks() {
   return rpc_client_->Call<protos_json::shortcut_proto::ShortcutList>(
       "get_short_tasks", {});
+}
+
+void Robot::RobotImpl::set_short_task(
+    const protos_json::shortcut_proto::Shortcut &req) {
+  rpc_client_->Call<void>("set_short_task", {req});
+}
+
+protos_json::shortcut_proto::Shortcut Robot::RobotImpl::get_short_task(
+    const protos_json::shortcut_proto::ShortcutIndex &req) {
+  return rpc_client_->Call<protos_json::shortcut_proto::Shortcut>(
+      "get_short_task", {req});
 }
 
 protos_json::trigger_proto::Triggers Robot::RobotImpl::get_triggers() {

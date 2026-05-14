@@ -908,11 +908,27 @@ class Robot {
    */
   std::vector<ShortcutData> get_short_poses();
   /**
+   * @brief 设置快捷路点
+   */
+  void set_short_pose(ShortcutData shortcut_data);
+  /**
+   * @brief 获取单个快捷路点
+   */
+  ShortcutData get_short_pose(unsigned int id);
+  /**
    * @brief 获取所有快捷任务
    *
    * @return 快捷任务列表
    */
   std::vector<ShortcutData> get_short_tasks();
+  /**
+   * @brief 设置快捷任务
+   */
+  void set_short_task(ShortcutData shortcut_data);
+  /**
+   * @brief 获取单个快捷任务
+   */
+  ShortcutData get_short_task(unsigned int id);
   /**
    * @brief 获取条件任务触发器列表
    *

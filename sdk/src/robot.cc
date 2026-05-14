@@ -770,12 +770,50 @@ static std::vector<ShortcutData> convertShortcuts(
   return shortcuts;
 }
 
+static ShortcutData convertShortcut(
+    const protos_json::shortcut_proto::Shortcut &shortcut) {
+  ShortcutData data;
+  data.id = shortcut.id;
+  data.dir = shortcut.dir;
+  data.name = shortcut.name;
+  return data;
+}
+
+static protos_json::shortcut_proto::Shortcut convertToShortcut(
+    const ShortcutData &shortcut_data) {
+  protos_json::shortcut_proto::Shortcut shortcut;
+  shortcut.id = shortcut_data.id;
+  shortcut.dir = shortcut_data.dir;
+  shortcut.name = shortcut_data.name;
+  return shortcut;
+}
+
 std::vector<ShortcutData> Robot::get_short_poses() {
   return convertShortcuts(impl_->get_short_poses());
 }
 
+void Robot::set_short_pose(ShortcutData shortcut_data) {
+  impl_->set_short_pose(convertToShortcut(shortcut_data));
+}
+
+ShortcutData Robot::get_short_pose(unsigned int id) {
+  protos_json::shortcut_proto::ShortcutIndex req;
+  req.id = id;
+  return convertShortcut(impl_->get_short_pose(req));
+}
+
 std::vector<ShortcutData> Robot::get_short_tasks() {
   return convertShortcuts(impl_->get_short_tasks());
+}
+
+void Robot::set_short_task(ShortcutData shortcut_data) {
+  impl_->set_short_task(convertToShortcut(shortcut_data));
+}
+
+ShortcutData Robot::get_short_task(unsigned int id) {
+  protos_json::shortcut_proto::ShortcutIndex req;
+  req.id = id;
+  return convertShortcut(impl_->get_short_task(req));
 }
 
 static ButtonIndexData convertButtonIndex(

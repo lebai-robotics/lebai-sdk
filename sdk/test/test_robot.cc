@@ -97,6 +97,16 @@ TEST_F(RobotTest, TestDbDirsSmoke) {
 }
 
 TEST_F(RobotTest, TestShortcutReadsSmoke) {
+  const l_master::ShortcutData pose_shortcut{99, "", "codex_pose_smoke"};
+  EXPECT_NO_THROW(robot_.set_short_pose(pose_shortcut));
+  const auto saved_pose_shortcut = robot_.get_short_pose(99);
+  EXPECT_EQ(saved_pose_shortcut.name, pose_shortcut.name);
+
+  const l_master::ShortcutData task_shortcut{99, "", "codex_task_smoke"};
+  EXPECT_NO_THROW(robot_.set_short_task(task_shortcut));
+  const auto saved_task_shortcut = robot_.get_short_task(99);
+  EXPECT_EQ(saved_task_shortcut.name, task_shortcut.name);
+
   EXPECT_NO_THROW(robot_.get_short_poses());
   EXPECT_NO_THROW(robot_.get_short_tasks());
 }

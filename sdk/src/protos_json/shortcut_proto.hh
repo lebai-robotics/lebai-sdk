@@ -15,6 +15,11 @@ struct Shortcut {
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(Shortcut, id, dir, name)
 };
 
+struct ShortcutIndex {
+  uint32_t id{};
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(ShortcutIndex, id)
+};
+
 struct ShortcutList {
   std::vector<Shortcut> list;
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(ShortcutList, list)

@@ -114,7 +114,13 @@ class Robot::RobotImpl {
       const protos_json::system_proto::GetBoxDevicesRequest &req);
   protos_json::db_proto::Dirs get_dirs();
   protos_json::shortcut_proto::ShortcutList get_short_poses();
+  void set_short_pose(const protos_json::shortcut_proto::Shortcut &req);
+  protos_json::shortcut_proto::Shortcut get_short_pose(
+      const protos_json::shortcut_proto::ShortcutIndex &req);
   protos_json::shortcut_proto::ShortcutList get_short_tasks();
+  void set_short_task(const protos_json::shortcut_proto::Shortcut &req);
+  protos_json::shortcut_proto::Shortcut get_short_task(
+      const protos_json::shortcut_proto::ShortcutIndex &req);
   protos_json::trigger_proto::Triggers get_triggers();
   protos_json::led_proto::LedStyles get_led_styles();
   protos_json::led_proto::LedStyle load_led_style(
