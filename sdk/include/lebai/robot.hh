@@ -1098,6 +1098,13 @@ class Robot {
    */
   void set_dio_mode(std::string device, unsigned int pin, bool value);
   /**
+   * @brief 获取单个数字端口模式
+   * @param device 设备名字，查看 @ref DEVICENAME.
+   * @param pin 端口号，从 0 开始
+   * @return false为输入模式，true为输出模式
+   */
+  bool get_dio_mode(std::string device, unsigned int pin);
+  /**
    * @brief 获取数字端口模式
    * @param device 设备名字，查看 @ref DEVICENAME ，可以进一步查看 <a
    * href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.

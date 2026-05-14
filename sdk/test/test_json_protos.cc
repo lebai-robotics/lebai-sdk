@@ -90,6 +90,23 @@ TEST(JsonIoProtoTest, SetAosRequestSerializesValues) {
   EXPECT_EQ(json.at("values").size(), 2U);
 }
 
+TEST(JsonIoProtoTest, DioModeResponsesParseModeLabels) {
+  const auto single_json = nlohmann::json::parse(R"({"mode":"OUTPUT"})");
+  const auto single =
+      single_json.get<protos_json::io_proto::GetDioModeResponse>();
+
+  EXPECT_TRUE(single.mode);
+
+  const auto batch_json =
+      nlohmann::json::parse(R"({"modes":["INPUT","OUTPUT"]})");
+  const auto batch =
+      batch_json.get<protos_json::io_proto::GetDiosModeResponse>();
+
+  ASSERT_EQ(batch.modes.size(), 2U);
+  EXPECT_FALSE(batch.modes.front());
+  EXPECT_TRUE(batch.modes.back());
+}
+
 TEST(JsonHardwareProtoTest, OtaStateParsesControllerPayload) {
   const auto json = nlohmann::json::parse(R"({"step":"NONE","progress":0})");
   const auto parsed = json.get<protos_json::hardware_proto::OtaState>();

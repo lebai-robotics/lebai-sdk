@@ -3,6 +3,7 @@
 #include <nlohmann/json.hpp>
 
 #include <cstdint>
+#include <string>
 #include <vector>
 
 namespace protos_json::io_proto {
@@ -96,6 +97,35 @@ struct SetDioModeRequest {
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(SetDioModeRequest, device, pin, value)
 };
 
+struct GetDioModeRequest {
+  IoDevice device{IoDevice::ROBOT};
+  uint32_t pin{};
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(GetDioModeRequest, device, pin)
+};
+
+inline bool parse_digital_mode(const nlohmann::json& value) {
+  if (value.is_boolean()) {
+    return value.get<bool>();
+  }
+  if (value.is_number_integer()) {
+    return value.get<int>() != 0;
+  }
+  const auto mode = value.get<std::string>();
+  return mode == "OUTPUT" || mode == "DO";
+}
+
+struct GetDioModeResponse {
+  bool mode{};
+};
+
+inline void from_json(const nlohmann::json& json, GetDioModeResponse& response) {
+  response.mode = parse_digital_mode(json.at("mode"));
+}
+
+inline void to_json(nlohmann::json& json, const GetDioModeResponse& response) {
+  json = nlohmann::json{{"mode", response.mode ? "OUTPUT" : "INPUT"}};
+}
+
 struct GetDiosModeRequest {
   IoDevice device{IoDevice::ROBOT};
   uint32_t pin{};
@@ -109,7 +139,10 @@ struct GetDiosModeResponse {
 
 inline void from_json(const nlohmann::json& json, GetDiosModeResponse& response) {
   if (json.contains("modes")) {
-    json.at("modes").get_to(response.modes);
+    response.modes.clear();
+    for (const auto& mode : json.at("modes")) {
+      response.modes.push_back(parse_digital_mode(mode));
+    }
   } else if (json.contains("values")) {
     json.at("values").get_to(response.modes);
   } else {

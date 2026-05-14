@@ -232,6 +232,7 @@ TEST_F(RobotTest, TestDioModeSmoke) {
   EXPECT_NO_THROW(robot_.start_sys());
   std::this_thread::sleep_for(std::chrono::seconds(1));
   EXPECT_NO_THROW(robot_.set_dio_mode("EXTRA", 0, true));
+  EXPECT_FALSE(robot_.get_dio_mode("ROBOT", 0));
   EXPECT_NO_THROW(robot_.get_dios_mode("EXTRA", 0, 2));
 }
 

@@ -138,6 +138,8 @@ class Robot::RobotImpl {
   protos_json::io_proto::GetAioPinsResponse get_aos(
       const protos_json::io_proto::GetAioPinsRequest &req);
   void set_dio_mode(const protos_json::io_proto::SetDioModeRequest &req);
+  protos_json::io_proto::GetDioModeResponse get_dio_mode(
+      const protos_json::io_proto::GetDioModeRequest &req);
   protos_json::io_proto::GetDiosModeResponse get_dios_mode(
       const protos_json::io_proto::GetDiosModeRequest &req);
   void set_ao(const protos_json::io_proto::SetAoPinRequest &req);

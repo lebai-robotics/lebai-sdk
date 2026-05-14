@@ -366,6 +366,11 @@ void Robot::RobotImpl::set_dio_mode(
     const protos_json::io_proto::SetDioModeRequest &req) {
   rpc_client_->Call<void>("set_dio_mode", {req});
 }
+protos_json::io_proto::GetDioModeResponse Robot::RobotImpl::get_dio_mode(
+    const protos_json::io_proto::GetDioModeRequest &req) {
+  return rpc_client_->Call<protos_json::io_proto::GetDioModeResponse>(
+      "get_dio_mode", {req});
+}
 protos_json::io_proto::GetDiosModeResponse Robot::RobotImpl::get_dios_mode(
     const protos_json::io_proto::GetDiosModeRequest &req) {
   return rpc_client_->Call<protos_json::io_proto::GetDiosModeResponse>(

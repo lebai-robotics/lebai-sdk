@@ -1085,6 +1085,18 @@ void Robot::set_dio_mode(std::string device, unsigned int pin, bool value) {
   req.value = value;
   impl_->set_dio_mode(req);
 }
+bool Robot::get_dio_mode(std::string device, unsigned int pin) {
+  protos_json::io_proto::GetDioModeRequest req;
+  if (device == "ROBOT") {
+    req.device = protos_json::io_proto::IoDevice::ROBOT;
+  } else if (device == "FLANGE") {
+    req.device = protos_json::io_proto::IoDevice::FLANGE;
+  } else if (device == "EXTRA") {
+    req.device = protos_json::io_proto::IoDevice::EXTRA;
+  }
+  req.pin = pin;
+  return impl_->get_dio_mode(req).mode;
+}
 std::vector<bool> Robot::get_dios_mode(std::string device, unsigned int pin,
                                        unsigned int count) {
   protos_json::io_proto::GetDiosModeRequest req;
