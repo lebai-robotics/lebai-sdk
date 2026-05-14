@@ -178,6 +178,7 @@ class Robot::RobotImpl {
   void set_aos(const protos_json::io_proto::SetAoPinsRequest &req);
   void init_claw(const protos_json::claw_proto::InitClawRequest &req);
   void set_claw(const protos_json::claw_proto::SetClawRequest &req);
+  void set_claw_ao(const protos_json::claw_proto::SetClawAoRequest &req);
   protos_json::claw_proto::Claw get_claw();
   protos_json::claw_proto::GetClawAiResponse get_claw_ai(
       const protos_json::claw_proto::GetClawAiRequest &req);

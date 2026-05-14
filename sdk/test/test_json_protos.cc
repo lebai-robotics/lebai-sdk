@@ -96,6 +96,13 @@ TEST(JsonModbusProtoTest, LoadModbusRegisterListRequestSerializesDevice) {
 }
 
 TEST(JsonClawProtoTest, ClawAiRequestAndResponseUseAddressAndValue) {
+  protos_json::claw_proto::SetClawAoRequest set_ao;
+  set_ao.address = 1;
+  set_ao.value = 2.5;
+  const nlohmann::json set_ao_json = set_ao;
+  EXPECT_EQ(set_ao_json.at("address"), 1);
+  EXPECT_DOUBLE_EQ(set_ao_json.at("value"), 2.5);
+
   protos_json::claw_proto::GetClawAiRequest req;
   req.address = 2;
 

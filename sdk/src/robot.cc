@@ -1408,6 +1408,13 @@ void Robot::set_claw(double force, double amplitude) {
   impl_->set_claw(req);
 }
 
+void Robot::set_claw_ao(unsigned int address, double value) {
+  protos_json::claw_proto::SetClawAoRequest req;
+  req.address = address;
+  req.value = value;
+  impl_->set_claw_ao(req);
+}
+
 ClawData Robot::get_claw() {
   auto resp = impl_->get_claw();
   ClawData claw_data;

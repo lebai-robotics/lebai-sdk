@@ -763,6 +763,7 @@ TEST_F(RobotTest, TestExtraIO) {
 TEST_F(RobotTest, TestClaw) {
   robot_.start_sys();
   robot_.set_claw(0, 0);
+  EXPECT_NO_THROW(robot_.set_claw_ao(0, 0.0));
   auto claw_data = robot_.get_claw();
 }
 TEST_F(RobotTest, TestLed) {

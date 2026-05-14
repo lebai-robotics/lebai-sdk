@@ -17,6 +17,12 @@ struct SetClawRequest {
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(SetClawRequest, force, amplitude)
 };
 
+struct SetClawAoRequest {
+  uint32_t address{};
+  double value{};
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(SetClawAoRequest, address, value)
+};
+
 struct Claw {
   double force{};
   double amplitude{};

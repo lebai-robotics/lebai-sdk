@@ -499,13 +499,26 @@ void Robot::RobotImpl::set_claw(
     const protos_json::claw_proto::SetClawRequest &req) {
   try {
     rpc_client_->Call<void>("set_claw", {req});
-  } catch (const jsonrpccxx::JsonRpcException& exception) {
+  } catch (const jsonrpccxx::JsonRpcException &exception) {
     if (exception.Message().find("ClawUninit") != std::string::npos) {
       return;
     }
     throw;
   }
 }
+
+void Robot::RobotImpl::set_claw_ao(
+    const protos_json::claw_proto::SetClawAoRequest &req) {
+  try {
+    rpc_client_->Call<void>("set_claw_ao", {req});
+  } catch (const jsonrpccxx::JsonRpcException &exception) {
+    if (exception.Message().find("ClawUninit") != std::string::npos) {
+      return;
+    }
+    throw;
+  }
+}
+
 protos_json::claw_proto::Claw Robot::RobotImpl::get_claw() {
   return rpc_client_->Call<protos_json::claw_proto::Claw>("get_claw", {});
 }

@@ -1303,6 +1303,13 @@ class Robot {
    * @param amplitude 张合幅度（0-100）
    */
   void set_claw(double force, double amplitude);
+  /**
+   * @brief 设置夹爪指定模拟输出数据.
+   *
+   * @param address 夹爪地址.
+   * @param value 输出值.
+   */
+  void set_claw_ao(unsigned int address, double value);
 
   /**
    * @brief 获取夹爪当前数据
