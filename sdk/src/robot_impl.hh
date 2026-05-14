@@ -38,6 +38,7 @@
 #include "protos_json/serial_proto.hh"
 #include "protos_json/storage_proto.hh"
 #include "protos_json/system_proto.hh"
+#include "protos_json/upgrade_proto.hh"
 #include "rpc_client.hh"
 
 namespace lebai {
@@ -101,6 +102,8 @@ class Robot::RobotImpl {
       const protos_json::system_proto::GetBoxDevicesRequest &req);
   protos_json::message_proto::Messages get_messages();
   protos_json::hardware_proto::OtaState get_ota_state();
+  protos_json::upgrade_proto::CheckUpgradeResponse check_upgrade();
+  protos_json::upgrade_proto::CommandStdout get_upgrade_stdout();
   protos_json::system_proto::PhyData get_phy_data();
   protos_json::kinematic_proto::KinData get_kin_data();
   protos_json::io_proto::GetDioPinResponse get_di(

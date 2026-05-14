@@ -243,6 +243,18 @@ protos_json::hardware_proto::OtaState Robot::RobotImpl::get_ota_state() {
       "get_ota_state", {});
 }
 
+protos_json::upgrade_proto::CheckUpgradeResponse
+Robot::RobotImpl::check_upgrade() {
+  return rpc_client_->Call<protos_json::upgrade_proto::CheckUpgradeResponse>(
+      "check_upgrade", {});
+}
+
+protos_json::upgrade_proto::CommandStdout
+Robot::RobotImpl::get_upgrade_stdout() {
+  return rpc_client_->Call<protos_json::upgrade_proto::CommandStdout>(
+      "get_upgrade_stdout", {});
+}
+
 protos_json::system_proto::PhyData Robot::RobotImpl::get_phy_data() {
   return rpc_client_->Call<protos_json::system_proto::PhyData>(
       "get_phy_data", {});

@@ -102,6 +102,14 @@ TEST_F(RobotTest, TestOtaStateSmoke) {
   EXPECT_FALSE(state.step.empty());
 }
 
+TEST_F(RobotTest, TestUpgradeInfoSmoke) {
+  const auto check = robot_.check_upgrade();
+  EXPECT_FALSE(check.need_upgrade);
+
+  const auto stdout_data = robot_.get_upgrade_stdout();
+  EXPECT_EQ(stdout_data.code, 0);
+}
+
 TEST_F(RobotTest, TestEstopReasonSmoke) {
   EXPECT_EQ(robot_.get_estop_reason(), 0);
 }

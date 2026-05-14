@@ -161,6 +161,18 @@ struct OtaStateData {
   uint32_t progress = 0; /*!< 升级进度. */
 };
 
+struct CheckUpgradeData {
+  bool need_upgrade = false;  /*!< 是否需要升级. */
+  std::string introduction;   /*!< 升级介绍. */
+};
+
+struct CommandStdoutData {
+  bool done = false;        /*!< 命令是否完成. */
+  std::string stdout_text;  /*!< 标准输出. */
+  std::string stderr_text;  /*!< 标准错误. */
+  int code = 0;             /*!< 返回码. */
+};
+
 /**
  * @brief 机械臂关节运动数据结构.
  *
@@ -747,6 +759,18 @@ class Robot {
    * @return OTA升级状态
    */
   OtaStateData get_ota_state();
+  /**
+   * @brief 查询是否需要系统升级
+   *
+   * @return 升级检查结果
+   */
+  CheckUpgradeData check_upgrade();
+  /**
+   * @brief 获取系统升级输出
+   *
+   * @return 升级输出
+   */
+  CommandStdoutData get_upgrade_stdout();
   /**
    * @brief 获取机械臂物理数据
    *

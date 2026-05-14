@@ -32,6 +32,7 @@
 #include "protos_json/signal_proto.hh"
 #include "protos_json/storage_proto.hh"
 #include "protos_json/system_proto.hh"
+#include "protos_json/upgrade_proto.hh"
 #include "base64.hh"
 
 TEST(Base64Test, EncodesAndDecodesFilePayloads) {
@@ -411,6 +412,24 @@ TEST(JsonSerialProtoTest, SerialRequestsSerializeExpectedFields) {
   parity.device = "ttyS0";
   parity.parity = 2;
   EXPECT_EQ(nlohmann::json(parity).at("parity"), 2);
+}
+
+TEST(JsonUpgradeProtoTest, UpgradeResponsesParseControllerPayloads) {
+  const auto check_json =
+      nlohmann::json::parse(R"({"need_upgrade":false,"introduction":""})");
+  const auto check =
+      check_json.get<protos_json::upgrade_proto::CheckUpgradeResponse>();
+
+  EXPECT_FALSE(check.need_upgrade);
+  EXPECT_EQ(check.introduction, "");
+
+  const auto stdout_json =
+      nlohmann::json::parse(R"({"done":true,"stdout":"","stderr":"","code":0})");
+  const auto stdout_data =
+      stdout_json.get<protos_json::upgrade_proto::CommandStdout>();
+
+  EXPECT_TRUE(stdout_data.done);
+  EXPECT_EQ(stdout_data.code, 0);
 }
 
 TEST(JsonModbusProtoTest, RequestsAndResponsesRoundTrip) {

@@ -686,6 +686,24 @@ OtaStateData Robot::get_ota_state() {
   return data;
 }
 
+CheckUpgradeData Robot::check_upgrade() {
+  const auto response = impl_->check_upgrade();
+  CheckUpgradeData data;
+  data.need_upgrade = response.need_upgrade;
+  data.introduction = response.introduction;
+  return data;
+}
+
+CommandStdoutData Robot::get_upgrade_stdout() {
+  const auto response = impl_->get_upgrade_stdout();
+  CommandStdoutData data;
+  data.done = response.done;
+  data.stdout_text = response.stdout_text;
+  data.stderr_text = response.stderr_text;
+  data.code = response.code;
+  return data;
+}
+
 PhysicalData Robot::get_phy_data() {
   auto phy_data = impl_->get_phy_data();
   PhysicalData physical_data;
