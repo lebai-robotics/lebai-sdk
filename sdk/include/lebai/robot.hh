@@ -104,6 +104,52 @@ struct SystemInfoData {
 };
 
 /**
+ * @brief 机器人设备信息.
+ *
+ */
+struct RobotInfoData {
+  std::string name;      /*!< 设备名称. */
+  std::string mac;       /*!< 设备物理唯一标识. */
+  std::string box_model; /*!< 控制箱型号. */
+  std::string box_sn;    /*!< 控制箱序列号. */
+  std::string arm_model; /*!< 手臂型号. */
+  std::string arm_sn;    /*!< 手臂序列号. */
+};
+
+/**
+ * @brief 控制器硬件设备信息.
+ *
+ */
+struct DeviceInfoData {
+  bool invalid = false;      /*!< 设备信息是否无效. */
+  std::string sn;            /*!< 序列号. */
+  std::string version;       /*!< 固件版本. */
+  std::string partition;     /*!< 固件分区. */
+  uint32_t di_num = 0;       /*!< DI数量. */
+  uint32_t do_num = 0;       /*!< DO数量. */
+  uint32_t dio_num = 0;      /*!< DIO数量. */
+  uint32_t ai_num = 0;       /*!< AI数量. */
+  uint32_t ao_num = 0;       /*!< AO数量. */
+};
+
+struct HardwareInfoData {
+  DeviceInfoData comboard;             /*!< 通信板信息. */
+  std::vector<DeviceInfoData> joints;  /*!< 关节信息. */
+  DeviceInfoData flange;               /*!< 法兰信息. */
+  DeviceInfoData led;                  /*!< 灯板信息. */
+  DeviceInfoData extra_io;             /*!< 扩展IO信息. */
+};
+
+struct SoftwareItemInfoData {
+  std::string version; /*!< 软件版本. */
+  std::string branch;  /*!< 软件分支. */
+};
+
+struct SoftwareInfoData {
+  std::map<std::string, SoftwareItemInfoData> software; /*!< 软件信息. */
+};
+
+/**
  * @brief 机械臂关节运动数据结构.
  *
  */
@@ -652,6 +698,24 @@ class Robot {
    * @return 控制器系统信息
    */
   SystemInfoData get_system_info();
+  /**
+   * @brief 获取机器人设备信息
+   *
+   * @return 机器人设备信息
+   */
+  RobotInfoData get_robot_info();
+  /**
+   * @brief 获取控制器硬件信息
+   *
+   * @return 控制器硬件信息
+   */
+  HardwareInfoData get_hardware_info();
+  /**
+   * @brief 获取控制器软件信息
+   *
+   * @return 控制器软件信息
+   */
+  SoftwareInfoData get_software_info();
   /**
    * @brief 获取机械臂物理数据
    *

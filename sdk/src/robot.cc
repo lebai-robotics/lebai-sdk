@@ -53,6 +53,21 @@ static CartesianPose convertToCartesianPose(
   return cart_pose;
 }
 
+static DeviceInfoData convertToDeviceInfoData(
+    const protos_json::system_proto::DeviceInfo &info) {
+  DeviceInfoData data;
+  data.invalid = info.invalid;
+  data.sn = info.sn;
+  data.version = info.version;
+  data.partition = info.partition;
+  data.di_num = info.di_num;
+  data.do_num = info.do_num;
+  data.dio_num = info.dio_num;
+  data.ai_num = info.ai_num;
+  data.ao_num = info.ao_num;
+  return data;
+}
+
 static CollisionDetectorConfig convertToCollisionDetectorConfig(
     const protos_json::safety_proto::CollisionDetector &detector) {
   CollisionDetectorConfig config;
@@ -604,6 +619,43 @@ SystemInfoData Robot::get_system_info() {
   system_info.used_memory = info.memory.used;
   system_info.total_memory = info.memory.total;
   return system_info;
+}
+
+RobotInfoData Robot::get_robot_info() {
+  const auto info = impl_->get_robot_info();
+  RobotInfoData robot_info;
+  robot_info.name = info.name;
+  robot_info.mac = info.mac;
+  robot_info.box_model = info.box_model;
+  robot_info.box_sn = info.box_sn;
+  robot_info.arm_model = info.arm_model;
+  robot_info.arm_sn = info.arm_sn;
+  return robot_info;
+}
+
+HardwareInfoData Robot::get_hardware_info() {
+  const auto info = impl_->get_hardware_info();
+  HardwareInfoData hardware_info;
+  hardware_info.comboard = convertToDeviceInfoData(info.comboard);
+  hardware_info.flange = convertToDeviceInfoData(info.flange);
+  hardware_info.led = convertToDeviceInfoData(info.led);
+  hardware_info.extra_io = convertToDeviceInfoData(info.extra_io);
+  for (const auto &joint : info.joints) {
+    hardware_info.joints.push_back(convertToDeviceInfoData(joint));
+  }
+  return hardware_info;
+}
+
+SoftwareInfoData Robot::get_software_info() {
+  const auto info = impl_->get_software_info();
+  SoftwareInfoData software_info;
+  for (const auto &item : info.software) {
+    SoftwareItemInfoData data;
+    data.version = item.second.version;
+    data.branch = item.second.branch;
+    software_info.software[item.first] = data;
+  }
+  return software_info;
 }
 
 PhysicalData Robot::get_phy_data() {

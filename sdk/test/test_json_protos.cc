@@ -136,6 +136,47 @@ TEST(JsonSystemProtoTest, SystemInfoParsesControllerPayload) {
   EXPECT_EQ(parsed.cpu.frequency, 2879ULL);
 }
 
+TEST(JsonSystemProtoTest, RobotHardwareSoftwareInfoParseControllerPayloads) {
+  const auto robot_json = nlohmann::json::parse(R"({
+    "name":"lebai-123456",
+    "mac":"00:11:22:33:44:55",
+    "box_model":"LM3",
+    "box_sn":"C123",
+    "arm_model":"J6M1",
+    "arm_sn":"R123"
+  })");
+  const auto robot_info =
+      robot_json.get<protos_json::system_proto::RobotInfo>();
+
+  EXPECT_EQ(robot_info.name, "lebai-123456");
+  EXPECT_EQ(robot_info.box_model, "LM3");
+  EXPECT_EQ(robot_info.arm_model, "J6M1");
+
+  const auto hardware_json = nlohmann::json::parse(R"({
+    "comboard":{"invalid":false,"sn":"C123","version":"1.0.0","partition":"A","di_num":4,"do_num":4,"dio_num":0,"ai_num":2,"ao_num":2},
+    "joints":[{"invalid":false,"sn":"J1","version":"1.0.0","partition":"B","di_num":0,"do_num":0,"dio_num":0,"ai_num":0,"ao_num":0}],
+    "flange":{"invalid":false,"sn":"F1","version":"1.0.0","partition":"A","di_num":2,"do_num":2,"dio_num":0,"ai_num":0,"ao_num":0},
+    "led":{"invalid":false,"sn":"L1","version":"1.0.0","partition":"A","di_num":0,"do_num":0,"dio_num":0,"ai_num":0,"ao_num":0},
+    "extra_io":{"invalid":true,"sn":"","version":"","partition":"UNKNOWN","di_num":12,"do_num":12,"dio_num":0,"ai_num":2,"ao_num":2}
+  })");
+  const auto hardware_info =
+      hardware_json.get<protos_json::system_proto::HardwareInfo>();
+
+  EXPECT_EQ(hardware_info.comboard.di_num, 4U);
+  ASSERT_EQ(hardware_info.joints.size(), 1U);
+  EXPECT_EQ(hardware_info.joints.front().partition, "B");
+  EXPECT_TRUE(hardware_info.extra_io.invalid);
+
+  const auto software_json = nlohmann::json::parse(R"({
+    "software":{"rc":{"version":"0.0.0","branch":"first"}}
+  })");
+  const auto software_info =
+      software_json.get<protos_json::system_proto::SoftwareInfo>();
+
+  ASSERT_EQ(software_info.software.count("rc"), 1U);
+  EXPECT_EQ(software_info.software.at("rc").branch, "first");
+}
+
 TEST(JsonSystemProtoTest, RobotStateParsesControllerPayload) {
   const auto json = nlohmann::json::parse(R"({"state":"ROBOT_OFF"})");
   const auto parsed =

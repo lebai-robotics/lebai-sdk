@@ -211,6 +211,21 @@ protos_json::system_proto::SystemInfo Robot::RobotImpl::get_system_info() {
       "get_system_info", {});
 }
 
+protos_json::system_proto::RobotInfo Robot::RobotImpl::get_robot_info() {
+  return rpc_client_->Call<protos_json::system_proto::RobotInfo>(
+      "get_robot_info", {});
+}
+
+protos_json::system_proto::HardwareInfo Robot::RobotImpl::get_hardware_info() {
+  return rpc_client_->Call<protos_json::system_proto::HardwareInfo>(
+      "get_hardware_info", {});
+}
+
+protos_json::system_proto::SoftwareInfo Robot::RobotImpl::get_software_info() {
+  return rpc_client_->Call<protos_json::system_proto::SoftwareInfo>(
+      "get_software_info", {});
+}
+
 protos_json::system_proto::PhyData Robot::RobotImpl::get_phy_data() {
   return rpc_client_->Call<protos_json::system_proto::PhyData>(
       "get_phy_data", {});

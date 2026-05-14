@@ -92,6 +92,9 @@ class Robot::RobotImpl {
   protos_json::system_proto::RobotState get_robot_state();
   protos_json::system_proto::EstopReason get_estop_reason();
   protos_json::system_proto::SystemInfo get_system_info();
+  protos_json::system_proto::RobotInfo get_robot_info();
+  protos_json::system_proto::HardwareInfo get_hardware_info();
+  protos_json::system_proto::SoftwareInfo get_software_info();
   protos_json::system_proto::PhyData get_phy_data();
   protos_json::kinematic_proto::KinData get_kin_data();
   protos_json::io_proto::GetDioPinResponse get_di(

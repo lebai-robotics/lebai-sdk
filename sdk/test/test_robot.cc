@@ -73,6 +73,19 @@ TEST_F(RobotTest, TestSystemInfoSmoke) {
   EXPECT_GE(info.total_memory, info.used_memory);
 }
 
+TEST_F(RobotTest, TestSystemDetailInfoSmoke) {
+  const auto robot_info = robot_.get_robot_info();
+  EXPECT_FALSE(robot_info.box_model.empty());
+  EXPECT_FALSE(robot_info.arm_model.empty());
+
+  const auto hardware_info = robot_.get_hardware_info();
+  EXPECT_FALSE(hardware_info.comboard.partition.empty());
+  EXPECT_FALSE(hardware_info.joints.empty());
+
+  const auto software_info = robot_.get_software_info();
+  EXPECT_FALSE(software_info.software.empty());
+}
+
 TEST_F(RobotTest, TestEstopReasonSmoke) {
   EXPECT_EQ(robot_.get_estop_reason(), 0);
 }

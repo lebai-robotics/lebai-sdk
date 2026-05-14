@@ -3,6 +3,7 @@
 #include <nlohmann/json.hpp>
 
 #include <cstdint>
+#include <map>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -279,6 +280,52 @@ struct SystemInfo {
   CpuInfo cpu;
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(SystemInfo, name, kernel_version, os_version,
                                  host_name, memory, disks, networks, cpu)
+};
+
+struct RobotInfo {
+  std::string name;
+  std::string mac;
+  std::string box_model;
+  std::string box_sn;
+  std::string arm_model;
+  std::string arm_sn;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(RobotInfo, name, mac, box_model, box_sn,
+                                 arm_model, arm_sn)
+};
+
+struct DeviceInfo {
+  bool invalid{};
+  std::string sn;
+  std::string version;
+  std::string partition;
+  uint32_t di_num{};
+  uint32_t do_num{};
+  uint32_t dio_num{};
+  uint32_t ai_num{};
+  uint32_t ao_num{};
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(DeviceInfo, invalid, sn, version, partition,
+                                 di_num, do_num, dio_num, ai_num, ao_num)
+};
+
+struct HardwareInfo {
+  DeviceInfo comboard;
+  std::vector<DeviceInfo> joints;
+  DeviceInfo flange;
+  DeviceInfo led;
+  DeviceInfo extra_io;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(HardwareInfo, comboard, joints, flange, led,
+                                 extra_io)
+};
+
+struct SoftwareItemInfo {
+  std::string version;
+  std::string branch;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(SoftwareItemInfo, version, branch)
+};
+
+struct SoftwareInfo {
+  std::map<std::string, SoftwareItemInfo> software;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(SoftwareInfo, software)
 };
 
 struct GetRobotStateResponse {
