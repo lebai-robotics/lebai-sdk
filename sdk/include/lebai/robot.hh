@@ -957,6 +957,26 @@ class Robot {
    */
   void set_tcp_force(const WrenchData &wrench);
   /**
+   * @brief 设置力控传感器.
+   *
+   * @param sensor 传感器类型.
+   * @param address 传感器地址.
+   */
+  void set_force_mode_sensor(const std::string &sensor, unsigned int address);
+  /**
+   * @brief 设置力控参数.
+   *
+   * @param damping 阻尼.
+   * @param gain 增益.
+   * @param max_vel 最大速度，长度为6.
+   */
+  void set_force_mode_param(double damping, double gain,
+                            const std::vector<double> &max_vel);
+  /**
+   * @brief 结束力控模式.
+   */
+  void end_force_mode();
+  /**
    * @brief 查询已安装插件列表
    *
    * @return 插件信息列表

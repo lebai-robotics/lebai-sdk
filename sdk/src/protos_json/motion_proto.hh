@@ -59,6 +59,20 @@ struct Wrench {
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(Wrench, force, torque)
 };
 
+struct SetForceModeSensorRequest {
+  std::string sensor;
+  uint32_t address{};
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(SetForceModeSensorRequest, sensor, address)
+};
+
+struct SetForceModeParamRequest {
+  double damping{};
+  double gain{};
+  std::vector<double> max_vel;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(SetForceModeParamRequest, damping, gain,
+                                 max_vel)
+};
+
 struct Rotation {
   Position euler_zyx;
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(Rotation, euler_zyx)

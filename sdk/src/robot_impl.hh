@@ -122,6 +122,11 @@ class Robot::RobotImpl {
   protos_json::motor_proto::ServoParams get_servo_params();
   protos_json::motion_proto::Wrench get_tcp_force();
   void set_tcp_force(const protos_json::motion_proto::Wrench &req);
+  void set_force_mode_sensor(
+      const protos_json::motion_proto::SetForceModeSensorRequest &req);
+  void set_force_mode_param(
+      const protos_json::motion_proto::SetForceModeParamRequest &req);
+  void end_force_mode();
   protos_json::plugin_proto::Plugins load_plugins();
   protos_json::multi_devices_proto::DiscoverRobotsResponse discover_robots();
   protos_json::plugin_proto::CommandStdout get_plugin_daemon_stdout(

@@ -127,6 +127,13 @@ TEST_F(RobotTest, TestTcpForceSmoke) {
   EXPECT_EQ(wrench.torque.size(), 3U);
 }
 
+TEST_F(RobotTest, TestForceModeConfigSmoke) {
+  EXPECT_NO_THROW(robot_.set_force_mode_sensor("DISABLE", 0));
+  EXPECT_NO_THROW(
+      robot_.set_force_mode_param(0.0, 0.0, {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}));
+  EXPECT_NO_THROW(robot_.end_force_mode());
+}
+
 TEST_F(RobotTest, TestPluginsSmoke) {
   EXPECT_NO_THROW(robot_.load_plugins());
 }

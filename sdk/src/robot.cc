@@ -844,6 +844,31 @@ void Robot::set_tcp_force(const WrenchData &wrench) {
   impl_->set_tcp_force(req);
 }
 
+void Robot::set_force_mode_sensor(const std::string &sensor,
+                                  unsigned int address) {
+  protos_json::motion_proto::SetForceModeSensorRequest req;
+  req.sensor = sensor;
+  req.address = address;
+  impl_->set_force_mode_sensor(req);
+}
+
+void Robot::set_force_mode_param(double damping, double gain,
+                                 const std::vector<double> &max_vel) {
+  if (max_vel.size() != 6) {
+    throw std::invalid_argument("force mode max_vel must have 6 values");
+  }
+
+  protos_json::motion_proto::SetForceModeParamRequest req;
+  req.damping = damping;
+  req.gain = gain;
+  req.max_vel = max_vel;
+  impl_->set_force_mode_param(req);
+}
+
+void Robot::end_force_mode() {
+  impl_->end_force_mode();
+}
+
 std::vector<PluginInfoData> Robot::load_plugins() {
   const auto response = impl_->load_plugins();
   std::vector<PluginInfoData> plugins;

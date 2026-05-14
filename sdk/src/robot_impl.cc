@@ -297,6 +297,20 @@ void Robot::RobotImpl::set_tcp_force(
   rpc_client_->Call<void>("set_tcp_force", {req});
 }
 
+void Robot::RobotImpl::set_force_mode_sensor(
+    const protos_json::motion_proto::SetForceModeSensorRequest &req) {
+  rpc_client_->Call<void>("set_force_mode_sensor", {req});
+}
+
+void Robot::RobotImpl::set_force_mode_param(
+    const protos_json::motion_proto::SetForceModeParamRequest &req) {
+  rpc_client_->Call<void>("set_force_mode_param", {req});
+}
+
+void Robot::RobotImpl::end_force_mode() {
+  rpc_client_->Call<void>("end_force_mode", {});
+}
+
 protos_json::plugin_proto::Plugins Robot::RobotImpl::load_plugins() {
   return rpc_client_->Call<protos_json::plugin_proto::Plugins>(
       "load_plugins", {});
