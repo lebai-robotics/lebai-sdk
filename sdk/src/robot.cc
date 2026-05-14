@@ -1004,22 +1004,33 @@ void Robot::end_force_mode() {
   impl_->end_force_mode();
 }
 
+static PluginInfoData convertPluginInfo(
+    const protos_json::plugin_proto::PluginInfo &plugin) {
+  PluginInfoData data;
+  data.name = plugin.name;
+  data.description = plugin.description;
+  data.homepage = plugin.homepage;
+  data.auto_restart = plugin.auto_restart;
+  data.web = plugin.web;
+  data.daemon = plugin.daemon;
+  data.cmd = plugin.cmd;
+  data.enable = plugin.enable;
+  return data;
+}
+
 std::vector<PluginInfoData> Robot::load_plugins() {
   const auto response = impl_->load_plugins();
   std::vector<PluginInfoData> plugins;
   for (const auto &plugin : response.plugins) {
-    PluginInfoData data;
-    data.name = plugin.name;
-    data.description = plugin.description;
-    data.homepage = plugin.homepage;
-    data.auto_restart = plugin.auto_restart;
-    data.web = plugin.web;
-    data.daemon = plugin.daemon;
-    data.cmd = plugin.cmd;
-    data.enable = plugin.enable;
-    plugins.push_back(data);
+    plugins.push_back(convertPluginInfo(plugin));
   }
   return plugins;
+}
+
+PluginInfoData Robot::load_plugin(const std::string &name) {
+  protos_json::plugin_proto::PluginIndex req;
+  req.name = name;
+  return convertPluginInfo(impl_->load_plugin(req));
 }
 
 std::vector<DiscoveredRobotData> Robot::discover_robots() {

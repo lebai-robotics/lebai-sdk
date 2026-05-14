@@ -1018,6 +1018,12 @@ class Robot {
    */
   std::vector<PluginInfoData> load_plugins();
   /**
+   * @brief 查询已安装插件
+   *
+   * @param name 插件名称.
+   */
+  PluginInfoData load_plugin(const std::string &name);
+  /**
    * @brief 通过控制器RPC发现机器人设备.
    *
    * @return 设备信息列表.

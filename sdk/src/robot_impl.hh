@@ -139,6 +139,8 @@ class Robot::RobotImpl {
       const protos_json::motion_proto::SetForceModeParamRequest &req);
   void end_force_mode();
   protos_json::plugin_proto::Plugins load_plugins();
+  protos_json::plugin_proto::PluginInfo load_plugin(
+      const protos_json::plugin_proto::PluginIndex &req);
   protos_json::multi_devices_proto::DiscoverRobotsResponse discover_robots();
   protos_json::plugin_proto::CommandStdout get_plugin_daemon_stdout(
       const protos_json::plugin_proto::PluginIndex &req);
