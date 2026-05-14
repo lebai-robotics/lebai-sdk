@@ -848,6 +848,12 @@ class Robot {
    */
   std::map<std::string, LedStyleData> get_led_styles();
   /**
+   * @brief 查询声光样式列表.
+   *
+   * @param dir 声光样式目录.
+   */
+  std::vector<std::string> load_led_style_list(std::string dir = "");
+  /**
    * @brief 获取伺服参数
    *
    * @return 伺服参数列表
@@ -1589,11 +1595,24 @@ class Robot {
    * @param dir 特征目录.
    */
   std::vector<std::string> load_frame_list(std::string dir = "");
+  /**
+   * @brief 查询机器人结构列表.
+   *
+   * @param dir 机器人结构目录.
+   */
+  std::vector<std::string> load_structure_list(std::string dir = "");
   /** @}*/
 
   /** \addtogroup MODBUS
    *  @{
    */
+
+  /**
+   * @brief 查询Modbus配置列表.
+   *
+   * @param dir Modbus配置目录.
+   */
+  std::vector<std::string> load_modbus_list(std::string dir = "");
 
   /**
    * @brief 写单个线圈.

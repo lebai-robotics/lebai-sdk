@@ -265,6 +265,12 @@ protos_json::led_proto::LedStyles Robot::RobotImpl::get_led_styles() {
       "get_led_styles", {});
 }
 
+protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_led_style_list(
+    const protos_json::db_proto::LoadListRequest &req) {
+  return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
+      "load_led_style_list", {req});
+}
+
 protos_json::motor_proto::ServoParams Robot::RobotImpl::get_servo_params() {
   return rpc_client_->Call<protos_json::motor_proto::ServoParams>(
       "get_servo_params", {});
@@ -627,6 +633,16 @@ protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_frame_list(
     const protos_json::db_proto::LoadListRequest &req) {
   return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
       "load_frame_list", {req});
+}
+protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_structure_list(
+    const protos_json::db_proto::LoadListRequest &req) {
+  return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
+      "load_structure_list", {req});
+}
+protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_modbus_list(
+    const protos_json::db_proto::LoadListRequest &req) {
+  return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
+      "load_modbus_list", {req});
 }
 void Robot::RobotImpl::write_single_coil(
     const protos_json::modbus_proto::SetCoilRequest &req) {

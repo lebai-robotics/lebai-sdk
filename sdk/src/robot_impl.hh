@@ -111,6 +111,8 @@ class Robot::RobotImpl {
   protos_json::shortcut_proto::ShortcutList get_short_tasks();
   protos_json::trigger_proto::Triggers get_triggers();
   protos_json::led_proto::LedStyles get_led_styles();
+  protos_json::db_proto::LoadListResponse load_led_style_list(
+      const protos_json::db_proto::LoadListRequest &req);
   protos_json::motor_proto::ServoParams get_servo_params();
   protos_json::motion_proto::Wrench get_tcp_force();
   protos_json::plugin_proto::Plugins load_plugins();
@@ -212,6 +214,10 @@ class Robot::RobotImpl {
   protos_json::db_proto::LoadListResponse load_pose_list(
       const protos_json::db_proto::LoadListRequest &req);
   protos_json::db_proto::LoadListResponse load_frame_list(
+      const protos_json::db_proto::LoadListRequest &req);
+  protos_json::db_proto::LoadListResponse load_structure_list(
+      const protos_json::db_proto::LoadListRequest &req);
+  protos_json::db_proto::LoadListResponse load_modbus_list(
       const protos_json::db_proto::LoadListRequest &req);
   void write_single_coil(const protos_json::modbus_proto::SetCoilRequest &req);
   void write_multiple_coils(

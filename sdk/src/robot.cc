@@ -737,6 +737,12 @@ std::map<std::string, LedStyleData> Robot::get_led_styles() {
   return styles;
 }
 
+std::vector<std::string> Robot::load_led_style_list(std::string dir) {
+  protos_json::db_proto::LoadListRequest req;
+  req.dir = dir;
+  return impl_->load_led_style_list(req).names;
+}
+
 std::vector<ServoParamData> Robot::get_servo_params() {
   const auto response = impl_->get_servo_params();
   std::vector<ServoParamData> params;
@@ -1774,6 +1780,18 @@ std::vector<std::string> Robot::load_frame_list(std::string dir) {
   protos_json::db_proto::LoadListRequest req;
   req.dir = dir;
   return impl_->load_frame_list(req).names;
+}
+
+std::vector<std::string> Robot::load_structure_list(std::string dir) {
+  protos_json::db_proto::LoadListRequest req;
+  req.dir = dir;
+  return impl_->load_structure_list(req).names;
+}
+
+std::vector<std::string> Robot::load_modbus_list(std::string dir) {
+  protos_json::db_proto::LoadListRequest req;
+  req.dir = dir;
+  return impl_->load_modbus_list(req).names;
 }
 
 void Robot::write_single_coil(std::string device, std::string addr,
