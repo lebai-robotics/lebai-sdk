@@ -39,6 +39,7 @@
 #include "protos_json/shortcut_proto.hh"
 #include "protos_json/storage_proto.hh"
 #include "protos_json/system_proto.hh"
+#include "protos_json/trigger_proto.hh"
 #include "protos_json/upgrade_proto.hh"
 #include "rpc_client.hh"
 
@@ -104,6 +105,7 @@ class Robot::RobotImpl {
   protos_json::db_proto::Dirs get_dirs();
   protos_json::shortcut_proto::ShortcutList get_short_poses();
   protos_json::shortcut_proto::ShortcutList get_short_tasks();
+  protos_json::trigger_proto::Triggers get_triggers();
   protos_json::message_proto::Messages get_messages();
   protos_json::hardware_proto::OtaState get_ota_state();
   protos_json::upgrade_proto::CheckUpgradeResponse check_upgrade();

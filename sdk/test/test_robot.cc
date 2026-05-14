@@ -101,6 +101,10 @@ TEST_F(RobotTest, TestShortcutReadsSmoke) {
   EXPECT_NO_THROW(robot_.get_short_tasks());
 }
 
+TEST_F(RobotTest, TestTriggerReadsSmoke) {
+  EXPECT_NO_THROW(robot_.get_triggers());
+}
+
 TEST_F(RobotTest, TestMessagesSmoke) {
   const auto messages = robot_.get_messages();
   EXPECT_FALSE(messages.empty());

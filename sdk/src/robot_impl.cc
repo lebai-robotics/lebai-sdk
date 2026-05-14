@@ -249,6 +249,11 @@ Robot::RobotImpl::get_short_tasks() {
       "get_short_tasks", {});
 }
 
+protos_json::trigger_proto::Triggers Robot::RobotImpl::get_triggers() {
+  return rpc_client_->Call<protos_json::trigger_proto::Triggers>(
+      "get_triggers", {});
+}
+
 protos_json::message_proto::Messages Robot::RobotImpl::get_messages() {
   return rpc_client_->Call<protos_json::message_proto::Messages>(
       "get_messages", {});

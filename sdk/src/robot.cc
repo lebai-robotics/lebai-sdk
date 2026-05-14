@@ -697,6 +697,31 @@ std::vector<ShortcutData> Robot::get_short_tasks() {
   return convertShortcuts(impl_->get_short_tasks());
 }
 
+static ButtonIndexData convertButtonIndex(
+    const protos_json::trigger_proto::ButtonIndex &button) {
+  ButtonIndexData data;
+  data.device = button.device;
+  data.pin = button.pin;
+  return data;
+}
+
+std::vector<TriggerData> Robot::get_triggers() {
+  const auto response = impl_->get_triggers();
+  std::vector<TriggerData> triggers;
+  for (const auto &trigger : response.triggers) {
+    TriggerData data;
+    for (const auto &button : trigger.condition.pressed) {
+      data.condition.pressed.push_back(convertButtonIndex(button));
+    }
+    data.condition.button = convertButtonIndex(trigger.condition.button);
+    data.condition.status.state = trigger.condition.status.state;
+    data.condition.status.time = trigger.condition.status.time;
+    data.function = trigger.function;
+    triggers.push_back(data);
+  }
+  return triggers;
+}
+
 std::vector<MessageData> Robot::get_messages() {
   const auto response = impl_->get_messages();
   std::vector<MessageData> messages;

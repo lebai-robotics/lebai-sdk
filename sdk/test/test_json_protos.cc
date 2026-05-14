@@ -33,6 +33,7 @@
 #include "protos_json/signal_proto.hh"
 #include "protos_json/storage_proto.hh"
 #include "protos_json/system_proto.hh"
+#include "protos_json/trigger_proto.hh"
 #include "protos_json/upgrade_proto.hh"
 #include "base64.hh"
 
@@ -434,6 +435,29 @@ TEST(JsonShortcutProtoTest, ShortcutListParsesControllerPayload) {
   EXPECT_EQ(parsed.list.front().id, 1U);
   EXPECT_EQ(parsed.list.front().dir, "default");
   EXPECT_EQ(parsed.list.front().name, "home");
+}
+
+TEST(JsonTriggerProtoTest, TriggersParseControllerPayload) {
+  const auto json = nlohmann::json::parse(R"({
+    "triggers":[
+      {
+        "condition":{
+          "pressed":[{"device":"SHOULDER","pin":0}],
+          "button":{"device":"FLANGE_BTN","pin":1},
+          "status":{"state":"CLICK","time":5}
+        },
+        "function":"SET_ZERO"
+      }
+    ]
+  })");
+  const auto parsed = json.get<protos_json::trigger_proto::Triggers>();
+
+  ASSERT_EQ(parsed.triggers.size(), 1U);
+  EXPECT_EQ(parsed.triggers.front().function, "SET_ZERO");
+  ASSERT_EQ(parsed.triggers.front().condition.pressed.size(), 1U);
+  EXPECT_EQ(parsed.triggers.front().condition.pressed.front().device,
+            "SHOULDER");
+  EXPECT_EQ(parsed.triggers.front().condition.status.state, "CLICK");
 }
 
 TEST(JsonUpgradeProtoTest, UpgradeResponsesParseControllerPayloads) {

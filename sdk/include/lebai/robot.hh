@@ -184,6 +184,27 @@ struct ShortcutData {
   std::string name; /*!< 目标名称. */
 };
 
+struct ButtonIndexData {
+  std::string device; /*!< 按键设备. */
+  uint32_t pin = 0;   /*!< 按键编号. */
+};
+
+struct ButtonStatusData {
+  std::string state; /*!< 按键状态. */
+  uint32_t time = 0; /*!< 持续时间. */
+};
+
+struct TriggerConditionData {
+  std::vector<ButtonIndexData> pressed; /*!< 同时按下的按键. */
+  ButtonIndexData button;               /*!< 条件按键. */
+  ButtonStatusData status;              /*!< 条件状态. */
+};
+
+struct TriggerData {
+  TriggerConditionData condition; /*!< 触发条件. */
+  std::string function;           /*!< 触发功能. */
+};
+
 /**
  * @brief 机械臂关节运动数据结构.
  *
@@ -776,6 +797,12 @@ class Robot {
    * @return 快捷任务列表
    */
   std::vector<ShortcutData> get_short_tasks();
+  /**
+   * @brief 获取条件任务触发器列表
+   *
+   * @return 触发器列表
+   */
+  std::vector<TriggerData> get_triggers();
   /**
    * @brief 获取控制器消息列表
    *
