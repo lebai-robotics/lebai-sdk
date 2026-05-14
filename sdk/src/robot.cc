@@ -880,26 +880,8 @@ void Robot::set_trigger(TriggerData trigger) {
   impl_->set_trigger(convertToTrigger(trigger));
 }
 
-std::map<std::string, LedStyleData> Robot::get_led_styles() {
-  const auto response = impl_->get_led_styles();
-  std::map<std::string, LedStyleData> styles;
-  for (const auto &style : response.styles) {
-    LedStyleData data;
-    data.mode = style.second.led.mode;
-    data.speed = style.second.led.speed;
-    data.colors = style.second.led.colors;
-    data.voice = style.second.voice;
-    data.volume = style.second.volume;
-    styles[style.first] = data;
-  }
-  return styles;
-}
-
-LedStyleData Robot::load_led_style(std::string name, std::string dir) {
-  protos_json::db_proto::LoadRequest req;
-  req.name = name;
-  req.dir = dir;
-  const auto style = impl_->load_led_style(req);
+static LedStyleData convertLedStyle(
+    const protos_json::led_proto::LedStyle &style) {
   LedStyleData data;
   data.mode = style.led.mode;
   data.speed = style.led.speed;
@@ -909,16 +891,48 @@ LedStyleData Robot::load_led_style(std::string name, std::string dir) {
   return data;
 }
 
+static protos_json::led_proto::LedStyle convertToLedStyle(
+    const LedStyleData &style) {
+  protos_json::led_proto::LedStyle req;
+  req.led.mode = style.mode;
+  req.led.speed = style.speed;
+  req.led.colors = style.colors;
+  req.voice = style.voice;
+  req.volume = style.volume;
+  return req;
+}
+
+std::map<std::string, LedStyleData> Robot::get_led_styles() {
+  const auto response = impl_->get_led_styles();
+  std::map<std::string, LedStyleData> styles;
+  for (const auto &style : response.styles) {
+    styles[style.first] = convertLedStyle(style.second);
+  }
+  return styles;
+}
+
+void Robot::set_led_styles(std::map<std::string, LedStyleData> styles) {
+  protos_json::led_proto::LedStyles req;
+  for (const auto &style : styles) {
+    req.styles[style.first] = convertToLedStyle(style.second);
+  }
+  impl_->set_led_styles(req);
+}
+
+LedStyleData Robot::load_led_style(std::string name, std::string dir) {
+  protos_json::db_proto::LoadRequest req;
+  req.name = name;
+  req.dir = dir;
+  const auto style = impl_->load_led_style(req);
+  return convertLedStyle(style);
+}
+
 void Robot::save_led_style(std::string name, LedStyleData style,
                            std::string dir) {
   protos_json::led_proto::SaveLedStyleRequest req;
   req.name = name;
   req.dir = dir;
-  req.data.led.mode = style.mode;
-  req.data.led.speed = style.speed;
-  req.data.led.colors = style.colors;
-  req.data.voice = style.voice;
-  req.data.volume = style.volume;
+  req.data = convertToLedStyle(style);
   impl_->save_led_style(req);
 }
 

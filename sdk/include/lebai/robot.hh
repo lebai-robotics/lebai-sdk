@@ -946,6 +946,12 @@ class Robot {
    */
   std::map<std::string, LedStyleData> get_led_styles();
   /**
+   * @brief 设置声光交互样式集
+   *
+   * @param styles 状态到声光样式的映射
+   */
+  void set_led_styles(std::map<std::string, LedStyleData> styles);
+  /**
    * @brief 查询声光样式.
    *
    * @param name 样式名称.
