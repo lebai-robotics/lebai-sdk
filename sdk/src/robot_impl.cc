@@ -291,6 +291,11 @@ protos_json::trigger_proto::Triggers Robot::RobotImpl::get_triggers() {
       "get_triggers", {});
 }
 
+void Robot::RobotImpl::set_trigger(
+    const protos_json::trigger_proto::Trigger &req) {
+  rpc_client_->Call<void>("set_trigger", {req});
+}
+
 protos_json::led_proto::LedStyles Robot::RobotImpl::get_led_styles() {
   return rpc_client_->Call<protos_json::led_proto::LedStyles>(
       "get_led_styles", {});

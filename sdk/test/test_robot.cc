@@ -112,7 +112,9 @@ TEST_F(RobotTest, TestShortcutReadsSmoke) {
 }
 
 TEST_F(RobotTest, TestTriggerReadsSmoke) {
-  EXPECT_NO_THROW(robot_.get_triggers());
+  const auto triggers = robot_.get_triggers();
+  ASSERT_FALSE(triggers.empty());
+  EXPECT_NO_THROW(robot_.set_trigger(triggers.front()));
 }
 
 TEST_F(RobotTest, TestLedStylesSmoke) {

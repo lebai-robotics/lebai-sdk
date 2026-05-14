@@ -936,6 +936,10 @@ class Robot {
    */
   std::vector<TriggerData> get_triggers();
   /**
+   * @brief 设置条件任务触发器
+   */
+  void set_trigger(TriggerData trigger);
+  /**
    * @brief 获取声光交互样式集
    *
    * @return 状态到声光样式的映射

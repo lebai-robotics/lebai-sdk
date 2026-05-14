@@ -122,6 +122,7 @@ class Robot::RobotImpl {
   protos_json::shortcut_proto::Shortcut get_short_task(
       const protos_json::shortcut_proto::ShortcutIndex &req);
   protos_json::trigger_proto::Triggers get_triggers();
+  void set_trigger(const protos_json::trigger_proto::Trigger &req);
   protos_json::led_proto::LedStyles get_led_styles();
   protos_json::led_proto::LedStyle load_led_style(
       const protos_json::db_proto::LoadRequest &req);

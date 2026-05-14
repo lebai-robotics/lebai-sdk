@@ -824,6 +824,41 @@ static ButtonIndexData convertButtonIndex(
   return data;
 }
 
+static protos_json::trigger_proto::ButtonIndex convertToButtonIndex(
+    const ButtonIndexData &button) {
+  protos_json::trigger_proto::ButtonIndex req;
+  req.device = button.device;
+  req.pin = button.pin;
+  return req;
+}
+
+static protos_json::trigger_proto::ButtonStatus convertToButtonStatus(
+    const ButtonStatusData &status) {
+  protos_json::trigger_proto::ButtonStatus req;
+  req.state = status.state;
+  req.time = status.time;
+  return req;
+}
+
+static protos_json::trigger_proto::Condition convertToTriggerCondition(
+    const TriggerConditionData &condition) {
+  protos_json::trigger_proto::Condition req;
+  for (const auto &button : condition.pressed) {
+    req.pressed.push_back(convertToButtonIndex(button));
+  }
+  req.button = convertToButtonIndex(condition.button);
+  req.status = convertToButtonStatus(condition.status);
+  return req;
+}
+
+static protos_json::trigger_proto::Trigger convertToTrigger(
+    const TriggerData &trigger) {
+  protos_json::trigger_proto::Trigger req;
+  req.condition = convertToTriggerCondition(trigger.condition);
+  req.function = trigger.function;
+  return req;
+}
+
 std::vector<TriggerData> Robot::get_triggers() {
   const auto response = impl_->get_triggers();
   std::vector<TriggerData> triggers;
@@ -839,6 +874,10 @@ std::vector<TriggerData> Robot::get_triggers() {
     triggers.push_back(data);
   }
   return triggers;
+}
+
+void Robot::set_trigger(TriggerData trigger) {
+  impl_->set_trigger(convertToTrigger(trigger));
 }
 
 std::map<std::string, LedStyleData> Robot::get_led_styles() {
