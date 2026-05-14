@@ -121,6 +121,7 @@ TEST_F(RobotTest, TestServoParamsSmoke) {
 }
 
 TEST_F(RobotTest, TestTcpForceSmoke) {
+  EXPECT_NO_THROW(robot_.set_tcp_force({{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}}));
   const auto wrench = robot_.get_tcp_force();
   EXPECT_EQ(wrench.force.size(), 3U);
   EXPECT_EQ(wrench.torque.size(), 3U);

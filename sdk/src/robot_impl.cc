@@ -292,6 +292,11 @@ protos_json::motion_proto::Wrench Robot::RobotImpl::get_tcp_force() {
       "get_tcp_force", {});
 }
 
+void Robot::RobotImpl::set_tcp_force(
+    const protos_json::motion_proto::Wrench &req) {
+  rpc_client_->Call<void>("set_tcp_force", {req});
+}
+
 protos_json::plugin_proto::Plugins Robot::RobotImpl::load_plugins() {
   return rpc_client_->Call<protos_json::plugin_proto::Plugins>(
       "load_plugins", {});

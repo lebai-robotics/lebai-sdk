@@ -951,6 +951,12 @@ class Robot {
    */
   WrenchData get_tcp_force();
   /**
+   * @brief 设置末端受力
+   *
+   * @param wrench 末端受力和力矩
+   */
+  void set_tcp_force(const WrenchData &wrench);
+  /**
    * @brief 查询已安装插件列表
    *
    * @return 插件信息列表

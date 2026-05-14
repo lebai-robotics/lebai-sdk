@@ -829,6 +829,21 @@ WrenchData Robot::get_tcp_force() {
   return data;
 }
 
+void Robot::set_tcp_force(const WrenchData &wrench) {
+  if (wrench.force.size() != 3 || wrench.torque.size() != 3) {
+    throw std::invalid_argument("tcp force and torque must both have 3 values");
+  }
+
+  protos_json::motion_proto::Wrench req;
+  req.force.x = wrench.force.at(0);
+  req.force.y = wrench.force.at(1);
+  req.force.z = wrench.force.at(2);
+  req.torque.x = wrench.torque.at(0);
+  req.torque.y = wrench.torque.at(1);
+  req.torque.z = wrench.torque.at(2);
+  impl_->set_tcp_force(req);
+}
+
 std::vector<PluginInfoData> Robot::load_plugins() {
   const auto response = impl_->load_plugins();
   std::vector<PluginInfoData> plugins;

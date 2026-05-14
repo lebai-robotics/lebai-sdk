@@ -121,6 +121,7 @@ class Robot::RobotImpl {
       const protos_json::db_proto::LoadListRequest &req);
   protos_json::motor_proto::ServoParams get_servo_params();
   protos_json::motion_proto::Wrench get_tcp_force();
+  void set_tcp_force(const protos_json::motion_proto::Wrench &req);
   protos_json::plugin_proto::Plugins load_plugins();
   protos_json::multi_devices_proto::DiscoverRobotsResponse discover_robots();
   protos_json::plugin_proto::CommandStdout get_plugin_daemon_stdout(
