@@ -24,6 +24,7 @@
 #include "protos_json/hardware_proto.hh"
 #include "protos_json/io_proto.hh"
 #include "protos_json/kinematic_proto.hh"
+#include "protos_json/led_proto.hh"
 #include "protos_json/message_proto.hh"
 #include "protos_json/motion_proto.hh"
 #include "protos_json/modbus_proto.hh"
@@ -458,6 +459,24 @@ TEST(JsonTriggerProtoTest, TriggersParseControllerPayload) {
   EXPECT_EQ(parsed.triggers.front().condition.pressed.front().device,
             "SHOULDER");
   EXPECT_EQ(parsed.triggers.front().condition.status.state, "CLICK");
+}
+
+TEST(JsonLedProtoTest, LedStylesParseControllerPayload) {
+  const auto json = nlohmann::json::parse(R"({
+    "styles":{
+      "5":{
+        "led":{"mode":"OPEN_LED","speed":"NORMAL","colors":["GREEN"]},
+        "voice":"OFF",
+        "volume":"MID"
+      }
+    }
+  })");
+  const auto parsed = json.get<protos_json::led_proto::LedStyles>();
+
+  ASSERT_EQ(parsed.styles.count("5"), 1U);
+  EXPECT_EQ(parsed.styles.at("5").led.mode, "OPEN_LED");
+  EXPECT_EQ(parsed.styles.at("5").led.colors.front(), "GREEN");
+  EXPECT_EQ(parsed.styles.at("5").volume, "MID");
 }
 
 TEST(JsonUpgradeProtoTest, UpgradeResponsesParseControllerPayloads) {

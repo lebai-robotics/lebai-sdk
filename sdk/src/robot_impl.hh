@@ -106,6 +106,7 @@ class Robot::RobotImpl {
   protos_json::shortcut_proto::ShortcutList get_short_poses();
   protos_json::shortcut_proto::ShortcutList get_short_tasks();
   protos_json::trigger_proto::Triggers get_triggers();
+  protos_json::led_proto::LedStyles get_led_styles();
   protos_json::message_proto::Messages get_messages();
   protos_json::hardware_proto::OtaState get_ota_state();
   protos_json::upgrade_proto::CheckUpgradeResponse check_upgrade();

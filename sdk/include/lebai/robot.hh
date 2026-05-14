@@ -205,6 +205,14 @@ struct TriggerData {
   std::string function;           /*!< 触发功能. */
 };
 
+struct LedStyleData {
+  std::string mode;                /*!< LED工作模式. */
+  std::string speed;               /*!< LED运行速度. */
+  std::vector<std::string> colors; /*!< LED颜色. */
+  std::string voice;               /*!< 语音ID. */
+  std::string volume;              /*!< 语音音量. */
+};
+
 /**
  * @brief 机械臂关节运动数据结构.
  *
@@ -803,6 +811,12 @@ class Robot {
    * @return 触发器列表
    */
   std::vector<TriggerData> get_triggers();
+  /**
+   * @brief 获取声光交互样式集
+   *
+   * @return 状态到声光样式的映射
+   */
+  std::map<std::string, LedStyleData> get_led_styles();
   /**
    * @brief 获取控制器消息列表
    *

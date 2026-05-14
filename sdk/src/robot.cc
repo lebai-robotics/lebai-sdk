@@ -722,6 +722,21 @@ std::vector<TriggerData> Robot::get_triggers() {
   return triggers;
 }
 
+std::map<std::string, LedStyleData> Robot::get_led_styles() {
+  const auto response = impl_->get_led_styles();
+  std::map<std::string, LedStyleData> styles;
+  for (const auto &style : response.styles) {
+    LedStyleData data;
+    data.mode = style.second.led.mode;
+    data.speed = style.second.led.speed;
+    data.colors = style.second.led.colors;
+    data.voice = style.second.voice;
+    data.volume = style.second.volume;
+    styles[style.first] = data;
+  }
+  return styles;
+}
+
 std::vector<MessageData> Robot::get_messages() {
   const auto response = impl_->get_messages();
   std::vector<MessageData> messages;

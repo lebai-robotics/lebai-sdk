@@ -105,6 +105,11 @@ TEST_F(RobotTest, TestTriggerReadsSmoke) {
   EXPECT_NO_THROW(robot_.get_triggers());
 }
 
+TEST_F(RobotTest, TestLedStylesSmoke) {
+  const auto styles = robot_.get_led_styles();
+  EXPECT_FALSE(styles.empty());
+}
+
 TEST_F(RobotTest, TestMessagesSmoke) {
   const auto messages = robot_.get_messages();
   EXPECT_FALSE(messages.empty());
