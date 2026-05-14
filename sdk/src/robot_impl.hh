@@ -169,6 +169,8 @@ class Robot::RobotImpl {
       const protos_json::control_proto::StartTaskRequest &req);
   protos_json::control_proto::TaskIds load_task_list();
   protos_json::control_proto::Tasks load_running_tasks();
+  protos_json::control_proto::TaskStdout get_task_stdout(
+      const protos_json::control_proto::TaskIndex &req);
   protos_json::control_proto::TaskStdout wait_task(
       const protos_json::control_proto::TaskIndex &req);
   void pause_task(const protos_json::control_proto::PauseRequest &req);

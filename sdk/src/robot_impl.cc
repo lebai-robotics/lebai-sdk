@@ -487,6 +487,12 @@ protos_json::control_proto::Tasks Robot::RobotImpl::load_running_tasks() {
       "load_running_tasks", {});
 }
 
+protos_json::control_proto::TaskStdout Robot::RobotImpl::get_task_stdout(
+    const protos_json::control_proto::TaskIndex &req) {
+  return rpc_client_->Call<protos_json::control_proto::TaskStdout>(
+      "get_task_stdout", {req});
+}
+
 protos_json::control_proto::TaskStdout Robot::RobotImpl::wait_task(
     const protos_json::control_proto::TaskIndex &req) {
   return rpc_client_->Call<protos_json::control_proto::TaskStdout>("wait_task",

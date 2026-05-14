@@ -1298,6 +1298,17 @@ std::vector<TaskData> Robot::load_running_tasks() {
   return tasks;
 }
 
+TaskStdoutData Robot::get_task_stdout(unsigned int id) {
+  protos_json::control_proto::TaskIndex task_index;
+  task_index.id = id;
+  const auto resp = impl_->get_task_stdout(task_index);
+  TaskStdoutData data;
+  data.id = resp.id;
+  data.done = resp.done;
+  data.stdout_text = resp.stdout_text;
+  return data;
+}
+
 std::string Robot::wait_task(unsigned int id) {
   protos_json::control_proto::TaskIndex task_index;
   task_index.id = id;

@@ -264,6 +264,12 @@ struct TaskData {
   std::vector<std::string> params; /*!< 任务参数. */
 };
 
+struct TaskStdoutData {
+  unsigned int id = 0;     /*!< 任务ID. */
+  bool done = false;       /*!< 任务是否完成. */
+  std::string stdout_text; /*!< 标准输出. */
+};
+
 /**
  * @brief 机械臂关节运动数据结构.
  *
@@ -1280,6 +1286,12 @@ class Robot {
    * @brief 查询运行中的任务列表.
    */
   std::vector<TaskData> load_running_tasks();
+  /**
+   * @brief 获取任务输出.
+   *
+   * @param id 任务ID.
+   */
+  TaskStdoutData get_task_stdout(unsigned int id);
   /**
    * @brief 等待任务完成
    *

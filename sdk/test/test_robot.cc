@@ -144,6 +144,11 @@ TEST_F(RobotTest, TestRunningTasksSmoke) {
   EXPECT_NO_THROW(robot_.load_running_tasks());
 }
 
+TEST_F(RobotTest, TestTaskStdoutSmoke) {
+  const auto stdout_data = robot_.get_task_stdout(0);
+  EXPECT_TRUE(stdout_data.done);
+}
+
 TEST_F(RobotTest, TestOtaStateSmoke) {
   const auto state = robot_.get_ota_state();
   EXPECT_LE(state.progress, 100U);
