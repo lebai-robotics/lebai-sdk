@@ -1636,6 +1636,15 @@ class Robot {
    */
   void set_payload_cog(std::map<std::string, double> cog);
   /**
+   *  @brief 保存末端负载.
+   *
+   *  @param name 负载名称.
+   *  @param payload 负载数据，包含mass,x,y,z.
+   *  @param dir 负载目录.
+   */
+  void save_payload(std::string name, std::map<std::string, double> payload,
+                    std::string dir = "");
+  /**
    *  @brief 获取末端负载设置.
    *
    *  @return 由负载质量mass和负载偏移组成的元组.

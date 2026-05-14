@@ -762,6 +762,11 @@ TEST_F(RobotTest, TestTcpAndPayloadSmoke) {
   robot_.set_payload(0.0, {{"x", 0.0}, {"y", 0.0}, {"z", 0.0}});
   const auto payload = robot_.get_payload();
   EXPECT_DOUBLE_EQ(payload.at("mass"), 0.0);
+  EXPECT_NO_THROW(robot_.save_payload(
+      "codex_payload_smoke",
+      {{"mass", 0.0}, {"x", 0.0}, {"y", 0.0}, {"z", 0.0}}, ""));
+  const auto saved_payload = robot_.load_payload("codex_payload_smoke", "");
+  EXPECT_DOUBLE_EQ(saved_payload.at("mass"), 0.0);
   const auto loaded_payload = robot_.load_payload("", "");
   EXPECT_TRUE(loaded_payload.count("mass"));
 }

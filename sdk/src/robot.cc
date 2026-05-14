@@ -1705,6 +1705,18 @@ void Robot::set_payload_cog(std::map<std::string, double> cog) {
   impl_->set_payload(req);
 }
 
+void Robot::save_payload(std::string name, std::map<std::string, double> payload,
+                         std::string dir) {
+  protos_json::dynamic_proto::SavePayloadRequest req;
+  req.name = name;
+  req.dir = dir;
+  req.data.mass = payload.at("mass");
+  req.data.cog.x = payload.at("x");
+  req.data.cog.y = payload.at("y");
+  req.data.cog.z = payload.at("z");
+  impl_->save_payload(req);
+}
+
 std::map<std::string, double> Robot::get_payload() {
   const auto resp = impl_->get_payload();
   std::map<std::string, double> cog;
