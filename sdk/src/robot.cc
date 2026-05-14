@@ -1397,6 +1397,13 @@ KinematicsInverseResp Robot::kinematics_inverse(
   return get_inverse_kin(pose, joint_init_positions);
 }
 
+double Robot::measure_manipulation(
+    const std::vector<double> &joint_positions) {
+  protos_json::posture_proto::JointPose req;
+  req.joint = joint_positions;
+  return impl_->measure_manipulation(req).manipulation;
+}
+
 CartesianPose Robot::get_pose_trans(const CartesianPose &a,
                                     const CartesianPose &b) {
   protos_json::kinematic_proto::GetPoseTransRequest req;

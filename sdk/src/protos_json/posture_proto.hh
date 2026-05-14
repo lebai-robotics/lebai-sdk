@@ -2,7 +2,14 @@
 
 #include <nlohmann/json.hpp>
 
+#include <vector>
+
 namespace protos_json::posture_proto {
+
+struct JointPose {
+  std::vector<double> joint;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(JointPose, joint)
+};
 
 struct Position {
   double x{};
@@ -58,5 +65,10 @@ inline void from_json(const nlohmann::json &json, CartesianPose &pose) {
     pose.rotation = Rotation{};
   }
 }
+
+struct Manipulation {
+  double manipulation{};
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(Manipulation, manipulation)
+};
 
 }  // namespace protos_json::posture_proto

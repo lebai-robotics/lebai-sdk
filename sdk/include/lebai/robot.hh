@@ -1340,6 +1340,13 @@ class Robot {
   KinematicsInverseResp kinematics_inverse(
       const CartesianPose &pose,
       const std::vector<double> &joint_init_positions = {});
+  /**
+   * @brief 估算关节位置的灵活性.
+   *
+   * @param joint_positions 机械臂关节位置数组.
+   * @return 灵活性估算值.
+   */
+  double measure_manipulation(const std::vector<double> &joint_positions);
 
   /**
    * @brief 位姿变换乘法（等价于对应的齐次坐标矩阵乘法）

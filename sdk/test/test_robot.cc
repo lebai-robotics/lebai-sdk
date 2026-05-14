@@ -179,6 +179,10 @@ TEST_F(RobotTest, TestDhParamsSmoke) {
   EXPECT_EQ(params.size(), 6U);
 }
 
+TEST_F(RobotTest, TestMeasureManipulationSmoke) {
+  EXPECT_GE(robot_.measure_manipulation({0.0, 0.0, 0.0, 0.0, 0.0, 0.0}), 0.0);
+}
+
 TEST_F(RobotTest, TestResourceListsSmoke) {
   EXPECT_NO_THROW(robot_.load_trajectory_list(""));
   EXPECT_NO_THROW(robot_.load_pose_list(""));

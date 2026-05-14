@@ -182,6 +182,8 @@ class Robot::RobotImpl {
       const protos_json::kinematic_proto::PoseRequest &req);
   protos_json::kinematic_proto::JointPose get_inverse_kin(
       const protos_json::kinematic_proto::GetInverseKinRequest &req);
+  protos_json::posture_proto::Manipulation measure_manipulation(
+      const protos_json::posture_proto::JointPose &req);
   protos_json::kinematic_proto::CartesianPose get_pose_trans(
       const protos_json::kinematic_proto::GetPoseTransRequest &req);
   protos_json::kinematic_proto::CartesianPose get_pose_inverse(

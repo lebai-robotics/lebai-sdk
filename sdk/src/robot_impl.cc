@@ -526,6 +526,13 @@ protos_json::kinematic_proto::JointPose Robot::RobotImpl::get_inverse_kin(
       "get_inverse_kin", {req});
 }
 
+protos_json::posture_proto::Manipulation
+Robot::RobotImpl::measure_manipulation(
+    const protos_json::posture_proto::JointPose &req) {
+  return rpc_client_->Call<protos_json::posture_proto::Manipulation>(
+      "measure_manipulation", {req});
+}
+
 protos_json::kinematic_proto::CartesianPose Robot::RobotImpl::get_pose_trans(
     const protos_json::kinematic_proto::GetPoseTransRequest &req) {
   return rpc_client_->Call<protos_json::kinematic_proto::CartesianPose>(

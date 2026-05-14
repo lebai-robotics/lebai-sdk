@@ -32,6 +32,7 @@
 #include "protos_json/motor_proto.hh"
 #include "protos_json/multi_devices_proto.hh"
 #include "protos_json/plugin_proto.hh"
+#include "protos_json/posture_proto.hh"
 #include "protos_json/safety_proto.hh"
 #include "protos_json/serial_proto.hh"
 #include "protos_json/shortcut_proto.hh"
@@ -104,6 +105,19 @@ TEST(JsonClawProtoTest, ClawAiRequestAndResponseUseAddressAndValue) {
 
   EXPECT_EQ(json.at("address"), 2);
   EXPECT_DOUBLE_EQ(response.value, 1.5);
+}
+
+TEST(JsonPostureProtoTest, ManipulationRequestAndResponseRoundTrip) {
+  protos_json::posture_proto::JointPose req;
+  req.joint = {0.0, 1.0, 2.0};
+
+  const nlohmann::json json = req;
+  const auto response =
+      nlohmann::json{{"manipulation", 0.25}}
+          .get<protos_json::posture_proto::Manipulation>();
+
+  EXPECT_EQ(json.at("joint").size(), 3U);
+  EXPECT_DOUBLE_EQ(response.manipulation, 0.25);
 }
 
 TEST(JsonIoProtoTest, SetDosRequestSerializesValues) {
