@@ -808,6 +808,18 @@ std::vector<DiscoveredRobotData> Robot::discover_robots() {
   return devices;
 }
 
+CommandStdoutData Robot::get_plugin_daemon_stdout(const std::string &name) {
+  protos_json::plugin_proto::PluginIndex req;
+  req.name = name;
+  const auto response = impl_->get_plugin_daemon_stdout(req);
+  CommandStdoutData data;
+  data.done = response.done;
+  data.stdout_text = response.stdout_text;
+  data.stderr_text = response.stderr_text;
+  data.code = response.code;
+  return data;
+}
+
 std::vector<MessageData> Robot::get_messages() {
   const auto response = impl_->get_messages();
   std::vector<MessageData> messages;

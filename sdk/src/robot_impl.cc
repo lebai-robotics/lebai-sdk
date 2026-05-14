@@ -293,6 +293,13 @@ Robot::RobotImpl::discover_robots() {
           "discover_robots", {});
 }
 
+protos_json::plugin_proto::CommandStdout
+Robot::RobotImpl::get_plugin_daemon_stdout(
+    const protos_json::plugin_proto::PluginIndex &req) {
+  return rpc_client_->Call<protos_json::plugin_proto::CommandStdout>(
+      "get_plugin_daemon_stdout", {req});
+}
+
 protos_json::message_proto::Messages Robot::RobotImpl::get_messages() {
   return rpc_client_->Call<protos_json::message_proto::Messages>(
       "get_messages", {});

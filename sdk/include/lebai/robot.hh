@@ -905,6 +905,12 @@ class Robot {
    */
   std::vector<DiscoveredRobotData> discover_robots();
   /**
+   * @brief 获取插件守护进程输出.
+   *
+   * @param name 插件名称.
+   */
+  CommandStdoutData get_plugin_daemon_stdout(const std::string &name);
+  /**
    * @brief 获取控制器消息列表
    *
    * @return 消息列表

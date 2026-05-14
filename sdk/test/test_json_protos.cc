@@ -634,6 +634,24 @@ TEST(JsonPluginProtoTest, PluginsParseControllerPayload) {
   EXPECT_TRUE(parsed.plugins.front().daemon);
 }
 
+TEST(JsonPluginProtoTest, PluginIndexAndCommandStdoutRoundTrip) {
+  protos_json::plugin_proto::PluginIndex index;
+  index.name = "demo";
+
+  const nlohmann::json index_json = index;
+  const auto stdout_data =
+      nlohmann::json{{"done", true},
+                     {"stdout", "out"},
+                     {"stderr", ""},
+                     {"code", 0}}
+          .get<protos_json::plugin_proto::CommandStdout>();
+
+  EXPECT_EQ(index_json.at("name"), "demo");
+  EXPECT_TRUE(stdout_data.done);
+  EXPECT_EQ(stdout_data.stdout_text, "out");
+  EXPECT_EQ(stdout_data.code, 0);
+}
+
 TEST(JsonUpgradeProtoTest, UpgradeResponsesParseControllerPayloads) {
   const auto check_json =
       nlohmann::json::parse(R"({"need_upgrade":false,"introduction":""})");

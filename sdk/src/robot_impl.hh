@@ -118,6 +118,8 @@ class Robot::RobotImpl {
   protos_json::motion_proto::Wrench get_tcp_force();
   protos_json::plugin_proto::Plugins load_plugins();
   protos_json::multi_devices_proto::DiscoverRobotsResponse discover_robots();
+  protos_json::plugin_proto::CommandStdout get_plugin_daemon_stdout(
+      const protos_json::plugin_proto::PluginIndex &req);
   protos_json::message_proto::Messages get_messages();
   protos_json::hardware_proto::OtaState get_ota_state();
   protos_json::upgrade_proto::CheckUpgradeResponse check_upgrade();

@@ -125,6 +125,11 @@ TEST_F(RobotTest, TestPluginsSmoke) {
   EXPECT_NO_THROW(robot_.load_plugins());
 }
 
+TEST_F(RobotTest, TestPluginDaemonStdoutSmoke) {
+  const auto stdout_data = robot_.get_plugin_daemon_stdout("");
+  EXPECT_EQ(stdout_data.code, 0);
+}
+
 TEST_F(RobotTest, TestDiscoverRobotsSmoke) {
   const auto devices = robot_.discover_robots();
   EXPECT_FALSE(devices.empty());
