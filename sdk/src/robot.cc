@@ -1957,6 +1957,16 @@ PoseData Robot::load_pose(std::string name, std::string dir) {
   return data;
 }
 
+void Robot::save_pose(std::string name, PoseData pose, std::string dir) {
+  protos_json::posture_proto::SavePoseRequest req;
+  req.name = name;
+  req.dir = dir;
+  req.data.kind = pose.kind;
+  req.data.cart = convertToPosturePose(pose.cart);
+  req.data.joint.joint = pose.joint;
+  impl_->save_pose(req);
+}
+
 std::vector<std::string> Robot::load_frame_list(std::string dir) {
   protos_json::db_proto::LoadListRequest req;
   req.dir = dir;
@@ -1974,6 +1984,27 @@ FrameData Robot::load_frame(std::string name, std::string dir) {
   data.rotation_kind = resp.rotation_kind;
   data.rotation = convertToRotationPose(resp.rotation);
   return data;
+}
+
+void Robot::save_frame(std::string name, FrameData frame, std::string dir) {
+  protos_json::posture_proto::SaveFrameRequest req;
+  req.name = name;
+  req.dir = dir;
+  req.data.position_kind = frame.position_kind;
+  req.data.position.x =
+      frame.position.count("x") ? frame.position.at("x") : 0.0;
+  req.data.position.y =
+      frame.position.count("y") ? frame.position.at("y") : 0.0;
+  req.data.position.z =
+      frame.position.count("z") ? frame.position.at("z") : 0.0;
+  req.data.rotation_kind = frame.rotation_kind;
+  req.data.rotation.euler_zyx.x =
+      frame.rotation.count("rx") ? frame.rotation.at("rx") : 0.0;
+  req.data.rotation.euler_zyx.y =
+      frame.rotation.count("ry") ? frame.rotation.at("ry") : 0.0;
+  req.data.rotation.euler_zyx.z =
+      frame.rotation.count("rz") ? frame.rotation.at("rz") : 0.0;
+  impl_->save_frame(req);
 }
 
 StructureData Robot::load_structure(std::string name, std::string dir) {

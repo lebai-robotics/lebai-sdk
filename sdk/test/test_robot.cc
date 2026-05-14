@@ -238,6 +238,24 @@ TEST_F(RobotTest, TestStructureResourceSmoke) {
 }
 
 TEST_F(RobotTest, TestPostureResourceSmoke) {
+  l_master::PoseData pose_data;
+  pose_data.kind = "CARTESIAN";
+  pose_data.cart = {{"x", 0.0}, {"y", 0.0}, {"z", 0.0},
+                    {"rx", 0.0}, {"ry", 0.0}, {"rz", 0.0}};
+  pose_data.joint = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
+  EXPECT_NO_THROW(robot_.save_pose("codex_pose_smoke", pose_data, ""));
+  const auto saved_pose = robot_.load_pose("codex_pose_smoke", "");
+  EXPECT_EQ(saved_pose.kind, "CARTESIAN");
+
+  l_master::FrameData frame_data;
+  frame_data.position_kind = "BASE";
+  frame_data.position = {{"x", 0.0}, {"y", 0.0}, {"z", 0.0}};
+  frame_data.rotation_kind = "BASE";
+  frame_data.rotation = {{"rx", 0.0}, {"ry", 0.0}, {"rz", 0.0}};
+  EXPECT_NO_THROW(robot_.save_frame("codex_frame_smoke", frame_data, ""));
+  const auto saved_frame = robot_.load_frame("codex_frame_smoke", "");
+  EXPECT_EQ(saved_frame.position_kind, "BASE");
+
   const auto pose = robot_.load_pose("", "");
   EXPECT_FALSE(pose.kind.empty());
   const auto frame = robot_.load_frame("", "");

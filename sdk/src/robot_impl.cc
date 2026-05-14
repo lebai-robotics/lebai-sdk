@@ -711,6 +711,10 @@ protos_json::posture_proto::Pose Robot::RobotImpl::load_pose(
   return rpc_client_->Call<protos_json::posture_proto::Pose>("load_pose",
                                                              {req});
 }
+void Robot::RobotImpl::save_pose(
+    const protos_json::posture_proto::SavePoseRequest &req) {
+  rpc_client_->Call<void>("save_pose", {req});
+}
 protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_pose_list(
     const protos_json::db_proto::LoadListRequest &req) {
   return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
@@ -720,6 +724,10 @@ protos_json::posture_proto::CartesianFrame Robot::RobotImpl::load_frame(
     const protos_json::db_proto::LoadRequest &req) {
   return rpc_client_->Call<protos_json::posture_proto::CartesianFrame>(
       "load_frame", {req});
+}
+void Robot::RobotImpl::save_frame(
+    const protos_json::posture_proto::SaveFrameRequest &req) {
+  rpc_client_->Call<void>("save_frame", {req});
 }
 protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_frame_list(
     const protos_json::db_proto::LoadListRequest &req) {

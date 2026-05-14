@@ -1792,6 +1792,14 @@ class Robot {
    */
   PoseData load_pose(std::string name, std::string dir = "");
   /**
+   * @brief 保存路点.
+   *
+   * @param name 路点名称.
+   * @param pose 路点数据.
+   * @param dir 路点目录.
+   */
+  void save_pose(std::string name, PoseData pose, std::string dir = "");
+  /**
    * @brief 查询特征列表.
    *
    * @param dir 特征目录.
@@ -1804,6 +1812,14 @@ class Robot {
    * @param dir 特征目录.
    */
   FrameData load_frame(std::string name, std::string dir = "");
+  /**
+   * @brief 保存特征.
+   *
+   * @param name 特征名称.
+   * @param frame 特征数据.
+   * @param dir 特征目录.
+   */
+  void save_frame(std::string name, FrameData frame, std::string dir = "");
   /**
    * @brief 查询机器人结构列表.
    *

@@ -122,6 +122,20 @@ inline void from_json(const nlohmann::json &json, Pose &pose) {
   }
 }
 
+struct SavePoseRequest {
+  std::string name;
+  Pose data;
+  std::string dir;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(SavePoseRequest, name, data, dir)
+};
+
+struct SaveFrameRequest {
+  std::string name;
+  CartesianFrame data;
+  std::string dir;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(SaveFrameRequest, name, data, dir)
+};
+
 struct Manipulation {
   double manipulation{};
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(Manipulation, manipulation)

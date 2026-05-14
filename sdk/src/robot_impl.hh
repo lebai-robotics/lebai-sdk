@@ -240,10 +240,12 @@ class Robot::RobotImpl {
       const protos_json::db_proto::LoadListRequest &req);
   protos_json::posture_proto::Pose load_pose(
       const protos_json::db_proto::LoadRequest &req);
+  void save_pose(const protos_json::posture_proto::SavePoseRequest &req);
   protos_json::db_proto::LoadListResponse load_pose_list(
       const protos_json::db_proto::LoadListRequest &req);
   protos_json::posture_proto::CartesianFrame load_frame(
       const protos_json::db_proto::LoadRequest &req);
+  void save_frame(const protos_json::posture_proto::SaveFrameRequest &req);
   protos_json::db_proto::LoadListResponse load_frame_list(
       const protos_json::db_proto::LoadListRequest &req);
   protos_json::structure_proto::Structure load_structure(
