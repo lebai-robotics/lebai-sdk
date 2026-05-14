@@ -1746,6 +1746,24 @@ CartesianPose Robot::load_tcp(std::string name, std::string dir) {
   return convertToCartesianPose(pose);
 }
 
+std::vector<std::string> Robot::load_trajectory_list(std::string dir) {
+  protos_json::db_proto::LoadListRequest req;
+  req.dir = dir;
+  return impl_->load_trajectory_list(req).names;
+}
+
+std::vector<std::string> Robot::load_pose_list(std::string dir) {
+  protos_json::db_proto::LoadListRequest req;
+  req.dir = dir;
+  return impl_->load_pose_list(req).names;
+}
+
+std::vector<std::string> Robot::load_frame_list(std::string dir) {
+  protos_json::db_proto::LoadListRequest req;
+  req.dir = dir;
+  return impl_->load_frame_list(req).names;
+}
+
 void Robot::write_single_coil(std::string device, std::string addr,
                               bool value) {
   protos_json::modbus_proto::SetCoilRequest req;

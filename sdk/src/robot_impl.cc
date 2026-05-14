@@ -172,6 +172,12 @@ void Robot::RobotImpl::move_pvat(
     const protos_json::motion_proto::MovePvatRequest &req) {
   rpc_client_->Call<void>("move_pvat", {req});
 }
+protos_json::db_proto::LoadListResponse
+Robot::RobotImpl::load_trajectory_list(
+    const protos_json::db_proto::LoadListRequest &req) {
+  return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
+      "load_trajectory_list", {req});
+}
 void Robot::RobotImpl::wait_move(
     const protos_json::motion_proto::MotionIndex &req) {
   rpc_client_->Call<void>("wait_move", {req});
@@ -606,6 +612,16 @@ protos_json::posture_proto::CartesianPose Robot::RobotImpl::load_tcp(
     const protos_json::db_proto::LoadRequest &req) {
   return rpc_client_->Call<protos_json::posture_proto::CartesianPose>(
       "load_tcp", {req});
+}
+protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_pose_list(
+    const protos_json::db_proto::LoadListRequest &req) {
+  return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
+      "load_pose_list", {req});
+}
+protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_frame_list(
+    const protos_json::db_proto::LoadListRequest &req) {
+  return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
+      "load_frame_list", {req});
 }
 void Robot::RobotImpl::write_single_coil(
     const protos_json::modbus_proto::SetCoilRequest &req) {

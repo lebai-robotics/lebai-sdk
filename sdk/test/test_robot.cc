@@ -169,6 +169,12 @@ TEST_F(RobotTest, TestDhParamsSmoke) {
   EXPECT_EQ(params.size(), 6U);
 }
 
+TEST_F(RobotTest, TestResourceListsSmoke) {
+  EXPECT_NO_THROW(robot_.load_trajectory_list(""));
+  EXPECT_NO_THROW(robot_.load_pose_list(""));
+  EXPECT_NO_THROW(robot_.load_frame_list(""));
+}
+
 TEST_F(RobotTest, TestStopSmoke) {
   EXPECT_NO_THROW(robot_.start_sys());
   std::this_thread::sleep_for(std::chrono::seconds(1));

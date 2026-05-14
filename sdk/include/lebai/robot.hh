@@ -1559,6 +1559,24 @@ class Robot {
    * @param dir 点位目录.
    */
   CartesianPose load_tcp(std::string name, std::string dir = "");
+  /**
+   * @brief 查询轨迹列表.
+   *
+   * @param dir 轨迹目录.
+   */
+  std::vector<std::string> load_trajectory_list(std::string dir = "");
+  /**
+   * @brief 查询路点列表.
+   *
+   * @param dir 路点目录.
+   */
+  std::vector<std::string> load_pose_list(std::string dir = "");
+  /**
+   * @brief 查询特征列表.
+   *
+   * @param dir 特征目录.
+   */
+  std::vector<std::string> load_frame_list(std::string dir = "");
   /** @}*/
 
   /** \addtogroup MODBUS

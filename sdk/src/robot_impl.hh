@@ -90,6 +90,8 @@ class Robot::RobotImpl {
   protos_json::motion_proto::MotionIndex speed_linear(
       const protos_json::motion_proto::SpeedLinearRequest &req);
   void move_pvat(const protos_json::motion_proto::MovePvatRequest &req);
+  protos_json::db_proto::LoadListResponse load_trajectory_list(
+      const protos_json::db_proto::LoadListRequest &req);
   void wait_move(const protos_json::motion_proto::MotionIndex &req);
   protos_json::motion_proto::MotionIndex get_running_motion();
   protos_json::motion_proto::GetMotionStateResponse get_motion_state(
@@ -205,6 +207,10 @@ class Robot::RobotImpl {
   protos_json::kin_factor_proto::KinFactor get_kin_factor();
   protos_json::posture_proto::CartesianPose load_tcp(
       const protos_json::db_proto::LoadRequest &req);
+  protos_json::db_proto::LoadListResponse load_pose_list(
+      const protos_json::db_proto::LoadListRequest &req);
+  protos_json::db_proto::LoadListResponse load_frame_list(
+      const protos_json::db_proto::LoadListRequest &req);
   void write_single_coil(const protos_json::modbus_proto::SetCoilRequest &req);
   void write_multiple_coils(
       const protos_json::modbus_proto::SetCoilsRequest &req);
