@@ -41,6 +41,7 @@
 #include "protos_json/serial_proto.hh"
 #include "protos_json/shortcut_proto.hh"
 #include "protos_json/storage_proto.hh"
+#include "protos_json/structure_proto.hh"
 #include "protos_json/system_proto.hh"
 #include "protos_json/trigger_proto.hh"
 #include "protos_json/upgrade_proto.hh"
@@ -228,6 +229,8 @@ class Robot::RobotImpl {
       const protos_json::db_proto::LoadListRequest &req);
   protos_json::db_proto::LoadListResponse load_frame_list(
       const protos_json::db_proto::LoadListRequest &req);
+  protos_json::structure_proto::Structure load_structure(
+      const protos_json::db_proto::LoadRequest &req);
   protos_json::db_proto::LoadListResponse load_structure_list(
       const protos_json::db_proto::LoadListRequest &req);
   protos_json::modbus_proto::Modbus load_modbus(

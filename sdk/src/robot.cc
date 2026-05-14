@@ -1878,6 +1878,22 @@ std::vector<std::string> Robot::load_frame_list(std::string dir) {
   return impl_->load_frame_list(req).names;
 }
 
+StructureData Robot::load_structure(std::string name, std::string dir) {
+  protos_json::db_proto::LoadRequest req;
+  req.name = name;
+  req.dir = dir;
+  const auto resp = impl_->load_structure(req);
+  StructureData data;
+  data.active = resp.active;
+  data.name = resp.name;
+  data.kind = resp.kind;
+  data.dof = resp.dof;
+  data.dh = resp.dh;
+  data.dyn = resp.dyn;
+  data.servo = resp.servo;
+  return data;
+}
+
 std::vector<std::string> Robot::load_structure_list(std::string dir) {
   protos_json::db_proto::LoadListRequest req;
   req.dir = dir;

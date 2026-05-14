@@ -219,6 +219,11 @@ TEST_F(RobotTest, TestModbusResourceSmoke) {
   EXPECT_NO_THROW(robot_.load_modbus_register("", ""));
 }
 
+TEST_F(RobotTest, TestStructureResourceSmoke) {
+  const auto structure = robot_.load_structure("", "");
+  EXPECT_FALSE(structure.kind.empty());
+}
+
 TEST_F(RobotTest, TestStopSmoke) {
   EXPECT_NO_THROW(robot_.start_sys());
   std::this_thread::sleep_for(std::chrono::seconds(1));

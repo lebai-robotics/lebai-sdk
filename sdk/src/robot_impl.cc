@@ -678,6 +678,11 @@ protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_frame_list(
   return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
       "load_frame_list", {req});
 }
+protos_json::structure_proto::Structure Robot::RobotImpl::load_structure(
+    const protos_json::db_proto::LoadRequest &req) {
+  return rpc_client_->Call<protos_json::structure_proto::Structure>(
+      "load_structure", {req});
+}
 protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_structure_list(
     const protos_json::db_proto::LoadListRequest &req) {
   return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(

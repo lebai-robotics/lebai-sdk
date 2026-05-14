@@ -38,6 +38,7 @@
 #include "protos_json/shortcut_proto.hh"
 #include "protos_json/signal_proto.hh"
 #include "protos_json/storage_proto.hh"
+#include "protos_json/structure_proto.hh"
 #include "protos_json/system_proto.hh"
 #include "protos_json/trigger_proto.hh"
 #include "protos_json/upgrade_proto.hh"
@@ -118,6 +119,22 @@ TEST(JsonPostureProtoTest, ManipulationRequestAndResponseRoundTrip) {
 
   EXPECT_EQ(json.at("joint").size(), 3U);
   EXPECT_DOUBLE_EQ(response.manipulation, 0.25);
+}
+
+TEST(JsonStructureProtoTest, StructureParsesControllerPayload) {
+  const auto parsed =
+      nlohmann::json{{"active", false},
+                     {"name", ""},
+                     {"kind", "J6M1"},
+                     {"dof", 0},
+                     {"dh", ""},
+                     {"dyn", ""},
+                     {"servo", ""}}
+          .get<protos_json::structure_proto::Structure>();
+
+  EXPECT_FALSE(parsed.active);
+  EXPECT_EQ(parsed.kind, "J6M1");
+  EXPECT_EQ(parsed.dof, 0U);
 }
 
 TEST(JsonIoProtoTest, SetDosRequestSerializesValues) {

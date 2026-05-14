@@ -282,6 +282,16 @@ struct ModbusRegisterData {
   unsigned int address = 0; /*!< Modbus内存地址. */
 };
 
+struct StructureData {
+  bool active = false;      /*!< 是否激活. */
+  std::string name;         /*!< 结构名称. */
+  std::string kind;         /*!< 结构型号. */
+  unsigned int dof = 0;     /*!< 自由度. */
+  std::string dh;           /*!< DH参数资源名. */
+  std::string dyn;          /*!< 动力学参数资源名. */
+  std::string servo;        /*!< 伺服参数资源名. */
+};
+
 /**
  * @brief 机械臂关节运动数据结构.
  *
@@ -1682,6 +1692,13 @@ class Robot {
    * @param dir 机器人结构目录.
    */
   std::vector<std::string> load_structure_list(std::string dir = "");
+  /**
+   * @brief 查询机器人结构.
+   *
+   * @param name 机器人结构名称.
+   * @param dir 机器人结构目录.
+   */
+  StructureData load_structure(std::string name, std::string dir = "");
   /** @}*/
 
   /** \addtogroup MODBUS
