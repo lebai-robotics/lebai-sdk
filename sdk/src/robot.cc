@@ -658,6 +658,12 @@ SoftwareInfoData Robot::get_software_info() {
   return software_info;
 }
 
+std::vector<std::string> Robot::get_box_devices(const std::string &prefix) {
+  protos_json::system_proto::GetBoxDevicesRequest req;
+  req.prefix = prefix;
+  return impl_->get_box_devices(req).devices;
+}
+
 PhysicalData Robot::get_phy_data() {
   auto phy_data = impl_->get_phy_data();
   PhysicalData physical_data;

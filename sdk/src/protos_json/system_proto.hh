@@ -328,6 +328,16 @@ struct SoftwareInfo {
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(SoftwareInfo, software)
 };
 
+struct GetBoxDevicesRequest {
+  std::string prefix;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(GetBoxDevicesRequest, prefix)
+};
+
+struct GetBoxDevicesResponse {
+  std::vector<std::string> devices;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(GetBoxDevicesResponse, devices)
+};
+
 struct GetRobotStateResponse {
   RobotState state{};
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(GetRobotStateResponse, state)

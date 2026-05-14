@@ -717,6 +717,13 @@ class Robot {
    */
   SoftwareInfoData get_software_info();
   /**
+   * @brief 获取控制箱dev设备列表
+   *
+   * @param prefix 设备名前缀过滤条件.
+   * @return 设备名列表
+   */
+  std::vector<std::string> get_box_devices(const std::string &prefix);
+  /**
    * @brief 获取机械臂物理数据
    *
    * @return 机械臂物理数据

@@ -177,6 +177,22 @@ TEST(JsonSystemProtoTest, RobotHardwareSoftwareInfoParseControllerPayloads) {
   EXPECT_EQ(software_info.software.at("rc").branch, "first");
 }
 
+TEST(JsonSystemProtoTest, BoxDevicesRequestAndResponseRoundTrip) {
+  protos_json::system_proto::GetBoxDevicesRequest request;
+  request.prefix = "tty";
+
+  const nlohmann::json request_json = request;
+  EXPECT_EQ(request_json.at("prefix"), "tty");
+
+  const auto response_json =
+      nlohmann::json::parse(R"({"devices":["ttyUSB0","ttyS0"]})");
+  const auto response =
+      response_json.get<protos_json::system_proto::GetBoxDevicesResponse>();
+
+  ASSERT_EQ(response.devices.size(), 2U);
+  EXPECT_EQ(response.devices.front(), "ttyUSB0");
+}
+
 TEST(JsonSystemProtoTest, RobotStateParsesControllerPayload) {
   const auto json = nlohmann::json::parse(R"({"state":"ROBOT_OFF"})");
   const auto parsed =

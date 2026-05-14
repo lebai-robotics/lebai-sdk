@@ -86,6 +86,11 @@ TEST_F(RobotTest, TestSystemDetailInfoSmoke) {
   EXPECT_FALSE(software_info.software.empty());
 }
 
+TEST_F(RobotTest, TestBoxDevicesSmoke) {
+  const auto devices = robot_.get_box_devices("");
+  EXPECT_FALSE(devices.empty());
+}
+
 TEST_F(RobotTest, TestEstopReasonSmoke) {
   EXPECT_EQ(robot_.get_estop_reason(), 0);
 }

@@ -226,6 +226,13 @@ protos_json::system_proto::SoftwareInfo Robot::RobotImpl::get_software_info() {
       "get_software_info", {});
 }
 
+protos_json::system_proto::GetBoxDevicesResponse
+Robot::RobotImpl::get_box_devices(
+    const protos_json::system_proto::GetBoxDevicesRequest &req) {
+  return rpc_client_->Call<protos_json::system_proto::GetBoxDevicesResponse>(
+      "get_box_devices", {req});
+}
+
 protos_json::system_proto::PhyData Robot::RobotImpl::get_phy_data() {
   return rpc_client_->Call<protos_json::system_proto::PhyData>(
       "get_phy_data", {});
