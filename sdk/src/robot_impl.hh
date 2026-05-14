@@ -100,6 +100,7 @@ class Robot::RobotImpl {
   protos_json::system_proto::SoftwareInfo get_software_info();
   protos_json::system_proto::GetBoxDevicesResponse get_box_devices(
       const protos_json::system_proto::GetBoxDevicesRequest &req);
+  protos_json::db_proto::Dirs get_dirs();
   protos_json::message_proto::Messages get_messages();
   protos_json::hardware_proto::OtaState get_ota_state();
   protos_json::upgrade_proto::CheckUpgradeResponse check_upgrade();

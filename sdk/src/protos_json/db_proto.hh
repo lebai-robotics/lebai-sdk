@@ -2,6 +2,7 @@
 
 #include <nlohmann/json.hpp>
 
+#include <cstdint>
 #include <string>
 #include <vector>
 
@@ -29,5 +30,16 @@ inline void to_json(nlohmann::json &json, const LoadListResponse &response) {
 inline void from_json(const nlohmann::json &json, LoadListResponse &response) {
   response.names = json.value("names", std::vector<std::string>{});
 }
+
+struct Dir {
+  std::string name;
+  uint32_t id{};
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(Dir, name, id)
+};
+
+struct Dirs {
+  std::vector<Dir> dirs;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(Dirs, dirs)
+};
 
 }  // namespace protos_json::db_proto

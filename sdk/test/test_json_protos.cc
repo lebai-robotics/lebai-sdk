@@ -355,6 +355,16 @@ TEST(JsonDbProtoTest, LoadListResponseParsesControllerNamesField) {
   EXPECT_EQ(parsed.names.front(), "payload0");
 }
 
+TEST(JsonDbProtoTest, DirsParsesControllerPayload) {
+  const auto json =
+      nlohmann::json::parse(R"({"dirs":[{"name":"default","id":1}]})");
+  const auto parsed = json.get<protos_json::db_proto::Dirs>();
+
+  ASSERT_EQ(parsed.dirs.size(), 1U);
+  EXPECT_EQ(parsed.dirs.front().name, "default");
+  EXPECT_EQ(parsed.dirs.front().id, 1U);
+}
+
 TEST(JsonDynamicProtoTest, PayloadParsesPartialControllerPayload) {
   const auto json = nlohmann::json::parse(R"({"mass":0.0})");
   const auto parsed = json.get<protos_json::dynamic_proto::Payload>();

@@ -92,6 +92,10 @@ TEST_F(RobotTest, TestBoxDevicesSmoke) {
   EXPECT_FALSE(devices.empty());
 }
 
+TEST_F(RobotTest, TestDbDirsSmoke) {
+  EXPECT_NO_THROW(robot_.get_dirs());
+}
+
 TEST_F(RobotTest, TestMessagesSmoke) {
   const auto messages = robot_.get_messages();
   EXPECT_FALSE(messages.empty());

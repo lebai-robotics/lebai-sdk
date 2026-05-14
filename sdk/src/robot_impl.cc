@@ -233,6 +233,10 @@ Robot::RobotImpl::get_box_devices(
       "get_box_devices", {req});
 }
 
+protos_json::db_proto::Dirs Robot::RobotImpl::get_dirs() {
+  return rpc_client_->Call<protos_json::db_proto::Dirs>("get_dirs", {});
+}
+
 protos_json::message_proto::Messages Robot::RobotImpl::get_messages() {
   return rpc_client_->Call<protos_json::message_proto::Messages>(
       "get_messages", {});

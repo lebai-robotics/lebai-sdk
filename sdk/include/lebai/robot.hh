@@ -173,6 +173,11 @@ struct CommandStdoutData {
   int code = 0;             /*!< 返回码. */
 };
 
+struct DirData {
+  std::string name; /*!< 目录名. */
+  uint32_t id = 0;  /*!< 目录内部ID. */
+};
+
 /**
  * @brief 机械臂关节运动数据结构.
  *
@@ -747,6 +752,12 @@ class Robot {
    * @return 设备名列表
    */
   std::vector<std::string> get_box_devices(const std::string &prefix);
+  /**
+   * @brief 获取数据库目录列表
+   *
+   * @return 目录列表
+   */
+  std::vector<DirData> get_dirs();
   /**
    * @brief 获取控制器消息列表
    *

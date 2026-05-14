@@ -664,6 +664,18 @@ std::vector<std::string> Robot::get_box_devices(const std::string &prefix) {
   return impl_->get_box_devices(req).devices;
 }
 
+std::vector<DirData> Robot::get_dirs() {
+  const auto response = impl_->get_dirs();
+  std::vector<DirData> dirs;
+  for (const auto &dir : response.dirs) {
+    DirData data;
+    data.name = dir.name;
+    data.id = dir.id;
+    dirs.push_back(data);
+  }
+  return dirs;
+}
+
 std::vector<MessageData> Robot::get_messages() {
   const auto response = impl_->get_messages();
   std::vector<MessageData> messages;
