@@ -1706,6 +1706,20 @@ std::map<std::string, double> Robot::get_payload() {
   return cog;
 }
 
+std::map<std::string, double> Robot::load_payload(std::string name,
+                                                  std::string dir) {
+  protos_json::db_proto::LoadRequest req;
+  req.name = name;
+  req.dir = dir;
+  const auto resp = impl_->load_payload(req);
+  std::map<std::string, double> payload;
+  payload["x"] = resp.cog.x;
+  payload["y"] = resp.cog.y;
+  payload["z"] = resp.cog.z;
+  payload["mass"] = resp.mass;
+  return payload;
+}
+
 std::vector<std::string> Robot::load_payload_list(std::string dir) {
   protos_json::db_proto::LoadListRequest req;
   req.dir = dir;

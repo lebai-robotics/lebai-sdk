@@ -1570,6 +1570,14 @@ class Robot {
    */
   std::map<std::string, double> get_payload();
   /**
+   * @brief 从资源库加载末端负载.
+   *
+   * @param name 负载名称.
+   * @param dir 负载目录.
+   */
+  std::map<std::string, double> load_payload(std::string name,
+                                             std::string dir = "");
+  /**
    * @brief 查询负载列表.
    *
    * @param dir 负载目录.
