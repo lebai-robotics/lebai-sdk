@@ -164,6 +164,11 @@ TEST_F(RobotTest, TestKinDataSmoke) {
   EXPECT_EQ(data.actual_flange_pose.size(), 6U);
 }
 
+TEST_F(RobotTest, TestDhParamsSmoke) {
+  const auto params = robot_.get_dh();
+  EXPECT_EQ(params.size(), 6U);
+}
+
 TEST_F(RobotTest, TestStopSmoke) {
   EXPECT_NO_THROW(robot_.start_sys());
   std::this_thread::sleep_for(std::chrono::seconds(1));

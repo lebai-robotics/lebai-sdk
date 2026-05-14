@@ -306,6 +306,11 @@ protos_json::kinematic_proto::KinData Robot::RobotImpl::get_kin_data() {
       "get_kin_data", {});
 }
 
+protos_json::kinematic_proto::DhParams Robot::RobotImpl::get_dh() {
+  return rpc_client_->Call<protos_json::kinematic_proto::DhParams>(
+      "get_dh", {});
+}
+
 protos_json::io_proto::GetDioPinResponse Robot::RobotImpl::get_di(
     const protos_json::io_proto::GetDioPinRequest &req) {
   return rpc_client_->Call<protos_json::io_proto::GetDioPinResponse>("get_di",

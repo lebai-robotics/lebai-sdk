@@ -13,6 +13,19 @@ struct Position {
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(Position, x, y, z)
 };
 
+struct DhParam {
+  double a{};
+  double alpha{};
+  double d{};
+  double theta{};
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(DhParam, a, alpha, d, theta)
+};
+
+struct DhParams {
+  std::vector<DhParam> params;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(DhParams, params)
+};
+
 struct JointPose {
   std::vector<double> joint;
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(JointPose, joint)

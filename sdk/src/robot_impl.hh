@@ -118,6 +118,7 @@ class Robot::RobotImpl {
   protos_json::upgrade_proto::CommandStdout get_upgrade_stdout();
   protos_json::system_proto::PhyData get_phy_data();
   protos_json::kinematic_proto::KinData get_kin_data();
+  protos_json::kinematic_proto::DhParams get_dh();
   protos_json::io_proto::GetDioPinResponse get_di(
       const protos_json::io_proto::GetDioPinRequest &req);
   protos_json::io_proto::GetDioPinsResponse get_dis(

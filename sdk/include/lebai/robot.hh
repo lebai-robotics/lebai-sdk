@@ -90,6 +90,13 @@ struct PhysicalData {
   double flange_voltage;          /*!< 法兰电压. */
 };
 
+struct DhParamData {
+  double a = 0.0;     /*!< DH参数a. */
+  double alpha = 0.0; /*!< DH参数alpha. */
+  double d = 0.0;     /*!< DH参数d. */
+  double theta = 0.0; /*!< DH参数theta. */
+};
+
 /**
  * @brief 控制器系统信息数据结构.
  *
@@ -1413,6 +1420,12 @@ class Robot {
    *  @return 当前机器人的工具中心点参数，为六元组.
    */
   std::array<double, 6> get_tcp();
+  /**
+   *  @brief 获取当前DH参数.
+   *
+   *  @return DH参数列表.
+   */
+  std::vector<DhParamData> get_dh();
   /**
    *  @brief 设置速度因子.
    *

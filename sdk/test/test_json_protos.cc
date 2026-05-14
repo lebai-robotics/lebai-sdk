@@ -285,6 +285,17 @@ TEST(JsonKinematicProtoTest, KinDataParsesControllerPayload) {
   EXPECT_DOUBLE_EQ(parsed.actual_tcp_pose.rotation.euler_zyx.x, 1.5708);
 }
 
+TEST(JsonKinematicProtoTest, DhParamsParseControllerPayload) {
+  const auto json = nlohmann::json::parse(R"({
+    "params":[{"a":0.0,"alpha":1.5708,"d":0.21583,"theta":0.0}]
+  })");
+  const auto parsed = json.get<protos_json::kinematic_proto::DhParams>();
+
+  ASSERT_EQ(parsed.params.size(), 1U);
+  EXPECT_DOUBLE_EQ(parsed.params.front().alpha, 1.5708);
+  EXPECT_DOUBLE_EQ(parsed.params.front().d, 0.21583);
+}
+
 TEST(JsonMessageProtoTest, MessagesParseControllerPayload) {
   const auto json = nlohmann::json::parse(R"({
     "messages":[

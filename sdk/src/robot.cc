@@ -1698,6 +1698,20 @@ std::array<double, 6> Robot::get_tcp() {
   return ret;
 }
 
+std::vector<DhParamData> Robot::get_dh() {
+  const auto response = impl_->get_dh();
+  std::vector<DhParamData> params;
+  for (const auto &param : response.params) {
+    DhParamData data;
+    data.a = param.a;
+    data.alpha = param.alpha;
+    data.d = param.d;
+    data.theta = param.theta;
+    params.push_back(data);
+  }
+  return params;
+}
+
 void Robot::set_kin_factor(int factor) {
   protos_json::kin_factor_proto::KinFactor req;
   req.speed_factor = factor;
