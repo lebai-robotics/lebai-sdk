@@ -298,6 +298,22 @@ struct PoseData {
   std::vector<double> joint;        /*!< 关节位姿. */
 };
 
+struct JointMoveData {
+  double pose = 0.0;     /*!< 关节位置. */
+  double velocity = 0.0; /*!< 关节速度. */
+  double acc = 0.0;      /*!< 关节加速度. */
+};
+
+struct PvatPointData {
+  double duration = 0.0;            /*!< 执行时间. */
+  std::vector<JointMoveData> joints; /*!< 关节运动数据. */
+};
+
+struct TrajectoryData {
+  std::string kind;                /*!< 轨迹类型. */
+  std::vector<PvatPointData> data; /*!< 轨迹数据. */
+};
+
 struct FrameData {
   std::string position_kind; /*!< 位置参考系类型. */
   CartesianPose position;    /*!< 自定义位置，使用x/y/z键. */
@@ -1695,6 +1711,13 @@ class Robot {
    * @param dir 轨迹目录.
    */
   std::vector<std::string> load_trajectory_list(std::string dir = "");
+  /**
+   * @brief 查询轨迹.
+   *
+   * @param name 轨迹名称.
+   * @param dir 轨迹目录.
+   */
+  TrajectoryData load_trajectory(std::string name, std::string dir = "");
   /**
    * @brief 查询路点列表.
    *

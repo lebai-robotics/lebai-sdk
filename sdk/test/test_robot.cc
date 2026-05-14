@@ -214,6 +214,11 @@ TEST_F(RobotTest, TestResourceListsSmoke) {
   EXPECT_NO_THROW(robot_.load_modbus_register_list(""));
 }
 
+TEST_F(RobotTest, TestTrajectoryResourceSmoke) {
+  const auto trajectory = robot_.load_trajectory("", "");
+  EXPECT_FALSE(trajectory.kind.empty());
+}
+
 TEST_F(RobotTest, TestModbusResourceSmoke) {
   EXPECT_NO_THROW(robot_.load_modbus("", ""));
   EXPECT_NO_THROW(robot_.load_modbus_register("", ""));

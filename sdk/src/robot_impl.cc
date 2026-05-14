@@ -172,6 +172,11 @@ void Robot::RobotImpl::move_pvat(
     const protos_json::motion_proto::MovePvatRequest &req) {
   rpc_client_->Call<void>("move_pvat", {req});
 }
+protos_json::motion_proto::Trajectory Robot::RobotImpl::load_trajectory(
+    const protos_json::db_proto::LoadRequest &req) {
+  return rpc_client_->Call<protos_json::motion_proto::Trajectory>(
+      "load_trajectory", {req});
+}
 protos_json::db_proto::LoadListResponse
 Robot::RobotImpl::load_trajectory_list(
     const protos_json::db_proto::LoadListRequest &req) {

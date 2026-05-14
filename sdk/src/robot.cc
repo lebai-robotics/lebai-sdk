@@ -594,6 +594,15 @@ void Robot::move_pvat(std::vector<double> p, std::vector<double> v,
   impl_->move_pvat(req);
 }
 
+static JointMoveData convertToJointMoveData(
+    const protos_json::motion_proto::JointMove &joint) {
+  JointMoveData data;
+  data.pose = joint.pose;
+  data.velocity = joint.velocity;
+  data.acc = joint.acc;
+  return data;
+}
+
 void Robot::wait_move(unsigned int id) {
   protos_json::motion_proto::MotionIndex req;
   req.id = id;
@@ -1896,6 +1905,24 @@ std::vector<std::string> Robot::load_trajectory_list(std::string dir) {
   protos_json::db_proto::LoadListRequest req;
   req.dir = dir;
   return impl_->load_trajectory_list(req).names;
+}
+
+TrajectoryData Robot::load_trajectory(std::string name, std::string dir) {
+  protos_json::db_proto::LoadRequest req;
+  req.name = name;
+  req.dir = dir;
+  const auto resp = impl_->load_trajectory(req);
+  TrajectoryData trajectory;
+  trajectory.kind = resp.kind;
+  for (const auto &point : resp.data) {
+    PvatPointData point_data;
+    point_data.duration = point.duration;
+    for (const auto &joint : point.joints) {
+      point_data.joints.push_back(convertToJointMoveData(joint));
+    }
+    trajectory.data.push_back(point_data);
+  }
+  return trajectory;
 }
 
 std::vector<std::string> Robot::load_pose_list(std::string dir) {

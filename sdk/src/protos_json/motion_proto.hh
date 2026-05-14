@@ -2,6 +2,7 @@
 
 #include <nlohmann/json.hpp>
 
+#include <string>
 #include <vector>
 
 namespace protos_json::motion_proto {
@@ -129,6 +130,12 @@ struct MovePvatRequest {
   double duration{};
   std::vector<JointMove> joints;
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(MovePvatRequest, duration, joints)
+};
+
+struct Trajectory {
+  std::string kind;
+  std::vector<MovePvatRequest> data;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(Trajectory, kind, data)
 };
 
 enum class MotionState {

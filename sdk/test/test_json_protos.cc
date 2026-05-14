@@ -470,6 +470,15 @@ TEST(JsonMotionProtoTest, WrenchParsesControllerPayload) {
   EXPECT_DOUBLE_EQ(parsed.torque.z, 6.0);
 }
 
+TEST(JsonMotionProtoTest, TrajectoryParsesControllerPayload) {
+  const auto parsed =
+      nlohmann::json{{"kind", "PT"}, {"data", nlohmann::json::array()}}
+          .get<protos_json::motion_proto::Trajectory>();
+
+  EXPECT_EQ(parsed.kind, "PT");
+  EXPECT_TRUE(parsed.data.empty());
+}
+
 TEST(JsonDbProtoTest, LoadRequestSerializesNameAndDir) {
   protos_json::db_proto::LoadRequest req;
   req.name = "tool0";
