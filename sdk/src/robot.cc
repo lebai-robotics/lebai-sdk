@@ -1556,70 +1556,9 @@ CartesianPose Robot::get_pose_trans(const CartesianPose &a,
                                     const CartesianPose &b) {
   protos_json::kinematic_proto::GetPoseTransRequest req;
   req.from.kind = 0;
+  req.from.cart = convertToKinematicPose(a);
   req.from_to.kind = 0;
-  double x = 0.0;
-  if (a.find("x") != a.end()) {
-    x = a.at("x");
-  }
-  double y = 0.0;
-  if (a.find("y") != a.end()) {
-    y = a.at("y");
-  }
-  double z = 0.0;
-  if (a.find("z") != a.end()) {
-    z = a.at("z");
-  }
-  double rx = 0.0;
-  if (a.find("rx") != a.end()) {
-    rx = a.at("rx");
-  }
-  double ry = 0.0;
-  if (a.find("ry") != a.end()) {
-    ry = a.at("ry");
-  }
-  double rz = 0.0;
-  if (a.find("rz") != a.end()) {
-    rz = a.at("rz");
-  }
-
-  req.from.cart.position.x = x;
-  req.from.cart.position.y = y;
-  req.from.cart.position.z = z;
-  req.from.cart.rotation.euler_zyx.z = rz;
-  req.from.cart.rotation.euler_zyx.y = ry;
-  req.from.cart.rotation.euler_zyx.x = rx;
-
-  x = 0.0;
-  if (b.find("x") != b.end()) {
-    x = b.at("x");
-  }
-  y = 0.0;
-  if (b.find("y") != b.end()) {
-    y = b.at("y");
-  }
-  z = 0.0;
-  if (b.find("z") != b.end()) {
-    z = b.at("z");
-  }
-  rx = 0.0;
-  if (b.find("rx") != b.end()) {
-    rx = b.at("rx");
-  }
-  ry = 0.0;
-  if (b.find("ry") != b.end()) {
-    ry = b.at("ry");
-  }
-  rz = 0.0;
-  if (b.find("rz") != b.end()) {
-    rz = b.at("rz");
-  }
-
-  req.from_to.cart.position.x = x;
-  req.from_to.cart.position.y = y;
-  req.from_to.cart.position.z = z;
-  req.from_to.cart.rotation.euler_zyx.z = rz;
-  req.from_to.cart.rotation.euler_zyx.y = ry;
-  req.from_to.cart.rotation.euler_zyx.x = rx;
+  req.from_to.cart = convertToKinematicPose(b);
 
   auto resp = impl_->get_pose_trans(req);
   return convertToCartesianPose(resp);
@@ -1654,37 +1593,7 @@ CartesianPose Robot::calc_frame(const CartesianPose &o, const CartesianPose &x,
 CartesianPose Robot::get_pose_inverse(const CartesianPose &in) {
   protos_json::kinematic_proto::PoseRequest req;
   req.pose.kind = 0;
-  double x = 0.0;
-  if (in.find("x") != in.end()) {
-    x = in.at("x");
-  }
-  double y = 0.0;
-  if (in.find("y") != in.end()) {
-    y = in.at("y");
-  }
-  double z = 0.0;
-  if (in.find("z") != in.end()) {
-    z = in.at("z");
-  }
-  double rx = 0.0;
-  if (in.find("rx") != in.end()) {
-    rx = in.at("rx");
-  }
-  double ry = 0.0;
-  if (in.find("ry") != in.end()) {
-    ry = in.at("ry");
-  }
-  double rz = 0.0;
-  if (in.find("rz") != in.end()) {
-    rz = in.at("rz");
-  }
-
-  req.pose.cart.position.x = x;
-  req.pose.cart.position.y = y;
-  req.pose.cart.position.z = z;
-  req.pose.cart.rotation.euler_zyx.z = rz;
-  req.pose.cart.rotation.euler_zyx.y = ry;
-  req.pose.cart.rotation.euler_zyx.x = rx;
+  req.pose.cart = convertToKinematicPose(in);
   auto resp = impl_->get_pose_inverse(req);
   return convertToCartesianPose(resp);
 }
