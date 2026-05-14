@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 #include <gtest/gtest.h>
+#include <chrono>
 #include <thread>
 #include <math.h>
 #include <memory>
@@ -648,28 +649,30 @@ TEST_F(RobotTest, TestStorageSmoke) {
 }
 
 TEST_F(RobotTest, TestFileSmoke) {
-  EXPECT_NO_THROW(
-      robot_.save_file("", "codex_file_smoke.txt", false, "hello"));
+  const auto suffix = std::to_string(
+      std::chrono::steady_clock::now().time_since_epoch().count());
+  const std::string prefix = "codex_file_smoke_" + suffix;
+  const std::string source = prefix + ".txt";
+  const std::string renamed_name = prefix + "_renamed.txt";
+  const std::string archive = prefix + ".zip";
 
-  const auto loaded = robot_.load_file("", "codex_file_smoke.txt");
+  EXPECT_NO_THROW(robot_.save_file("", source, false, "hello"));
+
+  const auto loaded = robot_.load_file("", source);
   EXPECT_FALSE(std::get<0>(loaded));
   EXPECT_EQ(std::get<1>(loaded), "hello");
 
-  const auto files = robot_.load_file_list("", "codex_file", ".txt");
+  const auto files = robot_.load_file_list("", prefix, ".txt");
   EXPECT_FALSE(files.empty());
 
-  EXPECT_NO_THROW(robot_.rename_file("", "codex_file_smoke.txt", "",
-                                     "codex_file_smoke_renamed.txt"));
-  const auto renamed = robot_.load_file("", "codex_file_smoke_renamed.txt");
+  EXPECT_NO_THROW(robot_.rename_file("", source, "", renamed_name));
+  const auto renamed = robot_.load_file("", renamed_name);
   EXPECT_EQ(std::get<1>(renamed), "hello");
 
-  EXPECT_NO_THROW(robot_.zip("", {"codex_file_smoke_renamed.txt"}, "",
-                             "codex_file_smoke.zip"));
-  const auto zipped =
-      robot_.load_zip_list("codex_file_smoke.zip", "", "codex_file", ".txt");
+  EXPECT_NO_THROW(robot_.zip("", {renamed_name}, "", archive));
+  const auto zipped = robot_.load_zip_list(archive, "", prefix, ".txt");
   EXPECT_FALSE(zipped.empty());
-  EXPECT_NO_THROW(robot_.unzip("", "codex_file_smoke.zip",
-                               {"codex_file_smoke_renamed.txt"}, ""));
+  EXPECT_NO_THROW(robot_.unzip("", archive, {renamed_name}, ""));
 }
 
 TEST_F(RobotTest, TestSafetyReadSmoke) {
