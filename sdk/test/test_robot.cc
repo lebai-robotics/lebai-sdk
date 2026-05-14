@@ -624,6 +624,14 @@ TEST_F(RobotTest, TestFileSmoke) {
                                      "codex_file_smoke_renamed.txt"));
   const auto renamed = robot_.load_file("", "codex_file_smoke_renamed.txt");
   EXPECT_EQ(std::get<1>(renamed), "hello");
+
+  EXPECT_NO_THROW(robot_.zip("", {"codex_file_smoke_renamed.txt"}, "",
+                             "codex_file_smoke.zip"));
+  const auto zipped =
+      robot_.load_zip_list("codex_file_smoke.zip", "", "codex_file", ".txt");
+  EXPECT_FALSE(zipped.empty());
+  EXPECT_NO_THROW(robot_.unzip("", "codex_file_smoke.zip",
+                               {"codex_file_smoke_renamed.txt"}, ""));
 }
 
 TEST_F(RobotTest, TestSafetyReadSmoke) {

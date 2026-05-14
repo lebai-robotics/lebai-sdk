@@ -1311,6 +1311,43 @@ std::vector<std::tuple<bool, std::string>> Robot::load_file_list(
   }
   return ret;
 }
+
+void Robot::zip(const std::string &from_dir, std::vector<std::string> files,
+                const std::string &to_dir, const std::string &name) {
+  protos_json::file_proto::ZipRequest req;
+  req.zip.dir = to_dir;
+  req.zip.name = name;
+  req.files = files;
+  req.dir = from_dir;
+  impl_->zip(req);
+}
+
+void Robot::unzip(const std::string &from_dir, const std::string &name,
+                  std::vector<std::string> files, const std::string &to_dir) {
+  protos_json::file_proto::UnzipRequest req;
+  req.zip.dir = from_dir;
+  req.zip.name = name;
+  req.files = files;
+  req.dir = to_dir;
+  impl_->unzip(req);
+}
+
+std::vector<std::tuple<bool, std::string>> Robot::load_zip_list(
+    const std::string &zip, const std::string &dir, const std::string &prefix,
+    const std::string &suffix) {
+  protos_json::file_proto::LoadZipListRequest req;
+  req.zip.name = zip;
+  req.dir = dir;
+  req.prefix = prefix;
+  req.suffix = suffix;
+  const auto resp = impl_->load_zip_list(req);
+  std::vector<std::tuple<bool, std::string>> ret;
+  for (auto f : resp.files) {
+    ret.push_back(std::make_tuple(f.is_dir, f.name));
+  }
+  return ret;
+}
+
 void Robot::set_payload(double mass, std::map<std::string, double> cog) {
   protos_json::dynamic_proto::SetPayloadRequest req;
   req.mass = mass;

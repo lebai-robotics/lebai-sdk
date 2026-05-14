@@ -1143,31 +1143,24 @@ class Robot {
    * @param to_dir  压缩后文件的路径.
    * @param name 压缩后文件的名称.
    */
-  // void zip(const std::string &from_dir, std::vector<std::string> files, const
-  // std::string &to_dir, const std::string &name);
-  // /**
-  //  *  @brief 将zip文件解压到文件系统.
-  //  *
-  //  * @param from_dir zip文件的路径.
-  //  * @param name zip文件的名称.
-  //  * @param files zip文件内的文件名.
-  //  * @param to_dir  解压到的路径.
-  //  */
-  // void unzip(const std::string &from_dir, const std::string &name,
-  // std::vector<std::string> files, const std::string &to_dir);
-  // /**
-  //  * @brief 查询文件列表.
-  //  *
-  //  * @brief 目标zip文件名.
-  //  * @param dir 文件的目录.
-  //  * @param prefix 前缀.
-  //  * @param suffix 后缀.
-  //  *
-  //  * @return 文件列表.
-  //  */
-  // //std::vector<std::tuple<bool,string>> load_zip_list(const std::string
-  // &zip,const std::string &dir,const std::string &prefix,const std::string
-  // &suffix);
+  void zip(const std::string &from_dir, std::vector<std::string> files,
+           const std::string &to_dir, const std::string &name);
+  /**
+   *  @brief 将zip文件解压到文件系统.
+   *
+   * @param from_dir zip文件的路径.
+   * @param name zip文件的名称.
+   * @param files zip文件内的文件名.
+   * @param to_dir  解压到的路径.
+   */
+  void unzip(const std::string &from_dir, const std::string &name,
+             std::vector<std::string> files, const std::string &to_dir);
+  /**
+   * @brief 查询zip内文件列表.
+   */
+  std::vector<std::tuple<bool, std::string>> load_zip_list(
+      const std::string &zip, const std::string &dir,
+      const std::string &prefix, const std::string &suffix);
 
   /** @}*/
 
