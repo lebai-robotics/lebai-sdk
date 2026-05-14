@@ -259,6 +259,11 @@ protos_json::led_proto::LedStyles Robot::RobotImpl::get_led_styles() {
       "get_led_styles", {});
 }
 
+protos_json::motor_proto::ServoParams Robot::RobotImpl::get_servo_params() {
+  return rpc_client_->Call<protos_json::motor_proto::ServoParams>(
+      "get_servo_params", {});
+}
+
 protos_json::message_proto::Messages Robot::RobotImpl::get_messages() {
   return rpc_client_->Call<protos_json::message_proto::Messages>(
       "get_messages", {});

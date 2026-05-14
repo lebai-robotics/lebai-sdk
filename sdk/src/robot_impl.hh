@@ -32,6 +32,7 @@
 #include "protos_json/message_proto.hh"
 #include "protos_json/modbus_proto.hh"
 #include "protos_json/motion_proto.hh"
+#include "protos_json/motor_proto.hh"
 #include "protos_json/posture_proto.hh"
 #include "protos_json/safety_proto.hh"
 #include "protos_json/signal_proto.hh"
@@ -107,6 +108,7 @@ class Robot::RobotImpl {
   protos_json::shortcut_proto::ShortcutList get_short_tasks();
   protos_json::trigger_proto::Triggers get_triggers();
   protos_json::led_proto::LedStyles get_led_styles();
+  protos_json::motor_proto::ServoParams get_servo_params();
   protos_json::message_proto::Messages get_messages();
   protos_json::hardware_proto::OtaState get_ota_state();
   protos_json::upgrade_proto::CheckUpgradeResponse check_upgrade();

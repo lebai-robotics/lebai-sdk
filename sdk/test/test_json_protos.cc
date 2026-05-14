@@ -28,6 +28,7 @@
 #include "protos_json/message_proto.hh"
 #include "protos_json/motion_proto.hh"
 #include "protos_json/modbus_proto.hh"
+#include "protos_json/motor_proto.hh"
 #include "protos_json/safety_proto.hh"
 #include "protos_json/serial_proto.hh"
 #include "protos_json/shortcut_proto.hh"
@@ -477,6 +478,19 @@ TEST(JsonLedProtoTest, LedStylesParseControllerPayload) {
   EXPECT_EQ(parsed.styles.at("5").led.mode, "OPEN_LED");
   EXPECT_EQ(parsed.styles.at("5").led.colors.front(), "GREEN");
   EXPECT_EQ(parsed.styles.at("5").volume, "MID");
+}
+
+TEST(JsonMotorProtoTest, ServoParamsParseControllerPayload) {
+  const auto json = nlohmann::json::parse(R"({
+    "params":[
+      {"position_kp":10.0,"speed_kp":18.0,"speed_it":300.0,"torque_cmd_filter":1.0}
+    ]
+  })");
+  const auto parsed = json.get<protos_json::motor_proto::ServoParams>();
+
+  ASSERT_EQ(parsed.params.size(), 1U);
+  EXPECT_DOUBLE_EQ(parsed.params.front().position_kp, 10.0);
+  EXPECT_DOUBLE_EQ(parsed.params.front().speed_it, 300.0);
 }
 
 TEST(JsonUpgradeProtoTest, UpgradeResponsesParseControllerPayloads) {

@@ -737,6 +737,20 @@ std::map<std::string, LedStyleData> Robot::get_led_styles() {
   return styles;
 }
 
+std::vector<ServoParamData> Robot::get_servo_params() {
+  const auto response = impl_->get_servo_params();
+  std::vector<ServoParamData> params;
+  for (const auto &param : response.params) {
+    ServoParamData data;
+    data.position_kp = param.position_kp;
+    data.speed_kp = param.speed_kp;
+    data.speed_it = param.speed_it;
+    data.torque_cmd_filter = param.torque_cmd_filter;
+    params.push_back(data);
+  }
+  return params;
+}
+
 std::vector<MessageData> Robot::get_messages() {
   const auto response = impl_->get_messages();
   std::vector<MessageData> messages;

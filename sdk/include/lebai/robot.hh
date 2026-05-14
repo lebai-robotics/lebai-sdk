@@ -213,6 +213,13 @@ struct LedStyleData {
   std::string volume;              /*!< 语音音量. */
 };
 
+struct ServoParamData {
+  double position_kp = 0.0;       /*!< 位置环KP. */
+  double speed_kp = 0.0;          /*!< 速度环KP. */
+  double speed_it = 0.0;          /*!< 速度环IT. */
+  double torque_cmd_filter = 0.0; /*!< 力矩命令滤波. */
+};
+
 /**
  * @brief 机械臂关节运动数据结构.
  *
@@ -817,6 +824,12 @@ class Robot {
    * @return 状态到声光样式的映射
    */
   std::map<std::string, LedStyleData> get_led_styles();
+  /**
+   * @brief 获取伺服参数
+   *
+   * @return 伺服参数列表
+   */
+  std::vector<ServoParamData> get_servo_params();
   /**
    * @brief 获取控制器消息列表
    *
