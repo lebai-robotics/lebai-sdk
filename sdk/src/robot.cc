@@ -41,6 +41,18 @@ static CartesianPose convertToCartesianPose(
   return cart_pose;
 }
 
+static protos_json::kinematic_proto::CartesianPose convertToKinematicPose(
+    const CartesianPose &pose) {
+  protos_json::kinematic_proto::CartesianPose typed_pose;
+  typed_pose.position.x = pose.count("x") ? pose.at("x") : 0.0;
+  typed_pose.position.y = pose.count("y") ? pose.at("y") : 0.0;
+  typed_pose.position.z = pose.count("z") ? pose.at("z") : 0.0;
+  typed_pose.rotation.euler_zyx.x = pose.count("rx") ? pose.at("rx") : 0.0;
+  typed_pose.rotation.euler_zyx.y = pose.count("ry") ? pose.at("ry") : 0.0;
+  typed_pose.rotation.euler_zyx.z = pose.count("rz") ? pose.at("rz") : 0.0;
+  return typed_pose;
+}
+
 static CartesianPose convertToCartesianPose(
     const protos_json::posture_proto::CartesianPose &pose) {
   CartesianPose cart_pose;
@@ -1576,6 +1588,27 @@ CartesianPose Robot::get_pose_trans(const CartesianPose &a,
 CartesianPose Robot::pose_times(const CartesianPose &a,
                                 const CartesianPose &b) {
   return get_pose_trans(a, b);
+}
+
+CartesianPose Robot::get_pose_add(const CartesianPose &pose,
+                                  const CartesianPose &delta) {
+  protos_json::kinematic_proto::GetPoseAddRequest req;
+  req.pose.kind = 0;
+  req.pose.cart = convertToKinematicPose(pose);
+  req.delta.kind = 0;
+  req.delta.cart = convertToKinematicPose(delta);
+  auto resp = impl_->get_pose_add(req);
+  return convertToCartesianPose(resp);
+}
+
+CartesianPose Robot::calc_frame(const CartesianPose &o, const CartesianPose &x,
+                                const CartesianPose &xy) {
+  protos_json::kinematic_proto::CalcFrameRequest req;
+  req.o = convertToKinematicPose(o);
+  req.x = convertToKinematicPose(x);
+  req.xy = convertToKinematicPose(xy);
+  auto resp = impl_->calc_frame(req);
+  return convertToCartesianPose(resp);
 }
 
 CartesianPose Robot::get_pose_inverse(const CartesianPose &in) {

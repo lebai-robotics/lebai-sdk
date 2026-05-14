@@ -725,6 +725,20 @@ TEST_F(RobotTest, TestKinematicsReadSmoke) {
       {{"x", 0.0}, {"y", 0.0}, {"z", 0.0}, {"rx", 0.0}, {"ry", 0.0},
        {"rz", 0.0}});
   EXPECT_EQ(inverse_pose.size(), 6U);
+  const auto added_pose = robot_.get_pose_add(
+      {{"x", 0.0}, {"y", 0.0}, {"z", 0.0}, {"rx", 0.0}, {"ry", 0.0},
+       {"rz", 0.0}},
+      {{"x", 0.0}, {"y", 0.0}, {"z", 0.0}, {"rx", 0.0}, {"ry", 0.0},
+       {"rz", 0.0}});
+  EXPECT_EQ(added_pose.size(), 6U);
+  const auto frame_pose = robot_.calc_frame(
+      {{"x", 0.0}, {"y", 0.0}, {"z", 0.0}, {"rx", 0.0}, {"ry", 0.0},
+       {"rz", 0.0}},
+      {{"x", 1.0}, {"y", 0.0}, {"z", 0.0}, {"rx", 0.0}, {"ry", 0.0},
+       {"rz", 0.0}},
+      {{"x", 1.0}, {"y", 1.0}, {"z", 0.0}, {"rx", 0.0}, {"ry", 0.0},
+       {"rz", 0.0}});
+  EXPECT_EQ(frame_pose.size(), 6U);
 }
 
 TEST_F(RobotTest, TestTcpAndPayloadSmoke) {

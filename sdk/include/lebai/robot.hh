@@ -1451,6 +1451,23 @@ class Robot {
    */
   CartesianPose get_pose_trans(const CartesianPose &a, const CartesianPose &b);
   CartesianPose pose_times(const CartesianPose &a, const CartesianPose &b);
+  /**
+   * @brief 位姿加.
+   *
+   * @param pose 基准位姿.
+   * @param delta 增量位姿.
+   */
+  CartesianPose get_pose_add(const CartesianPose &pose,
+                             const CartesianPose &delta);
+  /**
+   * @brief 三点采样计算原点特征.
+   *
+   * @param o 原点.
+   * @param x X轴点.
+   * @param xy XY平面点.
+   */
+  CartesianPose calc_frame(const CartesianPose &o, const CartesianPose &x,
+                           const CartesianPose &xy);
 
   /**
    * @brief 位姿变换的逆（等价于对应的齐次坐标矩的逆）

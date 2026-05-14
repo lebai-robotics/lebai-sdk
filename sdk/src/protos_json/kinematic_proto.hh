@@ -73,6 +73,19 @@ struct GetPoseTransRequest {
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(GetPoseTransRequest, from, from_to)
 };
 
+struct GetPoseAddRequest {
+  Pose pose;
+  Pose delta;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(GetPoseAddRequest, pose, delta)
+};
+
+struct CalcFrameRequest {
+  CartesianPose o;
+  CartesianPose x;
+  CartesianPose xy;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(CalcFrameRequest, o, x, xy)
+};
+
 struct KinData {
   std::vector<double> actual_joint_pose;
   std::vector<double> actual_joint_speed;

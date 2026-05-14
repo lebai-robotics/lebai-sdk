@@ -196,6 +196,10 @@ class Robot::RobotImpl {
       const protos_json::posture_proto::JointPose &req);
   protos_json::kinematic_proto::CartesianPose get_pose_trans(
       const protos_json::kinematic_proto::GetPoseTransRequest &req);
+  protos_json::kinematic_proto::CartesianPose get_pose_add(
+      const protos_json::kinematic_proto::GetPoseAddRequest &req);
+  protos_json::kinematic_proto::CartesianPose calc_frame(
+      const protos_json::kinematic_proto::CalcFrameRequest &req);
   protos_json::kinematic_proto::CartesianPose get_pose_inverse(
       const protos_json::kinematic_proto::PoseRequest &req);
   void save_file(const protos_json::file_proto::SaveFileRequest &req);

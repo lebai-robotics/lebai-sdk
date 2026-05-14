@@ -567,6 +567,16 @@ protos_json::kinematic_proto::CartesianPose Robot::RobotImpl::get_pose_trans(
   return rpc_client_->Call<protos_json::kinematic_proto::CartesianPose>(
       "get_pose_trans", {req});
 }
+protos_json::kinematic_proto::CartesianPose Robot::RobotImpl::get_pose_add(
+    const protos_json::kinematic_proto::GetPoseAddRequest &req) {
+  return rpc_client_->Call<protos_json::kinematic_proto::CartesianPose>(
+      "get_pose_add", {req});
+}
+protos_json::kinematic_proto::CartesianPose Robot::RobotImpl::calc_frame(
+    const protos_json::kinematic_proto::CalcFrameRequest &req) {
+  return rpc_client_->Call<protos_json::kinematic_proto::CartesianPose>(
+      "calc_frame", {req});
+}
 protos_json::kinematic_proto::CartesianPose Robot::RobotImpl::get_pose_inverse(
     const protos_json::kinematic_proto::PoseRequest &req) {
   return rpc_client_->Call<protos_json::kinematic_proto::CartesianPose>(
