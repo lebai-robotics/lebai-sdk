@@ -739,6 +739,21 @@ SoftwareInfoData Robot::get_software_info() {
   return software_info;
 }
 
+HttpResponseData Robot::http(HttpRequestData request) {
+  protos_json::network_proto::HttpRequest req;
+  req.method = request.method;
+  req.url = request.url;
+  req.headers = request.headers;
+  req.body = request.body;
+  const auto response = impl_->http(req);
+
+  HttpResponseData data;
+  data.status = response.status;
+  data.headers = response.headers;
+  data.body = response.body;
+  return data;
+}
+
 std::vector<std::string> Robot::get_box_devices(const std::string &prefix) {
   protos_json::system_proto::GetBoxDevicesRequest req;
   req.prefix = prefix;

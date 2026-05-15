@@ -89,6 +89,15 @@ TEST_F(RobotTest, TestSystemDetailInfoSmoke) {
   EXPECT_FALSE(software_info.software.empty());
 }
 
+TEST_F(RobotTest, TestHttpSmoke) {
+  l_master::HttpRequestData req;
+  req.method = "GET";
+  req.url = "http://127.0.0.1/";
+  const auto resp = robot_.http(req);
+  EXPECT_EQ(resp.status, 200);
+  EXPECT_FALSE(resp.body.empty());
+}
+
 TEST_F(RobotTest, TestBoxDevicesSmoke) {
   const auto devices = robot_.get_box_devices("");
   EXPECT_FALSE(devices.empty());

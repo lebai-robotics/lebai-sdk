@@ -34,6 +34,7 @@
 #include "protos_json/motion_proto.hh"
 #include "protos_json/motor_proto.hh"
 #include "protos_json/multi_devices_proto.hh"
+#include "protos_json/network_proto.hh"
 #include "protos_json/posture_proto.hh"
 #include "protos_json/plugin_proto.hh"
 #include "protos_json/safety_proto.hh"
@@ -114,6 +115,8 @@ class Robot::RobotImpl {
   protos_json::system_proto::RobotInfo get_robot_info();
   protos_json::system_proto::HardwareInfo get_hardware_info();
   protos_json::system_proto::SoftwareInfo get_software_info();
+  protos_json::network_proto::HttpResponse http(
+      const protos_json::network_proto::HttpRequest &req);
   protos_json::system_proto::GetBoxDevicesResponse get_box_devices(
       const protos_json::system_proto::GetBoxDevicesRequest &req);
   protos_json::db_proto::Dirs get_dirs();

@@ -163,6 +163,19 @@ struct SoftwareInfoData {
   std::map<std::string, SoftwareItemInfoData> software; /*!< 软件信息. */
 };
 
+struct HttpRequestData {
+  std::string method;                         /*!< HTTP方法. */
+  std::string url;                            /*!< 请求URL. */
+  std::map<std::string, std::string> headers; /*!< 请求头. */
+  std::string body;                           /*!< 请求体. */
+};
+
+struct HttpResponseData {
+  unsigned int status = 0;                    /*!< HTTP状态码. */
+  std::map<std::string, std::string> headers; /*!< 响应头. */
+  std::string body;                           /*!< 响应体. */
+};
+
 struct MessageData {
   std::string level;  /*!< 消息等级. */
   std::string kind;   /*!< 消息类型. */
@@ -893,6 +906,13 @@ class Robot {
    * @return 控制器软件信息
    */
   SoftwareInfoData get_software_info();
+  /**
+   * @brief 通过控制器发起HTTP请求.
+   *
+   * @param request HTTP请求.
+   * @return HTTP响应.
+   */
+  HttpResponseData http(HttpRequestData request);
   /**
    * @brief 获取控制箱dev设备列表
    *

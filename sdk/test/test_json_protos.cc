@@ -31,6 +31,7 @@
 #include "protos_json/modbus_proto.hh"
 #include "protos_json/motor_proto.hh"
 #include "protos_json/multi_devices_proto.hh"
+#include "protos_json/network_proto.hh"
 #include "protos_json/plugin_proto.hh"
 #include "protos_json/posture_proto.hh"
 #include "protos_json/safety_proto.hh"
@@ -84,6 +85,27 @@ TEST(JsonMultiDevicesProtoTest, DiscoverRobotsResponseParsesDevices) {
   EXPECT_EQ(parsed.devices.front().mac, "aa");
   EXPECT_EQ(parsed.devices.front().ip, "1.2.3.4");
   EXPECT_TRUE(parsed.devices.front().online);
+}
+
+TEST(JsonNetworkProtoTest, HttpRequestAndResponseRoundTrip) {
+  protos_json::network_proto::HttpRequest req;
+  req.method = "GET";
+  req.url = "http://127.0.0.1/";
+  req.headers = {{"Accept", "text/plain"}};
+  req.body = "";
+  const nlohmann::json req_json = req;
+
+  const auto response =
+      nlohmann::json{{"status", 200},
+                     {"headers", {{"content-type", "text/plain"}}},
+                     {"body", "ok"}}
+          .get<protos_json::network_proto::HttpResponse>();
+
+  EXPECT_EQ(req_json.at("method"), "GET");
+  EXPECT_EQ(req_json.at("headers").at("Accept"), "text/plain");
+  EXPECT_EQ(response.status, 200);
+  EXPECT_EQ(response.headers.at("content-type"), "text/plain");
+  EXPECT_EQ(response.body, "ok");
 }
 
 TEST(JsonModbusProtoTest, LoadModbusRegisterListRequestSerializesDevice) {
