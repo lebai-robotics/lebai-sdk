@@ -1537,6 +1537,14 @@ std::vector<int> Robot::get_signals(unsigned int index, unsigned int len) {
   return impl_->get_signals(req).values;
 }
 
+void Robot::wait_signal(unsigned int index, int value, std::string relation) {
+  protos_json::signal_proto::WaitSignalRequest req;
+  req.key = index;
+  req.value = value;
+  req.relation = relation;
+  impl_->wait_signal(req);
+}
+
 void Robot::add_signal(unsigned int index, int value) {
   protos_json::signal_proto::SetSignalRequest req;
   req.key = index;

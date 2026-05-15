@@ -15,6 +15,7 @@
  */
 #include <gtest/gtest.h>
 #include <chrono>
+#include <future>
 #include <thread>
 #include <math.h>
 #include <memory>
@@ -787,6 +788,16 @@ TEST_F(RobotTest, TestSignal) {
   robot_.set_signal(0, 30);
   std::this_thread::sleep_for(std::chrono::milliseconds(100));
   EXPECT_EQ(30, robot_.get_signal(0));
+  robot_.set_signal(201, 0);
+  auto wait_result = std::async(std::launch::async, [] {
+    l_master::Robot waiter(TEST_L_MASTER_IP, true);
+    waiter.wait_signal(201, 77, "EQ");
+  });
+  std::this_thread::sleep_for(std::chrono::milliseconds(100));
+  robot_.set_signal(201, 77);
+  EXPECT_EQ(wait_result.wait_for(std::chrono::seconds(5)),
+            std::future_status::ready);
+  EXPECT_NO_THROW(wait_result.get());
   robot_.add_signal(10, 50);
   robot_.set_signal(10, 60);
   std::this_thread::sleep_for(std::chrono::milliseconds(100));

@@ -1403,6 +1403,14 @@ class Robot {
    */
   std::vector<int> get_signals(unsigned int index, unsigned int len);
   /**
+   * @brief 等待信号量满足指定关系.
+   *
+   * @param index 信号量下标（取值范围0~255）.
+   * @param value 待比较的信号量值.
+   * @param relation 比较关系，如 EQ.
+   */
+  void wait_signal(unsigned int index, int value, std::string relation = "EQ");
+  /**
    * @brief 增加指定下标的信号量值，该操作是原子的.
    *
    * @param index: 信号量下标（取值范围0~255）

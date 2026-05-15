@@ -2,6 +2,7 @@
 
 #include <nlohmann/json.hpp>
 
+#include <string>
 #include <vector>
 
 namespace protos_json::signal_proto {
@@ -27,6 +28,13 @@ struct GetSignalsRequest {
   unsigned int key{};
   unsigned int len{};
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(GetSignalsRequest, key, len)
+};
+
+struct WaitSignalRequest {
+  unsigned int key{};
+  int value{};
+  std::string relation;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(WaitSignalRequest, key, value, relation)
 };
 
 struct GetSignalResponse {

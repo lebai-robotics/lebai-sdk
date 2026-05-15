@@ -227,6 +227,16 @@ TEST(JsonSignalProtoTest, SetSignalsRequestSerializesValues) {
 
   EXPECT_EQ(json.at("key"), 10);
   EXPECT_EQ(json.at("values").size(), 2U);
+
+  protos_json::signal_proto::WaitSignalRequest wait_req;
+  wait_req.key = 20;
+  wait_req.value = 2;
+  wait_req.relation = "EQ";
+  const nlohmann::json wait_json = wait_req;
+
+  EXPECT_EQ(wait_json.at("key"), 20);
+  EXPECT_EQ(wait_json.at("value"), 2);
+  EXPECT_EQ(wait_json.at("relation"), "EQ");
 }
 
 TEST(JsonSignalProtoTest, GetSignalsResponseParsesValues) {

@@ -198,6 +198,7 @@ class Robot::RobotImpl {
       const protos_json::signal_proto::GetSignalRequest &req);
   protos_json::signal_proto::GetSignalsResponse get_signals(
       const protos_json::signal_proto::GetSignalsRequest &req);
+  void wait_signal(const protos_json::signal_proto::WaitSignalRequest &req);
   void add_signal(const protos_json::signal_proto::SetSignalRequest &req);
   protos_json::control_proto::TaskIndex start_task(
       const protos_json::control_proto::StartTaskRequest &req);

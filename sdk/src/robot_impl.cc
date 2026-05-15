@@ -589,6 +589,11 @@ protos_json::signal_proto::GetSignalsResponse Robot::RobotImpl::get_signals(
       "get_signals", {req});
 }
 
+void Robot::RobotImpl::wait_signal(
+    const protos_json::signal_proto::WaitSignalRequest &req) {
+  rpc_client_->Call<void>("wait_signal", {req});
+}
+
 void Robot::RobotImpl::add_signal(
     const protos_json::signal_proto::SetSignalRequest &req) {
   rpc_client_->Call<void>("add_signal", {req});
