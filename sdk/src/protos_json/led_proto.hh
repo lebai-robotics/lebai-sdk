@@ -58,6 +58,12 @@ struct SaveLedStyleRequest {
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(SaveLedStyleRequest, name, data, dir)
 };
 
+struct LedStyleItem {
+  std::string state;
+  LedStyle style;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(LedStyleItem, state, style)
+};
+
 struct LedStyles {
   std::map<std::string, LedStyle> styles;
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(LedStyles, styles)

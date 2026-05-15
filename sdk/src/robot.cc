@@ -936,6 +936,13 @@ void Robot::save_led_style(std::string name, LedStyleData style,
   impl_->save_led_style(req);
 }
 
+void Robot::set_led_style(std::string state, LedStyleData style) {
+  protos_json::led_proto::LedStyleItem req;
+  req.state = state;
+  req.style = convertToLedStyle(style);
+  impl_->set_led_style(req);
+}
+
 std::vector<std::string> Robot::load_led_style_list(std::string dir) {
   protos_json::db_proto::LoadListRequest req;
   req.dir = dir;

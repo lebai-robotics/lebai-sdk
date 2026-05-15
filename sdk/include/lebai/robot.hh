@@ -968,6 +968,13 @@ class Robot {
   void save_led_style(std::string name, LedStyleData style,
                       std::string dir = "");
   /**
+   * @brief 设置机器人状态对应的声光交互样式.
+   *
+   * @param state 机器人状态名称.
+   * @param style 样式数据.
+   */
+  void set_led_style(std::string state, LedStyleData style);
+  /**
    * @brief 查询声光样式列表.
    *
    * @param dir 声光样式目录.

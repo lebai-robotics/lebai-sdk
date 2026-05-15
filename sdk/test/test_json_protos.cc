@@ -653,6 +653,17 @@ TEST(JsonTriggerProtoTest, TriggersParseControllerPayload) {
 }
 
 TEST(JsonLedProtoTest, LedStylesParseControllerPayload) {
+  protos_json::led_proto::LedStyleItem item;
+  item.state = "ESTOP";
+  item.style.led.mode = "BLINK";
+  item.style.led.speed = "FAST";
+  item.style.led.colors = {"RED"};
+  item.style.voice = "OFF";
+  item.style.volume = "MID";
+  const nlohmann::json item_json = item;
+  EXPECT_EQ(item_json.at("state"), "ESTOP");
+  EXPECT_EQ(item_json.at("style").at("voice"), "OFF");
+
   const auto json = nlohmann::json::parse(R"({
     "styles":{
       "5":{

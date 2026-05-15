@@ -120,6 +120,7 @@ TEST_F(RobotTest, TestTriggerReadsSmoke) {
 TEST_F(RobotTest, TestLedStylesSmoke) {
   const auto styles = robot_.get_led_styles();
   EXPECT_FALSE(styles.empty());
+  EXPECT_NO_THROW(robot_.set_led_style("ESTOP", styles.at("1")));
   EXPECT_NO_THROW(robot_.set_led_styles(styles));
 }
 

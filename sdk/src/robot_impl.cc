@@ -317,6 +317,11 @@ void Robot::RobotImpl::save_led_style(
   rpc_client_->Call<void>("save_led_style", {req});
 }
 
+void Robot::RobotImpl::set_led_style(
+    const protos_json::led_proto::LedStyleItem &req) {
+  rpc_client_->Call<void>("set_led_style", {req});
+}
+
 protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_led_style_list(
     const protos_json::db_proto::LoadListRequest &req) {
   return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
