@@ -80,9 +80,12 @@ Discovery is separate from the robot command path and is used to locate devices 
 ### Gripper
 
 - Public surface: `sdk/include/lebai/gripper.hh`
-- Implementation: `sdk/src/gripper.cc`, `sdk/src/gripper_impl.hh`
+- Implementation: `sdk/src/gripper.cc`, `sdk/src/gripper_impl.hh`,
+  `sdk/src/modbus_rtu_client.hh`, `sdk/src/modbus_rtu_client.cc`
 
-The gripper code path is distinct from the main robot control path and should be treated as its own subsystem.
+The gripper code path is distinct from the main robot control path and should
+be treated as its own subsystem. Direct RS485 gripper support uses a small
+internal Modbus RTU client built on Asio.
 
 ### Lua Robot Compatibility
 

@@ -161,7 +161,9 @@ Examples are enabled by default with `BUILD_EXAMPLES=ON` and live in `examples`.
 
 - C++ examples are built through `examples/CMakeLists.txt`
 - `.NET` and Java examples are only configured when their respective bindings are enabled
-- `examples/test_gripper_diagnostics.cc` is special-cased and links directly against `modbus`
+- `examples/test_gripper_diagnostics.cc` is special-cased to include the
+  internal Modbus RTU helper from `sdk/src`, but it links only against
+  `lebai-cpp`
 
 ## Formatting And Docs
 

@@ -35,7 +35,8 @@ Project-specific guidance for coding agents working in this repository.
 - discovery: `sdk/include/lebai/discovery.hh`, `sdk/src/discovery.cc`,
   `sdk/src/discovery_impl.cc`, `sdk/src/discovery_impl.hh`
 - gripper: `sdk/include/lebai/gripper.hh`, `sdk/src/gripper.cc`,
-  `sdk/src/gripper_impl.hh`
+  `sdk/src/gripper_impl.hh`, `sdk/src/modbus_rtu_client.hh`,
+  `sdk/src/modbus_rtu_client.cc`
 
 ## Generated And Sensitive Areas
 

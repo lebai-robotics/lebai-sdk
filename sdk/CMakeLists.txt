@@ -9,21 +9,14 @@ target_sources(lebai-cpp
     src/lua_robot_impl.cc
     src/gripper.cc
     src/gripper_impl.cc
+    src/modbus_rtu_client.cc
     )
 target_include_directories(lebai-cpp
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/third>
-    $<INSTALL_INTERFACE:include>
-  PRIVATE
-    ${CMAKE_BINARY_DIR}/_deps/modbuslib-src/src)
+    $<INSTALL_INTERFACE:include>)
 target_compile_features(lebai-cpp PUBLIC cxx_std_17)
-
-# Link modbus as a static library - use $<BUILD_INTERFACE:> to exclude from export
-target_link_libraries(
-  lebai-cpp
-  PRIVATE
-    $<BUILD_INTERFACE:modbus>)
 
 if(TARGET nlohmann_json::nlohmann_json)
   target_link_libraries(lebai-cpp PRIVATE nlohmann_json::nlohmann_json)

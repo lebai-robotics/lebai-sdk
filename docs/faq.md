@@ -18,17 +18,17 @@ FAQ
 界面显示的Rz，Ry，Rx为角度，将其转换为弧度后，它和旋转矩阵的关系如下：
  
 \f[ RotationMatrix = \begin{bmatrix}
- \cos(Rz) & -sin(Rz) & 0 \\ 
- sin(Rz) & cos(Rz) & 0\\ 
+ \cos(Rz) & -\sin(Rz) & 0 \\ 
+ \sin(Rz) & \cos(Rz) & 0\\ 
  0 & 0 & 1
  \end{bmatrix}\begin{bmatrix}
- cos(Ry) & 0 & sin(Ry)\\ 
+ \cos(Ry) & 0 & \sin(Ry)\\ 
  0 & 1 & 0 \\ 
- -sin(Ry) & 0 & cos(Ry)
+ -\sin(Ry) & 0 & \cos(Ry)
  \end{bmatrix}\begin{bmatrix}
  1 & 0 & 0 \\ 
- 0 & cos(Rx) & -sin(Rx) \\ 
- 0 & sin(Rx)  & cos(Rx) 
+ 0 & \cos(Rx) & -\sin(Rx) \\ 
+ 0 & \sin(Rx)  & \cos(Rx) 
  \end{bmatrix} \f]
 
  # 夹爪的轴位置关系

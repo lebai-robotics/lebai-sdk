@@ -14,10 +14,12 @@ foreach(FILE_NAME IN LISTS CPP_SRCS)
       PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${PROJECT_SOURCE_DIR}/sdk/src
-        ${CMAKE_BINARY_DIR}/_deps/modbuslib-src/src
     )
-    target_compile_features(${EXAMPLE_NAME} PRIVATE cxx_std_14)
-    target_link_libraries(${EXAMPLE_NAME} PRIVATE modbus)
+    target_compile_features(${EXAMPLE_NAME} PRIVATE cxx_std_17)
+    target_link_libraries(${EXAMPLE_NAME} PRIVATE ${PROJECT_NAMESPACE}::lebai-cpp)
+    set_target_properties(${EXAMPLE_NAME} PROPERTIES
+      INSTALL_RPATH
+      ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
     if(WIN32)
       target_link_libraries(${EXAMPLE_NAME} PRIVATE ws2_32)
     endif()

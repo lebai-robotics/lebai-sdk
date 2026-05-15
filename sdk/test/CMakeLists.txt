@@ -36,6 +36,19 @@ set_target_properties(test_json_protos PROPERTIES
   ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 add_test(NAME TestJsonProtos COMMAND test_json_protos WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/sdk/test)
 
+add_executable(test_modbus_rtu_client test_modbus_rtu_client.cc)
+target_include_directories(test_modbus_rtu_client PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${PROJECT_SOURCE_DIR}/sdk/src
+)
+target_link_libraries(test_modbus_rtu_client PRIVATE
+  ${PROJECT_NAMESPACE}::lebai-cpp
+  gtest)
+set_target_properties(test_modbus_rtu_client PROPERTIES
+  INSTALL_RPATH
+  ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+add_test(NAME TestModbusRtuClient COMMAND test_modbus_rtu_client WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/sdk/test)
+
 add_executable(test_robot test_robot.cc)
 if(DEFINED TEST_ROBOT_IP)
   target_compile_definitions(test_robot PRIVATE TEST_L_MASTER_IP="${TEST_ROBOT_IP}")

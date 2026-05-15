@@ -7,77 +7,37 @@
 #include <thread>
 #include <chrono>
 #include <vector>
-#include "Modbus.h"
-#include "ModbusClient.h"
-#include "ModbusClientPort.h"
-#include "ModbusPort.h"
+
+#include "modbus_rtu_client.hh"
+
+using lebai::l_master::ModbusRtuClient;
 
 struct TestConfig {
   int baudRate;
-  Modbus::Parity parity;
+  ModbusRtuClient::Parity parity;
   const char* parityName;
 };
 
 bool testConfiguration(const std::string& portName, int baudRate,
-                       Modbus::Parity parity, const char* parityName,
+                       ModbusRtuClient::Parity parity, const char* parityName,
                        uint8_t modbusAddr) {
   std::cout << "\nTesting: " << baudRate << " baud, " << parityName
             << ", address " << (int)modbusAddr << std::endl;
 
   try {
-    Modbus::SerialSettings settings;
-    settings.portName = portName.c_str();
-    settings.baudRate = baudRate;
-    settings.dataBits = 8;
-    settings.parity = parity;
-    settings.stopBits = Modbus::OneStop;
-    settings.flowControl = Modbus::NoFlowControl;
-    settings.timeoutFirstByte = 1000;  // 1 second
-    settings.timeoutInterByte = 100;   // 100 ms
+    ModbusRtuClient::Config config;
+    config.port_name = portName;
+    config.baud_rate = static_cast<unsigned int>(baudRate);
+    config.slave_id = modbusAddr;
+    config.timeout = std::chrono::milliseconds(1000);
+    config.parity = parity;
 
-    ModbusClientPort* port =
-        Modbus::createClientPort(Modbus::RTU, &settings, true);
-    if (!port) {
-      std::cout << "  Failed to create port" << std::endl;
-      return false;
-    }
-
-    ModbusPort* underlying = port->port();
-    if (underlying) {
-      Modbus::StatusCode status = underlying->open();
-      if (status != Modbus::Status_Good) {
-        std::cout << "  Failed to open port" << std::endl;
-        delete port;
-        return false;
-      }
-      std::this_thread::sleep_for(std::chrono::milliseconds(200));
-    }
-
-    ModbusClient client(modbusAddr, port);
-
+    ModbusRtuClient client(config);
+    std::this_thread::sleep_for(std::chrono::milliseconds(200));
     // Try to read a register to test communication
-    uint16_t value = 0;
-    Modbus::StatusCode status = client.readHoldingRegisters(0, 1, &value);
-
-    int retries = 0;
-    while (status == Modbus::Status_Processing && retries < 10) {
-      std::this_thread::sleep_for(std::chrono::milliseconds(100));
-      status = client.readHoldingRegisters(0, 1, &value);
-      retries++;
-    }
-
-    if (underlying) {
-      underlying->close();
-    }
-    delete port;
-
-    if (Modbus::StatusIsGood(status)) {
-      std::cout << "  SUCCESS! Read value: " << value << std::endl;
-      return true;
-    } else {
-      std::cout << "  Failed with status: " << (int)status << std::endl;
-      return false;
-    }
+    const auto values = client.read_holding_registers(0, 1);
+    std::cout << "  SUCCESS! Read value: " << values.front() << std::endl;
+    return true;
 
   } catch (const std::exception& e) {
     std::cout << "  Exception: " << e.what() << std::endl;
@@ -99,10 +59,14 @@ int main(int argc, char* argv[]) {
 
   // Common configurations to test
   std::vector<TestConfig> configs = {
-      {9600, Modbus::NoParity, "8N1"},   {9600, Modbus::EvenParity, "8E1"},
-      {19200, Modbus::NoParity, "8N1"},  {19200, Modbus::EvenParity, "8E1"},
-      {38400, Modbus::NoParity, "8N1"},  {57600, Modbus::NoParity, "8N1"},
-      {115200, Modbus::NoParity, "8N1"}, {115200, Modbus::EvenParity, "8E1"},
+      {9600, ModbusRtuClient::Parity::None, "8N1"},
+      {9600, ModbusRtuClient::Parity::Even, "8E1"},
+      {19200, ModbusRtuClient::Parity::None, "8N1"},
+      {19200, ModbusRtuClient::Parity::Even, "8E1"},
+      {38400, ModbusRtuClient::Parity::None, "8N1"},
+      {57600, ModbusRtuClient::Parity::None, "8N1"},
+      {115200, ModbusRtuClient::Parity::None, "8N1"},
+      {115200, ModbusRtuClient::Parity::Even, "8E1"},
   };
 
   // Common Modbus addresses to test
