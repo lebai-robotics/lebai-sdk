@@ -1,46 +1,33 @@
-name: Linux python aarch64 release
-run-name: ${{ github.actor }} Linux python aarch64 release
-on: 
-  workflow_dispatch: 
-  # push:
-  #  tags:
-  #   - v1.*.*
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+name: Linux Python aarch64 release
+
+on:
+  workflow_dispatch:
+  workflow_call:
+  push:
+    tags:
+      - v1.*.*
+
 permissions:
   contents: read
-  pages: write
-  id-token: write
-  pull-requests: read
 
-jobs: 
-  linux_python_aarch64_build_and_release: 
+jobs:
+  linux-python-aarch64-release:
     runs-on: [self-hosted, Linux, ARM64]
-    container: quay.io/pypa/manylinux2014_aarch64
+    container: quay.io/pypa/manylinux_2_28_aarch64
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
-      - run: ls /opt/python/
-      - run: for PYBIN in /opt/python/*/bin;do "${PYBIN}/pip" install -i https://mirrors.aliyun.com/pypi/simple/ -r requirements.txt; done;
-      - name: Install upload tooling
-        run: /opt/python/cp310-cp310/bin/python -m pip install -i https://mirrors.aliyun.com/pypi/simple/ --upgrade pip setuptools wheel twine markdown
-      - name: configure
-        run: cmake -S. -Bbuild -DBUILD_TESTING=OFF -DBUILD_PYTHON=ON
-      - name: build
-        run: cmake --build build
-      - name: create-whl-dir
-        run: mkdir -p whl
-      - name: build with python
-        run: for PY in /opt/python/*;do
-          rm -rf build;
-          cmake -S. -Bbuild -DBUILD_TESTING=OFF -DBUILD_PYTHON=ON -DPYTHONPATH=${PY};
-          cmake --build build;
-          cp build/python/dist/*.whl whl/;
-          done;
-        
-      - name: repair
-        run: for PYWHL in whl/*.whl;do
-          auditwheel repair ${PYWHL};
-          done;
-        
-      - name: upload Pypi
-        run: /opt/python/cp310-cp310/bin/python -m twine upload --skip-existing --verbose -u __token__ -p ${{ secrets.PYLEBAI }} wheelhouse/*.whl
+        uses: actions/checkout@v4
+
+      - name: Build and smoke-test wheels
+        run: scripts/build_python_wheels_manylinux.sh wheelhouse
+
+      - name: Upload PyPI
+        run: |
+          /opt/python/cp310-cp310/bin/python -m pip install --upgrade twine
+          /opt/python/cp310-cp310/bin/python -m twine upload --skip-existing --verbose -u __token__ -p "${{ secrets.PYLEBAI }}" wheelhouse/*.whl
+
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: lebai-linux-aarch64-whl
+          path: wheelhouse/*.whl

@@ -1,53 +1,33 @@
-name: Linux python release
-run-name: ${{ github.actor }} Linux python release
+name: Linux Python release
+
 on:
   workflow_dispatch:
   workflow_call:
   push:
     tags:
       - v1.*.*
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+
 permissions:
   contents: read
-  pages: write
-  id-token: write
-  pull-requests: read
 
 jobs:
-  linux_python_build_and_release:
+  linux-python-release:
     runs-on: ubuntu-22.04
     container: quay.io/pypa/manylinux_2_28_x86_64
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
-      - run: for PYBIN in /opt/python/*/bin;do "${PYBIN}/pip" install -r requirements.txt; done;
-      - name: Install upload tooling
-        run: /opt/python/cp310-cp310/bin/python -m pip install --upgrade pip setuptools wheel twine markdown
-      - name: Configure
-        run: cmake -S. -Bbuild -DBUILD_PYTHON=ON
-      - name: Build
-        run: cmake --build build
-      - name: Create-whl-dir
-        run: mkdir -p whl
-      - name: build with python
-        run: for PY in /opt/python/*;do
-          rm -rf build;
-          cmake -S. -Bbuild -DBUILD_PYTHON=ON -DPYTHONPATH=${PY};
-          cmake --build build;
-          cp build/python/dist/*.whl whl/;
-          done;
+        uses: actions/checkout@v4
 
-      - name: Repair
-        run: for PYWHL in whl/*.whl;do
-          auditwheel repair ${PYWHL};
-          done;
+      - name: Build and smoke-test wheels
+        run: scripts/build_python_wheels_manylinux.sh wheelhouse
 
-      - name: Upload Pypi
-        run: /opt/python/cp310-cp310/bin/python -m twine upload --skip-existing --verbose -u __token__ -p ${{ secrets.PYLEBAI }} wheelhouse/*.whl
+      - name: Upload PyPI
+        run: |
+          /opt/python/cp310-cp310/bin/python -m pip install --upgrade twine
+          /opt/python/cp310-cp310/bin/python -m twine upload --skip-existing --verbose -u __token__ -p "${{ secrets.PYLEBAI }}" wheelhouse/*.whl
 
-      - name: Upload artifact
+      - name: Upload wheels
         uses: actions/upload-artifact@v4
-        id: artifact
         with:
-          name: lebai-linux-x64-whl
+          name: lebai-linux-amd64-whl
           path: wheelhouse/*.whl

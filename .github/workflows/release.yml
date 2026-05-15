@@ -9,8 +9,11 @@ jobs:
     uses: ./.github/workflows/linux_cpp_release.yml
   linux-cpp-arm64:
     uses: ./.github/workflows/linux_cpp_arm64_release.yml
-  linux-python-x64:
+  linux-python-amd64:
     uses: ./.github/workflows/linux_python_release.yml
+    secrets: inherit
+  linux-python-aarch64:
+    uses: ./.github/workflows/linux_python_aarch64_release.yml
     secrets: inherit
   linux-dotnet-x64:
     uses: ./.github/workflows/linux_dotnet_release.yml
@@ -27,7 +30,8 @@ jobs:
     needs:
       - linux-cpp-x64
       - linux-cpp-arm64
-      - linux-python-x64
+      - linux-python-amd64
+      - linux-python-aarch64
       - linux-dotnet-x64
       - win-cpp-x64
       - win-python-x64
@@ -52,10 +56,14 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: lebai-linux-x64-nupkg
-      - name: Download linux x64 whl
+      - name: Download linux amd64 whl
         uses: actions/download-artifact@v4
         with:
-          name: lebai-linux-x64-whl
+          name: lebai-linux-amd64-whl
+      - name: Download linux aarch64 whl
+        uses: actions/download-artifact@v4
+        with:
+          name: lebai-linux-aarch64-whl
       - name: Download win x64 exe
         uses: actions/download-artifact@v4
         with:

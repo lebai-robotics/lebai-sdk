@@ -1,44 +1,22 @@
-name: Linux python build
-run-name: ${{ github.actor }} Linux python build
+name: Linux Python build
+
 on:
   workflow_dispatch:
   pull_request:
+
 jobs:
-  linux_python_build:
+  linux-python-build:
     runs-on: ubuntu-22.04
     container: quay.io/pypa/manylinux_2_28_x86_64
-    env:
-      ACTIONS_RUNNER_FORCE_ACTIONS_NODE_VERSION: node16
-      ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
-      - run: for PYBIN in /opt/python/*/bin;do "${PYBIN}/pip" install -r requirements.txt; done;
-      - name: Install build tooling
-        run: /opt/python/cp310-cp310/bin/python -m pip install --upgrade pip setuptools wheel markdown
+        uses: actions/checkout@v4
 
-      - name: create-whl-dir
-        run: mkdir -p whl
+      - name: Build and smoke-test wheels
+        run: scripts/build_python_wheels_manylinux.sh wheelhouse
 
-      - name: Build with python
-        run: for PY in /opt/python/*;do
-          rm -rf build;
-          cmake -S. -Bbuild -DBUILD_PYTHON=ON -DPYTHONPATH=${PY};
-          cmake --build build;
-          cp build/python/dist/*.whl whl/;
-          done;
-
-      - name: Repair
-        run: for PYWHL in whl/*.whl;do
-          auditwheel repair ${PYWHL};
-          done;
-
-      - name: List wheels.
-        run: ls wheelhouse/*
-
-      - name: Upload artifact
+      - name: Upload wheels
         uses: actions/upload-artifact@v4
-        id: artifact
         with:
-          name: lebai-linux-x64-whl
+          name: lebai-linux-amd64-whl
           path: wheelhouse/*.whl

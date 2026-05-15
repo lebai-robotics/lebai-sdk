@@ -110,6 +110,12 @@ and import the SWIG modules:
 scripts/python_wheel_smoke.sh build python3.10
 ```
 
+On Windows, use the PowerShell equivalent:
+
+```powershell
+.\scripts\python_wheel_smoke.ps1 -WheelDir build\python\dist -Python python.exe
+```
+
 Notes:
 
 - Python packaging is driven by `cmake/python.cmake`

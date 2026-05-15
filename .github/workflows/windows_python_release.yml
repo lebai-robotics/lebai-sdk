@@ -1,68 +1,64 @@
-name: Windows python release
-run-name: ${{ github.actor }} Windows python release
+name: Windows Python release
+
 on:
   workflow_dispatch:
   workflow_call:
   push:
     tags:
       - v1.*.*
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+
 permissions:
   contents: read
-  pages: write
-  id-token: write
-  pull-requests: read
 
 jobs:
-  windows_python_release:
+  windows-python-release:
     runs-on: windows-latest
     strategy:
       matrix:
         python-version: ["3.8", "3.9", "3.10", "3.11", "3.12"]
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
-      - uses: actions/setup-python@v4
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python-version }}
+
       - name: Set Python version for artifact name
         run: |
           $version = "${{ matrix.python-version }}".Replace(".", "")
           echo "PYTHON_VERSION_NO_DOT=$version" >> $env:GITHUB_ENV
-      - name: Check cmake
-        run: cmake --version
+
       - name: Ensure SWIG is available
         run: |
           if (!(Get-Command swig -ErrorAction SilentlyContinue)) {
             choco install swig -y --no-progress
-          } else {
-            Write-Host "SWIG is already installed"
-            swig -version
           }
-      - name: Check Python version
-        run: python.exe --version
-      - name: Upgrade pip, setuptools, and wheel
-        run: python.exe -m pip install --upgrade pip setuptools wheel
-      - name: Install python-dev-tools
-        run: python.exe -m pip install python-dev-tools twine delvewheel markdown build
+          swig -version
 
-      - name: CMake configure
-        run: cmake -S. -Bbuild -G "Visual Studio 17 2022" -DBUILD_PYTHON=ON -DBUILD_TESTING=OFF -DBUILD_DOCUMENTATION=OFF -DPython3_EXECUTABLE="${{ env.pythonLocation }}\python.exe" -DPYTHON_EXECUTABLE="${{ env.pythonLocation }}\python.exe"
-      - name: CMake build
-        run: cmake --build build --config release
-      - name: List built wheels
-        run: dir build\python\dist\
-      - name: Repair wheels with delvewheel
+      - name: Install Python build tooling
+        run: python.exe -m pip install --upgrade build setuptools wheel twine delvewheel
+
+      - name: Configure
+        run: cmake -S. -Bbuild -G "Visual Studio 17 2022" -DBUILD_PYTHON=ON -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF -DBUILD_DOCUMENTATION=OFF -DFETCH_PYTHON_DEPS=OFF -DPython3_EXECUTABLE="${{ env.pythonLocation }}\python.exe"
+
+      - name: Build
+        run: cmake --build build --config Release --target python_package
+
+      - name: Repair wheel
         run: |
           New-Item -ItemType Directory -Force -Path repaired_wheels
           delvewheel repair --add-path build\Release -w repaired_wheels build\python\dist\*.whl
-      - name: List repaired wheels
-        run: dir repaired_wheels\
-      - name: Upload Pypi
-        run: python.exe -m twine upload --skip-existing --verbose -u __token__ -p ${{ secrets.PYLEBAI }} repaired_wheels/*.whl
-      - name: Upload packages
+
+      - name: Smoke-test wheel
+        run: .\scripts\python_wheel_smoke.ps1 -WheelDir repaired_wheels -Python python.exe -VenvDir build\python-smoke-venv
+
+      - name: Upload PyPI
+        run: python.exe -m twine upload --skip-existing --verbose -u __token__ -p "${{ secrets.PYLEBAI }}" repaired_wheels/*.whl
+
+      - name: Upload wheels
         uses: actions/upload-artifact@v4
         with:
           name: lebai-win-x64-${{ env.PYTHON_VERSION_NO_DOT }}-whl
-          path: |
-            repaired_wheels/*.whl
+          path: repaired_wheels/*.whl
