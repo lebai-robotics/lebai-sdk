@@ -382,6 +382,11 @@ protos_json::plugin_proto::Plugins Robot::RobotImpl::load_plugins() {
       "load_plugins", {});
 }
 
+protos_json::plugin_proto::PluginStore Robot::RobotImpl::get_plugin_store() {
+  return rpc_client_->Call<protos_json::plugin_proto::PluginStore>(
+      "get_plugin_store", {});
+}
+
 protos_json::plugin_proto::PluginInfo Robot::RobotImpl::load_plugin(
     const protos_json::plugin_proto::PluginIndex &req) {
   return rpc_client_->Call<protos_json::plugin_proto::PluginInfo>(

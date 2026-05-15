@@ -167,6 +167,10 @@ TEST_F(RobotTest, TestForceModeConfigSmoke) {
 }
 
 TEST_F(RobotTest, TestPluginsSmoke) {
+  const auto store = robot_.get_plugin_store();
+  EXPECT_FALSE(store.empty());
+  EXPECT_FALSE(store.front().url.empty());
+
   const auto plugins = robot_.load_plugins();
   if (plugins.empty()) {
     GTEST_SKIP() << "simulator has no installed plugins";

@@ -754,6 +754,15 @@ TEST(JsonMotorProtoTest, ServoParamsParseControllerPayload) {
 }
 
 TEST(JsonPluginProtoTest, PluginsParseControllerPayload) {
+  const auto store_json = nlohmann::json::parse(R"({
+    "plugins":[{"name":"camera","url":"https://example.invalid/camera.zip"}]
+  })");
+  const auto store = store_json.get<protos_json::plugin_proto::PluginStore>();
+
+  ASSERT_EQ(store.plugins.size(), 1U);
+  EXPECT_EQ(store.plugins.front().name, "camera");
+  EXPECT_EQ(store.plugins.front().url, "https://example.invalid/camera.zip");
+
   const auto json = nlohmann::json::parse(R"({
     "plugins":[
       {

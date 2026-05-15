@@ -1048,6 +1048,18 @@ std::vector<PluginInfoData> Robot::load_plugins() {
   return plugins;
 }
 
+std::vector<PluginStoreInfoData> Robot::get_plugin_store() {
+  const auto response = impl_->get_plugin_store();
+  std::vector<PluginStoreInfoData> plugins;
+  for (const auto &plugin : response.plugins) {
+    PluginStoreInfoData data;
+    data.name = plugin.name;
+    data.url = plugin.url;
+    plugins.push_back(data);
+  }
+  return plugins;
+}
+
 PluginInfoData Robot::load_plugin(const std::string &name) {
   protos_json::plugin_proto::PluginIndex req;
   req.name = name;

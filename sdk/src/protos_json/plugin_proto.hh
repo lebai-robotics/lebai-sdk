@@ -7,6 +7,17 @@
 
 namespace protos_json::plugin_proto {
 
+struct PluginStoreInfo {
+  std::string name;
+  std::string url;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(PluginStoreInfo, name, url)
+};
+
+struct PluginStore {
+  std::vector<PluginStoreInfo> plugins;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(PluginStore, plugins)
+};
+
 struct PluginInfo {
   std::string name;
   std::string description;

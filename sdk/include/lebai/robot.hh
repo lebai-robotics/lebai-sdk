@@ -250,6 +250,11 @@ struct PluginInfoData {
   bool enable = false;       /*!< 是否启用. */
 };
 
+struct PluginStoreInfoData {
+  std::string name; /*!< 插件名称. */
+  std::string url;  /*!< 插件下载地址. */
+};
+
 struct TaskData {
   unsigned int id = 0;         /*!< 任务ID. */
   std::string state;           /*!< 任务状态. */
@@ -1037,6 +1042,12 @@ class Robot {
    * @return 插件信息列表
    */
   std::vector<PluginInfoData> load_plugins();
+  /**
+   * @brief 查询插件商店列表.
+   *
+   * @return 插件商店信息列表.
+   */
+  std::vector<PluginStoreInfoData> get_plugin_store();
   /**
    * @brief 查询已安装插件
    *
