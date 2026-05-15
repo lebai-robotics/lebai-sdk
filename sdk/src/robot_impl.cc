@@ -405,6 +405,23 @@ protos_json::plugin_proto::CommandStdout Robot::RobotImpl::run_plugin_cmd(
       "run_plugin_cmd", {req});
 }
 
+protos_json::plugin_proto::CommandStdout Robot::RobotImpl::enable_plugin(
+    const protos_json::plugin_proto::PluginIndex &req) {
+  return rpc_client_->Call<protos_json::plugin_proto::CommandStdout>(
+      "enable_plugin", {req});
+}
+
+protos_json::plugin_proto::CommandStdout Robot::RobotImpl::disable_plugin(
+    const protos_json::plugin_proto::PluginIndex &req) {
+  return rpc_client_->Call<protos_json::plugin_proto::CommandStdout>(
+      "disable_plugin", {req});
+}
+
+void Robot::RobotImpl::restart_plugin_daemon(
+    const protos_json::plugin_proto::PluginIndex &req) {
+  rpc_client_->Call<void>("restart_plugin_daemon", {req});
+}
+
 protos_json::multi_devices_proto::DiscoverRobotsResponse
 Robot::RobotImpl::discover_robots() {
   return rpc_client_

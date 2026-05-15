@@ -154,6 +154,12 @@ class Robot::RobotImpl {
       const protos_json::plugin_proto::PluginIndex &req);
   protos_json::plugin_proto::CommandStdout run_plugin_cmd(
       const protos_json::plugin_proto::PluginCmdRequest &req);
+  protos_json::plugin_proto::CommandStdout enable_plugin(
+      const protos_json::plugin_proto::PluginIndex &req);
+  protos_json::plugin_proto::CommandStdout disable_plugin(
+      const protos_json::plugin_proto::PluginIndex &req);
+  void restart_plugin_daemon(
+      const protos_json::plugin_proto::PluginIndex &req);
   protos_json::multi_devices_proto::DiscoverRobotsResponse discover_robots();
   protos_json::plugin_proto::CommandStdout get_plugin_daemon_stdout(
       const protos_json::plugin_proto::PluginIndex &req);

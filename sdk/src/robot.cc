@@ -1054,6 +1054,16 @@ static PluginInfoData convertPluginInfo(
   return data;
 }
 
+static CommandStdoutData convertCommandStdout(
+    const protos_json::plugin_proto::CommandStdout &stdout_data) {
+  CommandStdoutData data;
+  data.done = stdout_data.done;
+  data.stdout_text = stdout_data.stdout_text;
+  data.stderr_text = stdout_data.stderr_text;
+  data.code = stdout_data.code;
+  return data;
+}
+
 std::vector<PluginInfoData> Robot::load_plugins() {
   const auto response = impl_->load_plugins();
   std::vector<PluginInfoData> plugins;
@@ -1086,13 +1096,25 @@ CommandStdoutData Robot::run_plugin_cmd(
   protos_json::plugin_proto::PluginCmdRequest req;
   req.name = name;
   req.params = params;
-  const auto response = impl_->run_plugin_cmd(req);
-  CommandStdoutData data;
-  data.done = response.done;
-  data.stdout_text = response.stdout_text;
-  data.stderr_text = response.stderr_text;
-  data.code = response.code;
-  return data;
+  return convertCommandStdout(impl_->run_plugin_cmd(req));
+}
+
+CommandStdoutData Robot::enable_plugin(const std::string &name) {
+  protos_json::plugin_proto::PluginIndex req;
+  req.name = name;
+  return convertCommandStdout(impl_->enable_plugin(req));
+}
+
+CommandStdoutData Robot::disable_plugin(const std::string &name) {
+  protos_json::plugin_proto::PluginIndex req;
+  req.name = name;
+  return convertCommandStdout(impl_->disable_plugin(req));
+}
+
+void Robot::restart_plugin_daemon(const std::string &name) {
+  protos_json::plugin_proto::PluginIndex req;
+  req.name = name;
+  impl_->restart_plugin_daemon(req);
 }
 
 std::vector<DiscoveredRobotData> Robot::discover_robots() {

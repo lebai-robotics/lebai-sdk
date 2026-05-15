@@ -193,6 +193,14 @@ TEST_F(RobotTest, TestRunPluginCmdSmoke) {
   EXPECT_EQ(stdout_data.code, 0);
 }
 
+TEST_F(RobotTest, TestPluginLifecycleSmoke) {
+  const auto enabled_stdout = robot_.enable_plugin("");
+  EXPECT_EQ(enabled_stdout.code, 0);
+  const auto disabled_stdout = robot_.disable_plugin("");
+  EXPECT_EQ(disabled_stdout.code, 0);
+  EXPECT_NO_THROW(robot_.restart_plugin_daemon(""));
+}
+
 TEST_F(RobotTest, TestPluginDaemonStdoutSmoke) {
   const auto stdout_data = robot_.get_plugin_daemon_stdout("");
   EXPECT_EQ(stdout_data.code, 0);

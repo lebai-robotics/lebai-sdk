@@ -1084,6 +1084,24 @@ class Robot {
       const std::string &name,
       const std::vector<std::string> &params = std::vector<std::string>{});
   /**
+   * @brief 启用插件.
+   *
+   * @param name 插件名称.
+   */
+  CommandStdoutData enable_plugin(const std::string &name);
+  /**
+   * @brief 禁用插件.
+   *
+   * @param name 插件名称.
+   */
+  CommandStdoutData disable_plugin(const std::string &name);
+  /**
+   * @brief 重启插件守护进程.
+   *
+   * @param name 插件名称.
+   */
+  void restart_plugin_daemon(const std::string &name);
+  /**
    * @brief 通过控制器RPC发现机器人设备.
    *
    * @return 设备信息列表.
