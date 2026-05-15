@@ -1345,6 +1345,15 @@ class Robot {
    * @param address 夹爪地址.
    */
   double get_claw_ai(unsigned int address);
+  /**
+   * @brief 等待夹爪模拟输入满足指定关系.
+   *
+   * @param address 夹爪地址.
+   * @param value 待比较的模拟输入值.
+   * @param relation 比较关系，如 GTE.
+   */
+  void wait_claw_ai(unsigned int address, double value,
+                    std::string relation = "EQ");
   /** @}*/
 
   /** \addtogroup LED

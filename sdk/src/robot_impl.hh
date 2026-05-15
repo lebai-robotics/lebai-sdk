@@ -189,6 +189,7 @@ class Robot::RobotImpl {
   protos_json::claw_proto::Claw get_claw();
   protos_json::claw_proto::GetClawAiResponse get_claw_ai(
       const protos_json::claw_proto::GetClawAiRequest &req);
+  void wait_claw_ai(const protos_json::claw_proto::WaitClawAiRequest &req);
   void set_led(const protos_json::led_proto::LedData &req);
   void set_voice(const protos_json::led_proto::VoiceData &req);
   void set_fan(const protos_json::led_proto::FanData &req);

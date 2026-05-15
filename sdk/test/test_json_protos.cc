@@ -107,11 +107,19 @@ TEST(JsonClawProtoTest, ClawAiRequestAndResponseUseAddressAndValue) {
   req.address = 2;
 
   const nlohmann::json json = req;
+  protos_json::claw_proto::WaitClawAiRequest wait_req;
+  wait_req.address = 2;
+  wait_req.value = 0.5;
+  wait_req.relation = "GTE";
+  const nlohmann::json wait_json = wait_req;
   const auto response =
       nlohmann::json{{"value", 1.5}}
           .get<protos_json::claw_proto::GetClawAiResponse>();
 
   EXPECT_EQ(json.at("address"), 2);
+  EXPECT_EQ(wait_json.at("address"), 2);
+  EXPECT_DOUBLE_EQ(wait_json.at("value"), 0.5);
+  EXPECT_EQ(wait_json.at("relation"), "GTE");
   EXPECT_DOUBLE_EQ(response.value, 1.5);
 }
 

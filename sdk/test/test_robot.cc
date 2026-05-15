@@ -179,6 +179,7 @@ TEST_F(RobotTest, TestDiscoverRobotsSmoke) {
 
 TEST_F(RobotTest, TestClawAiSmoke) {
   EXPECT_GE(robot_.get_claw_ai(0), 0.0);
+  EXPECT_NO_THROW(robot_.wait_claw_ai(0, 0.0, "GTE"));
 }
 
 TEST_F(RobotTest, TestMessagesSmoke) {

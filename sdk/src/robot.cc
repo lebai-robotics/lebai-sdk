@@ -1473,6 +1473,15 @@ double Robot::get_claw_ai(unsigned int address) {
   return impl_->get_claw_ai(req).value;
 }
 
+void Robot::wait_claw_ai(unsigned int address, double value,
+                         std::string relation) {
+  protos_json::claw_proto::WaitClawAiRequest req;
+  req.address = address;
+  req.value = value;
+  req.relation = relation;
+  impl_->wait_claw_ai(req);
+}
+
 void Robot::set_led(unsigned int mode, unsigned int speed,
                     const std::vector<unsigned int> &color) {
   protos_json::led_proto::LedData typed_req;
