@@ -1284,6 +1284,20 @@ class Robot {
    */
   std::vector<bool> get_dios_mode(std::string device, unsigned int pin,
                                   unsigned int count);
+  /**
+   * @brief 启用按钮输入.
+   *
+   * @param device 按钮设备名称.
+   * @param pin 按钮编号.
+   */
+  void enable_button(std::string device, unsigned int pin);
+  /**
+   * @brief 禁用按钮输入.
+   *
+   * @param device 按钮设备名称.
+   * @param pin 按钮编号.
+   */
+  void disable_button(std::string device, unsigned int pin);
   /** @}*/
 
   /** \addtogroup CLAW

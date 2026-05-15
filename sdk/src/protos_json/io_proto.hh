@@ -12,9 +12,51 @@ enum class IoDevice : uint32_t {
   ROBOT = 0,
   FLANGE = 1,
   EXTRA = 2,
-  SHOULDER = 3,
-  FLANGE_BTN = 4,
+  ROBOT_BTN = 10,
+  SHOULDER = 11,
+  FLANGE_BTN = 12,
 };
+
+inline void from_json(const nlohmann::json &json, IoDevice &device) {
+  const auto value = json.get<std::string>();
+  if (value == "FLANGE") {
+    device = IoDevice::FLANGE;
+  } else if (value == "EXTRA") {
+    device = IoDevice::EXTRA;
+  } else if (value == "ROBOT_BTN") {
+    device = IoDevice::ROBOT_BTN;
+  } else if (value == "SHOULDER") {
+    device = IoDevice::SHOULDER;
+  } else if (value == "FLANGE_BTN") {
+    device = IoDevice::FLANGE_BTN;
+  } else {
+    device = IoDevice::ROBOT;
+  }
+}
+
+inline void to_json(nlohmann::json &json, const IoDevice &device) {
+  switch (device) {
+    case IoDevice::FLANGE:
+      json = "FLANGE";
+      break;
+    case IoDevice::EXTRA:
+      json = "EXTRA";
+      break;
+    case IoDevice::ROBOT_BTN:
+      json = "ROBOT_BTN";
+      break;
+    case IoDevice::SHOULDER:
+      json = "SHOULDER";
+      break;
+    case IoDevice::FLANGE_BTN:
+      json = "FLANGE_BTN";
+      break;
+    case IoDevice::ROBOT:
+    default:
+      json = "ROBOT";
+      break;
+  }
+}
 
 struct GetDioPinRequest {
   IoDevice device{IoDevice::ROBOT};
@@ -78,6 +120,12 @@ struct SetAoPinsRequest {
   uint32_t pin{};
   std::vector<double> values;
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(SetAoPinsRequest, device, pin, values)
+};
+
+struct ButtonIndex {
+  IoDevice device{IoDevice::ROBOT};
+  uint32_t pin{};
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(ButtonIndex, device, pin)
 };
 
 struct GetAioPinResponse {

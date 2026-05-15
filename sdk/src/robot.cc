@@ -1172,6 +1172,26 @@ std::vector<double> Robot::get_target_joint_torques() {
   return impl_->get_kin_data().target_joint_torque;
 }
 
+static protos_json::io_proto::IoDevice convertIoDevice(
+    const std::string &device) {
+  if (device == "FLANGE") {
+    return protos_json::io_proto::IoDevice::FLANGE;
+  }
+  if (device == "EXTRA") {
+    return protos_json::io_proto::IoDevice::EXTRA;
+  }
+  if (device == "ROBOT_BTN") {
+    return protos_json::io_proto::IoDevice::ROBOT_BTN;
+  }
+  if (device == "SHOULDER") {
+    return protos_json::io_proto::IoDevice::SHOULDER;
+  }
+  if (device == "FLANGE_BTN") {
+    return protos_json::io_proto::IoDevice::FLANGE_BTN;
+  }
+  return protos_json::io_proto::IoDevice::ROBOT;
+}
+
 void Robot::set_do(std::string device, unsigned int pin, unsigned int value) {
   protos_json::io_proto::SetDoPinRequest req;
   if (device == "ROBOT") {
@@ -1393,6 +1413,20 @@ std::vector<bool> Robot::get_dios_mode(std::string device, unsigned int pin,
   req.count = count;
   const auto resp = impl_->get_dios_mode(req);
   return resp.modes;
+}
+
+void Robot::enable_button(std::string device, unsigned int pin) {
+  protos_json::io_proto::ButtonIndex req;
+  req.device = convertIoDevice(device);
+  req.pin = pin;
+  impl_->enable_button(req);
+}
+
+void Robot::disable_button(std::string device, unsigned int pin) {
+  protos_json::io_proto::ButtonIndex req;
+  req.device = convertIoDevice(device);
+  req.pin = pin;
+  impl_->disable_button(req);
 }
 
 void Robot::init_claw(bool force_initilization) {

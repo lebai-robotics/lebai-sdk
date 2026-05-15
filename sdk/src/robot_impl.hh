@@ -174,6 +174,8 @@ class Robot::RobotImpl {
       const protos_json::io_proto::GetDioModeRequest &req);
   protos_json::io_proto::GetDiosModeResponse get_dios_mode(
       const protos_json::io_proto::GetDiosModeRequest &req);
+  void enable_button(const protos_json::io_proto::ButtonIndex &req);
+  void disable_button(const protos_json::io_proto::ButtonIndex &req);
   void set_ao(const protos_json::io_proto::SetAoPinRequest &req);
   void set_aos(const protos_json::io_proto::SetAoPinsRequest &req);
   void init_claw(const protos_json::claw_proto::InitClawRequest &req);

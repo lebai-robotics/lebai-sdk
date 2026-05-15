@@ -480,6 +480,16 @@ protos_json::io_proto::GetDiosModeResponse Robot::RobotImpl::get_dios_mode(
       "get_dios_mode", {req});
 }
 
+void Robot::RobotImpl::enable_button(
+    const protos_json::io_proto::ButtonIndex &req) {
+  rpc_client_->Call<void>("enable_button", {req});
+}
+
+void Robot::RobotImpl::disable_button(
+    const protos_json::io_proto::ButtonIndex &req) {
+  rpc_client_->Call<void>("disable_button", {req});
+}
+
 void Robot::RobotImpl::set_ao(
     const protos_json::io_proto::SetAoPinRequest &req) {
   rpc_client_->Call<void>("set_ao", {req});

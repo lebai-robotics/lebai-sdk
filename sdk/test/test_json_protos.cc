@@ -182,6 +182,17 @@ TEST(JsonIoProtoTest, SetAosRequestSerializesValues) {
   EXPECT_EQ(json.at("values").size(), 2U);
 }
 
+TEST(JsonIoProtoTest, ButtonIndexSerializesDeviceAndPin) {
+  protos_json::io_proto::ButtonIndex req;
+  req.device = protos_json::io_proto::IoDevice::FLANGE_BTN;
+  req.pin = 0;
+
+  const nlohmann::json json = req;
+
+  EXPECT_EQ(json.at("device"), "FLANGE_BTN");
+  EXPECT_EQ(json.at("pin"), 0);
+}
+
 TEST(JsonIoProtoTest, DioModeResponsesParseModeLabels) {
   const auto single_json = nlohmann::json::parse(R"({"mode":"OUTPUT"})");
   const auto single =

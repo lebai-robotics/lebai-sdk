@@ -382,6 +382,8 @@ TEST_F(RobotTest, TestDioModeSmoke) {
   EXPECT_NO_THROW(robot_.set_dio_mode("EXTRA", 0, true));
   EXPECT_FALSE(robot_.get_dio_mode("ROBOT", 0));
   EXPECT_NO_THROW(robot_.get_dios_mode("EXTRA", 0, 2));
+  EXPECT_NO_THROW(robot_.disable_button("FLANGE_BTN", 0));
+  EXPECT_NO_THROW(robot_.enable_button("FLANGE_BTN", 0));
 }
 
 TEST_F(RobotTest, TestStopMoveSmoke) {
