@@ -7,9 +7,10 @@ set(CMAKE_SWIG_FLAGS)
 find_package(SWIG REQUIRED)
 include(UseSWIG)
 
-# if(${SWIG_VERSION} VERSION_GREATER_EQUAL 4)
-#   list(APPEND CMAKE_SWIG_FLAGS "-doxygen")
-# endif()
+list(APPEND CMAKE_SWIG_FLAGS "-features" "autodoc=1")
+if(${SWIG_VERSION} VERSION_GREATER_EQUAL 4)
+  list(APPEND CMAKE_SWIG_FLAGS "-doxygen")
+endif()
 
 if(UNIX AND NOT APPLE)
   list(APPEND CMAKE_SWIG_FLAGS "-DSWIGWORDSIZE64")
@@ -151,6 +152,9 @@ search_python_module(
 add_custom_command(
   OUTPUT python/dist/timestamp
   COMMAND ${CMAKE_COMMAND} -E remove_directory dist
+  COMMAND ${CMAKE_COMMAND} -E remove_directory build
+  COMMAND ${CMAKE_COMMAND} -E remove_directory ${PYTHON_PROJECT}.egg-info
+  COMMAND ${CMAKE_COMMAND} -E remove_directory ${PYTHON_PROJECT}/.libs
   COMMAND ${CMAKE_COMMAND} -E make_directory ${PYTHON_PROJECT}/.libs
   # Don't need to copy static lib on Windows.
   COMMAND ${CMAKE_COMMAND} -E $<IF:$<STREQUAL:$<TARGET_PROPERTY:lebai-cpp,TYPE>,SHARED_LIBRARY>,copy,true>

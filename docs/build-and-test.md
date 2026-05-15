@@ -122,6 +122,9 @@ Notes:
 - templates come from `python/setup.py.in` and `python/pyproject.toml.in`
 - wheels are built from the build tree and written under `build/python/dist`
 - the package build depends on SWIG-generated wrapper modules for `l_master`, `zeroconf`, and `gripper`
+- Python wrappers are generated with SWIG `autodoc` and `doxygen` enabled so
+  public methods expose inline Python docstrings where SWIG can translate the
+  C++ declarations and comments
 
 ## .NET Build
 

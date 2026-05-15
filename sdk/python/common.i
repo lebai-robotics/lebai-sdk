@@ -12,8 +12,6 @@
 %ignore InitDocument;
 %ignore IsNullJSONData;
 
-%template(DoubleVector) std::vector<double>;
-
 %{
 #include <array>
 %}

@@ -1,10 +1,12 @@
 # ChangeLog
 
-## Unreleased
+## 2.0.0
 
 扩展 C++ RPC API 覆盖，补齐备份、法兰、硬件升级、订阅、DH、轨迹、
 电机参数、质量平台和虚拟 IP 相关的 snake_case RPC 接口，并继续使用
 `json-rpc-cxx` + `nlohmann/json` DTO 迁移模式。
+
+更新 SDK 版本号，作为 SDK2 风格 JSON-RPC API 迁移版本。
 
 ## 1.4.4
 

@@ -903,8 +903,8 @@ class Robot {
    *    11	 |   示教中	       |  机器人处于示教模式中
    *    12	 |   已停止	       |  机器人处于停止状态，非急停状态
    *
-   * @note 查看 <a
-   * href="https://help.lebai.ltd/guide/basic.html#%E6%9C%BA%E5%99%A8%E4%BA%BA%E7%8A%B6%E6%80%81">具体信息</a>.
+   * @note 具体信息:
+   * https://help.lebai.ltd/guide/basic.html#%E6%9C%BA%E5%99%A8%E4%BA%BA%E7%8A%B6%E6%80%81
    */
   int get_robot_state();
   /**
@@ -1304,8 +1304,8 @@ class Robot {
    *    11	 |   SHOULDER	     |  肩部按钮DI
    *    12	 |   FLANGE_BTN	   |  法兰按钮DI
    *
-   * 查看 <a
-   * href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
+   * 详细信息:
+   * https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B
    *
    * @param pin 端口，从 0 开始
    * @param value 待设置的值
@@ -1318,16 +1318,16 @@ class Robot {
                std::vector<unsigned int> values);
   /**
    * @brief 获取数字输出
-   * @param device 设备名字，查看 @ref DEVICENAME ，可以进一步查看 <a
-   * href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
+   * @param device 设备名字，查看 @ref DEVICENAME ，详细信息:
+   * https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B
    * @param pin 端口，从 0 开始
    * @return 返回数字输出数值
    */
   unsigned int get_do(std::string device, unsigned int pin);
   /**
    * @brief 获取多个数字输出
-   * @param device 设备名字，查看 @ref DEVICENAME ，可以进一步查看 <a
-   * href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
+   * @param device 设备名字，查看 @ref DEVICENAME ，详细信息:
+   * https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B
    * @param pin 起始数字输出端口，从 0 开始
    * @param num 连续的数字输出个数
    * @return 返回多个数字输出数值
@@ -1336,16 +1336,16 @@ class Robot {
                                     unsigned int num);
   /**
    * @brief 获取数字输入
-   * @param device 设备名字，查看 @ref DEVICENAME ，可以进一步查看 <a
-   * href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
+   * @param device 设备名字，查看 @ref DEVICENAME ，详细信息:
+   * https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B
    * @param pin 端口，从 0 开始
    * @return 返回输入数值
    */
   unsigned int get_di(std::string device, unsigned int pin);
   /**
    * @brief 获取多个数字输入
-   * @param device 设备名字，查看 @ref DEVICENAME ，可以进一步查看 <a
-   * href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
+   * @param device 设备名字，查看 @ref DEVICENAME ，详细信息:
+   * https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B
    * @param pin 起始数字输入端口，从 0 开始
    * @param num 连续的数字输入个数
    * @return 返回多个数字输入
@@ -1355,8 +1355,8 @@ class Robot {
 
   /**
    * @brief 设置模拟输出
-   * @param device 设备名字，查看 @ref DEVICENAME ，可以进一步查看 <a
-   * href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
+   * @param device 设备名字，查看 @ref DEVICENAME ，详细信息:
+   * https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B
    * @param pin: 模拟输出端口，从 0 开始
    * @param value: 待设置的模拟输出值
    */
@@ -1367,16 +1367,16 @@ class Robot {
   void set_aos(std::string device, unsigned int pin, std::vector<double> values);
   /**
    * @brief 获取模拟输出
-   * @param device 设备名字，查看 @ref DEVICENAME ，可以进一步查看 <a
-   * href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
+   * @param device 设备名字，查看 @ref DEVICENAME ，详细信息:
+   * https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B
    * @param pin: 端口，从 0 开始
    * @return 返回模拟输入数值
    */
   double get_ao(std::string device, unsigned int pin);
   /**
    * @brief 获取多个模拟输出
-   * @param device 设备名字，查看 @ref DEVICENAME ，可以进一步查看 <a
-   * href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
+   * @param device 设备名字，查看 @ref DEVICENAME ，详细信息:
+   * https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B
    * @param pin: 起始模拟输出端口，从 0 开始
    * @param num 连续的模拟输出个数
    * @return 返回模拟输出数值
@@ -1385,16 +1385,16 @@ class Robot {
                               unsigned int num);
   /**
    * @brief 获取模拟输入
-   * @param device 设备名字，查看 @ref DEVICENAME ，可以进一步查看 <a
-   * href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
+   * @param device 设备名字，查看 @ref DEVICENAME ，详细信息:
+   * https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B
    * @param pin: 端口，从 0 开始
    * @return 返回模拟输入数值
    */
   double get_ai(std::string device, unsigned int pin);
   /**
    * @brief 获取多个模拟输入
-   * @param device 设备名字，查看 @ref DEVICENAME ，可以进一步查看 <a
-   * href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
+   * @param device 设备名字，查看 @ref DEVICENAME ，详细信息:
+   * https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B
    * @param pin: 起始模拟输入端口，从 0 开始
    * @param num 连续的模拟输入个数
    * @return 返回多个模拟输入数值
@@ -1403,8 +1403,8 @@ class Robot {
                               unsigned int num);
   /**
    * @brief 设置数字端口模式
-   * @param device 设备名字，查看 @ref DEVICENAME ，可以进一步查看 <a
-   * href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
+   * @param device 设备名字，查看 @ref DEVICENAME ，详细信息:
+   * https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B
    * @param pin 端口号，从 0 开始
    * @param value 设置的值，false为输入模式，true为输出模式
    * @return 返回是否成功
@@ -1419,8 +1419,8 @@ class Robot {
   bool get_dio_mode(std::string device, unsigned int pin);
   /**
    * @brief 获取数字端口模式
-   * @param device 设备名字，查看 @ref DEVICENAME ，可以进一步查看 <a
-   * href="https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B">详细信息</a>.
+   * @param device 设备名字，查看 @ref DEVICENAME ，详细信息:
+   * https://help.lebai.ltd/sdk/io.html#io-%E8%AE%BE%E5%A4%87%E7%B1%BB%E5%9E%8B
    * @param pin 端口号，从 0 开始
    * @param count 查询的连续端口数
    * @return 从pin开始的连续count个端口的当前模式

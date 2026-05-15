@@ -34,9 +34,12 @@ from pylebai import gripper, l_master, zeroconf
 print("pylebai", pylebai.__version__)
 print("l_master version", l_master.version())
 print("Robot has move_joint", hasattr(l_master.Robot, "move_joint"))
+print("Robot.move_joint has docstring", bool(l_master.Robot.move_joint.__doc__))
 print("zeroconf module", bool(zeroconf))
 print("gripper module", bool(gripper))
 
 if not hasattr(l_master.Robot, "move_joint"):
     raise SystemExit("l_master.Robot.move_joint is missing")
+if not l_master.Robot.move_joint.__doc__:
+    raise SystemExit("l_master.Robot.move_joint docstring is missing")
 PY
