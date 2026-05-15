@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 #include <gtest/gtest.h>
+#include <algorithm>
 #include <chrono>
 #include <future>
 #include <thread>
@@ -95,6 +96,14 @@ TEST_F(RobotTest, TestBoxDevicesSmoke) {
 
 TEST_F(RobotTest, TestDbDirsSmoke) {
   EXPECT_NO_THROW(robot_.get_dirs());
+  EXPECT_NO_THROW(robot_.create_dir({"codex_dir_smoke", 0}));
+  EXPECT_NO_THROW(
+      robot_.update_dir("codex_dir_smoke", "codex_dir_smoke_renamed"));
+  const auto dirs = robot_.get_dirs();
+  const auto renamed = std::find_if(dirs.begin(), dirs.end(), [](const auto &dir) {
+    return dir.name == "codex_dir_smoke_renamed";
+  });
+  EXPECT_NE(renamed, dirs.end());
 }
 
 TEST_F(RobotTest, TestShortcutReadsSmoke) {

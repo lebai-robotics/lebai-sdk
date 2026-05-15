@@ -757,6 +757,20 @@ std::vector<DirData> Robot::get_dirs() {
   return dirs;
 }
 
+void Robot::create_dir(DirData dir) {
+  protos_json::db_proto::Dir req;
+  req.name = dir.name;
+  req.id = dir.id;
+  impl_->create_dir(req);
+}
+
+void Robot::update_dir(std::string from, std::string to) {
+  protos_json::db_proto::UpdateDirRequest req;
+  req.from = from;
+  req.to = to;
+  impl_->update_dir(req);
+}
+
 static std::vector<ShortcutData> convertShortcuts(
     const protos_json::shortcut_proto::ShortcutList &response) {
   std::vector<ShortcutData> shortcuts;

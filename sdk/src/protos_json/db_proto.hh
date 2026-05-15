@@ -37,6 +37,12 @@ struct Dir {
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(Dir, name, id)
 };
 
+struct UpdateDirRequest {
+  std::string from;
+  std::string to;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(UpdateDirRequest, from, to)
+};
+
 struct Dirs {
   std::vector<Dir> dirs;
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(Dirs, dirs)

@@ -542,6 +542,23 @@ TEST(JsonDbProtoTest, LoadRequestSerializesNameAndDir) {
   EXPECT_EQ(parsed.dir, "default");
 }
 
+TEST(JsonDbProtoTest, DirRequestsSerializeControllerFields) {
+  protos_json::db_proto::Dir create_req;
+  create_req.name = "codex_dir_smoke";
+  create_req.id = 0;
+  const nlohmann::json create_json = create_req;
+
+  protos_json::db_proto::UpdateDirRequest update_req;
+  update_req.from = "codex_dir_smoke";
+  update_req.to = "codex_dir_smoke_renamed";
+  const nlohmann::json update_json = update_req;
+
+  EXPECT_EQ(create_json.at("name"), "codex_dir_smoke");
+  EXPECT_EQ(create_json.at("id"), 0);
+  EXPECT_EQ(update_json.at("from"), "codex_dir_smoke");
+  EXPECT_EQ(update_json.at("to"), "codex_dir_smoke_renamed");
+}
+
 TEST(JsonDynamicProtoTest, SavePayloadRequestSerializesNestedPayload) {
   protos_json::dynamic_proto::SavePayloadRequest req;
   req.name = "payload0";

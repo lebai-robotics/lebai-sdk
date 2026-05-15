@@ -902,6 +902,19 @@ class Robot {
    */
   std::vector<DirData> get_dirs();
   /**
+   * @brief 创建数据库目录.
+   *
+   * @param dir 目录数据.
+   */
+  void create_dir(DirData dir);
+  /**
+   * @brief 重命名数据库目录.
+   *
+   * @param from 原目录名.
+   * @param to 新目录名.
+   */
+  void update_dir(std::string from, std::string to);
+  /**
    * @brief 获取所有快捷路点
    *
    * @return 快捷路点列表
