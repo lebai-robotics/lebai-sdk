@@ -26,7 +26,8 @@ class HttpJsonRpcConnector : public jsonrpccxx::IClientConnector {
           message << ", body=" << response->body;
         }
       } else {
-        message << ", no response";
+        message << ", no response, error="
+                << httplib::to_string(response.error());
       }
       throw jsonrpccxx::JsonRpcException(
           -32003, message.str());
