@@ -105,23 +105,23 @@ TEST_F(RobotTest, TestBoxDevicesSmoke) {
 
 TEST_F(RobotTest, TestDbDirsSmoke) {
   EXPECT_NO_THROW(robot_.get_dirs());
-  EXPECT_NO_THROW(robot_.create_dir({"codex_dir_smoke", 0}));
+  EXPECT_NO_THROW(robot_.create_dir({"sdk_dir_smoke", 0}));
   EXPECT_NO_THROW(
-      robot_.update_dir("codex_dir_smoke", "codex_dir_smoke_renamed"));
+      robot_.update_dir("sdk_dir_smoke", "sdk_dir_smoke_renamed"));
   const auto dirs = robot_.get_dirs();
   const auto renamed = std::find_if(dirs.begin(), dirs.end(), [](const auto &dir) {
-    return dir.name == "codex_dir_smoke_renamed";
+    return dir.name == "sdk_dir_smoke_renamed";
   });
   EXPECT_NE(renamed, dirs.end());
 }
 
 TEST_F(RobotTest, TestShortcutReadsSmoke) {
-  const l_master::ShortcutData pose_shortcut{99, "", "codex_pose_smoke"};
+  const l_master::ShortcutData pose_shortcut{99, "", "sdk_pose_smoke"};
   EXPECT_NO_THROW(robot_.set_short_pose(pose_shortcut));
   const auto saved_pose_shortcut = robot_.get_short_pose(99);
   EXPECT_EQ(saved_pose_shortcut.name, pose_shortcut.name);
 
-  const l_master::ShortcutData task_shortcut{99, "", "codex_task_smoke"};
+  const l_master::ShortcutData task_shortcut{99, "", "sdk_task_smoke"};
   EXPECT_NO_THROW(robot_.set_short_task(task_shortcut));
   const auto saved_task_shortcut = robot_.get_short_task(99);
   EXPECT_EQ(saved_task_shortcut.name, task_shortcut.name);
@@ -149,8 +149,8 @@ TEST_F(RobotTest, TestLedStyleResourceSmoke) {
   led_style.speed = "SLOW";
   led_style.voice = "OFF";
   led_style.volume = "MUTE";
-  EXPECT_NO_THROW(robot_.save_led_style("codex_led_smoke", led_style, ""));
-  const auto saved_style = robot_.load_led_style("codex_led_smoke", "");
+  EXPECT_NO_THROW(robot_.save_led_style("sdk_led_smoke", led_style, ""));
+  const auto saved_style = robot_.load_led_style("sdk_led_smoke", "");
   EXPECT_EQ(saved_style.mode, "HOLD_LED");
   const auto style = robot_.load_led_style("", "");
   EXPECT_FALSE(style.voice.empty());
@@ -277,35 +277,35 @@ TEST_F(RobotTest, TestTrajectoryResourceSmoke) {
   l_master::TrajectoryData trajectory_data;
   trajectory_data.kind = "PVAT";
   EXPECT_NO_THROW(
-      robot_.save_trajectory("codex_trajectory_smoke", trajectory_data, ""));
+      robot_.save_trajectory("sdk_trajectory_smoke", trajectory_data, ""));
   const auto saved_trajectory =
-      robot_.load_trajectory("codex_trajectory_smoke", "");
+      robot_.load_trajectory("sdk_trajectory_smoke", "");
   EXPECT_EQ(saved_trajectory.kind, "PVAT");
   const auto trajectory = robot_.load_trajectory("", "");
   EXPECT_FALSE(trajectory.kind.empty());
   EXPECT_NO_THROW(robot_.start_record_trajectory("PVAT", 0.01));
-  EXPECT_NO_THROW(robot_.end_record_trajectory("codex_record_smoke", ""));
-  const auto recorded = robot_.load_trajectory("codex_record_smoke", "");
+  EXPECT_NO_THROW(robot_.end_record_trajectory("sdk_record_smoke", ""));
+  const auto recorded = robot_.load_trajectory("sdk_record_smoke", "");
   EXPECT_EQ(recorded.kind, "PVAT");
 }
 
 TEST_F(RobotTest, TestModbusResourceSmoke) {
   l_master::ModbusData modbus;
   modbus.kind = "ROBOT";
-  EXPECT_NO_THROW(robot_.save_modbus("codex_modbus_smoke", modbus));
-  const auto saved_modbus = robot_.load_modbus("codex_modbus_smoke", "");
+  EXPECT_NO_THROW(robot_.save_modbus("sdk_modbus_smoke", modbus));
+  const auto saved_modbus = robot_.load_modbus("sdk_modbus_smoke", "");
   EXPECT_EQ(saved_modbus.kind, "ROBOT");
-  EXPECT_NO_THROW(robot_.set_modbus_timeout("codex_modbus_smoke", 600));
-  EXPECT_NO_THROW(robot_.set_modbus_retry("codex_modbus_smoke", 2));
-  EXPECT_NO_THROW(robot_.disconnect_modbus("codex_modbus_smoke"));
+  EXPECT_NO_THROW(robot_.set_modbus_timeout("sdk_modbus_smoke", 600));
+  EXPECT_NO_THROW(robot_.set_modbus_retry("sdk_modbus_smoke", 2));
+  EXPECT_NO_THROW(robot_.disconnect_modbus("sdk_modbus_smoke"));
 
   l_master::ModbusRegisterData reg;
   reg.kind = "DISCRETE_INPUT";
   reg.address = 0;
   EXPECT_NO_THROW(robot_.save_modbus_register(
-      "codex_modbus_smoke", "codex_register_smoke", reg));
+      "sdk_modbus_smoke", "sdk_register_smoke", reg));
   const auto saved_reg =
-      robot_.load_modbus_register("codex_modbus_smoke", "codex_register_smoke");
+      robot_.load_modbus_register("sdk_modbus_smoke", "sdk_register_smoke");
   EXPECT_EQ(saved_reg.kind, "DISCRETE_INPUT");
 
   EXPECT_NO_THROW(robot_.load_modbus("", ""));
@@ -316,9 +316,9 @@ TEST_F(RobotTest, TestStructureResourceSmoke) {
   const auto structure = robot_.load_structure("", "");
   EXPECT_FALSE(structure.kind.empty());
   EXPECT_NO_THROW(
-      robot_.save_structure("codex_structure_smoke", structure, ""));
+      robot_.save_structure("sdk_structure_smoke", structure, ""));
   const auto saved_structure =
-      robot_.load_structure("codex_structure_smoke", "");
+      robot_.load_structure("sdk_structure_smoke", "");
   EXPECT_EQ(saved_structure.kind, structure.kind);
 }
 
@@ -328,8 +328,8 @@ TEST_F(RobotTest, TestPostureResourceSmoke) {
   pose_data.cart = {{"x", 0.0}, {"y", 0.0}, {"z", 0.0},
                     {"rx", 0.0}, {"ry", 0.0}, {"rz", 0.0}};
   pose_data.joint = {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
-  EXPECT_NO_THROW(robot_.save_pose("codex_pose_smoke", pose_data, ""));
-  const auto saved_pose = robot_.load_pose("codex_pose_smoke", "");
+  EXPECT_NO_THROW(robot_.save_pose("sdk_pose_smoke", pose_data, ""));
+  const auto saved_pose = robot_.load_pose("sdk_pose_smoke", "");
   EXPECT_EQ(saved_pose.kind, "CARTESIAN");
 
   l_master::FrameData frame_data;
@@ -337,8 +337,8 @@ TEST_F(RobotTest, TestPostureResourceSmoke) {
   frame_data.position = {{"x", 0.0}, {"y", 0.0}, {"z", 0.0}};
   frame_data.rotation_kind = "BASE";
   frame_data.rotation = {{"rx", 0.0}, {"ry", 0.0}, {"rz", 0.0}};
-  EXPECT_NO_THROW(robot_.save_frame("codex_frame_smoke", frame_data, ""));
-  const auto saved_frame = robot_.load_frame("codex_frame_smoke", "");
+  EXPECT_NO_THROW(robot_.save_frame("sdk_frame_smoke", frame_data, ""));
+  const auto saved_frame = robot_.load_frame("sdk_frame_smoke", "");
   EXPECT_EQ(saved_frame.position_kind, "BASE");
 
   const auto pose = robot_.load_pose("", "");
@@ -870,11 +870,11 @@ TEST_F(RobotTest, TestTcpAndPayloadSmoke) {
   const auto tcp = robot_.get_tcp();
   EXPECT_EQ(tcp.size(), 6U);
   EXPECT_NO_THROW(robot_.save_tcp(
-      "codex_tcp_smoke",
+      "sdk_tcp_smoke",
       {{"x", 0.0}, {"y", 0.0}, {"z", 0.0}, {"rx", 0.0}, {"ry", 0.0},
        {"rz", 0.0}},
       ""));
-  const auto saved_tcp = robot_.load_tcp("codex_tcp_smoke", "");
+  const auto saved_tcp = robot_.load_tcp("sdk_tcp_smoke", "");
   EXPECT_EQ(saved_tcp.size(), 6U);
   const auto loaded_tcp = robot_.load_tcp("", "");
   EXPECT_EQ(loaded_tcp.size(), 6U);
@@ -886,30 +886,30 @@ TEST_F(RobotTest, TestTcpAndPayloadSmoke) {
   const auto payload = robot_.get_payload();
   EXPECT_DOUBLE_EQ(payload.at("mass"), 0.0);
   EXPECT_NO_THROW(robot_.save_payload(
-      "codex_payload_smoke",
+      "sdk_payload_smoke",
       {{"mass", 0.0}, {"x", 0.0}, {"y", 0.0}, {"z", 0.0}}, ""));
-  const auto saved_payload = robot_.load_payload("codex_payload_smoke", "");
+  const auto saved_payload = robot_.load_payload("sdk_payload_smoke", "");
   EXPECT_DOUBLE_EQ(saved_payload.at("mass"), 0.0);
   const auto loaded_payload = robot_.load_payload("", "");
   EXPECT_TRUE(loaded_payload.count("mass"));
 }
 
 TEST_F(RobotTest, TestStorageSmoke) {
-  const l_master::StorageItem item{"codex_storage_smoke", "ok"};
+  const l_master::StorageItem item{"sdk_storage_smoke", "ok"};
   EXPECT_NO_THROW(robot_.set_item(item));
 
   const auto loaded = robot_.get_item(item.key);
   EXPECT_EQ(loaded.key, item.key);
   EXPECT_EQ(loaded.value, item.value);
 
-  const auto items = robot_.get_items("codex_storage");
+  const auto items = robot_.get_items("sdk_storage");
   EXPECT_FALSE(items.empty());
 }
 
 TEST_F(RobotTest, TestFileSmoke) {
   const auto suffix = std::to_string(
       std::chrono::steady_clock::now().time_since_epoch().count());
-  const std::string prefix = "codex_file_smoke_" + suffix;
+  const std::string prefix = "sdk_file_smoke_" + suffix;
   const std::string source = prefix + ".txt";
   const std::string renamed_name = prefix + "_renamed.txt";
   const std::string archive = prefix + ".zip";

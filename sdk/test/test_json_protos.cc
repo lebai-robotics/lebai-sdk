@@ -566,19 +566,19 @@ TEST(JsonDbProtoTest, LoadRequestSerializesNameAndDir) {
 
 TEST(JsonDbProtoTest, DirRequestsSerializeControllerFields) {
   protos_json::db_proto::Dir create_req;
-  create_req.name = "codex_dir_smoke";
+  create_req.name = "sdk_dir_smoke";
   create_req.id = 0;
   const nlohmann::json create_json = create_req;
 
   protos_json::db_proto::UpdateDirRequest update_req;
-  update_req.from = "codex_dir_smoke";
-  update_req.to = "codex_dir_smoke_renamed";
+  update_req.from = "sdk_dir_smoke";
+  update_req.to = "sdk_dir_smoke_renamed";
   const nlohmann::json update_json = update_req;
 
-  EXPECT_EQ(create_json.at("name"), "codex_dir_smoke");
+  EXPECT_EQ(create_json.at("name"), "sdk_dir_smoke");
   EXPECT_EQ(create_json.at("id"), 0);
-  EXPECT_EQ(update_json.at("from"), "codex_dir_smoke");
-  EXPECT_EQ(update_json.at("to"), "codex_dir_smoke_renamed");
+  EXPECT_EQ(update_json.at("from"), "sdk_dir_smoke");
+  EXPECT_EQ(update_json.at("to"), "sdk_dir_smoke_renamed");
 }
 
 TEST(JsonDynamicProtoTest, SavePayloadRequestSerializesNestedPayload) {
@@ -627,23 +627,23 @@ TEST(JsonDynamicProtoTest, PayloadParsesPartialControllerPayload) {
 
 TEST(JsonStorageProtoTest, ItemsParsesControllerPayload) {
   const auto json = nlohmann::json::parse(R"({
-    "items":[{"key":"codex_storage_smoke","value":"ok"}]
+    "items":[{"key":"sdk_storage_smoke","value":"ok"}]
   })");
   const auto parsed = json.get<protos_json::storage_proto::Items>();
 
   ASSERT_EQ(parsed.items.size(), 1U);
-  EXPECT_EQ(parsed.items.front().key, "codex_storage_smoke");
+  EXPECT_EQ(parsed.items.front().key, "sdk_storage_smoke");
   EXPECT_EQ(parsed.items.front().value, "ok");
 }
 
 TEST(JsonFileProtoTest, LoadFileListParsesControllerPayload) {
   const auto json = nlohmann::json::parse(R"({
-    "files":[{"name":"codex_file_smoke.txt","is_dir":false}]
+    "files":[{"name":"sdk_file_smoke.txt","is_dir":false}]
   })");
   const auto parsed = json.get<protos_json::file_proto::LoadFileListResponse>();
 
   ASSERT_EQ(parsed.files.size(), 1U);
-  EXPECT_EQ(parsed.files.front().name, "codex_file_smoke.txt");
+  EXPECT_EQ(parsed.files.front().name, "sdk_file_smoke.txt");
   EXPECT_FALSE(parsed.files.front().is_dir);
 }
 
@@ -651,14 +651,14 @@ TEST(JsonFileProtoTest, ZipRequestSerializesNestedZipIndex) {
   protos_json::file_proto::ZipRequest req;
   req.zip.dir = "";
   req.zip.name = "archive.zip";
-  req.files = {"codex_file_smoke.txt"};
+  req.files = {"sdk_file_smoke.txt"};
   req.dir = "";
 
   const nlohmann::json json = req;
 
   EXPECT_EQ(json.at("zip").at("name"), "archive.zip");
   ASSERT_EQ(json.at("files").size(), 1U);
-  EXPECT_EQ(json.at("files").front(), "codex_file_smoke.txt");
+  EXPECT_EQ(json.at("files").front(), "sdk_file_smoke.txt");
 }
 
 TEST(JsonSerialProtoTest, SerialRequestsSerializeExpectedFields) {
