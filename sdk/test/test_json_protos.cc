@@ -480,6 +480,20 @@ TEST(JsonKinematicProtoTest, DhParamsParseControllerPayload) {
   EXPECT_DOUBLE_EQ(parsed.params.front().d, 0.21583);
 }
 
+TEST(JsonKinematicProtoTest, CalcTcpRequestSerializesPoseList) {
+  protos_json::kinematic_proto::CalcTcpRequest req;
+  req.poses.resize(3);
+  req.poses.front().position.x = 0.1;
+  req.poses.back().rotation.euler_zyx.z = 0.2;
+
+  const nlohmann::json json = req;
+
+  ASSERT_EQ(json.at("poses").size(), 3U);
+  EXPECT_DOUBLE_EQ(json.at("poses").front().at("position").at("x"), 0.1);
+  EXPECT_DOUBLE_EQ(
+      json.at("poses").back().at("rotation").at("euler_zyx").at("z"), 0.2);
+}
+
 TEST(JsonMessageProtoTest, MessagesParseControllerPayload) {
   const auto json = nlohmann::json::parse(R"({
     "messages":[

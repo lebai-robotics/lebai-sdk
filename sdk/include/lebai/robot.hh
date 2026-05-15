@@ -1658,6 +1658,12 @@ class Robot {
    */
   CartesianPose calc_frame(const CartesianPose &o, const CartesianPose &x,
                            const CartesianPose &xy);
+  /**
+   * @brief 三点采样计算工具中心点.
+   *
+   * @param poses 采样位姿列表，至少3个.
+   */
+  CartesianPose calc_tcp(const std::vector<CartesianPose> &poses);
 
   /**
    * @brief 位姿变换的逆（等价于对应的齐次坐标矩的逆）

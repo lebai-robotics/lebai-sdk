@@ -1908,6 +1908,19 @@ CartesianPose Robot::calc_frame(const CartesianPose &o, const CartesianPose &x,
   return convertToCartesianPose(resp);
 }
 
+CartesianPose Robot::calc_tcp(const std::vector<CartesianPose> &poses) {
+  if (poses.size() < 3) {
+    throw std::invalid_argument("calc_tcp requires at least 3 poses");
+  }
+
+  protos_json::kinematic_proto::CalcTcpRequest req;
+  for (const auto &pose : poses) {
+    req.poses.push_back(convertToKinematicPose(pose));
+  }
+  auto resp = impl_->calc_tcp(req);
+  return convertToCartesianPose(resp);
+}
+
 CartesianPose Robot::get_pose_inverse(const CartesianPose &in) {
   protos_json::kinematic_proto::PoseRequest req;
   req.pose.kind = 0;

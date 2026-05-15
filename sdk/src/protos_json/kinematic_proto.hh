@@ -89,6 +89,11 @@ struct CalcFrameRequest {
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(CalcFrameRequest, o, x, xy)
 };
 
+struct CalcTcpRequest {
+  std::vector<CartesianPose> poses;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(CalcTcpRequest, poses)
+};
+
 struct SaveTcpRequest {
   std::string name;
   protos_json::posture_proto::CartesianPose data;

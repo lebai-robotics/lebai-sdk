@@ -886,6 +886,7 @@ TEST_F(RobotTest, TestKinematicsReadSmoke) {
       {{"x", 1.0}, {"y", 1.0}, {"z", 0.0}, {"rx", 0.0}, {"ry", 0.0},
        {"rz", 0.0}});
   EXPECT_EQ(frame_pose.size(), 6U);
+  EXPECT_THROW(robot_.calc_tcp({}), std::invalid_argument);
 }
 
 TEST_F(RobotTest, TestTcpAndPayloadSmoke) {
