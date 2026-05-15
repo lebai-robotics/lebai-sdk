@@ -17,11 +17,13 @@
 #include <nlohmann/json.hpp>
 
 #include "protos_json/auto_proto.hh"
+#include "protos_json/backup_proto.hh"
 #include "protos_json/claw_proto.hh"
 #include "protos_json/control_proto.hh"
 #include "protos_json/db_proto.hh"
 #include "protos_json/dynamic_proto.hh"
 #include "protos_json/file_proto.hh"
+#include "protos_json/flange_proto.hh"
 #include "protos_json/hardware_proto.hh"
 #include "protos_json/io_proto.hh"
 #include "protos_json/kinematic_proto.hh"
@@ -34,12 +36,14 @@
 #include "protos_json/network_proto.hh"
 #include "protos_json/plugin_proto.hh"
 #include "protos_json/posture_proto.hh"
+#include "protos_json/quality_proto.hh"
 #include "protos_json/safety_proto.hh"
 #include "protos_json/serial_proto.hh"
 #include "protos_json/shortcut_proto.hh"
 #include "protos_json/signal_proto.hh"
 #include "protos_json/storage_proto.hh"
 #include "protos_json/structure_proto.hh"
+#include "protos_json/subscribe_proto.hh"
 #include "protos_json/system_proto.hh"
 #include "protos_json/trigger_proto.hh"
 #include "protos_json/upgrade_proto.hh"
@@ -69,6 +73,51 @@ TEST(JsonAutoProtoTest, GetAutoResponseDefaultsMissingValueToFalse) {
       nlohmann::json::object().get<protos_json::auto_proto::GetAutoResponse>();
 
   EXPECT_FALSE(parsed.value);
+}
+
+TEST(JsonBackupProtoTest, RequestsSerializeControllerFields) {
+  protos_json::backup_proto::Options options;
+  options.tmp = true;
+  options.config = true;
+
+  protos_json::backup_proto::BackupRequest backup;
+  backup.file = "sdk_probe.zip";
+  backup.option = options;
+
+  const nlohmann::json clean_json = options;
+  const nlohmann::json backup_json = backup;
+
+  EXPECT_TRUE(clean_json.at("tmp"));
+  EXPECT_TRUE(backup_json.at("option").at("config"));
+  EXPECT_EQ(backup_json.at("file"), "sdk_probe.zip");
+}
+
+TEST(JsonFlangeProtoTest, SetFlangeBaudRateRequestSerializesBaudRate) {
+  protos_json::flange_proto::SetFlangeBaudRateRequest req;
+  req.baud_rate = 115200;
+
+  const nlohmann::json json = req;
+
+  EXPECT_EQ(json.at("baud_rate"), 115200);
+}
+
+TEST(JsonHardwareProtoTest, OtaRequestsSerializeControllerFields) {
+  protos_json::hardware_proto::StartOtaRequest start;
+  start.address = "FLANGE";
+  start.partition = "UP";
+  start.file = "firmware.zip";
+
+  protos_json::hardware_proto::SwitchPartitionRequest sw;
+  sw.address = "FLANGE";
+  sw.partition = "UP";
+
+  const nlohmann::json start_json = start;
+  const nlohmann::json switch_json = sw;
+
+  EXPECT_EQ(start_json.at("address"), "FLANGE");
+  EXPECT_EQ(start_json.at("partition"), "UP");
+  EXPECT_EQ(start_json.at("file"), "firmware.zip");
+  EXPECT_EQ(switch_json.at("address"), "FLANGE");
 }
 
 TEST(JsonMultiDevicesProtoTest, DiscoverRobotsResponseParsesDevices) {
@@ -666,6 +715,17 @@ TEST(JsonStorageProtoTest, ItemsParsesControllerPayload) {
   EXPECT_EQ(parsed.items.front().value, "ok");
 }
 
+TEST(JsonSubscribeProtoTest, SubscribeRequestSerializesIntervals) {
+  protos_json::subscribe_proto::SubscribeRequest req;
+  req.interval_min = 10;
+  req.interval_max = 100;
+
+  const nlohmann::json json = req;
+
+  EXPECT_EQ(json.at("interval_min"), 10);
+  EXPECT_EQ(json.at("interval_max"), 100);
+}
+
 TEST(JsonFileProtoTest, LoadFileListParsesControllerPayload) {
   protos_json::file_proto::DownloadFileRequest req;
   req.dir = "";
@@ -814,6 +874,29 @@ TEST(JsonMotorProtoTest, ServoParamsParseControllerPayload) {
   EXPECT_DOUBLE_EQ(parsed.params.front().speed_it, 300.0);
 }
 
+TEST(JsonMotorProtoTest, MutationRequestsSerializeControllerFields) {
+  protos_json::motor_proto::SetZeroRequest zero;
+  zero.pose = {1.0, 2.0};
+  zero.valids = {true, false};
+
+  protos_json::motor_proto::SetExtraServoParamsRequest extra;
+  extra.params.resize(1);
+  extra.params.front().acc_position_kp = 1.0;
+  extra.valids = {true};
+
+  protos_json::motor_proto::ResetExtraServoParamsRequest reset;
+  reset.valids = {true, false};
+
+  const nlohmann::json zero_json = zero;
+  const nlohmann::json extra_json = extra;
+  const nlohmann::json reset_json = reset;
+
+  EXPECT_DOUBLE_EQ(zero_json.at("pose").front(), 1.0);
+  EXPECT_TRUE(zero_json.at("valids").front());
+  EXPECT_DOUBLE_EQ(extra_json.at("params").front().at("acc_position_kp"), 1.0);
+  EXPECT_TRUE(reset_json.at("valids").front());
+}
+
 TEST(JsonPluginProtoTest, PluginsParseControllerPayload) {
   const auto store_json = nlohmann::json::parse(R"({
     "plugins":[{"name":"camera","url":"https://example.invalid/camera.zip"}]
@@ -887,6 +970,24 @@ TEST(JsonUpgradeProtoTest, UpgradeResponsesParseControllerPayloads) {
 
   EXPECT_TRUE(stdout_data.done);
   EXPECT_EQ(stdout_data.code, 0);
+}
+
+TEST(JsonQualityProtoTest, RequestsAndResponsesRoundTrip) {
+  protos_json::quality_proto::InitRobotRequest req;
+  req.auth.time = "now";
+  req.auth.auth = "token";
+  req.info.name = "robot";
+
+  const nlohmann::json req_json = req;
+  const auto box = nlohmann::json{{"status", 1}}
+                       .get<protos_json::quality_proto::BoxTestResponse>();
+  const auto init = nlohmann::json{{"cup", "ok"}}
+                        .get<protos_json::quality_proto::InitRobotResponse>();
+
+  EXPECT_EQ(req_json.at("auth").at("auth"), "token");
+  EXPECT_EQ(req_json.at("info").at("name"), "robot");
+  EXPECT_EQ(box.status, 1);
+  EXPECT_EQ(init.cup, "ok");
 }
 
 TEST(JsonModbusProtoTest, RequestsAndResponsesRoundTrip) {

@@ -40,6 +40,12 @@ struct HelloData {
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(HelloData, data)
 };
 
+struct SetVirtualIpRequest {
+  std::string ifname;
+  std::string ip;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(SetVirtualIpRequest, ifname, ip)
+};
+
 enum class RobotState {
   DISCONNECTED = 0,
   ESTOP = 1,

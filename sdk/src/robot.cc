@@ -122,6 +122,95 @@ static DeviceInfoData convertToDeviceInfoData(
   return data;
 }
 
+static SystemInfoData convertToSystemInfoData(
+    const protos_json::system_proto::SystemInfo &info) {
+  SystemInfoData data;
+  data.name = info.name;
+  data.kernel_version = info.kernel_version;
+  data.os_version = info.os_version;
+  data.host_name = info.host_name;
+  data.used_memory = info.memory.used;
+  data.total_memory = info.memory.total;
+  return data;
+}
+
+static RobotInfoData convertToRobotInfoData(
+    const protos_json::system_proto::RobotInfo &info) {
+  RobotInfoData data;
+  data.name = info.name;
+  data.mac = info.mac;
+  data.box_model = info.box_model;
+  data.box_sn = info.box_sn;
+  data.arm_model = info.arm_model;
+  data.arm_sn = info.arm_sn;
+  return data;
+}
+
+static HardwareInfoData convertToHardwareInfoData(
+    const protos_json::system_proto::HardwareInfo &info) {
+  HardwareInfoData data;
+  data.comboard = convertToDeviceInfoData(info.comboard);
+  data.flange = convertToDeviceInfoData(info.flange);
+  data.led = convertToDeviceInfoData(info.led);
+  data.extra_io = convertToDeviceInfoData(info.extra_io);
+  for (const auto &joint : info.joints) {
+    data.joints.push_back(convertToDeviceInfoData(joint));
+  }
+  return data;
+}
+
+static SoftwareInfoData convertToSoftwareInfoData(
+    const protos_json::system_proto::SoftwareInfo &info) {
+  SoftwareInfoData data;
+  for (const auto &item : info.software) {
+    SoftwareItemInfoData software;
+    software.version = item.second.version;
+    software.branch = item.second.branch;
+    data.software[item.first] = software;
+  }
+  return data;
+}
+
+static protos_json::backup_proto::Options convertToBackupOptions(
+    const BackupOptionsData &option) {
+  protos_json::backup_proto::Options req;
+  req.tmp = option.tmp;
+  req.syslog = option.syslog;
+  req.arm = option.arm;
+  req.config = option.config;
+  req.data = option.data;
+  req.file = option.file;
+  req.docker = option.docker;
+  req.ds = option.ds;
+  return req;
+}
+
+static BackupInfoData convertToBackupInfoData(
+    const protos_json::backup_proto::BackupInfo &info) {
+  BackupInfoData data;
+  data.system = convertToSystemInfoData(info.system);
+  data.robot = convertToRobotInfoData(info.robot);
+  data.hardware = convertToHardwareInfoData(info.hardware);
+  data.software = convertToSoftwareInfoData(info.software);
+  data.option.tmp = info.option.tmp;
+  data.option.syslog = info.option.syslog;
+  data.option.arm = info.option.arm;
+  data.option.config = info.option.config;
+  data.option.data = info.option.data;
+  data.option.file = info.option.file;
+  data.option.docker = info.option.docker;
+  data.option.ds = info.option.ds;
+  return data;
+}
+
+static protos_json::subscribe_proto::SubscribeRequest makeSubscribeRequest(
+    uint64_t interval_min, uint64_t interval_max) {
+  protos_json::subscribe_proto::SubscribeRequest req;
+  req.interval_min = interval_min;
+  req.interval_max = interval_max;
+  return req;
+}
+
 static CollisionDetectorConfig convertToCollisionDetectorConfig(
     const protos_json::safety_proto::CollisionDetector &detector) {
   CollisionDetectorConfig config;
@@ -703,52 +792,19 @@ int Robot::get_estop_reason() {
 }
 
 SystemInfoData Robot::get_system_info() {
-  const auto info = impl_->get_system_info();
-  SystemInfoData system_info;
-  system_info.name = info.name;
-  system_info.kernel_version = info.kernel_version;
-  system_info.os_version = info.os_version;
-  system_info.host_name = info.host_name;
-  system_info.used_memory = info.memory.used;
-  system_info.total_memory = info.memory.total;
-  return system_info;
+  return convertToSystemInfoData(impl_->get_system_info());
 }
 
 RobotInfoData Robot::get_robot_info() {
-  const auto info = impl_->get_robot_info();
-  RobotInfoData robot_info;
-  robot_info.name = info.name;
-  robot_info.mac = info.mac;
-  robot_info.box_model = info.box_model;
-  robot_info.box_sn = info.box_sn;
-  robot_info.arm_model = info.arm_model;
-  robot_info.arm_sn = info.arm_sn;
-  return robot_info;
+  return convertToRobotInfoData(impl_->get_robot_info());
 }
 
 HardwareInfoData Robot::get_hardware_info() {
-  const auto info = impl_->get_hardware_info();
-  HardwareInfoData hardware_info;
-  hardware_info.comboard = convertToDeviceInfoData(info.comboard);
-  hardware_info.flange = convertToDeviceInfoData(info.flange);
-  hardware_info.led = convertToDeviceInfoData(info.led);
-  hardware_info.extra_io = convertToDeviceInfoData(info.extra_io);
-  for (const auto &joint : info.joints) {
-    hardware_info.joints.push_back(convertToDeviceInfoData(joint));
-  }
-  return hardware_info;
+  return convertToHardwareInfoData(impl_->get_hardware_info());
 }
 
 SoftwareInfoData Robot::get_software_info() {
-  const auto info = impl_->get_software_info();
-  SoftwareInfoData software_info;
-  for (const auto &item : info.software) {
-    SoftwareItemInfoData data;
-    data.version = item.second.version;
-    data.branch = item.second.branch;
-    software_info.software[item.first] = data;
-  }
-  return software_info;
+  return convertToSoftwareInfoData(impl_->get_software_info());
 }
 
 HttpResponseData Robot::http(HttpRequestData request) {
@@ -764,6 +820,37 @@ HttpResponseData Robot::http(HttpRequestData request) {
   data.headers = response.headers;
   data.body = response.body;
   return data;
+}
+
+void Robot::clean(const BackupOptionsData &option) {
+  impl_->clean(convertToBackupOptions(option));
+}
+
+void Robot::backup(const std::string &file, const BackupOptionsData &option) {
+  protos_json::backup_proto::BackupRequest req;
+  req.file = file;
+  req.option = convertToBackupOptions(option);
+  impl_->backup(req);
+}
+
+BackupInfoData Robot::get_backup_info(const std::string &file) {
+  protos_json::backup_proto::GetBackupInfoRequest req;
+  req.file = file;
+  return convertToBackupInfoData(impl_->get_backup_info(req));
+}
+
+void Robot::restore(const std::string &file, const BackupOptionsData &option) {
+  protos_json::backup_proto::RestoreRequest req;
+  req.file = file;
+  req.option = convertToBackupOptions(option);
+  impl_->restore(req);
+}
+
+void Robot::set_virtual_ip(const std::string &ifname, const std::string &ip) {
+  protos_json::system_proto::SetVirtualIpRequest req;
+  req.ifname = ifname;
+  req.ip = ip;
+  impl_->set_virtual_ip(req);
 }
 
 std::vector<std::string> Robot::get_box_devices(const std::string &prefix) {
@@ -1004,6 +1091,62 @@ std::vector<ServoParamData> Robot::get_servo_params() {
   return params;
 }
 
+void Robot::set_servo_params(const std::vector<ServoParamData> &params) {
+  protos_json::motor_proto::ServoParams req;
+  for (const auto &param : params) {
+    protos_json::motor_proto::ServoParam data;
+    data.position_kp = param.position_kp;
+    data.speed_kp = param.speed_kp;
+    data.speed_it = param.speed_it;
+    data.torque_cmd_filter = param.torque_cmd_filter;
+    req.params.push_back(data);
+  }
+  impl_->set_servo_params(req);
+}
+
+void Robot::find_zero() { impl_->find_zero(); }
+
+void Robot::set_zero(const std::vector<double> &pose,
+                     const std::vector<bool> &valids) {
+  protos_json::motor_proto::SetZeroRequest req;
+  req.pose = pose;
+  req.valids = valids;
+  impl_->set_zero(req);
+}
+
+void Robot::set_extra_servo_params(
+    const std::vector<ExtraServoParamData> &params,
+    const std::vector<bool> &valids) {
+  protos_json::motor_proto::SetExtraServoParamsRequest req;
+  for (const auto &param : params) {
+    protos_json::motor_proto::ExtraServoParam data;
+    data.acc_position_kp = param.acc_position_kp;
+    data.acc_speed_kp = param.acc_speed_kp;
+    data.acc_speed_it = param.acc_speed_it;
+    data.uni_position_kp = param.uni_position_kp;
+    data.uni_speed_kp = param.uni_speed_kp;
+    data.uni_speed_it = param.uni_speed_it;
+    data.dec_position_kp = param.dec_position_kp;
+    data.dec_speed_kp = param.dec_speed_kp;
+    data.dec_speed_it = param.dec_speed_it;
+    req.params.push_back(data);
+  }
+  req.valids = valids;
+  impl_->set_extra_servo_params(req);
+}
+
+void Robot::reset_extra_servo_params(const std::vector<bool> &valids) {
+  protos_json::motor_proto::ResetExtraServoParamsRequest req;
+  req.valids = valids;
+  impl_->reset_extra_servo_params(req);
+}
+
+void Robot::set_flange_baud_rate(unsigned int baud_rate) {
+  protos_json::flange_proto::SetFlangeBaudRateRequest req;
+  req.baud_rate = baud_rate;
+  impl_->set_flange_baud_rate(req);
+}
+
 WrenchData Robot::get_tcp_force() {
   const auto response = impl_->get_tcp_force();
   WrenchData data;
@@ -1195,6 +1338,23 @@ OtaStateData Robot::get_ota_state() {
   return data;
 }
 
+void Robot::start_ota(const std::string &address, const std::string &partition,
+                      const std::string &file) {
+  protos_json::hardware_proto::StartOtaRequest req;
+  req.address = address;
+  req.partition = partition;
+  req.file = file;
+  impl_->start_ota(req);
+}
+
+void Robot::switch_partition(const std::string &address,
+                             const std::string &partition) {
+  protos_json::hardware_proto::SwitchPartitionRequest req;
+  req.address = address;
+  req.partition = partition;
+  impl_->switch_partition(req);
+}
+
 CheckUpgradeData Robot::check_upgrade() {
   const auto response = impl_->check_upgrade();
   CheckUpgradeData data;
@@ -1202,6 +1362,8 @@ CheckUpgradeData Robot::check_upgrade() {
   data.introduction = response.introduction;
   return data;
 }
+
+void Robot::start_upgrade() { impl_->start_upgrade(); }
 
 CommandStdoutData Robot::get_upgrade_stdout() {
   const auto response = impl_->get_upgrade_stdout();
@@ -1211,6 +1373,49 @@ CommandStdoutData Robot::get_upgrade_stdout() {
   data.stderr_text = response.stderr_text;
   data.code = response.code;
   return data;
+}
+
+void Robot::sub_buttons_status(uint64_t interval_min, uint64_t interval_max) {
+  impl_->sub_buttons_status(makeSubscribeRequest(interval_min, interval_max));
+}
+
+void Robot::sub_kin_data(uint64_t interval_min, uint64_t interval_max) {
+  impl_->sub_kin_data(makeSubscribeRequest(interval_min, interval_max));
+}
+
+void Robot::sub_message(uint64_t interval_min, uint64_t interval_max) {
+  impl_->sub_message(makeSubscribeRequest(interval_min, interval_max));
+}
+
+void Robot::sub_robot_state(uint64_t interval_min, uint64_t interval_max) {
+  impl_->sub_robot_state(makeSubscribeRequest(interval_min, interval_max));
+}
+
+void Robot::sub_phy_data(uint64_t interval_min, uint64_t interval_max) {
+  impl_->sub_phy_data(makeSubscribeRequest(interval_min, interval_max));
+}
+
+void Robot::sub_task_stdout(uint64_t interval_min, uint64_t interval_max) {
+  impl_->sub_task_stdout(makeSubscribeRequest(interval_min, interval_max));
+}
+
+int Robot::box_test() {
+  protos_json::quality_proto::EmptyRequest req;
+  return impl_->box_test(req).status;
+}
+
+std::string Robot::init_robot(const std::string &time, const std::string &auth,
+                              const RobotInfoData &info) {
+  protos_json::quality_proto::InitRobotRequest req;
+  req.auth.time = time;
+  req.auth.auth = auth;
+  req.info.name = info.name;
+  req.info.mac = info.mac;
+  req.info.box_model = info.box_model;
+  req.info.box_sn = info.box_sn;
+  req.info.arm_model = info.arm_model;
+  req.info.arm_sn = info.arm_sn;
+  return impl_->init_robot(req).cup;
 }
 
 PhysicalData Robot::get_phy_data() {
@@ -2207,6 +2412,19 @@ std::vector<DhParamData> Robot::get_dh() {
   return params;
 }
 
+void Robot::set_dh(const std::vector<DhParamData> &params) {
+  protos_json::kinematic_proto::DhParams req;
+  for (const auto &param : params) {
+    protos_json::kinematic_proto::DhParam data;
+    data.a = param.a;
+    data.alpha = param.alpha;
+    data.d = param.d;
+    data.theta = param.theta;
+    req.params.push_back(data);
+  }
+  impl_->set_dh(req);
+}
+
 void Robot::set_kin_factor(int factor) {
   protos_json::kin_factor_proto::KinFactor req;
   req.speed_factor = factor;
@@ -2274,6 +2492,13 @@ void Robot::save_trajectory(std::string name, TrajectoryData trajectory,
   req.data = convertToMotionTrajectory(trajectory);
   req.dir = dir;
   impl_->save_trajectory(req);
+}
+
+unsigned int Robot::move_trajectory(std::string name, std::string dir) {
+  protos_json::db_proto::LoadRequest req;
+  req.name = name;
+  req.dir = dir;
+  return impl_->move_trajectory(req).id;
 }
 
 void Robot::start_record_trajectory(std::string kind, double duration) {

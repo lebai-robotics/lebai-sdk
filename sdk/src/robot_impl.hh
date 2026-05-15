@@ -19,11 +19,13 @@
 #include <lebai/robot.hh>
 #include "http_jsonrpc_connector.hh"
 #include "protos_json/auto_proto.hh"
+#include "protos_json/backup_proto.hh"
 #include "protos_json/claw_proto.hh"
 #include "protos_json/control_proto.hh"
 #include "protos_json/db_proto.hh"
 #include "protos_json/dynamic_proto.hh"
 #include "protos_json/file_proto.hh"
+#include "protos_json/flange_proto.hh"
 #include "protos_json/hardware_proto.hh"
 #include "protos_json/io_proto.hh"
 #include "protos_json/kin_factor_proto.hh"
@@ -37,12 +39,14 @@
 #include "protos_json/network_proto.hh"
 #include "protos_json/posture_proto.hh"
 #include "protos_json/plugin_proto.hh"
+#include "protos_json/quality_proto.hh"
 #include "protos_json/safety_proto.hh"
 #include "protos_json/signal_proto.hh"
 #include "protos_json/serial_proto.hh"
 #include "protos_json/shortcut_proto.hh"
 #include "protos_json/storage_proto.hh"
 #include "protos_json/structure_proto.hh"
+#include "protos_json/subscribe_proto.hh"
 #include "protos_json/system_proto.hh"
 #include "protos_json/trigger_proto.hh"
 #include "protos_json/upgrade_proto.hh"
@@ -97,6 +101,8 @@ class Robot::RobotImpl {
       const protos_json::db_proto::LoadRequest &req);
   void save_trajectory(
       const protos_json::motion_proto::SaveTrajectoryRequest &req);
+  protos_json::motion_proto::MotionIndex move_trajectory(
+      const protos_json::db_proto::LoadRequest &req);
   void start_record_trajectory(
       const protos_json::motion_proto::StartRecordTrajectoryRequest &req);
   void end_record_trajectory(
@@ -117,6 +123,15 @@ class Robot::RobotImpl {
   protos_json::system_proto::SoftwareInfo get_software_info();
   protos_json::network_proto::HttpResponse http(
       const protos_json::network_proto::HttpRequest &req);
+  void clean(const protos_json::backup_proto::Options &req);
+  void backup(const protos_json::backup_proto::BackupRequest &req);
+  protos_json::backup_proto::BackupInfo get_backup_info(
+      const protos_json::backup_proto::GetBackupInfoRequest &req);
+  void restore(const protos_json::backup_proto::RestoreRequest &req);
+  void set_virtual_ip(
+      const protos_json::system_proto::SetVirtualIpRequest &req);
+  void sub_robot_state(
+      const protos_json::subscribe_proto::SubscribeRequest &req);
   protos_json::system_proto::GetBoxDevicesResponse get_box_devices(
       const protos_json::system_proto::GetBoxDevicesRequest &req);
   protos_json::db_proto::Dirs get_dirs();
@@ -141,6 +156,15 @@ class Robot::RobotImpl {
   protos_json::db_proto::LoadListResponse load_led_style_list(
       const protos_json::db_proto::LoadListRequest &req);
   protos_json::motor_proto::ServoParams get_servo_params();
+  void set_servo_params(const protos_json::motor_proto::ServoParams &req);
+  void find_zero();
+  void set_zero(const protos_json::motor_proto::SetZeroRequest &req);
+  void set_extra_servo_params(
+      const protos_json::motor_proto::SetExtraServoParamsRequest &req);
+  void reset_extra_servo_params(
+      const protos_json::motor_proto::ResetExtraServoParamsRequest &req);
+  void set_flange_baud_rate(
+      const protos_json::flange_proto::SetFlangeBaudRateRequest &req);
   protos_json::motion_proto::Wrench get_tcp_force();
   void set_tcp_force(const protos_json::motion_proto::Wrench &req);
   void set_force_mode_sensor(
@@ -166,12 +190,24 @@ class Robot::RobotImpl {
   protos_json::plugin_proto::CommandStdout get_plugin_daemon_stdout(
       const protos_json::plugin_proto::PluginIndex &req);
   protos_json::message_proto::Messages get_messages();
+  void sub_message(const protos_json::subscribe_proto::SubscribeRequest &req);
   protos_json::hardware_proto::OtaState get_ota_state();
+  void start_ota(const protos_json::hardware_proto::StartOtaRequest &req);
+  void switch_partition(
+      const protos_json::hardware_proto::SwitchPartitionRequest &req);
   protos_json::upgrade_proto::CheckUpgradeResponse check_upgrade();
+  void start_upgrade();
   protos_json::upgrade_proto::CommandStdout get_upgrade_stdout();
+  protos_json::quality_proto::BoxTestResponse box_test(
+      const protos_json::quality_proto::EmptyRequest &req);
+  protos_json::quality_proto::InitRobotResponse init_robot(
+      const protos_json::quality_proto::InitRobotRequest &req);
   protos_json::system_proto::PhyData get_phy_data();
+  void sub_phy_data(const protos_json::subscribe_proto::SubscribeRequest &req);
   protos_json::kinematic_proto::KinData get_kin_data();
+  void sub_kin_data(const protos_json::subscribe_proto::SubscribeRequest &req);
   protos_json::kinematic_proto::DhParams get_dh();
+  void set_dh(const protos_json::kinematic_proto::DhParams &req);
   protos_json::io_proto::GetDioPinResponse get_di(
       const protos_json::io_proto::GetDioPinRequest &req);
   protos_json::io_proto::GetDioPinsResponse get_dis(
@@ -195,6 +231,8 @@ class Robot::RobotImpl {
       const protos_json::io_proto::GetDioModeRequest &req);
   protos_json::io_proto::GetDiosModeResponse get_dios_mode(
       const protos_json::io_proto::GetDiosModeRequest &req);
+  void sub_buttons_status(
+      const protos_json::subscribe_proto::SubscribeRequest &req);
   void enable_button(const protos_json::io_proto::ButtonIndex &req);
   void disable_button(const protos_json::io_proto::ButtonIndex &req);
   void set_ao(const protos_json::io_proto::SetAoPinRequest &req);
@@ -223,6 +261,8 @@ class Robot::RobotImpl {
   protos_json::control_proto::Tasks load_running_tasks();
   protos_json::control_proto::TaskStdout get_task_stdout(
       const protos_json::control_proto::TaskIndex &req);
+  void sub_task_stdout(
+      const protos_json::subscribe_proto::SubscribeRequest &req);
   protos_json::control_proto::TaskStdout wait_task(
       const protos_json::control_proto::TaskIndex &req);
   void pause_task(const protos_json::control_proto::PauseRequest &req);

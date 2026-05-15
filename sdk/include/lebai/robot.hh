@@ -163,6 +163,25 @@ struct SoftwareInfoData {
   std::map<std::string, SoftwareItemInfoData> software; /*!< 软件信息. */
 };
 
+struct BackupOptionsData {
+  bool tmp = false;
+  bool syslog = false;
+  bool arm = false;
+  bool config = false;
+  bool data = false;
+  bool file = false;
+  bool docker = false;
+  bool ds = false;
+};
+
+struct BackupInfoData {
+  SystemInfoData system;
+  RobotInfoData robot;
+  HardwareInfoData hardware;
+  SoftwareInfoData software;
+  BackupOptionsData option;
+};
+
 struct HttpRequestData {
   std::string method;                         /*!< HTTP方法. */
   std::string url;                            /*!< 请求URL. */
@@ -245,6 +264,18 @@ struct ServoParamData {
   double speed_kp = 0.0;          /*!< 速度环KP. */
   double speed_it = 0.0;          /*!< 速度环IT. */
   double torque_cmd_filter = 0.0; /*!< 力矩命令滤波. */
+};
+
+struct ExtraServoParamData {
+  double acc_position_kp = 0.0;
+  double acc_speed_kp = 0.0;
+  double acc_speed_it = 0.0;
+  double uni_position_kp = 0.0;
+  double uni_speed_kp = 0.0;
+  double uni_speed_it = 0.0;
+  double dec_position_kp = 0.0;
+  double dec_speed_kp = 0.0;
+  double dec_speed_it = 0.0;
 };
 
 struct WrenchData {
@@ -913,6 +944,11 @@ class Robot {
    * @return HTTP响应.
    */
   HttpResponseData http(HttpRequestData request);
+  void clean(const BackupOptionsData &option);
+  void backup(const std::string &file, const BackupOptionsData &option);
+  BackupInfoData get_backup_info(const std::string &file);
+  void restore(const std::string &file, const BackupOptionsData &option);
+  void set_virtual_ip(const std::string &ifname, const std::string &ip);
   /**
    * @brief 获取控制箱dev设备列表
    *
@@ -1024,6 +1060,14 @@ class Robot {
    * @return 伺服参数列表
    */
   std::vector<ServoParamData> get_servo_params();
+  void set_servo_params(const std::vector<ServoParamData> &params);
+  void find_zero();
+  void set_zero(const std::vector<double> &pose,
+                const std::vector<bool> &valids);
+  void set_extra_servo_params(const std::vector<ExtraServoParamData> &params,
+                              const std::vector<bool> &valids);
+  void reset_extra_servo_params(const std::vector<bool> &valids);
+  void set_flange_baud_rate(unsigned int baud_rate);
   /**
    * @brief 获取末端受力
    *
@@ -1144,6 +1188,20 @@ class Robot {
    * @return 升级输出
    */
   CommandStdoutData get_upgrade_stdout();
+  void sub_buttons_status(uint64_t interval_min, uint64_t interval_max);
+  void sub_kin_data(uint64_t interval_min, uint64_t interval_max);
+  void sub_message(uint64_t interval_min, uint64_t interval_max);
+  void sub_robot_state(uint64_t interval_min, uint64_t interval_max);
+  void sub_phy_data(uint64_t interval_min, uint64_t interval_max);
+  void sub_task_stdout(uint64_t interval_min, uint64_t interval_max);
+  void start_ota(const std::string &address, const std::string &partition,
+                 const std::string &file);
+  void switch_partition(const std::string &address,
+                        const std::string &partition);
+  void start_upgrade();
+  int box_test();
+  std::string init_robot(const std::string &time, const std::string &auth,
+                         const RobotInfoData &info);
   /**
    * @brief 获取机械臂物理数据
    *
@@ -1782,6 +1840,7 @@ class Robot {
    *  @return DH参数列表.
    */
   std::vector<DhParamData> get_dh();
+  void set_dh(const std::vector<DhParamData> &params);
   /**
    *  @brief 设置速度因子.
    *
@@ -1967,6 +2026,7 @@ class Robot {
    */
   void save_trajectory(std::string name, TrajectoryData trajectory,
                        std::string dir = "");
+  unsigned int move_trajectory(std::string name, std::string dir = "");
   /**
    * @brief 开始记录轨迹.
    *

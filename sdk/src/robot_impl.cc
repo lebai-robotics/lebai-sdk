@@ -182,6 +182,12 @@ void Robot::RobotImpl::save_trajectory(
   rpc_client_->Call<void>("save_trajectory", {req});
 }
 
+protos_json::motion_proto::MotionIndex Robot::RobotImpl::move_trajectory(
+    const protos_json::db_proto::LoadRequest &req) {
+  return rpc_client_->Call<protos_json::motion_proto::MotionIndex>(
+      "move_trajectory", {req});
+}
+
 void Robot::RobotImpl::start_record_trajectory(
     const protos_json::motion_proto::StartRecordTrajectoryRequest &req) {
   rpc_client_->Call<void>("start_record_trajectory", {req});
@@ -256,6 +262,36 @@ protos_json::network_proto::HttpResponse Robot::RobotImpl::http(
     const protos_json::network_proto::HttpRequest &req) {
   return rpc_client_->Call<protos_json::network_proto::HttpResponse>("http",
                                                                      {req});
+}
+
+void Robot::RobotImpl::clean(const protos_json::backup_proto::Options &req) {
+  rpc_client_->Call<void>("clean", {req});
+}
+
+void Robot::RobotImpl::backup(
+    const protos_json::backup_proto::BackupRequest &req) {
+  rpc_client_->Call<void>("backup", {req});
+}
+
+protos_json::backup_proto::BackupInfo Robot::RobotImpl::get_backup_info(
+    const protos_json::backup_proto::GetBackupInfoRequest &req) {
+  return rpc_client_->Call<protos_json::backup_proto::BackupInfo>(
+      "get_backup_info", {req});
+}
+
+void Robot::RobotImpl::restore(
+    const protos_json::backup_proto::RestoreRequest &req) {
+  rpc_client_->Call<void>("restore", {req});
+}
+
+void Robot::RobotImpl::set_virtual_ip(
+    const protos_json::system_proto::SetVirtualIpRequest &req) {
+  rpc_client_->Call<void>("set_virtual_ip", {req});
+}
+
+void Robot::RobotImpl::sub_robot_state(
+    const protos_json::subscribe_proto::SubscribeRequest &req) {
+  rpc_client_->Call<void>("sub_robot_state", {req});
 }
 
 protos_json::system_proto::GetBoxDevicesResponse
@@ -359,6 +395,33 @@ protos_json::motor_proto::ServoParams Robot::RobotImpl::get_servo_params() {
       "get_servo_params", {});
 }
 
+void Robot::RobotImpl::set_servo_params(
+    const protos_json::motor_proto::ServoParams &req) {
+  rpc_client_->Call<void>("set_servo_params", {req});
+}
+
+void Robot::RobotImpl::find_zero() { rpc_client_->Call<void>("find_zero", {}); }
+
+void Robot::RobotImpl::set_zero(
+    const protos_json::motor_proto::SetZeroRequest &req) {
+  rpc_client_->Call<void>("set_zero", {req});
+}
+
+void Robot::RobotImpl::set_extra_servo_params(
+    const protos_json::motor_proto::SetExtraServoParamsRequest &req) {
+  rpc_client_->Call<void>("set_extra_servo_params", {req});
+}
+
+void Robot::RobotImpl::reset_extra_servo_params(
+    const protos_json::motor_proto::ResetExtraServoParamsRequest &req) {
+  rpc_client_->Call<void>("reset_extra_servo_params", {req});
+}
+
+void Robot::RobotImpl::set_flange_baud_rate(
+    const protos_json::flange_proto::SetFlangeBaudRateRequest &req) {
+  rpc_client_->Call<void>("set_flange_baud_rate", {req});
+}
+
 protos_json::motion_proto::Wrench Robot::RobotImpl::get_tcp_force() {
   return rpc_client_->Call<protos_json::motion_proto::Wrench>(
       "get_tcp_force", {});
@@ -446,9 +509,24 @@ protos_json::message_proto::Messages Robot::RobotImpl::get_messages() {
       "get_messages", {});
 }
 
+void Robot::RobotImpl::sub_message(
+    const protos_json::subscribe_proto::SubscribeRequest &req) {
+  rpc_client_->Call<void>("sub_message", {req});
+}
+
 protos_json::hardware_proto::OtaState Robot::RobotImpl::get_ota_state() {
   return rpc_client_->Call<protos_json::hardware_proto::OtaState>(
       "get_ota_state", {});
+}
+
+void Robot::RobotImpl::start_ota(
+    const protos_json::hardware_proto::StartOtaRequest &req) {
+  rpc_client_->Call<void>("start_ota", {req});
+}
+
+void Robot::RobotImpl::switch_partition(
+    const protos_json::hardware_proto::SwitchPartitionRequest &req) {
+  rpc_client_->Call<void>("switch_partition", {req});
 }
 
 protos_json::upgrade_proto::CheckUpgradeResponse
@@ -457,10 +535,26 @@ Robot::RobotImpl::check_upgrade() {
       "check_upgrade", {});
 }
 
+void Robot::RobotImpl::start_upgrade() {
+  rpc_client_->Call<void>("start_upgrade", {});
+}
+
 protos_json::upgrade_proto::CommandStdout
 Robot::RobotImpl::get_upgrade_stdout() {
   return rpc_client_->Call<protos_json::upgrade_proto::CommandStdout>(
       "get_upgrade_stdout", {});
+}
+
+protos_json::quality_proto::BoxTestResponse Robot::RobotImpl::box_test(
+    const protos_json::quality_proto::EmptyRequest &req) {
+  return rpc_client_->Call<protos_json::quality_proto::BoxTestResponse>(
+      "box_test", {req});
+}
+
+protos_json::quality_proto::InitRobotResponse Robot::RobotImpl::init_robot(
+    const protos_json::quality_proto::InitRobotRequest &req) {
+  return rpc_client_->Call<protos_json::quality_proto::InitRobotResponse>(
+      "init_robot", {req});
 }
 
 protos_json::system_proto::PhyData Robot::RobotImpl::get_phy_data() {
@@ -468,14 +562,29 @@ protos_json::system_proto::PhyData Robot::RobotImpl::get_phy_data() {
       "get_phy_data", {});
 }
 
+void Robot::RobotImpl::sub_phy_data(
+    const protos_json::subscribe_proto::SubscribeRequest &req) {
+  rpc_client_->Call<void>("sub_phy_data", {req});
+}
+
 protos_json::kinematic_proto::KinData Robot::RobotImpl::get_kin_data() {
   return rpc_client_->Call<protos_json::kinematic_proto::KinData>(
       "get_kin_data", {});
 }
 
+void Robot::RobotImpl::sub_kin_data(
+    const protos_json::subscribe_proto::SubscribeRequest &req) {
+  rpc_client_->Call<void>("sub_kin_data", {req});
+}
+
 protos_json::kinematic_proto::DhParams Robot::RobotImpl::get_dh() {
   return rpc_client_->Call<protos_json::kinematic_proto::DhParams>(
       "get_dh", {});
+}
+
+void Robot::RobotImpl::set_dh(
+    const protos_json::kinematic_proto::DhParams &req) {
+  rpc_client_->Call<void>("set_dh", {req});
 }
 
 protos_json::io_proto::GetDioPinResponse Robot::RobotImpl::get_di(
@@ -542,6 +651,11 @@ protos_json::io_proto::GetDiosModeResponse Robot::RobotImpl::get_dios_mode(
     const protos_json::io_proto::GetDiosModeRequest &req) {
   return rpc_client_->Call<protos_json::io_proto::GetDiosModeResponse>(
       "get_dios_mode", {req});
+}
+
+void Robot::RobotImpl::sub_buttons_status(
+    const protos_json::subscribe_proto::SubscribeRequest &req) {
+  rpc_client_->Call<void>("sub_buttons_status", {req});
 }
 
 void Robot::RobotImpl::enable_button(
@@ -672,6 +786,11 @@ protos_json::control_proto::TaskStdout Robot::RobotImpl::get_task_stdout(
     const protos_json::control_proto::TaskIndex &req) {
   return rpc_client_->Call<protos_json::control_proto::TaskStdout>(
       "get_task_stdout", {req});
+}
+
+void Robot::RobotImpl::sub_task_stdout(
+    const protos_json::subscribe_proto::SubscribeRequest &req) {
+  rpc_client_->Call<void>("sub_task_stdout", {req});
 }
 
 protos_json::control_proto::TaskStdout Robot::RobotImpl::wait_task(
