@@ -98,7 +98,14 @@ sudo pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.tx
 # 如果需要生成文档，还需要安装doxygen
 sudo apt install doxygen graphviz
 # 如果需要生成python3的wrapper包
-sudo apt install python3-dev python3-setuptools
+sudo apt install python3-dev python3-setuptools python3-venv
+```
+
+如果系统包中的 SWIG 不可用，推荐用 `uv` 安装用户级 SWIG 命令，避免写入
+`/usr/local` 或系统 Python 目录:
+```bash
+uv tool install swig
+swig -version
 ```
 
 
@@ -148,13 +155,18 @@ cpack
 
 ### Python
 build目录下会生成python的whl包，可以直接使用:
-```python
+```bash
 cd build/python/dist
 ## 安装
 pip3 install pylebai-xxx.whl
 ### XXX取决于您的sdk版本，python版本，操作系统平台.
 ## 卸载
 pip3 uninstall pylebai
+```
+
+也可以在源码目录用干净 venv 验证 whl 是否可导入:
+```bash
+scripts/python_wheel_smoke.sh build python3.10
 ```
 
 

@@ -1133,7 +1133,7 @@ class Robot {
    */
   CommandStdoutData run_plugin_cmd(
       const std::string &name,
-      const std::vector<std::string> &params = std::vector<std::string>{});
+      const std::vector<std::string> &params = std::vector<std::string>());
   /**
    * @brief 启用插件.
    *

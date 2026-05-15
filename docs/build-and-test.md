@@ -14,11 +14,23 @@ The existing docs and CI workflows expect:
 - CMake
 - Python and `pip`
 - SWIG when building bindings
+- `python3-venv` when running the local Python wheel smoke check
 - Doxygen and Graphviz when building docs
 - Maven and a JDK when building Java bindings
 - the `.NET` SDK when building `.NET` bindings
 
 The CI workflow in `.github/workflows/linux_cpp_build.yml` is the best reference for a known-good Linux build sequence.
+
+If the distro SWIG package is unavailable or too old, install a user-level SWIG
+executable with `uv` instead of writing into system Python directories:
+
+```bash
+uv tool install swig
+swig -version
+```
+
+Avoid `uv pip install --system swig` for local development unless the shell has
+permission to write to the system site-packages directory.
 
 ### Windows
 
@@ -87,6 +99,15 @@ but the useful SDK test target is the forwarded localhost port. Do not use
 ```bash
 cmake -S . -B build -DBUILD_PYTHON=ON
 cmake --build build --target python_package
+```
+
+### Wheel smoke check
+
+After building `python_package`, install the generated wheel into a clean venv
+and import the SWIG modules:
+
+```bash
+scripts/python_wheel_smoke.sh build python3.10
 ```
 
 Notes:
