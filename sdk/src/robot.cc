@@ -77,6 +77,18 @@ static protos_json::posture_proto::CartesianPose convertToPosturePose(
   return typed_pose;
 }
 
+static protos_json::motion_proto::CartesianPose convertToMotionPose(
+    const CartesianPose &pose) {
+  protos_json::motion_proto::CartesianPose typed_pose;
+  typed_pose.position.x = pose.count("x") ? pose.at("x") : 0.0;
+  typed_pose.position.y = pose.count("y") ? pose.at("y") : 0.0;
+  typed_pose.position.z = pose.count("z") ? pose.at("z") : 0.0;
+  typed_pose.rotation.euler_zyx.x = pose.count("rx") ? pose.at("rx") : 0.0;
+  typed_pose.rotation.euler_zyx.y = pose.count("ry") ? pose.at("ry") : 0.0;
+  typed_pose.rotation.euler_zyx.z = pose.count("rz") ? pose.at("rz") : 0.0;
+  return typed_pose;
+}
+
 static CartesianPose convertToPositionPose(
     const protos_json::posture_proto::Position &position) {
   CartesianPose pose;
@@ -1034,6 +1046,24 @@ void Robot::set_force_mode_param(double damping, double gain,
   req.gain = gain;
   req.max_vel = max_vel;
   impl_->set_force_mode_param(req);
+}
+
+void Robot::start_force_mode(const CartesianPose &limit,
+                             const WrenchData &wrench) {
+  if (wrench.force.size() != 3 || wrench.torque.size() != 3) {
+    throw std::invalid_argument(
+        "force mode force and torque must both have 3 values");
+  }
+
+  protos_json::motion_proto::StartForceModeRequest req;
+  req.limit = convertToMotionPose(limit);
+  req.wrench.force.x = wrench.force.at(0);
+  req.wrench.force.y = wrench.force.at(1);
+  req.wrench.force.z = wrench.force.at(2);
+  req.wrench.torque.x = wrench.torque.at(0);
+  req.wrench.torque.y = wrench.torque.at(1);
+  req.wrench.torque.z = wrench.torque.at(2);
+  impl_->start_force_mode(req);
 }
 
 void Robot::end_force_mode() {

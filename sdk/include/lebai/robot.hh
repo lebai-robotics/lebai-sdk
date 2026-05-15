@@ -1053,6 +1053,13 @@ class Robot {
   void set_force_mode_param(double damping, double gain,
                             const std::vector<double> &max_vel);
   /**
+   * @brief 开始力控模式.
+   *
+   * @param limit 末端限速.
+   * @param wrench 控制力.
+   */
+  void start_force_mode(const CartesianPose &limit, const WrenchData &wrench);
+  /**
    * @brief 结束力控模式.
    */
   void end_force_mode();

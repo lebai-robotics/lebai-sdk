@@ -528,6 +528,22 @@ TEST(JsonMotionProtoTest, WrenchParsesControllerPayload) {
   EXPECT_DOUBLE_EQ(parsed.torque.z, 6.0);
 }
 
+TEST(JsonMotionProtoTest, StartForceModeRequestSerializesLimitAndWrench) {
+  protos_json::motion_proto::StartForceModeRequest req;
+  req.limit.position.x = 0.1;
+  req.limit.rotation.euler_zyx.z = 0.2;
+  req.wrench.force.x = 1.0;
+  req.wrench.torque.z = 2.0;
+
+  const nlohmann::json json = req;
+
+  EXPECT_DOUBLE_EQ(json.at("limit").at("position").at("x"), 0.1);
+  EXPECT_DOUBLE_EQ(json.at("limit").at("rotation").at("euler_zyx").at("z"),
+                   0.2);
+  EXPECT_DOUBLE_EQ(json.at("wrench").at("force").at("x"), 1.0);
+  EXPECT_DOUBLE_EQ(json.at("wrench").at("torque").at("z"), 2.0);
+}
+
 TEST(JsonMotionProtoTest, TrajectoryParsesControllerPayload) {
   protos_json::motion_proto::StartRecordTrajectoryRequest start_req;
   start_req.kind = "PVAT";

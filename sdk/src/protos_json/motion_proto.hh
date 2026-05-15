@@ -84,6 +84,12 @@ struct CartesianPose {
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(CartesianPose, position, rotation)
 };
 
+struct StartForceModeRequest {
+  CartesianPose limit;
+  Wrench wrench;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(StartForceModeRequest, limit, wrench)
+};
+
 struct CartesianMovePose {
   int kind{};
   CartesianPose cart;

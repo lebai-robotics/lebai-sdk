@@ -175,6 +175,16 @@ TEST_F(RobotTest, TestForceModeConfigSmoke) {
   EXPECT_NO_THROW(robot_.end_force_mode());
 }
 
+TEST_F(RobotTest, TestStartForceModeSmoke) {
+  const l_master::CartesianPose limit{{"x", 0.0},  {"y", 0.0},  {"z", 0.0},
+                                      {"rx", 0.0}, {"ry", 0.0}, {"rz", 0.0}};
+  const l_master::WrenchData wrench{{0.0, 0.0, 0.0}, {0.0, 0.0, 0.0}};
+
+  EXPECT_NO_THROW(robot_.start_sys());
+  EXPECT_NO_THROW(robot_.start_force_mode(limit, wrench));
+  EXPECT_NO_THROW(robot_.end_force_mode());
+}
+
 TEST_F(RobotTest, TestPluginsSmoke) {
   const auto store = robot_.get_plugin_store();
   EXPECT_FALSE(store.empty());

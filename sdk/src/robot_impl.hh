@@ -147,6 +147,8 @@ class Robot::RobotImpl {
       const protos_json::motion_proto::SetForceModeSensorRequest &req);
   void set_force_mode_param(
       const protos_json::motion_proto::SetForceModeParamRequest &req);
+  void start_force_mode(
+      const protos_json::motion_proto::StartForceModeRequest &req);
   void end_force_mode();
   protos_json::plugin_proto::Plugins load_plugins();
   protos_json::plugin_proto::PluginStore get_plugin_store();

@@ -379,6 +379,11 @@ void Robot::RobotImpl::set_force_mode_param(
   rpc_client_->Call<void>("set_force_mode_param", {req});
 }
 
+void Robot::RobotImpl::start_force_mode(
+    const protos_json::motion_proto::StartForceModeRequest &req) {
+  rpc_client_->Call<void>("start_force_mode", {req});
+}
+
 void Robot::RobotImpl::end_force_mode() {
   rpc_client_->Call<void>("end_force_mode", {});
 }
