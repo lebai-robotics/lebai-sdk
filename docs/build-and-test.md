@@ -19,6 +19,31 @@ The existing docs and CI workflows expect:
 - Maven and a JDK when building Java bindings
 - the `.NET` SDK when building `.NET` bindings
 
+On Ubuntu 22.04, a practical development setup is:
+
+```bash
+sudo apt-get update
+sudo apt-get install -y \
+  build-essential \
+  cmake \
+  git \
+  python3 \
+  python3-pip \
+  python3-venv \
+  doxygen \
+  graphviz \
+  default-jdk \
+  maven \
+  dotnet-sdk-8.0
+```
+
+For Python packaging, keep `build`, `wheel`, and `twine` available in the
+environment used to build wheels:
+
+```bash
+python3 -m pip install --user build wheel twine
+```
+
 The CI workflow in `.github/workflows/linux_cpp_build.yml` is the best reference for a known-good Linux build sequence.
 
 If the distro SWIG package is unavailable or too old, install a user-level SWIG
@@ -35,6 +60,28 @@ permission to write to the system site-packages directory.
 ### Windows
 
 The project is set up for CMake with Visual Studio generators as well as command-line CMake builds. The top-level `README.md` notes that Windows binding support has had limitations, so verify language-specific behavior before claiming Windows parity.
+
+Install these tools for local Windows development:
+
+- Visual Studio 2022 with the "Desktop development with C++" workload
+- CMake, either from Visual Studio or a standalone installer
+- Python 3.8 or newer when building Python wheels
+- SWIG 4.x on `PATH` when building bindings
+- .NET SDK 8.x when building the C# package
+- JDK and Maven when building Java bindings
+
+Windows C# native package builds use the static MSVC runtime (`/MT`) so C#
+consumers should not need to install the Visual C++ redistributable only to load
+`lebai-native.dll`.
+
+### Tool Notes
+
+The main build surfaces are:
+
+- C++: compiler + CMake
+- Python: CMake + SWIG + Python development headers/modules
+- C#: CMake + SWIG + .NET SDK 8
+- Java: CMake + SWIG + JDK + Maven
 
 ## Common Configure Options
 
@@ -138,8 +185,13 @@ Notes:
 - `.NET` packaging is driven by `cmake/dotnet.cmake`
 - generated projects live under `build/dotnet`
 - package projects are built and packed with the `dotnet` CLI
+- the main `lebai` package includes the generated managed assembly and native
+  assets staged under `runtimes/<rid>/native`
+- split packages named `lebai.runtime.<rid>` may still be generated for
+  compatibility, but the main package does not depend on all runtime packages
+- use `DOTNET_CLI_HOME=/tmp/dotnet-cli-home` in restricted environments where
+  the .NET SDK cannot write to the default home directory
 - current configuration targets `net48` and `net8.0` when `USE_DOTNET_8=ON`
-- existing `docs/dotnet.md` says the supported path is Linux-first and Windows should be verified carefully
 
 ## Java Build
 

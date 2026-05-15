@@ -1,14 +1,23 @@
 # .net平台应用文档
 
-**目前.net仅支持linux平台，windows平台还存在问题.**
+**.NET 包目标支持 Linux x64、Linux arm64 和 Windows x64；具体平台可用性以
+CI 产物和发布包内容为准。**
 
 [Nuget包地址](https://www.nuget.org/packages/lebai/)
 
-## 通过nuget安装'
+## 通过 NuGet 安装
 
 ```bash
 dotnet add package lebai
 ```
+
+`lebai` 包包含托管 C# 程序集，并在 NuGet 的 `runtimes/<rid>/native`
+目录中携带对应平台的原生库。为了兼容历史构建，仓库仍可能生成
+`lebai.runtime.<rid>` 这类运行时包，但普通用户不应该需要手动安装所有
+运行时包。
+
+Windows 的 C# 原生库按静态 MSVC runtime (`/MT`) 构建，因此用户不应该只
+为了加载 `lebai-native.dll` 而额外安装 Visual C++ Redistributable。
 
 ## 示例工程运行
 
@@ -63,6 +72,4 @@ robot.movej(jp1, 1.0, 1.0, 0.0, 0.0);
 dotnet build
 # run your console application.
 ```
-
-
 

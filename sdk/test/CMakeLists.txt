@@ -49,6 +49,12 @@ set_target_properties(test_modbus_rtu_client PROPERTIES
   ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 add_test(NAME TestModbusRtuClient COMMAND test_modbus_rtu_client WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/sdk/test)
 
+add_test(
+  NAME DotnetPackagingTemplates
+  COMMAND ${CMAKE_COMMAND}
+    -DPROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR}
+    -P ${CMAKE_CURRENT_SOURCE_DIR}/test_dotnet_packaging_templates.cmake)
+
 add_executable(test_robot test_robot.cc)
 if(DEFINED TEST_ROBOT_IP)
   target_compile_definitions(test_robot PRIVATE TEST_L_MASTER_IP="${TEST_ROBOT_IP}")

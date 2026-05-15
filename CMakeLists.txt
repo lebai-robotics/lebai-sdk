@@ -5,6 +5,9 @@ endif()
 if(POLICY CMP0135)
   cmake_policy(SET CMP0135 NEW)
 endif()
+if(POLICY CMP0091)
+  cmake_policy(SET CMP0091 NEW)
+endif()
 # SWIG policies - use modern SWIG target naming
 if(POLICY CMP0078)
   cmake_policy(SET CMP0078 NEW)
@@ -21,6 +24,10 @@ project(
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Keep Windows native packages self-contained for C# users that do not have the
+# Visual C++ redistributable installed.
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 set(PROJECT_NAMESPACE lebai)
 

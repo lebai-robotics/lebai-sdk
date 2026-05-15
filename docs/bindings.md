@@ -61,6 +61,16 @@ The `.NET` build creates:
 
 The runtime identifier is selected from the current platform, for example `linux-x64`, `linux-arm64`, or `win-x64`.
 
+The main `lebai` NuGet package directly packs staged native assets from
+`runtimes/<rid>/native`. It does not declare `PackageReference` dependencies on
+every `lebai.runtime.<rid>` package, because that causes wrong-platform runtime
+packages such as `lebai.runtime.linux-x64` to be installed on Windows.
+
+Per-RID runtime packages may still be built as compatibility artifacts. Product
+release CI must aggregate native assets from all release platforms before
+publishing a single multi-RID `lebai` package to NuGet; otherwise the published
+main package only contains the RID built by that job.
+
 ### Target frameworks
 
 When `USE_DOTNET_8=ON`, the generated managed package targets:
@@ -76,7 +86,9 @@ SWIG targets exist for:
 - `dotnet_zeroconf`
 - `dotnet_gripper`
 
-But the top-level native package target currently links only `dotnet_l_master` and `dotnet_zeroconf` into `lebai-native`. If you are adding or fixing gripper support for `.NET`, verify the full package path, not just the SWIG compilation step.
+All three targets are linked into `lebai-native`. If you are adding or fixing
+binding support, verify the full package path and a local install smoke test,
+not just the SWIG compilation step.
 
 ## Java
 
