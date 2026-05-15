@@ -913,6 +913,7 @@ TEST_F(RobotTest, TestFileSmoke) {
   const std::string source = prefix + ".txt";
   const std::string renamed_name = prefix + "_renamed.txt";
   const std::string archive = prefix + ".zip";
+  const std::string downloaded_name = prefix + "_download.html";
 
   EXPECT_NO_THROW(robot_.save_file("", source, false, "hello"));
 
@@ -931,6 +932,12 @@ TEST_F(RobotTest, TestFileSmoke) {
   const auto zipped = robot_.load_zip_list(archive, "", prefix, ".txt");
   EXPECT_FALSE(zipped.empty());
   EXPECT_NO_THROW(robot_.unzip("", archive, {renamed_name}, ""));
+
+  EXPECT_NO_THROW(
+      robot_.download_file("", downloaded_name, "http://127.0.0.1/"));
+  const auto downloaded = robot_.load_file("", downloaded_name);
+  EXPECT_FALSE(std::get<0>(downloaded));
+  EXPECT_FALSE(std::get<1>(downloaded).empty());
 }
 
 TEST_F(RobotTest, TestSafetyReadSmoke) {

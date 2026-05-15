@@ -728,6 +728,11 @@ void Robot::RobotImpl::rename_file(
   rpc_client_->Call<void>("rename_file", {req});
 }
 
+void Robot::RobotImpl::download_file(
+    const protos_json::file_proto::DownloadFileRequest &req) {
+  rpc_client_->Call<void>("download_file", {req});
+}
+
 protos_json::file_proto::File Robot::RobotImpl::load_file(
     const protos_json::file_proto::FileIndex &req) {
   return rpc_client_->Call<protos_json::file_proto::File>("load_file", {req});

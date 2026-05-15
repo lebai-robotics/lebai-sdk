@@ -239,6 +239,7 @@ class Robot::RobotImpl {
       const protos_json::kinematic_proto::PoseRequest &req);
   void save_file(const protos_json::file_proto::SaveFileRequest &req);
   void rename_file(const protos_json::file_proto::RenameFileRequest &req);
+  void download_file(const protos_json::file_proto::DownloadFileRequest &req);
   protos_json::file_proto::File load_file(
       const protos_json::file_proto::FileIndex &req);
   protos_json::file_proto::LoadFileListResponse load_file_list(

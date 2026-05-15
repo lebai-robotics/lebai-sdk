@@ -50,6 +50,13 @@ struct RenameFileRequest {
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(RenameFileRequest, from, to)
 };
 
+struct DownloadFileRequest {
+  std::string dir;
+  std::string name;
+  std::string url;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(DownloadFileRequest, dir, name, url)
+};
+
 struct ZipRequest {
   FileIndex zip;
   std::vector<std::string> files;

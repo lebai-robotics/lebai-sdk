@@ -1660,6 +1660,16 @@ class Robot {
                    const std::string &to_dir, const std::string &to_name);
 
   /**
+   * @brief 通过URL下载文件到控制器.
+   *
+   * @param dir: 保存的文件路径.
+   * @param name: 保存的文件名.
+   * @param url: 下载URL.
+   */
+  void download_file(const std::string &dir, const std::string &name,
+                     const std::string &url);
+
+  /**
    * @brief 查询文件
    *
    * @param dir: 文件的目录

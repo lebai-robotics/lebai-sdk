@@ -637,6 +637,15 @@ TEST(JsonStorageProtoTest, ItemsParsesControllerPayload) {
 }
 
 TEST(JsonFileProtoTest, LoadFileListParsesControllerPayload) {
+  protos_json::file_proto::DownloadFileRequest req;
+  req.dir = "";
+  req.name = "sdk_download_smoke.html";
+  req.url = "http://127.0.0.1/";
+  const nlohmann::json req_json = req;
+
+  EXPECT_EQ(req_json.at("name"), "sdk_download_smoke.html");
+  EXPECT_EQ(req_json.at("url"), "http://127.0.0.1/");
+
   const auto json = nlohmann::json::parse(R"({
     "files":[{"name":"sdk_file_smoke.txt","is_dir":false}]
   })");

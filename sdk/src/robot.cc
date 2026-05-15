@@ -1874,6 +1874,15 @@ void Robot::rename_file(const std::string &from_dir,
   impl_->rename_file(req);
 }
 
+void Robot::download_file(const std::string &dir, const std::string &name,
+                          const std::string &url) {
+  protos_json::file_proto::DownloadFileRequest req;
+  req.dir = dir;
+  req.name = name;
+  req.url = url;
+  impl_->download_file(req);
+}
+
 std::tuple<bool, std::string> Robot::load_file(const std::string &dir,
                                                const std::string &name) {
   protos_json::file_proto::FileIndex req;
