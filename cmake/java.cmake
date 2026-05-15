@@ -82,7 +82,7 @@ set(JAVA_SRC_PATH src/main/java/${JAVA_DOMAIN_EXTENSION}/${JAVA_DOMAIN_NAME}/${J
 set(JAVA_TEST_PATH src/test/java/${JAVA_DOMAIN_EXTENSION}/${JAVA_DOMAIN_NAME}/${JAVA_ARTIFACT})
 set(JAVA_RESSOURCES_PATH src/main/resources)
 add_subdirectory(sdk/java)
-target_link_libraries(jni${JAVA_ARTIFACT} PRIVATE jniLMaster jniZeroconf)
+target_link_libraries(jni${JAVA_ARTIFACT} PRIVATE jniLMaster jniZeroconf jniGripper)
 
 #################################
 ##  Java Native Maven Package  ##

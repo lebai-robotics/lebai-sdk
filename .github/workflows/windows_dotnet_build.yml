@@ -8,12 +8,16 @@ jobs:
     runs-on: windows-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v1
+        uses: actions/checkout@v4
       
       - name: Setup .NET 8.0
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
+
+      - name: Install SWIG
+        shell: pwsh
+        run: choco install swig -y
           
       - name: Configure
         run: cmake -S. -Bbuild -G "Visual Studio 17 2022" -DBUILD_DOTNET=ON -DBUILD_DOCUMENTATION=OFF
@@ -25,3 +29,8 @@ jobs:
         with:
           name: lebai-win-x64-nupkg
           path: build/dotnet/packages/*.nupkg        
+      - name: Upload native assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: lebai-dotnet-native-win-x64
+          path: build/dotnet/native-assets/**

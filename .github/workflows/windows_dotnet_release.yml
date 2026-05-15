@@ -3,9 +3,6 @@ run-name: ${{ github.actor }} Windows dotnet release
 on:
   workflow_dispatch:
   workflow_call:
-  push:
-    tags:
-      - v1.*.*
 jobs:
   windows_dotnet_build_and_release:
     runs-on: windows-latest
@@ -24,10 +21,6 @@ jobs:
       - name: Build
         run: cmake --build build
 
-      - name: Upload pacakges
-        run: |
-          cd ./build/dotnet/packages
-          dotnet nuget push lebai.runtime.win-x64.*.nupkg --api-key ${{ secrets.LEBAI_NUGET_KEY }} --source https://api.nuget.org/v3/index.json --skip-duplicate
       - name: Upload package
         uses: actions/upload-artifact@v4
         id: artifact
@@ -35,3 +28,8 @@ jobs:
           name: lebai-win-x64-nupkg
           path: |
             build/dotnet/packages/*.nupkg
+      - name: Upload native assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: lebai-dotnet-native-win-x64
+          path: build/dotnet/native-assets/**

@@ -193,6 +193,16 @@ Notes:
   the .NET SDK cannot write to the default home directory
 - current configuration targets `net48` and `net8.0` when `USE_DOTNET_8=ON`
 
+To assemble a local package from staged native assets, use:
+
+```bash
+bash scripts/dotnet_pack_multirid.sh build-dotnet-multirid dotnet-native-artifacts
+bash scripts/dotnet_smoke_local_package.sh build-dotnet-multirid/dotnet/packages 2.0.0
+```
+
+The release workflow uses the same scripts after downloading native assets from
+Linux x64, Linux arm64, and Windows x64 jobs.
+
 ## Java Build
 
 ```bash

@@ -6,6 +6,18 @@ The C++ library is the source implementation. Python, .NET, and Java bindings ar
 
 In practice, a public API change is not fully integrated until the C++ headers, implementation, and the relevant SWIG wrappers all agree.
 
+The current binding interface files prioritize compatibility with the C++ SDK.
+They are good enough for generated packages, but they are not the final
+idiomatic API design for every language. Prefer incremental cleanup:
+
+- keep the C++ public API as the source of truth for behavior
+- add small language-specific aliases or helper wrappers only when they remove
+  real friction
+- avoid broad renames in SWIG files unless examples, docs, and compatibility
+  notes are updated together
+- keep generated names stable for existing users unless there is a clear 2.x
+  migration reason
+
 ## Binding Inputs
 
 ### Shared C++ source of truth
@@ -71,6 +83,15 @@ release CI must aggregate native assets from all release platforms before
 publishing a single multi-RID `lebai` package to NuGet; otherwise the published
 main package only contains the RID built by that job.
 
+`multi-RID` means the package contains native assets for multiple .NET Runtime
+Identifiers, for example:
+
+- `runtimes/linux-x64/native`
+- `runtimes/linux-arm64/native`
+- `runtimes/win-x64/native`
+
+.NET selects the matching native asset folder for the consumer's target runtime.
+
 ### Target frameworks
 
 When `USE_DOTNET_8=ON`, the generated managed package targets:
@@ -89,6 +110,12 @@ SWIG targets exist for:
 All three targets are linked into `lebai-native`. If you are adding or fixing
 binding support, verify the full package path and a local install smoke test,
 not just the SWIG compilation step.
+
+SWIG can parse Doxygen comments with `-doxygen`, but the resulting C# XML
+documentation is not as polished as hand-authored C# docs. The generated .NET
+projects already enable XML documentation output; useful inline docs require
+either enabling SWIG Doxygen processing for C# or adding targeted SWIG
+documentation features for the public wrapper surface.
 
 ## Java
 
@@ -115,7 +142,9 @@ SWIG targets exist for:
 - `jniZeroconf`
 - `jniGripper`
 
-But the top-level JNI shared library currently links only `jniLMaster` and `jniZeroconf`. If a task touches gripper support for Java, validate the full Maven packaging path and not only the generated wrapper sources.
+All three targets are linked into the top-level JNI shared library. If a task
+touches Java binding support, validate the full Maven packaging path and not
+only the generated wrapper sources.
 
 ## What To Update When API Changes
 

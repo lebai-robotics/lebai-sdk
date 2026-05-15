@@ -1,0 +1,32 @@
+set(ROOT "${PROJECT_SOURCE_DIR}")
+
+function(read_project_file var path)
+  if(NOT EXISTS "${ROOT}/${path}")
+    message(FATAL_ERROR "Expected file to exist: ${path}")
+  endif()
+  file(READ "${ROOT}/${path}" content)
+  set("${var}" "${content}" PARENT_SCOPE)
+endfunction()
+
+function(expect_contains content needle description)
+  string(FIND "${content}" "${needle}" found)
+  if(found EQUAL -1)
+    message(FATAL_ERROR "Expected ${description}: '${needle}'")
+  endif()
+endfunction()
+
+read_project_file(dotnet_release ".github/workflows/dotnet_release.yml")
+read_project_file(release_workflow ".github/workflows/release.yml")
+
+expect_contains("${dotnet_release}" "ubuntu-24.04-arm" "Linux arm64 hosted runner")
+expect_contains("${dotnet_release}" "windows-2022" "Windows x64 hosted runner")
+expect_contains("${dotnet_release}" "rid: linux-x64" "Linux x64 matrix RID")
+expect_contains("${dotnet_release}" "rid: linux-arm64" "Linux arm64 matrix RID")
+expect_contains("${dotnet_release}" "lebai-dotnet-native-${{ matrix.rid }}" "Linux matrix native asset artifact")
+expect_contains("${dotnet_release}" "lebai-dotnet-native-win-x64" "Windows x64 native asset artifact")
+expect_contains("${dotnet_release}" "scripts/dotnet_pack_multirid.sh" "multi-RID pack script")
+expect_contains("${dotnet_release}" "scripts/dotnet_smoke_local_package.sh" "local package smoke script")
+expect_contains("${dotnet_release}" "dotnet nuget push" "NuGet publish step")
+
+expect_contains("${release_workflow}" "uses: ./.github/workflows/dotnet_release.yml" "aggregate .NET release workflow")
+expect_contains("${release_workflow}" "name: lebai-dotnet-nupkg" "aggregate .NET artifact download")

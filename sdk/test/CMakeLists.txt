@@ -55,6 +55,12 @@ add_test(
     -DPROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR}
     -P ${CMAKE_CURRENT_SOURCE_DIR}/test_dotnet_packaging_templates.cmake)
 
+add_test(
+  NAME DotnetCiAggregation
+  COMMAND ${CMAKE_COMMAND}
+    -DPROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR}
+    -P ${CMAKE_CURRENT_SOURCE_DIR}/test_dotnet_ci_aggregation.cmake)
+
 add_executable(test_robot test_robot.cc)
 if(DEFINED TEST_ROBOT_IP)
   target_compile_definitions(test_robot PRIVATE TEST_L_MASTER_IP="${TEST_ROBOT_IP}")
