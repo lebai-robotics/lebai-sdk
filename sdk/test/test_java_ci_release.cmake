@@ -24,7 +24,7 @@ endfunction()
 
 read_project_file(java_cmake "cmake/java.cmake")
 read_project_file(java_release ".github/workflows/java_release.yml")
-read_project_file(java_build ".github/workflows/linux_java_build.yml")
+read_project_file(java_build ".github/workflows/java_build.yml")
 read_project_file(release_workflow ".github/workflows/release.yml")
 read_project_file(pom_native "java/pom-native.xml.in")
 read_project_file(pom_local "java/pom-local.xml.in")
