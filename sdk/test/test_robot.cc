@@ -188,6 +188,11 @@ TEST_F(RobotTest, TestPluginsSmoke) {
   EXPECT_EQ(plugin.name, plugins.front().name);
 }
 
+TEST_F(RobotTest, TestRunPluginCmdSmoke) {
+  const auto stdout_data = robot_.run_plugin_cmd("", {});
+  EXPECT_EQ(stdout_data.code, 0);
+}
+
 TEST_F(RobotTest, TestPluginDaemonStdoutSmoke) {
   const auto stdout_data = robot_.get_plugin_daemon_stdout("");
   EXPECT_EQ(stdout_data.code, 0);

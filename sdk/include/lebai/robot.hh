@@ -1075,6 +1075,15 @@ class Robot {
    */
   PluginInfoData load_plugin(const std::string &name);
   /**
+   * @brief 执行插件命令.
+   *
+   * @param name 插件名称.
+   * @param params 命令参数.
+   */
+  CommandStdoutData run_plugin_cmd(
+      const std::string &name,
+      const std::vector<std::string> &params = std::vector<std::string>{});
+  /**
    * @brief 通过控制器RPC发现机器人设备.
    *
    * @return 设备信息列表.

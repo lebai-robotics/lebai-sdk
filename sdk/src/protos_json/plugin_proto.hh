@@ -41,6 +41,12 @@ struct PluginIndex {
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(PluginIndex, name)
 };
 
+struct PluginCmdRequest {
+  std::string name;
+  std::vector<std::string> params;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(PluginCmdRequest, name, params)
+};
+
 struct CommandStdout {
   bool done{};
   std::string stdout_text;

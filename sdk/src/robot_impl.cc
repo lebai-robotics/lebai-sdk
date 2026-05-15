@@ -399,6 +399,12 @@ protos_json::plugin_proto::PluginInfo Robot::RobotImpl::load_plugin(
       "load_plugin", {req});
 }
 
+protos_json::plugin_proto::CommandStdout Robot::RobotImpl::run_plugin_cmd(
+    const protos_json::plugin_proto::PluginCmdRequest &req) {
+  return rpc_client_->Call<protos_json::plugin_proto::CommandStdout>(
+      "run_plugin_cmd", {req});
+}
+
 protos_json::multi_devices_proto::DiscoverRobotsResponse
 Robot::RobotImpl::discover_robots() {
   return rpc_client_

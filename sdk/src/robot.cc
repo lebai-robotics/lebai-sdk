@@ -1081,6 +1081,20 @@ PluginInfoData Robot::load_plugin(const std::string &name) {
   return convertPluginInfo(impl_->load_plugin(req));
 }
 
+CommandStdoutData Robot::run_plugin_cmd(
+    const std::string &name, const std::vector<std::string> &params) {
+  protos_json::plugin_proto::PluginCmdRequest req;
+  req.name = name;
+  req.params = params;
+  const auto response = impl_->run_plugin_cmd(req);
+  CommandStdoutData data;
+  data.done = response.done;
+  data.stdout_text = response.stdout_text;
+  data.stderr_text = response.stderr_text;
+  data.code = response.code;
+  return data;
+}
+
 std::vector<DiscoveredRobotData> Robot::discover_robots() {
   const auto response = impl_->discover_robots();
   std::vector<DiscoveredRobotData> devices;

@@ -819,8 +819,12 @@ TEST(JsonPluginProtoTest, PluginsParseControllerPayload) {
 TEST(JsonPluginProtoTest, PluginIndexAndCommandStdoutRoundTrip) {
   protos_json::plugin_proto::PluginIndex index;
   index.name = "demo";
+  protos_json::plugin_proto::PluginCmdRequest cmd;
+  cmd.name = "demo";
+  cmd.params = {"--help"};
 
   const nlohmann::json index_json = index;
+  const nlohmann::json cmd_json = cmd;
   const auto stdout_data =
       nlohmann::json{{"done", true},
                      {"stdout", "out"},
@@ -829,6 +833,9 @@ TEST(JsonPluginProtoTest, PluginIndexAndCommandStdoutRoundTrip) {
           .get<protos_json::plugin_proto::CommandStdout>();
 
   EXPECT_EQ(index_json.at("name"), "demo");
+  EXPECT_EQ(cmd_json.at("name"), "demo");
+  ASSERT_EQ(cmd_json.at("params").size(), 1U);
+  EXPECT_EQ(cmd_json.at("params").front(), "--help");
   EXPECT_TRUE(stdout_data.done);
   EXPECT_EQ(stdout_data.stdout_text, "out");
   EXPECT_EQ(stdout_data.code, 0);
