@@ -33,23 +33,52 @@ else()
 endif()
 
 # Needed by java/CMakeLists.txt
+set(JAVA_ENABLE_MAVEN_CENTRAL OFF CACHE BOOL "Enable Maven Central Portal publishing plugin in generated Java POMs")
+if(JAVA_ENABLE_MAVEN_CENTRAL)
+  set(JAVA_CENTRAL_PUBLISHING_PLUGIN [=[
+    <plugin>
+      <groupId>org.sonatype.central</groupId>
+      <artifactId>central-publishing-maven-plugin</artifactId>
+      <version>0.9.0</version>
+      <extensions>true</extensions>
+      <configuration>
+        <publishingServerId>central</publishingServerId>
+        <autoPublish>${central.autoPublish}</autoPublish>
+      </configuration>
+    </plugin>]=])
+else()
+  set(JAVA_CENTRAL_PUBLISHING_PLUGIN "")
+endif()
+
 set(JAVA_DOMAIN_NAME "sdk")
 set(JAVA_DOMAIN_EXTENSION "org")
 
 set(JAVA_GROUP "${JAVA_DOMAIN_EXTENSION}.${JAVA_DOMAIN_NAME}")
 set(JAVA_ARTIFACT "lebai")
+set(JAVA_MAVEN_GROUP_ID "io.github.liufang-robot" CACHE STRING "Maven groupId for Java artifacts")
 
 set(JAVA_PACKAGE "${JAVA_GROUP}.${JAVA_ARTIFACT}")
-if(APPLE)
-  set(NATIVE_IDENTIFIER darwin-x86-64)
-elseif(UNIX)
-  set(NATIVE_IDENTIFIER linux-x86-64)
-elseif(WIN32)
-  set(NATIVE_IDENTIFIER win32-x86-64)
-else()
-  message(FATAL_ERROR "Unsupported system !")
+set(JAVA_NATIVE_IDENTIFIER "" CACHE STRING "Override Java native artifact identifier")
+if(NOT JAVA_NATIVE_IDENTIFIER)
+  if(APPLE)
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm64|aarch64)$")
+      set(JAVA_NATIVE_IDENTIFIER darwin-aarch64)
+    else()
+      set(JAVA_NATIVE_IDENTIFIER darwin-x86-64)
+    endif()
+  elseif(UNIX)
+    if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(arm64|aarch64)$")
+      set(JAVA_NATIVE_IDENTIFIER linux-aarch64)
+    else()
+      set(JAVA_NATIVE_IDENTIFIER linux-x86-64)
+    endif()
+  elseif(WIN32)
+    set(JAVA_NATIVE_IDENTIFIER win32-x86-64)
+  else()
+    message(FATAL_ERROR "Unsupported system !")
+  endif()
 endif()
-set(JAVA_NATIVE_PROJECT ${JAVA_ARTIFACT}-${NATIVE_IDENTIFIER})
+set(JAVA_NATIVE_PROJECT ${JAVA_ARTIFACT}-${JAVA_NATIVE_IDENTIFIER})
 message(STATUS "Java runtime project: ${JAVA_NATIVE_PROJECT}")
 set(JAVA_NATIVE_PROJECT_DIR ${PROJECT_BINARY_DIR}/java/${JAVA_NATIVE_PROJECT})
 message(STATUS "Java runtime project build path: ${JAVA_NATIVE_PROJECT_DIR}")
@@ -116,6 +145,13 @@ add_custom_target(java_native_package
     ${JAVA_NATIVE_PROJECT_DIR}/timestamp
   WORKING_DIRECTORY ${JAVA_NATIVE_PROJECT_DIR})
 
+add_custom_target(java_native_deploy
+  COMMAND ${MAVEN_EXECUTABLE} deploy -B $<$<BOOL:${SKIP_GPG}>:-Dgpg.skip=true>
+  DEPENDS
+    java_native_package
+  COMMENT "Deploy Java native package ${JAVA_NATIVE_PROJECT}"
+  WORKING_DIRECTORY ${JAVA_NATIVE_PROJECT_DIR})
+
 ##########################
 ##  Java Maven Package  ##
 ##########################
@@ -169,6 +205,13 @@ add_custom_command(
 add_custom_target(java_package ALL
   DEPENDS
     ${JAVA_PROJECT_DIR}/timestamp
+  WORKING_DIRECTORY ${JAVA_PROJECT_DIR})
+
+add_custom_target(java_deploy
+  COMMAND ${MAVEN_EXECUTABLE} deploy -B $<$<BOOL:${SKIP_GPG}>:-Dgpg.skip=true>
+  DEPENDS
+    java_package
+  COMMENT "Deploy Java package ${JAVA_PROJECT}"
   WORKING_DIRECTORY ${JAVA_PROJECT_DIR})
 
 # #################

@@ -15,6 +15,9 @@ jobs:
   dotnet:
     uses: ./.github/workflows/dotnet_release.yml
     secrets: inherit
+  java:
+    uses: ./.github/workflows/java_release.yml
+    secrets: inherit
   win-cpp-x64:
     uses: ./.github/workflows/windows_cpp_release.yml
   release:
@@ -23,6 +26,7 @@ jobs:
       - linux-cpp-arm64
       - python
       - dotnet
+      - java
       - win-cpp-x64
     runs-on: ubuntu-latest
     permissions:
@@ -44,6 +48,10 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: lebai-dotnet-nupkg
+      - name: Download Java jars
+        uses: actions/download-artifact@v4
+        with:
+          name: lebai-java-jars
       - name: Download Python wheels
         uses: actions/download-artifact@v4
         with:
@@ -74,4 +82,5 @@ jobs:
             *.exe,
             *.deb,
             *.nupkg,
+            *.jar,
             *.whl

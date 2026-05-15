@@ -1,0 +1,240 @@
+name: Java release
+run-name: ${{ github.actor }} Java release
+
+on:
+  workflow_dispatch:
+  workflow_call:
+    secrets:
+      MAVEN_CENTRAL_USERNAME:
+        required: false
+      MAVEN_CENTRAL_PASSWORD:
+        required: false
+      MAVEN_GPG_PRIVATE_KEY:
+        required: false
+      MAVEN_GPG_PASSPHRASE:
+        required: false
+  push:
+    tags:
+      - v*.*.*
+
+permissions:
+  contents: read
+
+env:
+  JAVA_MAVEN_GROUP_ID: io.github.liufang-robot
+
+jobs:
+  linux-java-native:
+    name: Linux Java native ${{ matrix.native-id }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - native-id: linux-x86-64
+            runner: ubuntu-22.04
+          - native-id: linux-aarch64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    env:
+      MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+      MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+      MAVEN_GPG_PRIVATE_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+      MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "11"
+
+      - name: Install native build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y swig
+
+      - name: Configure
+        run: cmake -S . -B build -DBUILD_JAVA=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DSKIP_GPG=ON -DJAVA_MAVEN_GROUP_ID="${JAVA_MAVEN_GROUP_ID}"
+
+      - name: Build Java native package
+        run: cmake --build build --target java_native_package
+
+      - name: Upload native jars
+        uses: actions/upload-artifact@v4
+        with:
+          name: lebai-java-native-${{ matrix.native-id }}
+          path: build/java/lebai-${{ matrix.native-id }}/target/*.jar
+
+      - name: Configure Maven Central credentials
+        if: env.MAVEN_CENTRAL_USERNAME != '' && env.MAVEN_CENTRAL_PASSWORD != '' && env.MAVEN_GPG_PRIVATE_KEY != '' && env.MAVEN_GPG_PASSPHRASE != ''
+        run: |
+          mkdir -p ~/.m2 ~/.gnupg
+          chmod 700 ~/.gnupg
+          cat > ~/.m2/settings.xml <<EOF
+          <settings>
+            <servers>
+              <server>
+                <id>central</id>
+                <username>${MAVEN_CENTRAL_USERNAME}</username>
+                <password>${MAVEN_CENTRAL_PASSWORD}</password>
+              </server>
+            </servers>
+          </settings>
+          EOF
+          printf '%s' "${MAVEN_GPG_PRIVATE_KEY}" | gpg --batch --import
+
+      - name: Upload native package to Maven Central Portal
+        if: env.MAVEN_CENTRAL_USERNAME != '' && env.MAVEN_CENTRAL_PASSWORD != '' && env.MAVEN_GPG_PRIVATE_KEY != '' && env.MAVEN_GPG_PASSPHRASE != ''
+        run: |
+          cmake -S . -B build -DBUILD_JAVA=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DSKIP_GPG=OFF -DJAVA_ENABLE_MAVEN_CENTRAL=ON -DJAVA_MAVEN_GROUP_ID="${JAVA_MAVEN_GROUP_ID}"
+          cmake --build build --target java_native_deploy
+
+  windows-java-native:
+    name: Windows Java native win32-x86-64
+    runs-on: windows-2022
+    env:
+      MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+      MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+      MAVEN_GPG_PRIVATE_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+      MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "11"
+
+      - name: Install SWIG
+        run: choco install swig -y --no-progress
+
+      - name: Configure
+        run: cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DBUILD_JAVA=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DSKIP_GPG=ON -DJAVA_MAVEN_GROUP_ID="${{ env.JAVA_MAVEN_GROUP_ID }}"
+
+      - name: Build Java native package
+        run: cmake --build build --config Release --target java_native_package
+
+      - name: Upload native jars
+        uses: actions/upload-artifact@v4
+        with:
+          name: lebai-java-native-win32-x86-64
+          path: build/java/lebai-win32-x86-64/target/*.jar
+
+      - name: Configure Maven Central credentials
+        if: env.MAVEN_CENTRAL_USERNAME != '' && env.MAVEN_CENTRAL_PASSWORD != '' && env.MAVEN_GPG_PRIVATE_KEY != '' && env.MAVEN_GPG_PASSPHRASE != ''
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.m2" | Out-Null
+          New-Item -ItemType Directory -Force -Path "$env:USERPROFILE\.gnupg" | Out-Null
+          @"
+          <settings>
+            <servers>
+              <server>
+                <id>central</id>
+                <username>$env:MAVEN_CENTRAL_USERNAME</username>
+                <password>$env:MAVEN_CENTRAL_PASSWORD</password>
+              </server>
+            </servers>
+          </settings>
+          "@ | Set-Content -Path "$env:USERPROFILE\.m2\settings.xml"
+          $env:MAVEN_GPG_PRIVATE_KEY | gpg --batch --import
+
+      - name: Upload native package to Maven Central Portal
+        if: env.MAVEN_CENTRAL_USERNAME != '' && env.MAVEN_CENTRAL_PASSWORD != '' && env.MAVEN_GPG_PRIVATE_KEY != '' && env.MAVEN_GPG_PASSPHRASE != ''
+        run: |
+          cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DBUILD_JAVA=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DSKIP_GPG=OFF -DJAVA_ENABLE_MAVEN_CENTRAL=ON -DJAVA_MAVEN_GROUP_ID="${{ env.JAVA_MAVEN_GROUP_ID }}"
+          cmake --build build --config Release --target java_native_deploy
+
+  java-package:
+    name: Java package
+    needs:
+      - linux-java-native
+      - windows-java-native
+    runs-on: ubuntu-22.04
+    env:
+      MAVEN_CENTRAL_USERNAME: ${{ secrets.MAVEN_CENTRAL_USERNAME }}
+      MAVEN_CENTRAL_PASSWORD: ${{ secrets.MAVEN_CENTRAL_PASSWORD }}
+      MAVEN_GPG_PRIVATE_KEY: ${{ secrets.MAVEN_GPG_PRIVATE_KEY }}
+      MAVEN_GPG_PASSPHRASE: ${{ secrets.MAVEN_GPG_PASSPHRASE }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "11"
+
+      - name: Install native build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y swig
+
+      - name: Download native jars
+        uses: actions/download-artifact@v4
+        with:
+          pattern: lebai-java-native-*
+          path: java-native-artifacts
+
+      - name: Configure
+        run: cmake -S . -B build -DBUILD_JAVA=ON -DUNIVERSAL_JAVA_PACKAGE=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DSKIP_GPG=ON -DJAVA_MAVEN_GROUP_ID="${JAVA_MAVEN_GROUP_ID}"
+
+      - name: Install native jars into local Maven cache
+        run: |
+          version="$(awk '/project\s*\(/,/)/' CMakeLists.txt | grep -Po 'VERSION\s*\K[0-9]+\.[0-9]+\.[0-9]+')"
+          find java-native-artifacts -type f -name '*.jar' ! -name '*-sources.jar' ! -name '*-javadoc.jar' -print0 | while IFS= read -r -d '' jar; do
+            file="$(basename "${jar}")"
+            artifact="${file%-${version}.jar}"
+            mvn -B install:install-file \
+              -Dfile="${jar}" \
+              -DgroupId="${JAVA_MAVEN_GROUP_ID}" \
+              -DartifactId="${artifact}" \
+              -Dversion="${version}" \
+              -Dpackaging=jar \
+              -DgeneratePom=true
+          done
+
+      - name: Build Java package
+        run: cmake --build build --target java_package
+
+      - name: Stage Java release jars
+        run: |
+          mkdir -p java-release-artifacts
+          find java-native-artifacts -type f -name '*.jar' -exec cp {} java-release-artifacts/ \;
+          find build/java/lebai-java/target -maxdepth 1 -type f -name '*.jar' -exec cp {} java-release-artifacts/ \;
+          ls -l java-release-artifacts
+
+      - name: Upload Java jars
+        uses: actions/upload-artifact@v4
+        with:
+          name: lebai-java-jars
+          path: java-release-artifacts/*.jar
+
+      - name: Configure Maven Central credentials
+        if: env.MAVEN_CENTRAL_USERNAME != '' && env.MAVEN_CENTRAL_PASSWORD != '' && env.MAVEN_GPG_PRIVATE_KEY != '' && env.MAVEN_GPG_PASSPHRASE != ''
+        run: |
+          mkdir -p ~/.m2 ~/.gnupg
+          chmod 700 ~/.gnupg
+          cat > ~/.m2/settings.xml <<EOF
+          <settings>
+            <servers>
+              <server>
+                <id>central</id>
+                <username>${MAVEN_CENTRAL_USERNAME}</username>
+                <password>${MAVEN_CENTRAL_PASSWORD}</password>
+              </server>
+            </servers>
+          </settings>
+          EOF
+          printf '%s' "${MAVEN_GPG_PRIVATE_KEY}" | gpg --batch --import
+
+      - name: Upload Java package to Maven Central Portal
+        if: env.MAVEN_CENTRAL_USERNAME != '' && env.MAVEN_CENTRAL_PASSWORD != '' && env.MAVEN_GPG_PRIVATE_KEY != '' && env.MAVEN_GPG_PASSPHRASE != ''
+        run: |
+          cmake -S . -B build -DBUILD_JAVA=ON -DUNIVERSAL_JAVA_PACKAGE=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DSKIP_GPG=OFF -DJAVA_ENABLE_MAVEN_CENTRAL=ON -DJAVA_MAVEN_GROUP_ID="${JAVA_MAVEN_GROUP_ID}"
+          cmake --build build --target java_deploy

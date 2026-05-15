@@ -132,6 +132,7 @@ documentation features for the public wrapper surface.
 - CMake logic: `cmake/java.cmake`
 - SWIG setup: `sdk/java/CMakeLists.txt`
 - Maven templates: `java/pom-native.xml.in`, `java/pom-local.xml.in`, `java/pom-full.xml.in`, `java/pom-example.xml.in`
+- user/developer notes: `docs/java.md`
 
 ### Generated structure
 
@@ -140,7 +141,17 @@ The Java build creates:
 - a native artifact named like `lebai-<platform-id>`
 - a Java package project named `lebai-java`
 
-The configured Java package namespace is `org.sdk.lebai`.
+The configured Java package namespace is `org.sdk.lebai`. The Maven Central
+`groupId` is intentionally separate and defaults to `io.github.liufang-robot`
+through `JAVA_MAVEN_GROUP_ID`, because the verified Sonatype namespace controls
+Maven coordinates while the Java package namespace controls source-level imports.
+
+`.github/workflows/java_release.yml` builds native runtime jars for Linux x64,
+Linux arm64, and Windows x64, then builds the aggregate `lebai-java` package.
+It uploads all jars as the `lebai-java-jars` GitHub artifact. If
+`MAVEN_CENTRAL_USERNAME`, `MAVEN_CENTRAL_PASSWORD`, `MAVEN_GPG_PRIVATE_KEY`, and
+`MAVEN_GPG_PASSPHRASE` are configured, the workflow also uploads signed Maven
+deployments to the Maven Central Portal using server id `central`.
 
 ### Important packaging note
 
