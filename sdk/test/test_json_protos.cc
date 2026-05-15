@@ -827,6 +827,11 @@ TEST(JsonModbusProtoTest, RequestsAndResponsesRoundTrip) {
   EXPECT_EQ(retry_json.at("device"), "modbus0");
   EXPECT_EQ(retry_json.at("retry"), 2);
 
+  protos_json::modbus_proto::DisconnectModbusRequest disconnect_req;
+  disconnect_req.device = "modbus0";
+  const nlohmann::json disconnect_json = disconnect_req;
+  EXPECT_EQ(disconnect_json.at("device"), "modbus0");
+
   protos_json::modbus_proto::SetRegisterRequest set_req;
   set_req.device = "modbus0";
   set_req.pin = "40001";

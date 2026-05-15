@@ -2005,6 +2005,12 @@ class Robot {
    */
   void set_modbus_retry(std::string device, unsigned int retry);
   /**
+   * @brief 断开Modbus设备连接.
+   *
+   * @param device Modbus设备名称.
+   */
+  void disconnect_modbus(std::string device);
+  /**
    * @brief 查询Modbus寄存器列表.
    *
    * @param device Modbus设备名称.

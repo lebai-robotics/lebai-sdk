@@ -2323,6 +2323,12 @@ void Robot::set_modbus_retry(std::string device, unsigned int retry) {
   impl_->set_modbus_retry(req);
 }
 
+void Robot::disconnect_modbus(std::string device) {
+  protos_json::modbus_proto::DisconnectModbusRequest req;
+  req.device = device;
+  impl_->disconnect_modbus(req);
+}
+
 std::vector<std::string> Robot::load_modbus_register_list(std::string device) {
   protos_json::modbus_proto::LoadModbusRegisterListRequest req;
   req.device = device;

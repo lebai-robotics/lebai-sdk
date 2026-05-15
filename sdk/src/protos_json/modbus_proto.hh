@@ -46,6 +46,11 @@ struct SetModbusRetryRequest {
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(SetModbusRetryRequest, device, retry)
 };
 
+struct DisconnectModbusRequest {
+  std::string device;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(DisconnectModbusRequest, device)
+};
+
 struct SetCoilRequest {
   std::string device;
   std::string pin;

@@ -286,6 +286,8 @@ class Robot::RobotImpl {
       const protos_json::modbus_proto::SetModbusTimeoutRequest &req);
   void set_modbus_retry(
       const protos_json::modbus_proto::SetModbusRetryRequest &req);
+  void disconnect_modbus(
+      const protos_json::modbus_proto::DisconnectModbusRequest &req);
   protos_json::db_proto::LoadListResponse load_modbus_list(
       const protos_json::db_proto::LoadListRequest &req);
   protos_json::modbus_proto::ModbusRegister load_modbus_register(

@@ -870,6 +870,10 @@ void Robot::RobotImpl::set_modbus_retry(
     const protos_json::modbus_proto::SetModbusRetryRequest &req) {
   rpc_client_->Call<void>("set_modbus_retry", {req});
 }
+void Robot::RobotImpl::disconnect_modbus(
+    const protos_json::modbus_proto::DisconnectModbusRequest &req) {
+  rpc_client_->Call<void>("disconnect_modbus", {req});
+}
 protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_modbus_list(
     const protos_json::db_proto::LoadListRequest &req) {
   return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
