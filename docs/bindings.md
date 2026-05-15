@@ -55,6 +55,9 @@ The packaged Python project name is `pylebai`.
 - the package is assembled in the build tree under `build/python`
 - wheels are emitted under `build/python/dist`
 - the build copies generated wrapper binaries plus the native runtime pieces needed by the package
+- release CI builds Linux x64, Linux arm64, and Windows x64 wheels as artifacts
+  first; `.github/workflows/python_release.yml` then validates all wheels with
+  `twine check` and publishes once to PyPI using the `PYLEBAI` secret
 
 ## .NET
 
@@ -82,6 +85,11 @@ Per-RID runtime packages may still be built as compatibility artifacts. Product
 release CI must aggregate native assets from all release platforms before
 publishing a single multi-RID `lebai` package to NuGet; otherwise the published
 main package only contains the RID built by that job.
+
+`.github/workflows/dotnet_release.yml` is the aggregate .NET release workflow.
+It builds native assets for Linux x64, Linux arm64, and Windows x64, packs one
+multi-RID `lebai` NuGet package, smoke-tests it, and publishes to NuGet using
+the `LEBAI_NUGET_KEY` secret when that secret is configured.
 
 `multi-RID` means the package contains native assets for multiple .NET Runtime
 Identifiers, for example:

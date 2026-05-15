@@ -3,9 +3,6 @@ name: Linux Python aarch64 release
 on:
   workflow_dispatch:
   workflow_call:
-  push:
-    tags:
-      - v1.*.*
 
 permissions:
   contents: read
@@ -20,11 +17,6 @@ jobs:
 
       - name: Build and smoke-test wheels
         run: scripts/build_python_wheels_manylinux.sh wheelhouse
-
-      - name: Upload PyPI
-        run: |
-          /opt/python/cp310-cp310/bin/python -m pip install --upgrade twine
-          /opt/python/cp310-cp310/bin/python -m twine upload --skip-existing --verbose -u __token__ -p "${{ secrets.PYLEBAI }}" wheelhouse/*.whl
 
       - name: Upload wheels
         uses: actions/upload-artifact@v4
