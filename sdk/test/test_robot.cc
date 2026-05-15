@@ -259,6 +259,10 @@ TEST_F(RobotTest, TestTrajectoryResourceSmoke) {
   EXPECT_EQ(saved_trajectory.kind, "PVAT");
   const auto trajectory = robot_.load_trajectory("", "");
   EXPECT_FALSE(trajectory.kind.empty());
+  EXPECT_NO_THROW(robot_.start_record_trajectory("PVAT", 0.01));
+  EXPECT_NO_THROW(robot_.end_record_trajectory("codex_record_smoke", ""));
+  const auto recorded = robot_.load_trajectory("codex_record_smoke", "");
+  EXPECT_EQ(recorded.kind, "PVAT");
 }
 
 TEST_F(RobotTest, TestModbusResourceSmoke) {

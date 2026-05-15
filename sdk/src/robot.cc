@@ -2130,6 +2130,20 @@ void Robot::save_trajectory(std::string name, TrajectoryData trajectory,
   impl_->save_trajectory(req);
 }
 
+void Robot::start_record_trajectory(std::string kind, double duration) {
+  protos_json::motion_proto::StartRecordTrajectoryRequest req;
+  req.kind = kind;
+  req.duration = duration;
+  impl_->start_record_trajectory(req);
+}
+
+void Robot::end_record_trajectory(std::string name, std::string dir) {
+  protos_json::motion_proto::EndRecordTrajectoryRequest req;
+  req.name = name;
+  req.dir = dir;
+  impl_->end_record_trajectory(req);
+}
+
 std::vector<std::string> Robot::load_pose_list(std::string dir) {
   protos_json::db_proto::LoadListRequest req;
   req.dir = dir;

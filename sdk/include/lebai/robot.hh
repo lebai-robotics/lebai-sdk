@@ -1857,6 +1857,20 @@ class Robot {
   void save_trajectory(std::string name, TrajectoryData trajectory,
                        std::string dir = "");
   /**
+   * @brief 开始记录轨迹.
+   *
+   * @param kind 轨迹类型.
+   * @param duration 采样周期.
+   */
+  void start_record_trajectory(std::string kind, double duration);
+  /**
+   * @brief 结束记录轨迹并保存.
+   *
+   * @param name 轨迹名称.
+   * @param dir 轨迹目录.
+   */
+  void end_record_trajectory(std::string name, std::string dir = "");
+  /**
    * @brief 查询路点列表.
    *
    * @param dir 路点目录.

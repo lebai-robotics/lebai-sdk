@@ -489,6 +489,19 @@ TEST(JsonMotionProtoTest, WrenchParsesControllerPayload) {
 }
 
 TEST(JsonMotionProtoTest, TrajectoryParsesControllerPayload) {
+  protos_json::motion_proto::StartRecordTrajectoryRequest start_req;
+  start_req.kind = "PVAT";
+  start_req.duration = 0.01;
+  const nlohmann::json start_json = start_req;
+  EXPECT_EQ(start_json.at("kind"), "PVAT");
+  EXPECT_DOUBLE_EQ(start_json.at("duration"), 0.01);
+
+  protos_json::motion_proto::EndRecordTrajectoryRequest end_req;
+  end_req.name = "recorded";
+  end_req.dir = "";
+  const nlohmann::json end_json = end_req;
+  EXPECT_EQ(end_json.at("name"), "recorded");
+
   const auto parsed =
       nlohmann::json{{"kind", "PT"}, {"data", nlohmann::json::array()}}
           .get<protos_json::motion_proto::Trajectory>();
