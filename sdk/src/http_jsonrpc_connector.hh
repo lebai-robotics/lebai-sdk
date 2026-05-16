@@ -15,7 +15,9 @@ class HttpJsonRpcConnector : public jsonrpccxx::IClientConnector {
   explicit HttpJsonRpcConnector(const std::string& host, int port)
       : http_client_(host, port) {
     http_client_.set_connection_timeout(5, 0);
-    http_client_.set_read_timeout(5, 0);
+    // Use a long read timeout to allow blocking RPCs such as wait_move and
+    // wait_task to complete without the connector timing out prematurely.
+    http_client_.set_read_timeout(120, 0);
     http_client_.set_write_timeout(5, 0);
   }
 

@@ -23,7 +23,7 @@ class RpcClient {
   template <class Result = nlohmann::json>
   auto Call(const std::string& method,
             const std::vector<nlohmann::json>& args) -> Result {
-    const int id = static_cast<int>(NextId());
+    const int id = NextId();
     if constexpr (std::is_void_v<Result>) {
       client_->CallMethod<nlohmann::json>(id, method, args);
       return;
@@ -34,7 +34,7 @@ class RpcClient {
 
   auto CallRaw(const std::string& method, const nlohmann::json& params)
       -> nlohmann::json {
-    const int id = static_cast<int>(NextId());
+    const int id = NextId();
     if (params.is_array()) {
       return client_->CallMethod<nlohmann::json>(
           id, method, params.get<std::vector<nlohmann::json>>());
@@ -45,9 +45,11 @@ class RpcClient {
   }
 
  private:
-  static auto NextId() -> uint32_t {
-    static std::atomic<uint32_t> id(0);
-    return ++id;
+  static auto NextId() -> int {
+    static std::atomic<int> id(0);
+    const int next = ++id;
+    // Wrap at INT_MAX to avoid ever producing a negative id for the wire.
+    return next > 0 ? next : 1;
   }
 
   std::shared_ptr<jsonrpccxx::JsonRpcClient> client_;

@@ -299,9 +299,7 @@ static CartesianLimitConfig convertToCartesianLimitConfig(
   return config;
 }
 
-Robot::Robot(std::string ip, bool simulator)
-// :ip_(ip)
-{
+Robot::Robot(std::string ip, bool simulator) {
   impl_ = std::make_unique<RobotImpl>(ip, simulator);
 }
 Robot::~Robot() {}
@@ -708,7 +706,7 @@ int Robot::towardj(const std::vector<double> &joint_positions, double a,
 void Robot::move_pvat(std::vector<double> p, std::vector<double> v,
                       std::vector<double> a, double t) {
   protos_json::motion_proto::MovePvatRequest req;
-  for (int i = 0; i < p.size(); i++) {
+  for (std::size_t i = 0; i < p.size(); i++) {
     protos_json::motion_proto::JointMove joint;
     joint.pose = p[i];
     joint.velocity = v[i];
@@ -1307,13 +1305,7 @@ std::vector<DiscoveredRobotData> Robot::discover_robots() {
 CommandStdoutData Robot::get_plugin_daemon_stdout(const std::string &name) {
   protos_json::plugin_proto::PluginIndex req;
   req.name = name;
-  const auto response = impl_->get_plugin_daemon_stdout(req);
-  CommandStdoutData data;
-  data.done = response.done;
-  data.stdout_text = response.stdout_text;
-  data.stderr_text = response.stderr_text;
-  data.code = response.code;
-  return data;
+  return convertCommandStdout(impl_->get_plugin_daemon_stdout(req));
 }
 
 std::vector<MessageData> Robot::get_messages() {
@@ -1476,9 +1468,12 @@ CartesianPose Robot::get_target_tcp_pose() {
 
 double Robot::get_joint_temp(unsigned int joint_index) {
   auto data = impl_->get_phy_data();
-  joint_index -= 1;
-  if (data.joint_temp.size() > joint_index) {
-    return data.joint_temp[joint_index];
+  if (joint_index == 0) {
+    return 0.0;
+  }
+  const std::size_t idx = joint_index - 1;
+  if (data.joint_temp.size() > idx) {
+    return data.joint_temp[idx];
   }
   return 0.0;
 }
@@ -1513,13 +1508,7 @@ static protos_json::io_proto::IoDevice convertIoDevice(
 
 void Robot::set_do(std::string device, unsigned int pin, unsigned int value) {
   protos_json::io_proto::SetDoPinRequest req;
-  if (device == "ROBOT") {
-    req.device = protos_json::io_proto::IoDevice::ROBOT;
-  } else if (device == "FLANGE") {
-    req.device = protos_json::io_proto::IoDevice::FLANGE;
-  } else if (device == "EXTRA") {
-    req.device = protos_json::io_proto::IoDevice::EXTRA;
-  }
+  req.device = convertIoDevice(device);
   req.pin = pin;
   req.value = value;
   impl_->set_do(req);
@@ -1528,13 +1517,7 @@ void Robot::set_do(std::string device, unsigned int pin, unsigned int value) {
 void Robot::set_dos(std::string device, unsigned int pin,
                     std::vector<unsigned int> values) {
   protos_json::io_proto::SetDoPinsRequest req;
-  if (device == "ROBOT") {
-    req.device = protos_json::io_proto::IoDevice::ROBOT;
-  } else if (device == "FLANGE") {
-    req.device = protos_json::io_proto::IoDevice::FLANGE;
-  } else if (device == "EXTRA") {
-    req.device = protos_json::io_proto::IoDevice::EXTRA;
-  }
+  req.device = convertIoDevice(device);
   req.pin = pin;
   req.values = {values.begin(), values.end()};
   impl_->set_dos(req);
@@ -1542,15 +1525,7 @@ void Robot::set_dos(std::string device, unsigned int pin,
 
 unsigned int Robot::get_do(std::string device, unsigned int pin) {
   protos_json::io_proto::GetDioPinRequest req;
-
-  if (device == "ROBOT") {
-    req.device = protos_json::io_proto::IoDevice::ROBOT;
-  } else if (device == "FLANGE") {
-    req.device = protos_json::io_proto::IoDevice::FLANGE;
-  } else if (device == "EXTRA") {
-    req.device = protos_json::io_proto::IoDevice::EXTRA;
-  }
-
+  req.device = convertIoDevice(device);
   req.pin = pin;
   const auto resp = impl_->get_do(req);
   return resp.value;
@@ -1559,15 +1534,7 @@ unsigned int Robot::get_do(std::string device, unsigned int pin) {
 std::vector<unsigned int> Robot::get_dos(std::string device, unsigned int pin,
                                          unsigned int num) {
   protos_json::io_proto::GetDioPinsRequest req;
-
-  if (device == "ROBOT") {
-    req.device = protos_json::io_proto::IoDevice::ROBOT;
-  } else if (device == "FLANGE") {
-    req.device = protos_json::io_proto::IoDevice::FLANGE;
-  } else if (device == "EXTRA") {
-    req.device = protos_json::io_proto::IoDevice::EXTRA;
-  }
-
+  req.device = convertIoDevice(device);
   req.pin = pin;
   req.count = num;
   const auto resp = impl_->get_dos(req);
@@ -1576,14 +1543,7 @@ std::vector<unsigned int> Robot::get_dos(std::string device, unsigned int pin,
 
 unsigned int Robot::get_di(std::string device, unsigned int pin) {
   protos_json::io_proto::GetDioPinRequest req;
-  if (device == "ROBOT") {
-    req.device = protos_json::io_proto::IoDevice::ROBOT;
-  } else if (device == "FLANGE") {
-    req.device = protos_json::io_proto::IoDevice::FLANGE;
-  } else if (device == "EXTRA") {
-    req.device = protos_json::io_proto::IoDevice::EXTRA;
-  }
-
+  req.device = convertIoDevice(device);
   req.pin = pin;
   const auto resp = impl_->get_di(req);
   return resp.value;
@@ -1592,13 +1552,7 @@ unsigned int Robot::get_di(std::string device, unsigned int pin) {
 std::vector<unsigned int> Robot::get_dis(std::string device, unsigned int pin,
                                          unsigned int num) {
   protos_json::io_proto::GetDioPinsRequest req;
-  if (device == "ROBOT") {
-    req.device = protos_json::io_proto::IoDevice::ROBOT;
-  } else if (device == "FLANGE") {
-    req.device = protos_json::io_proto::IoDevice::FLANGE;
-  } else if (device == "EXTRA") {
-    req.device = protos_json::io_proto::IoDevice::EXTRA;
-  }
+  req.device = convertIoDevice(device);
   req.pin = pin;
   req.count = num;
   const auto resp = impl_->get_dis(req);
@@ -1607,13 +1561,7 @@ std::vector<unsigned int> Robot::get_dis(std::string device, unsigned int pin,
 
 void Robot::set_ao(std::string device, unsigned int pin, double value) {
   protos_json::io_proto::SetAoPinRequest req;
-  if (device == "ROBOT") {
-    req.device = protos_json::io_proto::IoDevice::ROBOT;
-  } else if (device == "FLANGE") {
-    req.device = protos_json::io_proto::IoDevice::FLANGE;
-  } else if (device == "EXTRA") {
-    req.device = protos_json::io_proto::IoDevice::EXTRA;
-  }
+  req.device = convertIoDevice(device);
   req.pin = pin;
   req.value = value;
   impl_->set_ao(req);
@@ -1622,13 +1570,7 @@ void Robot::set_ao(std::string device, unsigned int pin, double value) {
 void Robot::set_aos(std::string device, unsigned int pin,
                     std::vector<double> values) {
   protos_json::io_proto::SetAoPinsRequest req;
-  if (device == "ROBOT") {
-    req.device = protos_json::io_proto::IoDevice::ROBOT;
-  } else if (device == "FLANGE") {
-    req.device = protos_json::io_proto::IoDevice::FLANGE;
-  } else if (device == "EXTRA") {
-    req.device = protos_json::io_proto::IoDevice::EXTRA;
-  }
+  req.device = convertIoDevice(device);
   req.pin = pin;
   req.values = values;
   impl_->set_aos(req);
@@ -1636,13 +1578,7 @@ void Robot::set_aos(std::string device, unsigned int pin,
 
 double Robot::get_ao(std::string device, unsigned int pin) {
   protos_json::io_proto::GetAioPinRequest req;
-  if (device == "ROBOT") {
-    req.device = protos_json::io_proto::IoDevice::ROBOT;
-  } else if (device == "FLANGE") {
-    req.device = protos_json::io_proto::IoDevice::FLANGE;
-  } else if (device == "EXTRA") {
-    req.device = protos_json::io_proto::IoDevice::EXTRA;
-  }
+  req.device = convertIoDevice(device);
   req.pin = pin;
   const auto resp = impl_->get_ao(req);
   return resp.value;
@@ -1651,13 +1587,7 @@ double Robot::get_ao(std::string device, unsigned int pin) {
 std::vector<double> Robot::get_aos(std::string device, unsigned int pin,
                                    unsigned int num) {
   protos_json::io_proto::GetAioPinsRequest req;
-  if (device == "ROBOT") {
-    req.device = protos_json::io_proto::IoDevice::ROBOT;
-  } else if (device == "FLANGE") {
-    req.device = protos_json::io_proto::IoDevice::FLANGE;
-  } else if (device == "EXTRA") {
-    req.device = protos_json::io_proto::IoDevice::EXTRA;
-  }
+  req.device = convertIoDevice(device);
   req.pin = pin;
   req.count = num;
   const auto resp = impl_->get_aos(req);
@@ -1666,13 +1596,7 @@ std::vector<double> Robot::get_aos(std::string device, unsigned int pin,
 
 double Robot::get_ai(std::string device, unsigned int pin) {
   protos_json::io_proto::GetAioPinRequest req;
-  if (device == "ROBOT") {
-    req.device = protos_json::io_proto::IoDevice::ROBOT;
-  } else if (device == "FLANGE") {
-    req.device = protos_json::io_proto::IoDevice::FLANGE;
-  } else if (device == "EXTRA") {
-    req.device = protos_json::io_proto::IoDevice::EXTRA;
-  }
+  req.device = convertIoDevice(device);
   req.pin = pin;
   const auto resp = impl_->get_ai(req);
   return resp.value;
@@ -1681,13 +1605,7 @@ double Robot::get_ai(std::string device, unsigned int pin) {
 std::vector<double> Robot::get_ais(std::string device, unsigned int pin,
                                    unsigned int num) {
   protos_json::io_proto::GetAioPinsRequest req;
-  if (device == "ROBOT") {
-    req.device = protos_json::io_proto::IoDevice::ROBOT;
-  } else if (device == "FLANGE") {
-    req.device = protos_json::io_proto::IoDevice::FLANGE;
-  } else if (device == "EXTRA") {
-    req.device = protos_json::io_proto::IoDevice::EXTRA;
-  }
+  req.device = convertIoDevice(device);
   req.pin = pin;
   req.count = num;
   const auto resp = impl_->get_ais(req);
@@ -1695,39 +1613,21 @@ std::vector<double> Robot::get_ais(std::string device, unsigned int pin,
 }
 void Robot::set_dio_mode(std::string device, unsigned int pin, bool value) {
   protos_json::io_proto::SetDioModeRequest req;
-  if (device == "ROBOT") {
-    req.device = protos_json::io_proto::IoDevice::ROBOT;
-  } else if (device == "FLANGE") {
-    req.device = protos_json::io_proto::IoDevice::FLANGE;
-  } else if (device == "EXTRA") {
-    req.device = protos_json::io_proto::IoDevice::EXTRA;
-  }
+  req.device = convertIoDevice(device);
   req.pin = pin;
   req.value = value;
   impl_->set_dio_mode(req);
 }
 bool Robot::get_dio_mode(std::string device, unsigned int pin) {
   protos_json::io_proto::GetDioModeRequest req;
-  if (device == "ROBOT") {
-    req.device = protos_json::io_proto::IoDevice::ROBOT;
-  } else if (device == "FLANGE") {
-    req.device = protos_json::io_proto::IoDevice::FLANGE;
-  } else if (device == "EXTRA") {
-    req.device = protos_json::io_proto::IoDevice::EXTRA;
-  }
+  req.device = convertIoDevice(device);
   req.pin = pin;
   return impl_->get_dio_mode(req).mode;
 }
 std::vector<bool> Robot::get_dios_mode(std::string device, unsigned int pin,
                                        unsigned int count) {
   protos_json::io_proto::GetDiosModeRequest req;
-  if (device == "ROBOT") {
-    req.device = protos_json::io_proto::IoDevice::ROBOT;
-  } else if (device == "FLANGE") {
-    req.device = protos_json::io_proto::IoDevice::FLANGE;
-  } else if (device == "EXTRA") {
-    req.device = protos_json::io_proto::IoDevice::EXTRA;
-  }
+  req.device = convertIoDevice(device);
   req.pin = pin;
   req.count = count;
   const auto resp = impl_->get_dios_mode(req);
@@ -1974,7 +1874,11 @@ unsigned int Robot::exec_hook(unsigned int id) {
   if (!resp.success) {
     return 0;
   }
-  return atoi(resp.error.c_str());
+  try {
+    return static_cast<unsigned int>(std::stoi(resp.error));
+  } catch (const std::exception &) {
+    return 0;
+  }
 }
 std::string Robot::load_task(unsigned int id) {
   protos_json::control_proto::TaskIndex req;
