@@ -5,6 +5,7 @@
 #include <nlohmann/json.hpp>
 
 #include <atomic>
+#include <climits>
 #include <memory>
 #include <string>
 #include <type_traits>
@@ -45,11 +46,26 @@ class RpcClient {
   }
 
  private:
+  friend struct RpcClientTestAccess;
+
+  static auto MutableNextIdForTesting() -> std::atomic<int>& {
+    return MutableNextId();
+  }
+
   static auto NextId() -> int {
+    auto& id = MutableNextId();
+    int current = id.load();
+    while (true) {
+      const int next = current == INT_MAX ? 1 : current + 1;
+      if (id.compare_exchange_weak(current, next)) {
+        return next;
+      }
+    }
+  }
+
+  static auto MutableNextId() -> std::atomic<int>& {
     static std::atomic<int> id(0);
-    const int next = ++id;
-    // Wrap at INT_MAX to avoid ever producing a negative id for the wire.
-    return next > 0 ? next : 1;
+    return id;
   }
 
   std::shared_ptr<jsonrpccxx::JsonRpcClient> client_;
