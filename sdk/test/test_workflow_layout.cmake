@@ -96,6 +96,7 @@ foreach(content_name IN ITEMS
   dotnet_release
   java_release)
   expect_contains("${${content_name}}" "workflow_call:" "${content_name} release orchestration entry")
+  expect_not_contains("${${content_name}}" "tags:" "${content_name} standalone tag trigger")
   expect_contains("${${content_name}}" "ubuntu-24.04-arm" "${content_name} Linux arm64 release")
   expect_contains("${${content_name}}" "windows-2022" "${content_name} Windows x64 release")
   expect_not_contains("${${content_name}}" "Win32" "${content_name} legacy Windows 32-bit release")

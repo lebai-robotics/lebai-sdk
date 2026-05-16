@@ -7,9 +7,6 @@ on:
     secrets:
       PYLEBAI:
         required: false
-  push:
-    tags:
-      - v*.*.*
 
 permissions:
   contents: read

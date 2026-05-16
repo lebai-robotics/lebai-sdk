@@ -4,9 +4,6 @@ run-name: ${{ github.actor }} C++ release
 on:
   workflow_dispatch:
   workflow_call:
-  push:
-    tags:
-      - v*.*.*
 
 permissions:
   contents: read
