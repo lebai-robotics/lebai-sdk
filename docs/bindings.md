@@ -166,7 +166,10 @@ Linux arm64, and Windows x64, then builds the aggregate `lebai-java` package.
 It uploads all jars as the `lebai-java-jars` GitHub artifact. If
 `MAVEN_CENTRAL_USERNAME`, `MAVEN_CENTRAL_PASSWORD`, `MAVEN_GPG_PRIVATE_KEY`, and
 `MAVEN_GPG_PASSPHRASE` are configured, the workflow also uploads signed Maven
-deployments to the Maven Central Portal using server id `central`.
+deployments to the Maven Central Portal using server id `central`. The public
+key for `MAVEN_GPG_PRIVATE_KEY` must already be published on a Maven
+Central-supported keyserver, such as `keyserver.ubuntu.com`, `keys.openpgp.org`,
+or `pgp.mit.edu`; the workflow checks this before upload.
 
 ### Important packaging note
 

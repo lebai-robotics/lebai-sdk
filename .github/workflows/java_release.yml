@@ -81,6 +81,22 @@ jobs:
           </settings>
           EOF
           printf '%s' "${MAVEN_GPG_PRIVATE_KEY}" | gpg --batch --import
+          fingerprint="$(gpg --batch --with-colons --list-secret-keys | awk -F: '$1 == "fpr" { print $10; exit }')"
+          if [ -z "${fingerprint}" ]; then
+            echo "::error::MAVEN_GPG_PRIVATE_KEY did not import a signing key."
+            exit 1
+          fi
+          verify_home="$(mktemp -d)"
+          chmod 700 "${verify_home}"
+          trap 'rm -rf "${verify_home}"' EXIT
+          for keyserver in keyserver.ubuntu.com keys.openpgp.org pgp.mit.edu; do
+            if GNUPGHOME="${verify_home}" gpg --batch --keyserver "hkps://${keyserver}" --recv-keys "${fingerprint}"; then
+              GNUPGHOME="${verify_home}" gpg --batch --list-keys "${fingerprint}"
+              exit 0
+            fi
+          done
+          echo "::error::Maven Central requires the public GPG key ${fingerprint} on keyserver.ubuntu.com, keys.openpgp.org, or pgp.mit.edu before upload."
+          exit 1
 
       - name: Upload native package to Maven Central Portal
         if: env.MAVEN_CENTRAL_USERNAME != '' && env.MAVEN_CENTRAL_PASSWORD != '' && env.MAVEN_GPG_PRIVATE_KEY != '' && env.MAVEN_GPG_PASSPHRASE != ''
@@ -139,6 +155,22 @@ jobs:
           </settings>
           "@ | Set-Content -Path "$env:USERPROFILE\.m2\settings.xml"
           $env:MAVEN_GPG_PRIVATE_KEY | gpg --batch --import
+          $fingerprint = (& gpg --batch --with-colons --list-secret-keys | Where-Object { $_.StartsWith("fpr:") } | Select-Object -First 1).Split(":")[9]
+          if (-not $fingerprint) {
+            Write-Error "MAVEN_GPG_PRIVATE_KEY did not import a signing key."
+            exit 1
+          }
+          $verifyHome = Join-Path $env:RUNNER_TEMP "gpg-public-key-check"
+          New-Item -ItemType Directory -Force -Path $verifyHome | Out-Null
+          foreach ($keyserver in @("keyserver.ubuntu.com", "keys.openpgp.org", "pgp.mit.edu")) {
+            & gpg --homedir $verifyHome --batch --keyserver "hkps://$keyserver" --recv-keys $fingerprint
+            if ($LASTEXITCODE -eq 0) {
+              & gpg --homedir $verifyHome --batch --list-keys "$fingerprint"
+              exit 0
+            }
+          }
+          Write-Error "Maven Central requires the public GPG key $fingerprint on keyserver.ubuntu.com, keys.openpgp.org, or pgp.mit.edu before upload."
+          exit 1
 
       - name: Upload native package to Maven Central Portal
         if: env.MAVEN_CENTRAL_USERNAME != '' && env.MAVEN_CENTRAL_PASSWORD != '' && env.MAVEN_GPG_PRIVATE_KEY != '' && env.MAVEN_GPG_PASSPHRASE != ''
@@ -229,6 +261,22 @@ jobs:
           </settings>
           EOF
           printf '%s' "${MAVEN_GPG_PRIVATE_KEY}" | gpg --batch --import
+          fingerprint="$(gpg --batch --with-colons --list-secret-keys | awk -F: '$1 == "fpr" { print $10; exit }')"
+          if [ -z "${fingerprint}" ]; then
+            echo "::error::MAVEN_GPG_PRIVATE_KEY did not import a signing key."
+            exit 1
+          fi
+          verify_home="$(mktemp -d)"
+          chmod 700 "${verify_home}"
+          trap 'rm -rf "${verify_home}"' EXIT
+          for keyserver in keyserver.ubuntu.com keys.openpgp.org pgp.mit.edu; do
+            if GNUPGHOME="${verify_home}" gpg --batch --keyserver "hkps://${keyserver}" --recv-keys "${fingerprint}"; then
+              GNUPGHOME="${verify_home}" gpg --batch --list-keys "${fingerprint}"
+              exit 0
+            fi
+          done
+          echo "::error::Maven Central requires the public GPG key ${fingerprint} on keyserver.ubuntu.com, keys.openpgp.org, or pgp.mit.edu before upload."
+          exit 1
 
       - name: Upload Java package to Maven Central Portal
         if: env.MAVEN_CENTRAL_USERNAME != '' && env.MAVEN_CENTRAL_PASSWORD != '' && env.MAVEN_GPG_PRIVATE_KEY != '' && env.MAVEN_GPG_PASSPHRASE != ''

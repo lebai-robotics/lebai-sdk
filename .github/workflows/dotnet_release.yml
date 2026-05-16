@@ -128,7 +128,7 @@ jobs:
           ! grep -q 'lebai.runtime' package.nuspec
 
       - name: Smoke test local package
-        run: bash scripts/dotnet_smoke_local_package.sh build-dotnet-multirid/dotnet/packages "$(awk '/project\\s*\\(/,/)/' CMakeLists.txt | grep -Po 'VERSION\\s*\\K[0-9]+\\.[0-9]+\\.[0-9]+')"
+        run: bash scripts/dotnet_smoke_local_package.sh build-dotnet-multirid/dotnet/packages "$(awk '/project\s*\(/,/)/' CMakeLists.txt | grep -Po 'VERSION\s*\K[0-9]+\.[0-9]+\.[0-9]+')"
 
       - name: Upload aggregate package
         uses: actions/upload-artifact@v4

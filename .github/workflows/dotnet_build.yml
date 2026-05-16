@@ -82,3 +82,45 @@ jobs:
         with:
           name: lebai-dotnet-packages-win-x64
           path: build/dotnet/packages/*.nupkg
+
+  dotnet-multirid-package:
+    name: Pack multi-RID .NET NuGet
+    needs:
+      - linux-dotnet
+      - windows-dotnet
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8.0
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Install native build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y swig unzip
+
+      - name: Download native assets
+        uses: actions/download-artifact@v4
+        with:
+          pattern: lebai-dotnet-native-*
+          path: dotnet-native-artifacts
+
+      - name: Build aggregate package
+        run: bash scripts/dotnet_pack_multirid.sh build-dotnet-multirid dotnet-native-artifacts
+
+      - name: Verify aggregate package contents
+        run: |
+          package="$(find build-dotnet-multirid/dotnet/packages -maxdepth 1 -name 'lebai.[0-9]*.nupkg' | sort | tail -n 1)"
+          unzip -l "${package}" | tee package-files.txt
+          grep -q 'runtimes/linux-x64/native/lebai-native.so' package-files.txt
+          grep -q 'runtimes/linux-arm64/native/lebai-native.so' package-files.txt
+          grep -q 'runtimes/win-x64/native/lebai-native.dll' package-files.txt
+          unzip -p "${package}" lebai.nuspec | tee package.nuspec
+          ! grep -q 'lebai.runtime' package.nuspec
+
+      - name: Smoke test local package
+        run: bash scripts/dotnet_smoke_local_package.sh build-dotnet-multirid/dotnet/packages "$(awk '/project\s*\(/,/)/' CMakeLists.txt | grep -Po 'VERSION\s*\K[0-9]+\.[0-9]+\.[0-9]+')"
