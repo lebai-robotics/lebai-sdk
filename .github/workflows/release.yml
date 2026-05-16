@@ -7,6 +7,10 @@ on:
 jobs:
   cpp:
     uses: ./.github/workflows/cpp_release.yml
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
   python:
     uses: ./.github/workflows/python_release.yml
     secrets: inherit
