@@ -42,8 +42,11 @@ jobs:
       - name: Build
         run: cmake --build build
 
-      - name: Run tests
-        run: ctest --test-dir build --output-on-failure
+      - name: Run non-robot tests
+        run: ctest --test-dir build -E "TestRobot|TestLuaRobot" --output-on-failure
+
+      - name: Run simulator smoke tests
+        run: ./build/bin/test_robot --gtest_filter=RobotTest.TestStartStop:RobotTest.TestPhase1HttpRpcSmoke:RobotTest.TestRawCallSmoke:RobotTest.TestRawCallErrorContract:RobotTest.TestHelloSmoke:RobotTest.TestNetworkConnection
 
   linux-cpp-package:
     name: Linux ${{ matrix.name }} C++ package

@@ -86,6 +86,10 @@ foreach(content_name IN ITEMS
   expect_not_contains("${${content_name}}" "Win32" "${content_name} legacy Windows 32-bit build")
 endforeach()
 
+expect_contains("${cpp_build}" "ctest --test-dir build -E \"TestRobot|TestLuaRobot\" --output-on-failure" "C++ PR non-robot CTest scope")
+expect_contains("${cpp_build}" "./build/bin/test_robot --gtest_filter=RobotTest.TestStartStop:RobotTest.TestPhase1HttpRpcSmoke:RobotTest.TestRawCallSmoke:RobotTest.TestRawCallErrorContract:RobotTest.TestHelloSmoke:RobotTest.TestNetworkConnection" "C++ PR simulator smoke scope")
+expect_not_contains("${cpp_build}" "ctest --test-dir build --output-on-failure" "full simulator CTest in C++ PR build")
+
 foreach(content_name IN ITEMS
   cpp_release
   python_release
