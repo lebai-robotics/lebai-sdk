@@ -76,6 +76,13 @@ signed Maven deployments to the Maven Central Portal:
 
 The Maven server id is `central`.
 
+The public key that matches `MAVEN_GPG_PRIVATE_KEY` must be published before
+release. Maven Central validates signatures using public keyservers and supports
+`keyserver.ubuntu.com`, `keys.openpgp.org`, and `pgp.mit.edu`. A release job
+preflights this by importing the configured private key, reading its
+fingerprint, then checking that the public key can be fetched from one of those
+servers before any Maven Central upload starts.
+
 The Central Portal plugin is enabled only for deploy steps with
 `JAVA_ENABLE_MAVEN_CENTRAL=ON`. Normal local Java package builds do not load
 the Central Portal plugin.

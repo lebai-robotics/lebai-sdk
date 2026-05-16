@@ -54,6 +54,8 @@ expect_contains("${java_release}" "lebai-java-native-win32-x86-64" "Windows x64 
 expect_contains("${java_release}" "name: lebai-java-jars" "aggregate Java jar artifact")
 expect_contains("${java_release}" "MAVEN_CENTRAL_USERNAME" "Maven Central credential")
 expect_contains("${java_release}" "MAVEN_GPG_PRIVATE_KEY" "GPG signing key")
+expect_contains("${java_release}" "keys.openpgp.org" "Maven Central public signing key preflight")
+expect_contains("${java_release}" [=[--list-keys "${fingerprint}"]=] "GPG fingerprint availability check")
 expect_contains("${java_release}" "JAVA_ENABLE_MAVEN_CENTRAL=ON" "Central Portal plugin enabled only for deploy steps")
 expect_contains("${java_release}" "java_native_deploy" "native deploy step")
 expect_contains("${java_release}" "java_deploy" "main deploy step")
