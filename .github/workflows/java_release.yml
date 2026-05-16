@@ -162,10 +162,11 @@ jobs:
           }
           $verifyHome = Join-Path $env:RUNNER_TEMP "gpg-public-key-check"
           New-Item -ItemType Directory -Force -Path $verifyHome | Out-Null
+          $env:GNUPGHOME = $verifyHome
           foreach ($keyserver in @("keyserver.ubuntu.com", "keys.openpgp.org", "pgp.mit.edu")) {
-            & gpg --homedir $verifyHome --batch --keyserver "hkps://$keyserver" --recv-keys $fingerprint
+            & gpg --batch --keyserver "hkps://$keyserver" --recv-keys $fingerprint
             if ($LASTEXITCODE -eq 0) {
-              & gpg --homedir $verifyHome --batch --list-keys "$fingerprint"
+              & gpg --batch --list-keys "$fingerprint"
               exit 0
             }
           }

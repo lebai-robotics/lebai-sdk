@@ -87,7 +87,6 @@ The Central Portal plugin is enabled only for deploy steps with
 `JAVA_ENABLE_MAVEN_CENTRAL=ON`. Normal local Java package builds do not load
 the Central Portal plugin.
 
-`central.autoPublish` defaults to `false`, so the workflow uploads deployments
-to the Central Portal but does not automatically publish them. After a release
-run, review the deployments in `https://central.sonatype.com/` and publish them
-manually when all Java, Python, .NET, and C++ artifacts are correct.
+`central.autoPublish` defaults to `true`, so release CI publishes validated
+deployments automatically through the Central Portal. Review the release run and
+the published artifacts in `https://central.sonatype.com/` after CI completes.

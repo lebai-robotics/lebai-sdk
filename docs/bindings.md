@@ -169,7 +169,8 @@ It uploads all jars as the `lebai-java-jars` GitHub artifact. If
 deployments to the Maven Central Portal using server id `central`. The public
 key for `MAVEN_GPG_PRIVATE_KEY` must already be published on a Maven
 Central-supported keyserver, such as `keyserver.ubuntu.com`, `keys.openpgp.org`,
-or `pgp.mit.edu`; the workflow checks this before upload.
+or `pgp.mit.edu`; the workflow checks this before upload. Validated Java
+deployments publish automatically during release CI.
 
 ### Important packaging note
 
