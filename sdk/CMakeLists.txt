@@ -18,20 +18,19 @@ target_include_directories(lebai-cpp
     $<INSTALL_INTERFACE:include>)
 target_compile_features(lebai-cpp PUBLIC cxx_std_17)
 
-if(TARGET nlohmann_json::nlohmann_json)
-  target_link_libraries(lebai-cpp PRIVATE nlohmann_json::nlohmann_json)
-elseif(TARGET nlohmann_json)
-  target_link_libraries(lebai-cpp PRIVATE nlohmann_json)
+if(LEBAI_NLOHMANN_JSON_TARGET)
+  target_link_libraries(lebai-cpp PRIVATE
+    "$<BUILD_INTERFACE:${LEBAI_NLOHMANN_JSON_TARGET}>")
 endif()
 
-if(TARGET httplib::httplib)
-  target_link_libraries(lebai-cpp PRIVATE httplib::httplib)
+if(LEBAI_HTTPLIB_TARGET)
+  target_link_libraries(lebai-cpp PRIVATE
+    "$<BUILD_INTERFACE:${LEBAI_HTTPLIB_TARGET}>")
 endif()
 
-if(TARGET unofficial::json-rpc-cxx::json-rpc-cxx)
-  target_link_libraries(lebai-cpp PRIVATE unofficial::json-rpc-cxx::json-rpc-cxx)
-elseif(TARGET json-rpc-cxx)
-  target_link_libraries(lebai-cpp PRIVATE json-rpc-cxx)
+if(LEBAI_JSON_RPC_CXX_TARGET)
+  target_link_libraries(lebai-cpp PRIVATE
+    "$<BUILD_INTERFACE:${LEBAI_JSON_RPC_CXX_TARGET}>")
 endif()
 
 if(WIN32)

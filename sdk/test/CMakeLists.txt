@@ -31,6 +31,9 @@ target_link_directories(test_json_protos PRIVATE
 target_link_libraries(test_json_protos PRIVATE
   ${PROJECT_NAMESPACE}::lebai-cpp
   gtest)
+if(LEBAI_NLOHMANN_JSON_TARGET)
+  target_link_libraries(test_json_protos PRIVATE ${LEBAI_NLOHMANN_JSON_TARGET})
+endif()
 set_target_properties(test_json_protos PROPERTIES
   INSTALL_RPATH
   ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
@@ -96,6 +99,12 @@ add_test(
   COMMAND ${CMAKE_COMMAND}
     -DPROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR}
     -P ${CMAKE_CURRENT_SOURCE_DIR}/test_workflow_layout.cmake)
+
+add_test(
+  NAME CMakeDependencyBoundaries
+  COMMAND ${CMAKE_COMMAND}
+    -DPROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR}
+    -P ${CMAKE_CURRENT_SOURCE_DIR}/test_cmake_dependency_boundaries.cmake)
 
 add_executable(test_robot test_robot.cc)
 if(DEFINED TEST_ROBOT_IP)

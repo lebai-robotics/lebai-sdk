@@ -33,7 +33,7 @@ jobs:
           sudo apt-get install -y build-essential cmake git python3-pip python3-dev doxygen graphviz dpkg-dev
 
       - name: Configure
-        run: cmake -S . -B build -DBUILD_DEB=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_EXAMPLES=OFF
+        run: cmake -S . -B build -DBUILD_DEB=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF
 
       - name: Build and pack
         run: |
@@ -58,7 +58,7 @@ jobs:
         run: choco install nsis -y --no-progress
 
       - name: Configure
-        run: cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DBUILD_NSIS=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_EXAMPLES=OFF
+        run: cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DBUILD_NSIS=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF
 
       - name: Build
         run: cmake --build build --config Release
