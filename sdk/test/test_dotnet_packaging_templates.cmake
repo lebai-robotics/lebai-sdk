@@ -21,6 +21,7 @@ endfunction()
 
 read_project_file(lebai_csproj "dotnet/lebai.csproj.in")
 read_project_file(runtime_csproj "dotnet/lebai.runtime.csproj.in")
+read_project_file(robot_facade "dotnet/RobotFacade.cs")
 read_project_file(dotnet_cmake "cmake/dotnet.cmake")
 read_project_file(root_cmake "CMakeLists.txt")
 
@@ -32,4 +33,9 @@ expect_contains("${runtime_csproj}" "$<TARGET_PROPERTY:dotnet_gripper,TYPE>" "gr
 expect_contains("${dotnet_cmake}" "target_link_libraries(lebai-native PRIVATE dotnet_l_master dotnet_zeroconf dotnet_gripper)" "gripper native wrapper link")
 expect_contains("${dotnet_cmake}" "DOTNET_NATIVE_ASSETS_DIR" "staged native asset directory")
 expect_contains("${dotnet_cmake}" "fix_dotnet_dllimports.cmake" "post-SWIG DllImport normalization")
+expect_contains("${dotnet_cmake}" "RobotFacade.cs" "C# facade copied into main package")
+expect_contains("${robot_facade}" "namespace lebai" "idiomatic C# facade namespace")
+expect_contains("${robot_facade}" "public sealed class Robot" "idiomatic C# Robot facade")
+expect_contains("${robot_facade}" "MoveJ(IEnumerable<double>" "array/list-friendly motion method")
+expect_contains("${robot_facade}" "GetActualJointPositions()" "array-returning joint getter")
 expect_contains("${root_cmake}" "CMAKE_MSVC_RUNTIME_LIBRARY" "static MSVC runtime configuration")

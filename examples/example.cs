@@ -1,5 +1,6 @@
 using System;
-using lebai.l_master;
+using lebai;
+
 namespace lebai.app
 {
     class Program
@@ -8,27 +9,23 @@ namespace lebai.app
         {
             Console.WriteLine($"Enter example");
             Robot robot = new Robot("127.0.0.1", true);
-            robot.stop_sys();
+            robot.StopSys();
             Console.WriteLine($"stop...");
-            robot.start_sys();
+            robot.StartSys();
             Console.WriteLine($"start...");
-            DoubleVector jp1 = new DoubleVector();
-            jp1.Add(0.0);
-            jp1.Add(-60.0 / 180.0 * 3.14);
-            jp1.Add(80.0 / 180.0 * 3.14);
-            jp1.Add(-10.0 / 180.0 * 3.14);
-            jp1.Add(-60.0 / 180.0 * 3.14);
-            jp1.Add(0.0);
-            robot.movej(jp1, 1.0, 1.0, 0.0, 0.0);
-            DoubleVector jp2 = new DoubleVector();
-            jp2.Add(0.0);
-            jp2.Add(0.0);
-            jp2.Add(0.0);
-            jp2.Add(0.0);
-            jp2.Add(0.0);
-            jp2.Add(0.0);
-            robot.movej(jp2, 1.0, 1.0, 0.0, 0.0);
-            robot.wait_move();
+            double[] jp1 = {
+                0.0,
+                -60.0 / 180.0 * Math.PI,
+                80.0 / 180.0 * Math.PI,
+                -10.0 / 180.0 * Math.PI,
+                -60.0 / 180.0 * Math.PI,
+                0.0
+            };
+            robot.MoveJ(jp1, 1.0, 1.0, 0.0, 0.0);
+
+            double[] jp2 = { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+            robot.MoveJ(jp2, 1.0, 1.0, 0.0, 0.0);
+            robot.WaitMove();
             Console.WriteLine($"Exit example");
         }
     }

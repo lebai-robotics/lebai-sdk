@@ -185,6 +185,18 @@ configure_file(
   ${DOTNET_PROJECT_DIR}/${DOTNET_PROJECT}.csproj.in
   @ONLY)
 
+set(DOTNET_FACADE_SOURCES
+  ${PROJECT_SOURCE_DIR}/dotnet/RobotFacade.cs)
+set(DOTNET_FACADE_OUTPUTS)
+foreach(DOTNET_FACADE_SOURCE IN LISTS DOTNET_FACADE_SOURCES)
+  get_filename_component(DOTNET_FACADE_NAME ${DOTNET_FACADE_SOURCE} NAME)
+  configure_file(
+    ${DOTNET_FACADE_SOURCE}
+    ${DOTNET_PROJECT_DIR}/${DOTNET_FACADE_NAME}
+    COPYONLY)
+  list(APPEND DOTNET_FACADE_OUTPUTS ${DOTNET_PROJECT_DIR}/${DOTNET_FACADE_NAME})
+endforeach()
+
 add_custom_command(
   OUTPUT ${DOTNET_PROJECT_DIR}/${DOTNET_PROJECT}.csproj
   COMMAND ${CMAKE_COMMAND} -E copy ${DOTNET_PROJECT}.csproj.in ${DOTNET_PROJECT}.csproj
@@ -199,6 +211,7 @@ add_custom_command(
   COMMAND ${CMAKE_COMMAND} -E touch ${DOTNET_PROJECT_DIR}/timestamp
   DEPENDS
     ${DOTNET_PROJECT_DIR}/${DOTNET_PROJECT}.csproj
+    ${DOTNET_FACADE_OUTPUTS}
     dotnet_native_package
     dotnet_stage_native_assets
     dotnet_fix_dllimports

@@ -74,6 +74,11 @@ The `.NET` build creates:
 - a native runtime package project named like `lebai.runtime.<rid>`
 - a managed package project named `lebai`
 
+The public C# API should prefer the handwritten `lebai.Robot` facade in
+`dotnet/RobotFacade.cs`. The facade exposes ordinary C# collections such as
+`double[]`, `uint[]`, `int[]`, and `string[]`, while the SWIG-generated
+`lebai.l_master` namespace remains the lower-level bridge to the C++ API.
+
 The runtime identifier is selected from the current platform, for example `linux-x64`, `linux-arm64`, or `win-x64`.
 
 The main `lebai` NuGet package directly packs staged native assets from

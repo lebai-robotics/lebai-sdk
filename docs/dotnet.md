@@ -47,23 +47,25 @@ dotnet add package lebai
 在程序中添加如下代码
 
 ```c#
-using lebai.l_master;
-
+using System;
+using lebai;
 
 # in Main
 Robot robot = new Robot("xxx.xxx.xxx.xxx", true);
-robot.stop_sys();
+robot.StopSys();
 Console.WriteLine($"stop...");
-robot.start_sys();
+robot.StartSys();
 Console.WriteLine($"start...");
-DoubleVector jp1 = new DoubleVector();
-jp1.Add(0.0);
-jp1.Add(-60.0 / 180.0 * 3.14);
-jp1.Add(80.0 / 180.0 * 3.14);
-jp1.Add(-10.0 / 180.0 * 3.14);
-jp1.Add(-60.0 / 180.0 * 3.14);
-jp1.Add(0.0);
-robot.movej(jp1, 1.0, 1.0, 0.0, 0.0);
+
+double[] joints = {
+    0.0,
+    -60.0 / 180.0 * Math.PI,
+    80.0 / 180.0 * Math.PI,
+    -10.0 / 180.0 * Math.PI,
+    -60.0 / 180.0 * Math.PI,
+    0.0
+};
+robot.MoveJ(joints, 1.0, 1.0, 0.0, 0.0);
 ```
 
 4. 编译运行
@@ -73,3 +75,11 @@ dotnet build
 # run your console application.
 ```
 
+## API 风格
+
+推荐应用层使用 `lebai.Robot`。它是面向 C# 的轻量 facade，公开
+`double[]`、`uint[]`、`int[]`、`string[]` 等普通 C# 类型，并在内部转换到
+SWIG 生成的底层类型。
+
+`lebai.l_master` 命名空间下仍包含 SWIG 生成的低层接口，例如 `DoubleVector`
+和 `StrVector`。这些类型主要用于兼容和内部桥接，新代码不应优先直接使用。
