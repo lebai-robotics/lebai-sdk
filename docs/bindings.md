@@ -50,6 +50,11 @@ The Python binding generates wrapper modules for:
 
 The packaged Python project name is `pylebai`.
 
+The public Python API should prefer `pylebai.Robot` from
+`python/pylebai/robot.py`. The facade accepts normal Python `list`/`dict`
+arguments and converts common vector returns to `list`, while the SWIG-generated
+`pylebai.l_master` module remains available as the lower-level bridge.
+
 ### Packaging notes
 
 - the package is assembled in the build tree under `build/python`

@@ -12,14 +12,13 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from pylebai import zeroconf
+from pylebai import Robot, zeroconf
 ## Try to find the l_master
 d = zeroconf.Discovery()
 controllers = d.resolve()
 ## Robot instance
-from pylebai import l_master
 import time
-robot = l_master.Robot(controllers[0].ip_address)
+robot = Robot(controllers[0].ip_address)
 time.sleep(2)
 robot.start_sys()
 robot.movej([1.0, 0.0, 0.0, 0.0, -1.0, 0.0],1.0,1.0,0.0,0.0)

@@ -44,10 +44,15 @@ sudo pip3 uninstall pylebai
 安装完成后可以直接使用lebai包。
 
 ```python
-from pylebai import l_master
-robot = l_master.Robot("172.17.0.5",True)
-robot.movej({"j1": 1.0,"j2": -1.0471975511965976,"j3": 1.3962634015954636,"j4": -0.17453292519943295,"j5": -1.0471975511965976,"j6": 0.0},1.0,1.0,0.0,0.0)
+from pylebai import Robot
+
+robot = Robot("172.17.0.5", True)
+robot.movej([1.0, -1.0471975511965976, 1.3962634015954636, -0.17453292519943295, -1.0471975511965976, 0.0], 1.0, 1.0, 0.0, 0.0)
 ```
+
+推荐应用层使用 `pylebai.Robot`。它是 Python 风格 facade，接受普通
+`list`/`dict` 参数，并将常用 vector 返回值转换为 Python `list`。
+`pylebai.l_master` 仍保留 SWIG 生成的低层接口，主要用于兼容和内部桥接。
 
 ## API
 
@@ -379,11 +384,11 @@ resolve()
 
 example:
 #从lebai导入设备发现的模块
-from lebai import zeroconf
+from pylebai import Robot, zeroconf
 #实例化一个Discovery类用来存储设备发现的信息
 d = zeroconf.Discovery()
 #搜索局域网内设备，返回一个最多16个元素的列表
 controllers = d.resolve()
 #根据局域网内发现的设备，建立连接
-robot = l_master.Robot(controllers[0].ip_address)
+robot = Robot(controllers[0].ip_address)
 ```

@@ -112,7 +112,8 @@ endforeach()
 ## Python Packaging  ##
 #######################
 #file(MAKE_DIRECTORY python/${PYTHON_PROJECT})
-file(GENERATE OUTPUT ${PYTHON_PROJECT_DIR}/__init__.py CONTENT "__version__ = \"${PROJECT_VERSION}\"\n")
+file(COPY ${PROJECT_SOURCE_DIR}/python/${PYTHON_PROJECT}/ DESTINATION ${PYTHON_PROJECT_DIR})
+file(APPEND ${PYTHON_PROJECT_DIR}/__init__.py "\n__version__ = \"${PROJECT_VERSION}\"\n")
 # file(GENERATE OUTPUT ${PYTHON_PROJECT_DIR}/__init__.py CONTENT "")
 
 configure_file(
@@ -175,6 +176,8 @@ add_custom_command(
   DEPENDS
     python/setup.py
     python/pyproject.toml
+    ${PROJECT_SOURCE_DIR}/python/${PYTHON_PROJECT}/__init__.py
+    ${PROJECT_SOURCE_DIR}/python/${PYTHON_PROJECT}/robot.py
     ${PROJECT_NAMESPACE}::lebai-cpp
     # ${PROJECT_NAMESPACE}::posture
     # ${PROJECT_NAMESPACE}::motion

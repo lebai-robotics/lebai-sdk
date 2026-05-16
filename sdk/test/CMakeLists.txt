@@ -68,6 +68,12 @@ add_test(
     -P ${CMAKE_CURRENT_SOURCE_DIR}/test_python_ci_aggregation.cmake)
 
 add_test(
+  NAME PythonFacadePackaging
+  COMMAND ${CMAKE_COMMAND}
+    -DPROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR}
+    -P ${CMAKE_CURRENT_SOURCE_DIR}/test_python_facade_packaging.cmake)
+
+add_test(
   NAME JavaCiRelease
   COMMAND ${CMAKE_COMMAND}
     -DPROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR}
