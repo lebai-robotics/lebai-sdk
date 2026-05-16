@@ -28,8 +28,8 @@ int main(int argc, char **argv) {
   if (argc < 2) {
     std::cerr << "You must specify the IP address of the robot" << std::endl;
     std::cerr << "Execute example as follow:" << std::endl;
-    std::cerr << "./example 127.0.0.1 sim" << std::endl;
-    std::cerr << "./example 127.0.0.1 sim --move" << std::endl;
+    std::cerr << argv[0] << " 127.0.0.1 sim" << std::endl;
+    std::cerr << argv[0] << " 127.0.0.1 sim --move" << std::endl;
     return 1;
   }
 

@@ -14,7 +14,7 @@
 
 import sys
 import time
-from pylebai import l_master
+from pylebai import gripper
 
 def main():
     # Check command line arguments
@@ -32,14 +32,14 @@ def main():
         # Create gripper instance
         # This will establish Modbus RTU communication over RS485
         # with 115200 baud rate, 8N1, Modbus address 1
-        gripper = l_master.Gripper(port_name)
+        direct_gripper = gripper.Gripper(port_name)
 
         print("Gripper connected successfully!")
-        gripper.set_position(30)
+        direct_gripper.set_position(30)
         time.sleep(1)
-        gripper.set_position(70)
+        direct_gripper.set_position(70)
         time.sleep(5)
-        gripper.do_calibration()
+        direct_gripper.do_calibration()
         time.sleep(5)
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)
@@ -49,4 +49,3 @@ def main():
 
 if __name__ == "__main__":
     sys.exit(main())
-

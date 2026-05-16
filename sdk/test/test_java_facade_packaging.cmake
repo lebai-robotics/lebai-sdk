@@ -19,7 +19,7 @@ read_project_file(java_facade "java/Robot.java")
 read_project_file(java_swig "sdk/java/l_master.i")
 read_project_file(java_docs "docs/java.md")
 read_project_file(bindings_docs "docs/bindings.md")
-read_project_file(java_example "examples/example.java")
+read_project_file(java_example "examples/robot/RobotExample.java")
 
 expect_contains("${java_facade}" "public final class Robot implements AutoCloseable" "Java public Robot facade")
 expect_contains("${java_facade}" "private final NativeRobot nativeRobot" "NativeRobot-backed facade")

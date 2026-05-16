@@ -18,8 +18,8 @@ if(NOT _python_cmake MATCHES "python/\\$\\{PYTHON_PROJECT\\}/robot\\.py")
   message(FATAL_ERROR "Python package target must depend on the Robot facade source")
 endif()
 
-file(READ "${_root}/examples/example.py" _example)
-if(NOT _example MATCHES "from pylebai import Robot, zeroconf")
+file(READ "${_root}/examples/robot/robot.py" _example)
+if(NOT _example MATCHES "from pylebai import Robot")
   message(FATAL_ERROR "Python example must use the public Robot facade")
 endif()
 

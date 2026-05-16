@@ -3,7 +3,7 @@ using lebai.gripper;
 
 namespace lebai.app
 {
-    class ExampleGripper
+    class GripperExample
     {
         static int Main(string[] args)
         {
