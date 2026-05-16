@@ -2,6 +2,7 @@
 
 #include <nlohmann/json.hpp>
 
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -41,6 +42,36 @@ inline void from_json(const nlohmann::json& json, TaskState& state) {
   }
 }
 
+inline void to_json(nlohmann::json& json, const TaskState& state) {
+  switch (state) {
+    case TaskState::NONE:
+      json = "NONE";
+      return;
+    case TaskState::RUNNING:
+      json = "RUNNING";
+      return;
+    case TaskState::PAUSE:
+      json = "PAUSE";
+      return;
+    case TaskState::SUCCESS:
+      json = "SUCCESS";
+      return;
+    case TaskState::INTERRUPT:
+      json = "INTERRUPT";
+      return;
+    case TaskState::FAIL:
+      json = "FAIL";
+      return;
+    case TaskState::WAIT:
+      json = "WAIT";
+      return;
+    case TaskState::INTERRUPTING:
+      json = "INTERRUPTING";
+      return;
+  }
+  throw std::runtime_error("invalid task state");
+}
+
 enum class TaskKind {
   LUA = 0,
   APP = 10,
@@ -55,6 +86,18 @@ inline void from_json(const nlohmann::json& json, TaskKind& kind) {
   } else {
     throw std::runtime_error("unknown task kind: " + text);
   }
+}
+
+inline void to_json(nlohmann::json& json, const TaskKind& kind) {
+  switch (kind) {
+    case TaskKind::LUA:
+      json = "LUA";
+      return;
+    case TaskKind::APP:
+      json = "APP";
+      return;
+  }
+  throw std::runtime_error("invalid task kind");
 }
 
 struct TaskIds {
@@ -159,12 +202,14 @@ inline void to_json(nlohmann::json& json, const Task& task) {
   json = nlohmann::json{{"id", task.id},
                         {"block_id", task.block_id},
                         {"event_id", task.event_id},
+                        {"state", task.state},
                         {"loop_count", task.loop_count},
                         {"loop_to", task.loop_to},
                         {"is_parallel", task.is_parallel},
                         {"is_simu", task.is_simu},
                         {"stdout", task.stdout_text},
                         {"pre_pause", task.pre_pause},
+                        {"kind", task.kind},
                         {"dir", task.dir},
                         {"name", task.name},
                         {"params", task.params}};

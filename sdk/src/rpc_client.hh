@@ -39,6 +39,8 @@ class RpcClient {
       return client_->CallMethod<nlohmann::json>(
           id, method, params.get<std::vector<nlohmann::json>>());
     }
+    // The public Robot::call API accepts a JSON object payload; controller RPCs
+    // expect positional params, so keep the object as one positional argument.
     return client_->CallMethod<nlohmann::json>(id, method, {params});
   }
 

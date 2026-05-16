@@ -2,6 +2,7 @@
 
 #include <nlohmann/json.hpp>
 
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -213,7 +214,7 @@ inline void to_json(nlohmann::json &json, const MotionState &state) {
       json = "FINISHED";
       return;
   }
-  json = "WAIT";
+  throw std::runtime_error("invalid motion state");
 }
 
 inline void from_json(const nlohmann::json &json,

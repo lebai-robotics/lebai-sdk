@@ -137,6 +137,7 @@ inline void to_json(nlohmann::json& value, const RobotState& state) {
       value = "STOP";
       return;
   }
+  throw std::runtime_error("invalid robot state");
 }
 
 enum class NetworkKind {
@@ -428,6 +429,7 @@ inline void to_json(nlohmann::json& value, const EstopReason& reason) {
       value = "JOINT_ERROR";
       return;
   }
+  throw std::runtime_error("invalid estop reason");
 }
 
 struct GetEstopReasonResponse {

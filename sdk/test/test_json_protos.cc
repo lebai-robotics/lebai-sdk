@@ -426,12 +426,26 @@ TEST(JsonSystemProtoTest, RobotStateParsesControllerPayload) {
   EXPECT_EQ(parsed.state, protos_json::system_proto::RobotState::ROBOT_OFF);
 }
 
+TEST(JsonSystemProtoTest, RobotStateRejectsInvalidOutboundValue) {
+  const auto invalid =
+      static_cast<protos_json::system_proto::RobotState>(999);
+
+  EXPECT_THROW(static_cast<void>(nlohmann::json(invalid)), std::runtime_error);
+}
+
 TEST(JsonSystemProtoTest, EstopReasonParsesControllerPayload) {
   const auto json = nlohmann::json::parse(R"({"reason":"NONE"})");
   const auto parsed =
       json.get<protos_json::system_proto::GetEstopReasonResponse>();
 
   EXPECT_EQ(parsed.reason, protos_json::system_proto::EstopReason::NONE);
+}
+
+TEST(JsonSystemProtoTest, EstopReasonRejectsInvalidOutboundValue) {
+  const auto invalid =
+      static_cast<protos_json::system_proto::EstopReason>(999);
+
+  EXPECT_THROW(static_cast<void>(nlohmann::json(invalid)), std::runtime_error);
 }
 
 TEST(JsonControlProtoTest, StartTaskRequestSerializesExpectedFields) {
@@ -482,6 +496,30 @@ TEST(JsonControlProtoTest, TasksParseControllerPayload) {
   ASSERT_EQ(parsed.tasks.size(), 1U);
   EXPECT_EQ(parsed.tasks.front().id, 7U);
   EXPECT_EQ(parsed.tasks.front().stdout_text, "ok");
+}
+
+TEST(JsonControlProtoTest, TaskSerializesStateAndKind) {
+  protos_json::control_proto::Task task;
+  task.id = 7;
+  task.block_id = "block";
+  task.event_id = 1;
+  task.state = protos_json::control_proto::TaskState::RUNNING;
+  task.loop_count = 2;
+  task.loop_to = 3;
+  task.is_parallel = true;
+  task.is_simu = false;
+  task.stdout_text = "ok";
+  task.pre_pause = 0;
+  task.kind = protos_json::control_proto::TaskKind::APP;
+  task.dir = "apps";
+  task.name = "demo";
+  task.params = {"--flag"};
+
+  const nlohmann::json json = task;
+
+  EXPECT_EQ(json.at("state"), "RUNNING");
+  EXPECT_EQ(json.at("kind"), "APP");
+  EXPECT_EQ(json.at("stdout"), "ok");
 }
 
 TEST(JsonSystemProtoTest, PhyDataParsesControllerPayload) {
