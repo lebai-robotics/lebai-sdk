@@ -42,6 +42,8 @@
 #include "lebai/gripper.hh"
 %}
 
+%rename(NativeRobot) lebai::l_master::Robot;
+
 %extend lebai::l_master::KinematicsForwardResp {
   std::string __repr__() {
     std::string repr = "{pose: {{x: ";

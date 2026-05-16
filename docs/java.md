@@ -14,7 +14,26 @@ main package:
 ```
 
 The Java source package remains `org.sdk.lebai` for compatibility with the
-existing SWIG-generated API.
+existing package namespace.
+
+Use `org.sdk.lebai.Robot` for application code. It is a Java facade over the
+SWIG binding, accepts primitive arrays for common vector parameters, returns
+primitive arrays for common vector results, loads native libraries
+automatically, and implements `AutoCloseable`.
+
+```java
+import org.sdk.lebai.Robot;
+
+try (Robot robot = new Robot("172.17.0.5", true)) {
+  robot.startSys();
+  robot.moveJ(new double[] {0.0, 0.0, 0.0, 0.0, 0.0, 0.0}, 0.5, 0.5, 0.0, 0.0);
+  robot.waitMove(0);
+}
+```
+
+The lower-level SWIG-generated robot class is `org.sdk.lebai.NativeRobot` in
+v2.x. Access it through `Robot.getNative()` when a method has not yet been
+wrapped by the facade.
 
 ## Local Build
 

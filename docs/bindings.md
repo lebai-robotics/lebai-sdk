@@ -156,6 +156,11 @@ The configured Java package namespace is `org.sdk.lebai`. The Maven Central
 through `JAVA_MAVEN_GROUP_ID`, because the verified Sonatype namespace controls
 Maven coordinates while the Java package namespace controls source-level imports.
 
+The public Java API should prefer `org.sdk.lebai.Robot` from `java/Robot.java`.
+The SWIG-generated robot class is renamed to `org.sdk.lebai.NativeRobot` so the
+public facade can own the `Robot` name; lower-level access remains available via
+`Robot.getNative()`.
+
 `.github/workflows/java_release.yml` builds native runtime jars for Linux x64,
 Linux arm64, and Windows x64, then builds the aggregate `lebai-java` package.
 It uploads all jars as the `lebai-java-jars` GitHub artifact. If
