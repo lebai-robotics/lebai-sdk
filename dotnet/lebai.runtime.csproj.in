@@ -28,6 +28,7 @@
       $<$<STREQUAL:$<TARGET_PROPERTY:lebai-cpp,TYPE>,SHARED_LIBRARY>:;$<TARGET_SONAME_FILE:lebai-cpp>>
       $<$<STREQUAL:$<TARGET_PROPERTY:dotnet_l_master,TYPE>,SHARED_LIBRARY>:;$<TARGET_SONAME_FILE:dotnet_l_master>>
       $<$<STREQUAL:$<TARGET_PROPERTY:dotnet_zeroconf,TYPE>,SHARED_LIBRARY>:;$<TARGET_SONAME_FILE:dotnet_zeroconf>>
+      $<$<STREQUAL:$<TARGET_PROPERTY:dotnet_gripper,TYPE>,SHARED_LIBRARY>:;$<TARGET_SONAME_FILE:dotnet_gripper>>
     ">
       <PackagePath>runtimes/@RUNTIME_IDENTIFIER@/native/%(Filename)%(Extension)</PackagePath>
       <Pack>true</Pack>

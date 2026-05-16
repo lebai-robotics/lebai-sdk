@@ -26,6 +26,7 @@ endif()
 # Needed by dotnet/CMakeLists.txt
 set(DOTNET_PACKAGE lebai)
 set(DOTNET_PACKAGES_DIR "${PROJECT_BINARY_DIR}/dotnet/packages")
+set(DOTNET_NATIVE_ASSETS_DIR "${PROJECT_BINARY_DIR}/dotnet/native-assets")
 
 # see: https://docs.microsoft.com/en-us/dotnet/core/rid-catalog
 if(APPLE)
@@ -91,7 +92,18 @@ endif()
 list(APPEND CMAKE_SWIG_FLAGS ${FLAGS} "-I${PROJECT_SOURCE_DIR}")
 
 add_subdirectory(sdk/dotnet)
-target_link_libraries(lebai-native PRIVATE dotnet_l_master dotnet_zeroconf)
+target_link_libraries(lebai-native PRIVATE dotnet_l_master dotnet_zeroconf dotnet_gripper)
+
+add_custom_target(dotnet_fix_dllimports
+  COMMAND ${CMAKE_COMMAND}
+    -DDOTNET_PROJECT_DIR=${DOTNET_PROJECT_DIR}
+    -DDOTNET_NATIVE_LIBRARY=lebai-native
+    -P ${PROJECT_SOURCE_DIR}/cmake/fix_dotnet_dllimports.cmake
+  DEPENDS
+    dotnet_l_master_swig_compilation
+    dotnet_zeroconf_swig_compilation
+    dotnet_gripper_swig_compilation
+  COMMENT "Normalize generated .NET DllImport attributes")
 
 file(COPY ${PROJECT_SOURCE_DIR}/dotnet/logo.png DESTINATION ${PROJECT_BINARY_DIR}/dotnet)
 set(DOTNET_LOGO_DIR "${PROJECT_BINARY_DIR}/dotnet")
@@ -140,6 +152,31 @@ add_custom_target(dotnet_native_package
     ${DOTNET_NATIVE_PROJECT_DIR}/timestamp
   WORKING_DIRECTORY ${DOTNET_NATIVE_PROJECT_DIR})
 
+############################
+##  .NET Native Assets    ##
+############################
+set(DOTNET_RUNTIME_NATIVE_DIR "${DOTNET_NATIVE_ASSETS_DIR}/runtimes/${RUNTIME_IDENTIFIER}/native")
+set(DOTNET_STAGE_NATIVE_COMMANDS
+  COMMAND ${CMAKE_COMMAND} -E make_directory "${DOTNET_RUNTIME_NATIVE_DIR}"
+  COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:lebai-native> "${DOTNET_RUNTIME_NATIVE_DIR}/$<TARGET_FILE_NAME:lebai-native>")
+if(BUILD_SHARED_LIBS)
+  list(APPEND DOTNET_STAGE_NATIVE_COMMANDS
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different $<TARGET_FILE:lebai-cpp> "${DOTNET_RUNTIME_NATIVE_DIR}/$<TARGET_FILE_NAME:lebai-cpp>")
+endif()
+
+add_custom_command(
+  OUTPUT ${DOTNET_NATIVE_ASSETS_DIR}/timestamp
+  ${DOTNET_STAGE_NATIVE_COMMANDS}
+  COMMAND ${CMAKE_COMMAND} -E touch ${DOTNET_NATIVE_ASSETS_DIR}/timestamp
+  DEPENDS
+    lebai-native
+  VERBATIM
+  COMMENT "Stage .NET native assets for ${RUNTIME_IDENTIFIER}")
+
+add_custom_target(dotnet_stage_native_assets
+  DEPENDS
+    ${DOTNET_NATIVE_ASSETS_DIR}/timestamp)
+
 ####################
 ##  .Net Package  ##
 ####################
@@ -147,6 +184,18 @@ configure_file(
   ${PROJECT_SOURCE_DIR}/dotnet/${DOTNET_PROJECT}.csproj.in
   ${DOTNET_PROJECT_DIR}/${DOTNET_PROJECT}.csproj.in
   @ONLY)
+
+set(DOTNET_FACADE_SOURCES
+  ${PROJECT_SOURCE_DIR}/dotnet/RobotFacade.cs)
+set(DOTNET_FACADE_OUTPUTS)
+foreach(DOTNET_FACADE_SOURCE IN LISTS DOTNET_FACADE_SOURCES)
+  get_filename_component(DOTNET_FACADE_NAME ${DOTNET_FACADE_SOURCE} NAME)
+  configure_file(
+    ${DOTNET_FACADE_SOURCE}
+    ${DOTNET_PROJECT_DIR}/${DOTNET_FACADE_NAME}
+    COPYONLY)
+  list(APPEND DOTNET_FACADE_OUTPUTS ${DOTNET_PROJECT_DIR}/${DOTNET_FACADE_NAME})
+endforeach()
 
 add_custom_command(
   OUTPUT ${DOTNET_PROJECT_DIR}/${DOTNET_PROJECT}.csproj
@@ -162,7 +211,10 @@ add_custom_command(
   COMMAND ${CMAKE_COMMAND} -E touch ${DOTNET_PROJECT_DIR}/timestamp
   DEPENDS
     ${DOTNET_PROJECT_DIR}/${DOTNET_PROJECT}.csproj
+    ${DOTNET_FACADE_OUTPUTS}
     dotnet_native_package
+    dotnet_stage_native_assets
+    dotnet_fix_dllimports
   BYPRODUCTS
     ${DOTNET_PROJECT_DIR}/bin
     ${DOTNET_PROJECT_DIR}/obj

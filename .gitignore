@@ -1,8 +1,12 @@
 build
+build-*
 out
 .vscode
 .vs
 sdk/include/lebai/config.hh
 CMakeSettings.json
 .cache
+.codex
+.worktrees/
+docs/superpowers/
 example_dummy.cc

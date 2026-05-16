@@ -13,686 +13,1178 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-#include <rapidjson/rapidjson.h>
-#include <rapidjson/stringbuffer.h>
-#include <rapidjson/writer.h>
 #include <exception>
+#include <stdexcept>
 #include "robot_impl.hh"
-#include "protos/utils.hh"
 
 namespace lebai {
 namespace l_master {
+
 Robot::RobotImpl::RobotImpl(const ::std::string &ip, bool simulator) {
   uint16_t port = simulator ? simulation_port_ : physical_machine_port_;
-  json_rpc_connector_ = std::make_unique<JSONRpcConnector>(ip, port);
-  unsigned int i = 0;
-  unsigned int count = timeout_ / 0.1;
-  while (i < count) {
-    if (json_rpc_connector_->GetConnectionStatus() == JSONRpcConnector::kOpen) {
-      break;
-    }
-    std::this_thread::sleep_for(std::chrono::milliseconds(100));
-    i++;
-  }
+  http_json_rpc_connector_ = std::make_unique<HttpJsonRpcConnector>(ip, port);
+  rpc_client_ = std::make_unique<RpcClient>(*http_json_rpc_connector_);
 }
 Robot::RobotImpl::~RobotImpl() {}
 
 std::tuple<int, std::string> Robot::RobotImpl::call(
     const std::string &method, const std::string &req_data_str) {
-  // std::string jsonrpc_req = ToJSONRpcReqString(++jsonrpc_id_, method,
-  // params);
-  std::string resp_data_str;
-  auto ret = json_rpc_connector_->CallRpc(method, req_data_str, &resp_data_str);
-  // std::string resp_data;
-  // if(ExtractJSONRpcRespString(jsonrpc_resp, resp_id, resp_data) < 0)
-  // {
-  //   return std::make_tuple(-1, "");
-  // }
-  return std::make_tuple(ret, resp_data_str);
+  try {
+    const auto params = nlohmann::json::parse(req_data_str);
+    const auto response = rpc_client_->CallRaw(method, params);
+    return std::make_tuple(0, response.dump());
+  } catch (const jsonrpccxx::JsonRpcException &exception) {
+    return std::make_tuple(exception.Code(), exception.Message());
+  } catch (const nlohmann::json::exception &exception) {
+    return std::make_tuple(-32600, exception.what());
+  } catch (const std::exception &exception) {
+    return std::make_tuple(-1, exception.what());
+  }
 }
 
 bool Robot::RobotImpl::isNetworkConnected() {
-  // return json_rpc_connector_->Ping();
-  return json_rpc_connector_->GetConnectionStatus() == JSONRpcConnector::kOpen;
+  try {
+    protos_json::system_proto::HelloData req;
+    req.data = "world";
+    const auto resp = hello(req);
+    return resp.data == "hello, world";
+  } catch (...) {
+    return false;
+  }
 }
 
-int Robot::RobotImpl::startSys() {
-  return json_rpc_connector_->CallRpc("start_sys", "{}", nullptr);
+protos_json::system_proto::HelloData Robot::RobotImpl::hello(
+    const protos_json::system_proto::HelloData &req) {
+  return rpc_client_->Call<protos_json::system_proto::HelloData>("hello",
+                                                                 {req});
 }
 
-int Robot::RobotImpl::stopSys() {
-  return json_rpc_connector_->CallRpc("stop_sys", "{}", nullptr);
+void Robot::RobotImpl::set_auto(
+    const protos_json::auto_proto::SetAutoRequest &req) {
+  rpc_client_->Call<void>("set_auto", {req});
+}
+
+protos_json::auto_proto::GetAutoResponse Robot::RobotImpl::get_auto(
+    const protos_json::auto_proto::GetAutoRequest &req) {
+  return rpc_client_->Call<protos_json::auto_proto::GetAutoResponse>(
+      "get_auto", {req});
+}
+
+int Robot::RobotImpl::start_sys() {
+  rpc_client_->Call<void>("start_sys", {});
+  return 0;
+}
+
+int Robot::RobotImpl::stop_sys() {
+  rpc_client_->Call<void>("stop_sys", {});
+  return 0;
 }
 
 int Robot::RobotImpl::powerdown() {
-  return json_rpc_connector_->CallRpc("powerdown", "{}", nullptr);
+  rpc_client_->Call<void>("powerdown", {});
+  return 0;
 }
 
 int Robot::RobotImpl::stop() {
-  return json_rpc_connector_->CallRpc("stop", "{}", nullptr);
+  rpc_client_->Call<void>("stop", {});
+  return 0;
 }
 
 int Robot::RobotImpl::estop() {
-  return json_rpc_connector_->CallRpc("estop", "{}", nullptr);
+  rpc_client_->Call<void>("estop", {});
+  return 0;
 }
 
-int Robot::RobotImpl::teachMode() {
-  return json_rpc_connector_->CallRpc("start_teach_mode", "{}", nullptr);
+int Robot::RobotImpl::start_teach_mode() {
+  rpc_client_->Call<void>("start_teach_mode", {});
+  return 0;
 }
 
-int Robot::RobotImpl::endTeachMode() {
-  return json_rpc_connector_->CallRpc("end_teach_mode", "{}", nullptr);
+int Robot::RobotImpl::end_teach_mode() {
+  rpc_client_->Call<void>("end_teach_mode", {});
+  return 0;
 }
 
-int Robot::RobotImpl::pause() {
-  return json_rpc_connector_->CallRpc("pause", "{}", nullptr);
+int Robot::RobotImpl::pause_move() {
+  rpc_client_->Call<void>("pause_move", {});
+  return 0;
 }
 
-int Robot::RobotImpl::resume() {
-  return json_rpc_connector_->CallRpc("resume", "{}", nullptr);
+int Robot::RobotImpl::resume_move() {
+  rpc_client_->Call<void>("resume_move", {});
+  return 0;
 }
 
 void Robot::RobotImpl::reboot() {
-  json_rpc_connector_->CallRpc("reboot", "{}", nullptr);
+  rpc_client_->Call<void>("reboot", {});
 }
 
-motion::MotionIndex Robot::RobotImpl::moveJoint(
-    const motion::MoveRequest &req) {
-  std::string resp;
-  json_rpc_connector_->CallRpc("move_joint", req.ToJSONString(), &resp);
-  motion::MotionIndex motion_resp;
-  motion_resp.FromJSONString(resp);
-  return motion_resp;
-}
-motion::MotionIndex Robot::RobotImpl::moveLinear(
-    const motion::MoveRequest &req) {
-  std::string resp;
-  json_rpc_connector_->CallRpc("move_linear", req.ToJSONString(), &resp);
-  motion::MotionIndex motion_resp;
-  motion_resp.FromJSONString(resp);
-  return motion_resp;
-}
-motion::MotionIndex Robot::RobotImpl::moveCircular(
-    const motion::MovecRequest &req) {
-  std::string resp;
-  json_rpc_connector_->CallRpc("move_circular", req.ToJSONString(), &resp);
-  motion::MotionIndex motion_resp;
-  motion_resp.FromJSONString(resp);
-  return motion_resp;
-}
-motion::MotionIndex Robot::RobotImpl::towardJoint(
-    const motion::MoveRequest &req) {
-  std::string resp;
-  json_rpc_connector_->CallRpc("toward_joint", req.ToJSONString(), &resp);
-  motion::MotionIndex motion_resp;
-  motion_resp.FromJSONString(resp);
-  return motion_resp;
-}
-motion::MotionIndex Robot::RobotImpl::speedJoint(
-    const motion::SpeedJRequest &req) {
-  std::string resp;
-  json_rpc_connector_->CallRpc("speed_joint", req.ToJSONString(), &resp);
-  motion::MotionIndex motion_resp;
-  motion_resp.FromJSONString(resp);
-  return motion_resp;
-}
-motion::MotionIndex Robot::RobotImpl::speedLinear(
-    const motion::SpeedLRequest &req) {
-  std::string resp;
-
-  auto req_string = req.ToJSONString();
-  json_rpc_connector_->CallRpc("speed_linear", req_string, &resp);
-  // json_rpc_connector_->CallRpc("speed_linear",req.ToJSONString(),&resp);
-  motion::MotionIndex motion_resp;
-  motion_resp.FromJSONString(resp);
-  return motion_resp;
-}
-void Robot::RobotImpl::movePvat(const motion::MovePvatRequest &req) {
-  std::string resp;
-  json_rpc_connector_->CallRpc("move_pvat", req.ToJSONString(), &resp);
-}
-void Robot::RobotImpl::waitMove(const motion::MotionIndex &req) {
-  std::string resp;
-  json_rpc_connector_->CallRpc("wait_move", req.ToJSONString(), &resp);
-}
-motion::MotionIndex Robot::RobotImpl::getRunningMotion() {
-  std::string resp;
-  json_rpc_connector_->CallRpc("get_running_motion", "{}", &resp);
-  motion::MotionIndex get_running_motion_resp;
-  get_running_motion_resp.FromJSONString(resp);
-  return get_running_motion_resp;
-}
-motion::GetMotionStateResponse Robot::RobotImpl::getMotionState(
-    const motion::MotionIndex &req) {
-  std::string resp;
-  json_rpc_connector_->CallRpc("get_motion_state", req.ToJSONString(), &resp);
-  motion::GetMotionStateResponse get_motion_state_resp;
-  get_motion_state_resp.FromJSONString(resp);
-  return get_motion_state_resp;
-}
-void Robot::RobotImpl::stopMove() {
-  json_rpc_connector_->CallRpc("stop_move", "{}", nullptr);
-}
-system::RobotState Robot::RobotImpl::getRobotState() {
-  std::string resp;
-  json_rpc_connector_->CallRpc("get_robot_state", "{}", &resp);
-  system::GetRobotStateResponse get_robot_state_resp;
-  get_robot_state_resp.FromJSONString(resp);
-  return get_robot_state_resp.state();
+protos_json::motion_proto::MotionIndex Robot::RobotImpl::move_joint(
+    const protos_json::motion_proto::MoveRequest &req) {
+  return rpc_client_->Call<protos_json::motion_proto::MotionIndex>("move_joint",
+                                                                   {req});
 }
 
-system::EstopReason Robot::RobotImpl::getEstopReason() {
-  std::string resp;
-  json_rpc_connector_->CallRpc("get_estop_reason", "{}", &resp);
-  system::GetEstopReasonResponse get_estop_reason_resp;
-  get_estop_reason_resp.FromJSONString(resp);
-  return get_estop_reason_resp.reason();
+protos_json::motion_proto::MotionIndex Robot::RobotImpl::move_joint(
+    const protos_json::motion_proto::CartesianMoveRequest &req) {
+  return rpc_client_->Call<protos_json::motion_proto::MotionIndex>("move_joint",
+                                                                   {req});
 }
 
-system::PhyData Robot::RobotImpl::getPhyData() {
-  std::string resp;
-  json_rpc_connector_->CallRpc("get_phy_data", "{}", &resp);
-  // std::cout<<"resp "<<resp<<"\n";
-  system::PhyData phy_data;
-  phy_data.FromJSONString(resp);
-  return phy_data;
+protos_json::motion_proto::MotionIndex Robot::RobotImpl::move_linear(
+    const protos_json::motion_proto::MoveRequest &req) {
+  return rpc_client_->Call<protos_json::motion_proto::MotionIndex>(
+      "move_linear", {req});
 }
 
-kinematic::KinData Robot::RobotImpl::getKinData() {
-  std::string resp;
-  json_rpc_connector_->CallRpc("get_kin_data", "{}", &resp);
-  // std::cout<<"resp "<<resp<<"\n";
-  kinematic::KinData kin_data;
-  kin_data.FromJSONString(resp);
-  return kin_data;
+protos_json::motion_proto::MotionIndex Robot::RobotImpl::move_linear(
+    const protos_json::motion_proto::CartesianMoveRequest &req) {
+  return rpc_client_->Call<protos_json::motion_proto::MotionIndex>(
+      "move_linear", {req});
 }
 
-io::GetDioPinResponse Robot::RobotImpl::getDI(const io::GetDioPinRequest &req) {
-  std::string resp;
-  json_rpc_connector_->CallRpc("get_di", req.ToJSONString(), &resp);
-  io::GetDioPinResponse get_dio_resp;
-  get_dio_resp.FromJSONString(resp);
-  return get_dio_resp;
+protos_json::motion_proto::MotionIndex Robot::RobotImpl::move_circular(
+    const protos_json::motion_proto::MoveCircularRequest &req) {
+  return rpc_client_->Call<protos_json::motion_proto::MotionIndex>(
+      "move_circular", {req});
 }
-io::GetDioPinsResponse Robot::RobotImpl::getDIS(
-    const io::GetDioPinsRequest &req) {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("get_dis", req.ToJSONString(), &resp_str);
-  io::GetDioPinsResponse resp;
-  resp.FromJSONString(resp_str);
-  return resp;
+protos_json::motion_proto::MotionIndex Robot::RobotImpl::move_circular(
+    const protos_json::motion_proto::CartesianMoveCircularRequest &req) {
+  return rpc_client_->Call<protos_json::motion_proto::MotionIndex>(
+      "move_circular", {req});
 }
-io::GetDioPinResponse Robot::RobotImpl::getDO(const io::GetDioPinRequest &req) {
-  std::string resp;
-  json_rpc_connector_->CallRpc("get_do", req.ToJSONString(), &resp);
-  io::GetDioPinResponse get_dio_resp;
-  get_dio_resp.FromJSONString(resp);
-  return get_dio_resp;
+protos_json::motion_proto::MotionIndex Robot::RobotImpl::toward_joint(
+    const protos_json::motion_proto::MoveRequest &req) {
+  return rpc_client_->Call<protos_json::motion_proto::MotionIndex>(
+      "toward_joint", {req});
 }
-io::GetDioPinsResponse Robot::RobotImpl::getDOS(
-    const io::GetDioPinsRequest &req) {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("get_dos", req.ToJSONString(), &resp_str);
-  io::GetDioPinsResponse resp;
-  resp.FromJSONString(resp_str);
-  return resp;
+protos_json::motion_proto::MotionIndex Robot::RobotImpl::speed_joint(
+    const protos_json::motion_proto::SpeedJointRequest &req) {
+  return rpc_client_->Call<protos_json::motion_proto::MotionIndex>(
+      "speed_joint", {req});
 }
-
-void Robot::RobotImpl::setDO(const io::SetDoPinRequest &req) {
-  json_rpc_connector_->CallRpc("set_do", req.ToJSONString(), nullptr);
-  return;
+protos_json::motion_proto::MotionIndex Robot::RobotImpl::speed_linear(
+    const protos_json::motion_proto::SpeedLinearRequest &req) {
+  return rpc_client_->Call<protos_json::motion_proto::MotionIndex>(
+      "speed_linear", {req});
 }
-
-io::GetAioPinResponse Robot::RobotImpl::getAI(const io::GetAioPinRequest &req) {
-  std::string resp;
-  json_rpc_connector_->CallRpc("get_ai", req.ToJSONString(), &resp);
-  io::GetAioPinResponse get_aio_resp;
-  get_aio_resp.FromJSONString(resp);
-  return get_aio_resp;
+void Robot::RobotImpl::move_pvat(
+    const protos_json::motion_proto::MovePvatRequest &req) {
+  rpc_client_->Call<void>("move_pvat", {req});
 }
-io::GetAioPinsResponse Robot::RobotImpl::getAIS(
-    const io::GetAioPinsRequest &req) {
-  std::string resp;
-  json_rpc_connector_->CallRpc("get_ais", req.ToJSONString(), &resp);
-  io::GetAioPinsResponse get_aio_resp;
-  get_aio_resp.FromJSONString(resp);
-  return get_aio_resp;
+protos_json::motion_proto::Trajectory Robot::RobotImpl::load_trajectory(
+    const protos_json::db_proto::LoadRequest &req) {
+  return rpc_client_->Call<protos_json::motion_proto::Trajectory>(
+      "load_trajectory", {req});
 }
-io::GetAioPinResponse Robot::RobotImpl::getAO(const io::GetAioPinRequest &req) {
-  std::string resp;
-  json_rpc_connector_->CallRpc("get_ao", req.ToJSONString(), &resp);
-  io::GetAioPinResponse get_aio_resp;
-  get_aio_resp.FromJSONString(resp);
-  return get_aio_resp;
-}
-io::GetAioPinsResponse Robot::RobotImpl::getAOS(
-    const io::GetAioPinsRequest &req) {
-  std::string resp;
-  json_rpc_connector_->CallRpc("get_aos", req.ToJSONString(), &resp);
-  io::GetAioPinsResponse get_aio_resp;
-  get_aio_resp.FromJSONString(resp);
-  return get_aio_resp;
-}
-void Robot::RobotImpl::setDioMode(const io::SetDioModeRequest &req) {
-  json_rpc_connector_->CallRpc("set_dio_mode", req.ToJSONString(), nullptr);
-}
-io::GetDiosModeResponse Robot::RobotImpl::getDiosMode(
-    const io::GetDiosModeRequest &req) {
-  std::string resp;
-  json_rpc_connector_->CallRpc("get_dios_mode", req.ToJSONString(), &resp);
-  io::GetDiosModeResponse resp_;
-  resp_.FromJSONString(resp);
-  return resp_;
+void Robot::RobotImpl::save_trajectory(
+    const protos_json::motion_proto::SaveTrajectoryRequest &req) {
+  rpc_client_->Call<void>("save_trajectory", {req});
 }
 
-void Robot::RobotImpl::setAO(const io::SetAoPinRequest &req) {
-  json_rpc_connector_->CallRpc("set_ao", req.ToJSONString(), nullptr);
-  return;
+protos_json::motion_proto::MotionIndex Robot::RobotImpl::move_trajectory(
+    const protos_json::db_proto::LoadRequest &req) {
+  return rpc_client_->Call<protos_json::motion_proto::MotionIndex>(
+      "move_trajectory", {req});
 }
 
-void Robot::RobotImpl::initClaw(const claw::InitClawRequest &req) {
-  json_rpc_connector_->CallRpc("init_claw", req.ToJSONString(), nullptr);
-  return;
+void Robot::RobotImpl::start_record_trajectory(
+    const protos_json::motion_proto::StartRecordTrajectoryRequest &req) {
+  rpc_client_->Call<void>("start_record_trajectory", {req});
 }
 
-void Robot::RobotImpl::setClaw(const claw::SetClawRequest &req) {
-  json_rpc_connector_->CallRpc("set_claw", req.ToJSONString(), nullptr);
-  return;
-}
-claw::Claw Robot::RobotImpl::getClaw() {
-  std::string resp;
-  json_rpc_connector_->CallRpc("get_claw", "{}", &resp);
-  claw::Claw get_claw_resp;
-  get_claw_resp.FromJSONString(resp);
-  return get_claw_resp;
+void Robot::RobotImpl::end_record_trajectory(
+    const protos_json::motion_proto::EndRecordTrajectoryRequest &req) {
+  rpc_client_->Call<void>("end_record_trajectory", {req});
 }
 
-void Robot::RobotImpl::setLed(const led::LedData &req) {
-  json_rpc_connector_->CallRpc("set_led", req.ToJSONString(), nullptr);
+protos_json::db_proto::LoadListResponse
+Robot::RobotImpl::load_trajectory_list(
+    const protos_json::db_proto::LoadListRequest &req) {
+  return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
+      "load_trajectory_list", {req});
+}
+void Robot::RobotImpl::wait_move(
+    const protos_json::motion_proto::MotionIndex &req) {
+  rpc_client_->Call<void>("wait_move", {req});
+}
+protos_json::motion_proto::MotionIndex Robot::RobotImpl::get_running_motion() {
+  return rpc_client_->Call<protos_json::motion_proto::MotionIndex>(
+      "get_running_motion", {});
+}
+protos_json::motion_proto::GetMotionStateResponse
+Robot::RobotImpl::get_motion_state(
+    const protos_json::motion_proto::MotionIndex &req) {
+  return rpc_client_->Call<protos_json::motion_proto::GetMotionStateResponse>(
+      "get_motion_state", {req});
+}
+void Robot::RobotImpl::stop_move() {
+  rpc_client_->Call<void>("stop_move", {});
+}
+void Robot::RobotImpl::skip_move() {
+  rpc_client_->Call<void>("skip_move", {});
+}
+protos_json::system_proto::RobotState Robot::RobotImpl::get_robot_state() {
+  const auto response =
+      rpc_client_->Call<protos_json::system_proto::GetRobotStateResponse>(
+          "get_robot_state", {});
+  return response.state;
 }
 
-void Robot::RobotImpl::setVoice(const led::VoiceData &req) {
-  json_rpc_connector_->CallRpc("set_voice", req.ToJSONString(), nullptr);
+protos_json::system_proto::EstopReason Robot::RobotImpl::get_estop_reason() {
+  const auto response =
+      rpc_client_->Call<protos_json::system_proto::GetEstopReasonResponse>(
+          "get_estop_reason", {});
+  return response.reason;
 }
 
-void Robot::RobotImpl::setFan(const led::FanData &req) {
-  json_rpc_connector_->CallRpc("set_fan", req.ToJSONString(), nullptr);
+protos_json::system_proto::SystemInfo Robot::RobotImpl::get_system_info() {
+  return rpc_client_->Call<protos_json::system_proto::SystemInfo>(
+      "get_system_info", {});
 }
 
-void Robot::RobotImpl::setSignal(const signal::SetSignalRequest &req) {
-  json_rpc_connector_->CallRpc("set_signal", req.ToJSONString(), nullptr);
-}
-signal::GetSignalResponse Robot::RobotImpl::getSignal(
-    const signal::GetSignalRequest &req) {
-  std::string resp;
-  json_rpc_connector_->CallRpc("get_signal", req.ToJSONString(), &resp);
-  signal::GetSignalResponse set_signal_resp;
-  set_signal_resp.FromJSONString(resp);
-  return set_signal_resp;
-}
-void Robot::RobotImpl::addSignal(const signal::SetSignalRequest &req) {
-  json_rpc_connector_->CallRpc("add_signal", req.ToJSONString(), nullptr);
+protos_json::system_proto::RobotInfo Robot::RobotImpl::get_robot_info() {
+  return rpc_client_->Call<protos_json::system_proto::RobotInfo>(
+      "get_robot_info", {});
 }
 
-control::TaskIndex Robot::RobotImpl::scene(
-    const control::StartTaskRequest &req) {
-  std::string resp;
-  json_rpc_connector_->CallRpc("start_task", req.ToJSONString(), &resp);
-  control::TaskIndex start_task_resp;
-  start_task_resp.FromJSONString(resp);
-  return start_task_resp;
+protos_json::system_proto::HardwareInfo Robot::RobotImpl::get_hardware_info() {
+  return rpc_client_->Call<protos_json::system_proto::HardwareInfo>(
+      "get_hardware_info", {});
 }
 
-control::TaskIds Robot::RobotImpl::loadTaskList() {
-  std::string resp;
-  json_rpc_connector_->CallRpc("load_task_list", "{}", &resp);
-  control::TaskIds list_resp;
-  list_resp.FromJSONString(resp);
-  return list_resp;
+protos_json::system_proto::SoftwareInfo Robot::RobotImpl::get_software_info() {
+  return rpc_client_->Call<protos_json::system_proto::SoftwareInfo>(
+      "get_software_info", {});
 }
 
-control::TaskStdout Robot::RobotImpl::waitTask(const control::TaskIndex &req) {
-  std::string resp;
-  json_rpc_connector_->CallRpc("wait_task", req.ToJSONString(), &resp);
-  control::TaskStdout wait_task_resp;
-  wait_task_resp.FromJSONString(resp);
-  return wait_task_resp;
+protos_json::network_proto::HttpResponse Robot::RobotImpl::http(
+    const protos_json::network_proto::HttpRequest &req) {
+  return rpc_client_->Call<protos_json::network_proto::HttpResponse>("http",
+                                                                     {req});
 }
 
-void Robot::RobotImpl::pauseTask(const control::PauseRequest &req) {
-  json_rpc_connector_->CallRpc("pause_task", req.ToJSONString(), nullptr);
-}
-void Robot::RobotImpl::resumeTask(const control::TaskIndex &req) {
-  json_rpc_connector_->CallRpc("resume_task", req.ToJSONString(), nullptr);
-}
-void Robot::RobotImpl::cancelTask(const control::TaskIndex &req) {
-  json_rpc_connector_->CallRpc("cancel_task", req.ToJSONString(), nullptr);
-}
-control::HookResponse Robot::RobotImpl::execHook(const control::Exec &req) {
-  std::string resp;
-  json_rpc_connector_->CallRpc("exec_hook", req.ToJSONString(), &resp);
-  control::HookResponse hook_resp;
-  hook_resp.FromJSONString(resp);
-  return hook_resp;
-}
-control::Task Robot::RobotImpl::loadTask(const control::TaskIndex &req) {
-  std::string resp;
-  json_rpc_connector_->CallRpc("load_task", req.ToJSONString(), &resp);
-  control::Task task_resp;
-  task_resp.FromJSONString(resp);
-  return task_resp;
-}
-control::Task Robot::RobotImpl::loadTask() {
-  std::string resp;
-  json_rpc_connector_->CallRpc("load_task", "{}", &resp);
-  control::Task task_resp;
-  task_resp.FromJSONString(resp);
-  return task_resp;
+void Robot::RobotImpl::clean(const protos_json::backup_proto::Options &req) {
+  rpc_client_->Call<void>("clean", {req});
 }
 
-posture::CartesianPose Robot::RobotImpl::getForwardKin(
-    const posture::PoseRequest &req) {
-  std::string resp;
-  json_rpc_connector_->CallRpc("get_forward_kin", req.ToJSONString(), &resp);
-  posture::CartesianPose get_forward_kin_resp;
-  get_forward_kin_resp.FromJSONString(resp);
-  return get_forward_kin_resp;
+void Robot::RobotImpl::backup(
+    const protos_json::backup_proto::BackupRequest &req) {
+  rpc_client_->Call<void>("backup", {req});
 }
 
-posture::JointPose Robot::RobotImpl::getInverseKin(
-    const posture::GetInverseKinRequest &req) {
-  std::string resp;
-  if (json_rpc_connector_->CallRpc("get_inverse_kin", req.ToJSONString(),
-                                   &resp) < 0) {
-    throw std::runtime_error("get_inverse_kin failed");
-  }
-  posture::JointPose get_inverse_kin_resp;
-  get_inverse_kin_resp.FromJSONString(resp);
-  return get_inverse_kin_resp;
+protos_json::backup_proto::BackupInfo Robot::RobotImpl::get_backup_info(
+    const protos_json::backup_proto::GetBackupInfoRequest &req) {
+  return rpc_client_->Call<protos_json::backup_proto::BackupInfo>(
+      "get_backup_info", {req});
 }
 
-posture::CartesianPose Robot::RobotImpl::getPoseTrans(
-    const posture::GetPoseTransRequest &req) {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("get_pose_trans", req.ToJSONString(), &resp_str);
-  posture::CartesianPose resp;
-  resp.FromJSONString(resp_str);
-  return resp;
-}
-posture::CartesianPose Robot::RobotImpl::getPoseInverse(
-    const posture::PoseRequest &req) {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("get_pose_inverse", req.ToJSONString(),
-                               &resp_str);
-  posture::CartesianPose resp;
-  resp.FromJSONString(resp_str);
-  return resp;
+void Robot::RobotImpl::restore(
+    const protos_json::backup_proto::RestoreRequest &req) {
+  rpc_client_->Call<void>("restore", {req});
 }
 
-void Robot::RobotImpl::saveFile(const file::SaveFileRequest &req) {
-  json_rpc_connector_->CallRpc("save_file", req.ToJSONString(), nullptr);
+void Robot::RobotImpl::set_virtual_ip(
+    const protos_json::system_proto::SetVirtualIpRequest &req) {
+  rpc_client_->Call<void>("set_virtual_ip", {req});
 }
 
-void Robot::RobotImpl::renameFile(const file::RenameFileRequest &req) {
-  json_rpc_connector_->CallRpc("rename_file", req.ToJSONString(), nullptr);
+void Robot::RobotImpl::sub_robot_state(
+    const protos_json::subscribe_proto::SubscribeRequest &req) {
+  rpc_client_->Call<void>("sub_robot_state", {req});
 }
 
-file::File Robot::RobotImpl::loadFile(const file::FileIndex &req) {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("load_file", req.ToJSONString(), &resp_str);
-  file::File resp;
-  resp.FromJSONString(resp_str);
-  return resp;
+protos_json::system_proto::GetBoxDevicesResponse
+Robot::RobotImpl::get_box_devices(
+    const protos_json::system_proto::GetBoxDevicesRequest &req) {
+  return rpc_client_->Call<protos_json::system_proto::GetBoxDevicesResponse>(
+      "get_box_devices", {req});
 }
 
-file::LoadFileListResponse Robot::RobotImpl::loadFileList(
-    const file::LoadFileListRequest &req) {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("load_file_list", req.ToJSONString(), &resp_str);
-  file::LoadFileListResponse resp;
-  resp.FromJSONString(resp_str);
-  return resp;
+protos_json::db_proto::Dirs Robot::RobotImpl::get_dirs() {
+  return rpc_client_->Call<protos_json::db_proto::Dirs>("get_dirs", {});
 }
 
-void Robot::RobotImpl::zip(const file::ZipRequest &req) {
-  json_rpc_connector_->CallRpc("zip", req.ToJSONString(), nullptr);
+void Robot::RobotImpl::create_dir(const protos_json::db_proto::Dir &req) {
+  rpc_client_->Call<void>("create_dir", {req});
 }
 
-void Robot::RobotImpl::unzip(const file::UnzipRequest &req) {
-  json_rpc_connector_->CallRpc("unzip", req.ToJSONString(), nullptr);
+void Robot::RobotImpl::update_dir(
+    const protos_json::db_proto::UpdateDirRequest &req) {
+  rpc_client_->Call<void>("update_dir", {req});
 }
 
-file::LoadZipListResponse Robot::RobotImpl::loadZipList(
-    const file::LoadZipListRequest &req) {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("load_zip_list", req.ToJSONString(), &resp_str);
-  file::LoadZipListResponse resp;
-  resp.FromJSONString(resp_str);
-  return resp;
+protos_json::shortcut_proto::ShortcutList
+Robot::RobotImpl::get_short_poses() {
+  return rpc_client_->Call<protos_json::shortcut_proto::ShortcutList>(
+      "get_short_poses", {});
 }
 
-void Robot::RobotImpl::setPayload(const dynamic::SetPayloadRequest &req) {
-  json_rpc_connector_->CallRpc("set_payload", req.ToJSONString(), nullptr);
-}
-void Robot::RobotImpl::setPayload(const dynamic::SetCogRequest &req) {
-  json_rpc_connector_->CallRpc("set_payload", req.ToJSONString(), nullptr);
-}
-void Robot::RobotImpl::setPayload(const dynamic::SetMassRequest &req) {
-  json_rpc_connector_->CallRpc("set_payload", req.ToJSONString(), nullptr);
-}
-dynamic::Payload Robot::RobotImpl::getPayload() {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("get_payload", "{}", &resp_str);
-  dynamic::Payload resp;
-  resp.FromJSONString(resp_str);
-  return resp;
-}
-void Robot::RobotImpl::setGravity(const posture::Position &req) {
-  json_rpc_connector_->CallRpc("set_gravity", req.ToJSONString(), nullptr);
-}
-posture::Position Robot::RobotImpl::getGravity() {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("get_gravity", "{}", &resp_str);
-  posture::Position resp;
-  resp.FromJSONString(resp_str);
-  return resp;
-}
-void Robot::RobotImpl::savePayload(const dynamic::SavePayloadRequest &req) {
-  json_rpc_connector_->CallRpc("save_payload", req.ToJSONString(), nullptr);
-}
-dynamic::Payload Robot::RobotImpl::loadPayload(const db::LoadRequest &req) {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("load_payload", req.ToJSONString(), &resp_str);
-  dynamic::Payload resp;
-  resp.FromJSONString(resp_str);
-  return resp;
-}
-db::LoadListResponse Robot::RobotImpl::loadPayloadList(
-    const db::LoadListRequest &req) {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("load_payload_list", req.ToJSONString(),
-                               &resp_str);
-  db::LoadListResponse resp;
-  resp.FromJSONString(resp_str);
-  return resp;
+void Robot::RobotImpl::set_short_pose(
+    const protos_json::shortcut_proto::Shortcut &req) {
+  rpc_client_->Call<void>("set_short_pose", {req});
 }
 
-void Robot::RobotImpl::setTcp(const posture::CartesianPose &req) {
-  json_rpc_connector_->CallRpc("set_tcp", req.ToJSONString(), nullptr);
-}
-posture::CartesianPose Robot::RobotImpl::getTcp() {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("get_tcp", "{}", &resp_str);
-  posture::CartesianPose resp;
-  resp.FromJSONString(resp_str);
-  return resp;
-}
-void Robot::RobotImpl::setKinFactor(const kinematic::KinFactor &req) {
-  json_rpc_connector_->CallRpc("set_kin_factor", req.ToJSONString(), nullptr);
-}
-kinematic::KinFactor Robot::RobotImpl::getKinFactor() {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("get_kin_factor", "{}", &resp_str);
-  kinematic::KinFactor resp;
-  resp.FromJSONString(resp_str);
-  return resp;
-}
-posture::CartesianPose Robot::RobotImpl::loadTcp(const db::LoadRequest &req) {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("get_tcp", req.ToJSONString(), &resp_str);
-  posture::CartesianPose resp;
-  resp.FromJSONString(resp_str);
-  return resp;
-}
-void Robot::RobotImpl::writeSingleCoil(const modbus::SetCoilRequest &req) {
-  json_rpc_connector_->CallRpc("write_single_coil", req.ToJSONString(),
-                               nullptr);
-}
-void Robot::RobotImpl::writeMultipleCoils(const modbus::SetCoilsRequest &req) {
-  json_rpc_connector_->CallRpc("write_multiple_coils", req.ToJSONString(),
-                               nullptr);
-}
-modbus::GetCoilsResponse Robot::RobotImpl::readCoils(
-    const modbus::GetCoilsRequest &req) {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("read_coils", req.ToJSONString(), &resp_str);
-  modbus::GetCoilsResponse resp;
-  resp.FromJSONString(resp_str);
-  return resp;
-}
-modbus::GetCoilsResponse Robot::RobotImpl::readDiscreteInputs(
-    const modbus::GetCoilsRequest &req) {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("read_discrete_inputs", req.ToJSONString(),
-                               &resp_str);
-  modbus::GetCoilsResponse resp;
-  resp.FromJSONString(resp_str);
-  return resp;
-}
-void Robot::RobotImpl::writeSingleRegister(
-    const modbus::SetRegisterRequest &req) {
-  json_rpc_connector_->CallRpc("write_single_register", req.ToJSONString(),
-                               nullptr);
-}
-void Robot::RobotImpl::writeMultipleRegisters(
-    const modbus::SetRegistersRequest &req) {
-  json_rpc_connector_->CallRpc("write_multiple_registers", req.ToJSONString(),
-                               nullptr);
-}
-modbus::GetRegistersResponse Robot::RobotImpl::readInputRegisters(
-    const modbus::GetRegistersRequest &req) {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("read_input_registers", req.ToJSONString(),
-                               &resp_str);
-  modbus::GetRegistersResponse resp;
-  resp.FromJSONString(resp_str);
-  return resp;
-}
-modbus::GetRegistersResponse Robot::RobotImpl::readHoldingRegisters(
-    const modbus::GetRegistersRequest &req) {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("read_holding_registers", req.ToJSONString(),
-                               &resp_str);
-  modbus::GetRegistersResponse resp;
-  resp.FromJSONString(resp_str);
-  return resp;
+protos_json::shortcut_proto::Shortcut Robot::RobotImpl::get_short_pose(
+    const protos_json::shortcut_proto::ShortcutIndex &req) {
+  return rpc_client_->Call<protos_json::shortcut_proto::Shortcut>(
+      "get_short_pose", {req});
 }
 
-void Robot::RobotImpl::setSerialBaudRateRequest(
-    const serial::SetSerialBaudRateRequest &req) {
-  json_rpc_connector_->CallRpc("set_serial_baud_rate", req.ToJSONString(),
-                               nullptr);
-}
-void Robot::RobotImpl::setSerialParityRequest(
-    const serial::SetSerialParityRequest &req) {
-  json_rpc_connector_->CallRpc("set_serial_parity", req.ToJSONString(),
-                               nullptr);
-}
-void Robot::RobotImpl::setItem(const storage::Item &req) {
-  json_rpc_connector_->CallRpc("set_item", req.ToJSONString(), nullptr);
-}
-storage::Item Robot::RobotImpl::getItem(const storage::ItemIndex &req) {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("get_item", req.ToJSONString(), &resp_str);
-  storage::Item resp;
-  resp.FromJSONString(resp_str);
-  return resp;
+protos_json::shortcut_proto::ShortcutList
+Robot::RobotImpl::get_short_tasks() {
+  return rpc_client_->Call<protos_json::shortcut_proto::ShortcutList>(
+      "get_short_tasks", {});
 }
 
-storage::Items Robot::RobotImpl::getItems(const storage::GetItemsRequest &req) {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("get_items", req.ToJSONString(), &resp_str);
-  storage::Items resp;
-  resp.FromJSONString(resp_str);
-  return resp;
+void Robot::RobotImpl::set_short_task(
+    const protos_json::shortcut_proto::Shortcut &req) {
+  rpc_client_->Call<void>("set_short_task", {req});
 }
 
-void Robot::RobotImpl::enableCollisionDetector() {
-  json_rpc_connector_->CallRpc("enable_collision_detector", "{}", nullptr);
+protos_json::shortcut_proto::Shortcut Robot::RobotImpl::get_short_task(
+    const protos_json::shortcut_proto::ShortcutIndex &req) {
+  return rpc_client_->Call<protos_json::shortcut_proto::Shortcut>(
+      "get_short_task", {req});
 }
 
-void Robot::RobotImpl::disableCollisionDetector() {
-  json_rpc_connector_->CallRpc("disable_collision_detector", "{}", nullptr);
+protos_json::trigger_proto::Triggers Robot::RobotImpl::get_triggers() {
+  return rpc_client_->Call<protos_json::trigger_proto::Triggers>(
+      "get_triggers", {});
 }
 
-void Robot::RobotImpl::setCollisionTorqueDiff(
-    const safety::CollisionTorqueDiff &req) {
-  json_rpc_connector_->CallRpc("set_collision_torque_diff", req.ToJSONString(),
-                               nullptr);
+void Robot::RobotImpl::set_trigger(
+    const protos_json::trigger_proto::Trigger &req) {
+  rpc_client_->Call<void>("set_trigger", {req});
 }
 
-safety::CollisionTorqueDiff Robot::RobotImpl::getCollisionTorqueDiff() {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("get_collision_torque_diff", "{}", &resp_str);
-  safety::CollisionTorqueDiff resp;
-  resp.FromJSONString(resp_str);
-  return resp;
+protos_json::led_proto::LedStyles Robot::RobotImpl::get_led_styles() {
+  return rpc_client_->Call<protos_json::led_proto::LedStyles>(
+      "get_led_styles", {});
 }
 
-void Robot::RobotImpl::setCollisionDetector(
-    const safety::CollisionDetector &req) {
-  json_rpc_connector_->CallRpc("set_collision_detector", req.ToJSONString(),
-                               nullptr);
+void Robot::RobotImpl::set_led_styles(
+    const protos_json::led_proto::LedStyles &req) {
+  rpc_client_->Call<void>("set_led_styles", {req});
 }
 
-safety::CollisionDetector Robot::RobotImpl::getCollisionDetector() {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("get_collision_detector", "{}", &resp_str);
-  safety::CollisionDetector resp;
-  resp.FromJSONString(resp_str);
-  return resp;
+protos_json::led_proto::LedStyle Robot::RobotImpl::load_led_style(
+    const protos_json::db_proto::LoadRequest &req) {
+  return rpc_client_->Call<protos_json::led_proto::LedStyle>("load_led_style",
+                                                             {req});
 }
 
-void Robot::RobotImpl::enableLimit() {
-  json_rpc_connector_->CallRpc("enable_limit", "{}", nullptr);
+void Robot::RobotImpl::save_led_style(
+    const protos_json::led_proto::SaveLedStyleRequest &req) {
+  rpc_client_->Call<void>("save_led_style", {req});
 }
 
-void Robot::RobotImpl::disableLimit() {
-  json_rpc_connector_->CallRpc("disable_limit", "{}", nullptr);
+void Robot::RobotImpl::set_led_style(
+    const protos_json::led_proto::LedStyleItem &req) {
+  rpc_client_->Call<void>("set_led_style", {req});
 }
 
-void Robot::RobotImpl::setJointsLimit(const safety::JointsLimit &req) {
-  json_rpc_connector_->CallRpc("set_joints_limit", req.ToJSONString(), nullptr);
+protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_led_style_list(
+    const protos_json::db_proto::LoadListRequest &req) {
+  return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
+      "load_led_style_list", {req});
 }
 
-safety::JointsLimit Robot::RobotImpl::getJointsLimit() {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("get_joints_limit", "{}", &resp_str);
-  safety::JointsLimit resp;
-  resp.FromJSONString(resp_str);
-  return resp;
+protos_json::motor_proto::ServoParams Robot::RobotImpl::get_servo_params() {
+  return rpc_client_->Call<protos_json::motor_proto::ServoParams>(
+      "get_servo_params", {});
 }
 
-void Robot::RobotImpl::setCartLimit(const safety::CartesianLimit &req) {
-  json_rpc_connector_->CallRpc("set_cart_limit", req.ToJSONString(), nullptr);
+void Robot::RobotImpl::set_servo_params(
+    const protos_json::motor_proto::ServoParams &req) {
+  rpc_client_->Call<void>("set_servo_params", {req});
 }
 
-safety::CartesianLimit Robot::RobotImpl::getCartLimit() {
-  std::string resp_str;
-  json_rpc_connector_->CallRpc("get_cart_limit", "{}", &resp_str);
-  safety::CartesianLimit resp;
-  resp.FromJSONString(resp_str);
-  return resp;
+void Robot::RobotImpl::find_zero() { rpc_client_->Call<void>("find_zero", {}); }
+
+void Robot::RobotImpl::set_zero(
+    const protos_json::motor_proto::SetZeroRequest &req) {
+  rpc_client_->Call<void>("set_zero", {req});
+}
+
+void Robot::RobotImpl::set_extra_servo_params(
+    const protos_json::motor_proto::SetExtraServoParamsRequest &req) {
+  rpc_client_->Call<void>("set_extra_servo_params", {req});
+}
+
+void Robot::RobotImpl::reset_extra_servo_params(
+    const protos_json::motor_proto::ResetExtraServoParamsRequest &req) {
+  rpc_client_->Call<void>("reset_extra_servo_params", {req});
+}
+
+void Robot::RobotImpl::set_flange_baud_rate(
+    const protos_json::flange_proto::SetFlangeBaudRateRequest &req) {
+  rpc_client_->Call<void>("set_flange_baud_rate", {req});
+}
+
+protos_json::motion_proto::Wrench Robot::RobotImpl::get_tcp_force() {
+  return rpc_client_->Call<protos_json::motion_proto::Wrench>(
+      "get_tcp_force", {});
+}
+
+void Robot::RobotImpl::set_tcp_force(
+    const protos_json::motion_proto::Wrench &req) {
+  rpc_client_->Call<void>("set_tcp_force", {req});
+}
+
+void Robot::RobotImpl::set_force_mode_sensor(
+    const protos_json::motion_proto::SetForceModeSensorRequest &req) {
+  rpc_client_->Call<void>("set_force_mode_sensor", {req});
+}
+
+void Robot::RobotImpl::set_force_mode_param(
+    const protos_json::motion_proto::SetForceModeParamRequest &req) {
+  rpc_client_->Call<void>("set_force_mode_param", {req});
+}
+
+void Robot::RobotImpl::start_force_mode(
+    const protos_json::motion_proto::StartForceModeRequest &req) {
+  rpc_client_->Call<void>("start_force_mode", {req});
+}
+
+void Robot::RobotImpl::end_force_mode() {
+  rpc_client_->Call<void>("end_force_mode", {});
+}
+
+protos_json::plugin_proto::Plugins Robot::RobotImpl::load_plugins() {
+  return rpc_client_->Call<protos_json::plugin_proto::Plugins>(
+      "load_plugins", {});
+}
+
+protos_json::plugin_proto::PluginStore Robot::RobotImpl::get_plugin_store() {
+  return rpc_client_->Call<protos_json::plugin_proto::PluginStore>(
+      "get_plugin_store", {});
+}
+
+protos_json::plugin_proto::PluginInfo Robot::RobotImpl::load_plugin(
+    const protos_json::plugin_proto::PluginIndex &req) {
+  return rpc_client_->Call<protos_json::plugin_proto::PluginInfo>(
+      "load_plugin", {req});
+}
+
+protos_json::plugin_proto::CommandStdout Robot::RobotImpl::run_plugin_cmd(
+    const protos_json::plugin_proto::PluginCmdRequest &req) {
+  return rpc_client_->Call<protos_json::plugin_proto::CommandStdout>(
+      "run_plugin_cmd", {req});
+}
+
+protos_json::plugin_proto::CommandStdout Robot::RobotImpl::enable_plugin(
+    const protos_json::plugin_proto::PluginIndex &req) {
+  return rpc_client_->Call<protos_json::plugin_proto::CommandStdout>(
+      "enable_plugin", {req});
+}
+
+protos_json::plugin_proto::CommandStdout Robot::RobotImpl::disable_plugin(
+    const protos_json::plugin_proto::PluginIndex &req) {
+  return rpc_client_->Call<protos_json::plugin_proto::CommandStdout>(
+      "disable_plugin", {req});
+}
+
+void Robot::RobotImpl::restart_plugin_daemon(
+    const protos_json::plugin_proto::PluginIndex &req) {
+  rpc_client_->Call<void>("restart_plugin_daemon", {req});
+}
+
+protos_json::multi_devices_proto::DiscoverRobotsResponse
+Robot::RobotImpl::discover_robots() {
+  return rpc_client_
+      ->Call<protos_json::multi_devices_proto::DiscoverRobotsResponse>(
+          "discover_robots", {});
+}
+
+protos_json::plugin_proto::CommandStdout
+Robot::RobotImpl::get_plugin_daemon_stdout(
+    const protos_json::plugin_proto::PluginIndex &req) {
+  return rpc_client_->Call<protos_json::plugin_proto::CommandStdout>(
+      "get_plugin_daemon_stdout", {req});
+}
+
+protos_json::message_proto::Messages Robot::RobotImpl::get_messages() {
+  return rpc_client_->Call<protos_json::message_proto::Messages>(
+      "get_messages", {});
+}
+
+void Robot::RobotImpl::sub_message(
+    const protos_json::subscribe_proto::SubscribeRequest &req) {
+  rpc_client_->Call<void>("sub_message", {req});
+}
+
+protos_json::hardware_proto::OtaState Robot::RobotImpl::get_ota_state() {
+  return rpc_client_->Call<protos_json::hardware_proto::OtaState>(
+      "get_ota_state", {});
+}
+
+void Robot::RobotImpl::start_ota(
+    const protos_json::hardware_proto::StartOtaRequest &req) {
+  rpc_client_->Call<void>("start_ota", {req});
+}
+
+void Robot::RobotImpl::switch_partition(
+    const protos_json::hardware_proto::SwitchPartitionRequest &req) {
+  rpc_client_->Call<void>("switch_partition", {req});
+}
+
+protos_json::upgrade_proto::CheckUpgradeResponse
+Robot::RobotImpl::check_upgrade() {
+  return rpc_client_->Call<protos_json::upgrade_proto::CheckUpgradeResponse>(
+      "check_upgrade", {});
+}
+
+void Robot::RobotImpl::start_upgrade() {
+  rpc_client_->Call<void>("start_upgrade", {});
+}
+
+protos_json::upgrade_proto::CommandStdout
+Robot::RobotImpl::get_upgrade_stdout() {
+  return rpc_client_->Call<protos_json::upgrade_proto::CommandStdout>(
+      "get_upgrade_stdout", {});
+}
+
+protos_json::quality_proto::BoxTestResponse Robot::RobotImpl::box_test(
+    const protos_json::quality_proto::EmptyRequest &req) {
+  return rpc_client_->Call<protos_json::quality_proto::BoxTestResponse>(
+      "box_test", {req});
+}
+
+protos_json::quality_proto::InitRobotResponse Robot::RobotImpl::init_robot(
+    const protos_json::quality_proto::InitRobotRequest &req) {
+  return rpc_client_->Call<protos_json::quality_proto::InitRobotResponse>(
+      "init_robot", {req});
+}
+
+protos_json::system_proto::PhyData Robot::RobotImpl::get_phy_data() {
+  return rpc_client_->Call<protos_json::system_proto::PhyData>(
+      "get_phy_data", {});
+}
+
+void Robot::RobotImpl::sub_phy_data(
+    const protos_json::subscribe_proto::SubscribeRequest &req) {
+  rpc_client_->Call<void>("sub_phy_data", {req});
+}
+
+protos_json::kinematic_proto::KinData Robot::RobotImpl::get_kin_data() {
+  return rpc_client_->Call<protos_json::kinematic_proto::KinData>(
+      "get_kin_data", {});
+}
+
+void Robot::RobotImpl::sub_kin_data(
+    const protos_json::subscribe_proto::SubscribeRequest &req) {
+  rpc_client_->Call<void>("sub_kin_data", {req});
+}
+
+protos_json::kinematic_proto::DhParams Robot::RobotImpl::get_dh() {
+  return rpc_client_->Call<protos_json::kinematic_proto::DhParams>(
+      "get_dh", {});
+}
+
+void Robot::RobotImpl::set_dh(
+    const protos_json::kinematic_proto::DhParams &req) {
+  rpc_client_->Call<void>("set_dh", {req});
+}
+
+protos_json::io_proto::GetDioPinResponse Robot::RobotImpl::get_di(
+    const protos_json::io_proto::GetDioPinRequest &req) {
+  return rpc_client_->Call<protos_json::io_proto::GetDioPinResponse>("get_di",
+                                                                     {req});
+}
+protos_json::io_proto::GetDioPinsResponse Robot::RobotImpl::get_dis(
+    const protos_json::io_proto::GetDioPinsRequest &req) {
+  return rpc_client_->Call<protos_json::io_proto::GetDioPinsResponse>(
+      "get_dis", {req});
+}
+protos_json::io_proto::GetDioPinResponse Robot::RobotImpl::get_do(
+    const protos_json::io_proto::GetDioPinRequest &req) {
+  return rpc_client_->Call<protos_json::io_proto::GetDioPinResponse>("get_do",
+                                                                     {req});
+}
+protos_json::io_proto::GetDioPinsResponse Robot::RobotImpl::get_dos(
+    const protos_json::io_proto::GetDioPinsRequest &req) {
+  return rpc_client_->Call<protos_json::io_proto::GetDioPinsResponse>(
+      "get_dos", {req});
+}
+
+void Robot::RobotImpl::set_do(
+    const protos_json::io_proto::SetDoPinRequest &req) {
+  rpc_client_->Call<void>("set_do", {req});
+}
+
+void Robot::RobotImpl::set_dos(
+    const protos_json::io_proto::SetDoPinsRequest &req) {
+  rpc_client_->Call<void>("set_dos", {req});
+}
+
+protos_json::io_proto::GetAioPinResponse Robot::RobotImpl::get_ai(
+    const protos_json::io_proto::GetAioPinRequest &req) {
+  return rpc_client_->Call<protos_json::io_proto::GetAioPinResponse>("get_ai",
+                                                                     {req});
+}
+protos_json::io_proto::GetAioPinsResponse Robot::RobotImpl::get_ais(
+    const protos_json::io_proto::GetAioPinsRequest &req) {
+  return rpc_client_->Call<protos_json::io_proto::GetAioPinsResponse>(
+      "get_ais", {req});
+}
+protos_json::io_proto::GetAioPinResponse Robot::RobotImpl::get_ao(
+    const protos_json::io_proto::GetAioPinRequest &req) {
+  return rpc_client_->Call<protos_json::io_proto::GetAioPinResponse>("get_ao",
+                                                                     {req});
+}
+protos_json::io_proto::GetAioPinsResponse Robot::RobotImpl::get_aos(
+    const protos_json::io_proto::GetAioPinsRequest &req) {
+  return rpc_client_->Call<protos_json::io_proto::GetAioPinsResponse>(
+      "get_aos", {req});
+}
+void Robot::RobotImpl::set_dio_mode(
+    const protos_json::io_proto::SetDioModeRequest &req) {
+  rpc_client_->Call<void>("set_dio_mode", {req});
+}
+protos_json::io_proto::GetDioModeResponse Robot::RobotImpl::get_dio_mode(
+    const protos_json::io_proto::GetDioModeRequest &req) {
+  return rpc_client_->Call<protos_json::io_proto::GetDioModeResponse>(
+      "get_dio_mode", {req});
+}
+protos_json::io_proto::GetDiosModeResponse Robot::RobotImpl::get_dios_mode(
+    const protos_json::io_proto::GetDiosModeRequest &req) {
+  return rpc_client_->Call<protos_json::io_proto::GetDiosModeResponse>(
+      "get_dios_mode", {req});
+}
+
+void Robot::RobotImpl::sub_buttons_status(
+    const protos_json::subscribe_proto::SubscribeRequest &req) {
+  rpc_client_->Call<void>("sub_buttons_status", {req});
+}
+
+void Robot::RobotImpl::enable_button(
+    const protos_json::io_proto::ButtonIndex &req) {
+  rpc_client_->Call<void>("enable_button", {req});
+}
+
+void Robot::RobotImpl::disable_button(
+    const protos_json::io_proto::ButtonIndex &req) {
+  rpc_client_->Call<void>("disable_button", {req});
+}
+
+void Robot::RobotImpl::set_ao(
+    const protos_json::io_proto::SetAoPinRequest &req) {
+  rpc_client_->Call<void>("set_ao", {req});
+}
+
+void Robot::RobotImpl::set_aos(
+    const protos_json::io_proto::SetAoPinsRequest &req) {
+  rpc_client_->Call<void>("set_aos", {req});
+}
+
+void Robot::RobotImpl::init_claw(
+    const protos_json::claw_proto::InitClawRequest &req) {
+  rpc_client_->Call<void>("init_claw", {req});
+}
+
+void Robot::RobotImpl::set_claw(
+    const protos_json::claw_proto::SetClawRequest &req) {
+  rpc_client_->Call<void>("set_claw", {req});
+}
+
+void Robot::RobotImpl::set_claw_ao(
+    const protos_json::claw_proto::SetClawAoRequest &req) {
+  rpc_client_->Call<void>("set_claw_ao", {req});
+}
+
+protos_json::claw_proto::Claw Robot::RobotImpl::get_claw() {
+  return rpc_client_->Call<protos_json::claw_proto::Claw>("get_claw", {});
+}
+
+protos_json::claw_proto::GetClawAiResponse Robot::RobotImpl::get_claw_ai(
+    const protos_json::claw_proto::GetClawAiRequest &req) {
+  return rpc_client_->Call<protos_json::claw_proto::GetClawAiResponse>(
+      "get_claw_ai", {req});
+}
+
+void Robot::RobotImpl::wait_claw_ai(
+    const protos_json::claw_proto::WaitClawAiRequest &req) {
+  rpc_client_->Call<void>("wait_claw_ai", {req});
+}
+
+void Robot::RobotImpl::set_led(const protos_json::led_proto::LedData &req) {
+  rpc_client_->Call<void>("set_led", {req});
+}
+
+void Robot::RobotImpl::set_voice(const protos_json::led_proto::VoiceData &req) {
+  rpc_client_->Call<void>("set_voice", {req});
+}
+
+void Robot::RobotImpl::set_fan(const protos_json::led_proto::FanData &req) {
+  rpc_client_->Call<void>("set_fan", {req});
+}
+
+void Robot::RobotImpl::set_signal(
+    const protos_json::signal_proto::SetSignalRequest &req) {
+  rpc_client_->Call<void>("set_signal", {req});
+}
+
+void Robot::RobotImpl::set_signals(
+    const protos_json::signal_proto::SetSignalsRequest &req) {
+  rpc_client_->Call<void>("set_signals", {req});
+}
+
+protos_json::signal_proto::GetSignalResponse Robot::RobotImpl::get_signal(
+    const protos_json::signal_proto::GetSignalRequest &req) {
+  return rpc_client_->Call<protos_json::signal_proto::GetSignalResponse>(
+      "get_signal", {req});
+}
+
+protos_json::signal_proto::GetSignalsResponse Robot::RobotImpl::get_signals(
+    const protos_json::signal_proto::GetSignalsRequest &req) {
+  return rpc_client_->Call<protos_json::signal_proto::GetSignalsResponse>(
+      "get_signals", {req});
+}
+
+void Robot::RobotImpl::wait_signal(
+    const protos_json::signal_proto::WaitSignalRequest &req) {
+  rpc_client_->Call<void>("wait_signal", {req});
+}
+
+void Robot::RobotImpl::add_signal(
+    const protos_json::signal_proto::SetSignalRequest &req) {
+  rpc_client_->Call<void>("add_signal", {req});
+}
+
+protos_json::control_proto::TaskIndex Robot::RobotImpl::start_task(
+    const protos_json::control_proto::StartTaskRequest &req) {
+  return rpc_client_->Call<protos_json::control_proto::TaskIndex>("start_task",
+                                                                  {req});
+}
+
+protos_json::control_proto::TaskIds Robot::RobotImpl::load_task_list() {
+  return rpc_client_->Call<protos_json::control_proto::TaskIds>(
+      "load_task_list", {});
+}
+
+protos_json::control_proto::Tasks Robot::RobotImpl::load_running_tasks() {
+  return rpc_client_->Call<protos_json::control_proto::Tasks>(
+      "load_running_tasks", {});
+}
+
+protos_json::control_proto::TaskStdout Robot::RobotImpl::get_task_stdout(
+    const protos_json::control_proto::TaskIndex &req) {
+  return rpc_client_->Call<protos_json::control_proto::TaskStdout>(
+      "get_task_stdout", {req});
+}
+
+void Robot::RobotImpl::sub_task_stdout(
+    const protos_json::subscribe_proto::SubscribeRequest &req) {
+  rpc_client_->Call<void>("sub_task_stdout", {req});
+}
+
+protos_json::control_proto::TaskStdout Robot::RobotImpl::wait_task(
+    const protos_json::control_proto::TaskIndex &req) {
+  return rpc_client_->Call<protos_json::control_proto::TaskStdout>("wait_task",
+                                                                   {req});
+}
+
+void Robot::RobotImpl::pause_task(
+    const protos_json::control_proto::PauseRequest &req) {
+  rpc_client_->Call<void>("pause_task", {req});
+}
+void Robot::RobotImpl::resume_task(
+    const protos_json::control_proto::TaskIndex &req) {
+  rpc_client_->Call<void>("resume_task", {req});
+}
+void Robot::RobotImpl::cancel_task(
+    const protos_json::control_proto::TaskIndex &req) {
+  rpc_client_->Call<void>("cancel_task", {req});
+}
+protos_json::control_proto::HookResponse Robot::RobotImpl::exec_hook(
+    const protos_json::control_proto::TaskIndex &req) {
+  return rpc_client_->Call<protos_json::control_proto::HookResponse>(
+      "exec_hook", {req});
+}
+protos_json::control_proto::Task Robot::RobotImpl::load_task(
+    const protos_json::control_proto::TaskIndex &req) {
+  return rpc_client_->Call<protos_json::control_proto::Task>("load_task",
+                                                             {req});
+}
+protos_json::control_proto::Task Robot::RobotImpl::load_task() {
+  return rpc_client_->Call<protos_json::control_proto::Task>("load_task", {});
+}
+
+protos_json::kinematic_proto::CartesianPose Robot::RobotImpl::get_forward_kin(
+    const protos_json::kinematic_proto::PoseRequest &req) {
+  return rpc_client_->Call<protos_json::kinematic_proto::CartesianPose>(
+      "get_forward_kin", {req});
+}
+
+protos_json::kinematic_proto::JointPose Robot::RobotImpl::get_inverse_kin(
+    const protos_json::kinematic_proto::GetInverseKinRequest &req) {
+  return rpc_client_->Call<protos_json::kinematic_proto::JointPose>(
+      "get_inverse_kin", {req});
+}
+
+protos_json::posture_proto::Manipulation
+Robot::RobotImpl::measure_manipulation(
+    const protos_json::posture_proto::JointPose &req) {
+  return rpc_client_->Call<protos_json::posture_proto::Manipulation>(
+      "measure_manipulation", {req});
+}
+
+protos_json::kinematic_proto::CartesianPose Robot::RobotImpl::get_pose_trans(
+    const protos_json::kinematic_proto::GetPoseTransRequest &req) {
+  return rpc_client_->Call<protos_json::kinematic_proto::CartesianPose>(
+      "get_pose_trans", {req});
+}
+protos_json::kinematic_proto::CartesianPose Robot::RobotImpl::get_pose_add(
+    const protos_json::kinematic_proto::GetPoseAddRequest &req) {
+  return rpc_client_->Call<protos_json::kinematic_proto::CartesianPose>(
+      "get_pose_add", {req});
+}
+protos_json::kinematic_proto::CartesianPose Robot::RobotImpl::calc_frame(
+    const protos_json::kinematic_proto::CalcFrameRequest &req) {
+  return rpc_client_->Call<protos_json::kinematic_proto::CartesianPose>(
+      "calc_frame", {req});
+}
+protos_json::kinematic_proto::CartesianPose Robot::RobotImpl::calc_tcp(
+    const protos_json::kinematic_proto::CalcTcpRequest &req) {
+  return rpc_client_->Call<protos_json::kinematic_proto::CartesianPose>(
+      "calc_tcp", {req});
+}
+protos_json::kinematic_proto::CartesianPose Robot::RobotImpl::get_pose_inverse(
+    const protos_json::kinematic_proto::PoseRequest &req) {
+  return rpc_client_->Call<protos_json::kinematic_proto::CartesianPose>(
+      "get_pose_inverse", {req});
+}
+
+void Robot::RobotImpl::save_file(
+    const protos_json::file_proto::SaveFileRequest &req) {
+  rpc_client_->Call<void>("save_file", {req});
+}
+
+void Robot::RobotImpl::rename_file(
+    const protos_json::file_proto::RenameFileRequest &req) {
+  rpc_client_->Call<void>("rename_file", {req});
+}
+
+void Robot::RobotImpl::download_file(
+    const protos_json::file_proto::DownloadFileRequest &req) {
+  rpc_client_->Call<void>("download_file", {req});
+}
+
+protos_json::file_proto::File Robot::RobotImpl::load_file(
+    const protos_json::file_proto::FileIndex &req) {
+  return rpc_client_->Call<protos_json::file_proto::File>("load_file", {req});
+}
+
+protos_json::file_proto::LoadFileListResponse Robot::RobotImpl::load_file_list(
+    const protos_json::file_proto::LoadFileListRequest &req) {
+  return rpc_client_->Call<protos_json::file_proto::LoadFileListResponse>(
+      "load_file_list", {req});
+}
+
+void Robot::RobotImpl::zip(const protos_json::file_proto::ZipRequest &req) {
+  rpc_client_->Call<void>("zip", {req});
+}
+
+void Robot::RobotImpl::unzip(const protos_json::file_proto::UnzipRequest &req) {
+  rpc_client_->Call<void>("unzip", {req});
+}
+
+protos_json::file_proto::LoadZipListResponse Robot::RobotImpl::load_zip_list(
+    const protos_json::file_proto::LoadZipListRequest &req) {
+  return rpc_client_->Call<protos_json::file_proto::LoadZipListResponse>(
+      "load_zip_list", {req});
+}
+
+void Robot::RobotImpl::set_payload(
+    const protos_json::dynamic_proto::SetPayloadRequest &req) {
+  rpc_client_->Call<void>("set_payload", {req});
+}
+void Robot::RobotImpl::set_payload(
+    const protos_json::dynamic_proto::SetCogRequest &req) {
+  rpc_client_->Call<void>("set_payload", {req});
+}
+void Robot::RobotImpl::set_payload(
+    const protos_json::dynamic_proto::SetMassRequest &req) {
+  rpc_client_->Call<void>("set_payload", {req});
+}
+protos_json::dynamic_proto::Payload Robot::RobotImpl::get_payload() {
+  return rpc_client_->Call<protos_json::dynamic_proto::Payload>("get_payload",
+                                                                {});
+}
+void Robot::RobotImpl::set_gravity(
+    const protos_json::posture_proto::Position &req) {
+  rpc_client_->Call<void>("set_gravity", {req});
+}
+protos_json::posture_proto::Position Robot::RobotImpl::get_gravity() {
+  return rpc_client_->Call<protos_json::posture_proto::Position>("get_gravity",
+                                                                 {});
+}
+void Robot::RobotImpl::save_payload(
+    const protos_json::dynamic_proto::SavePayloadRequest &req) {
+  rpc_client_->Call<void>("save_payload", {req});
+}
+protos_json::dynamic_proto::Payload Robot::RobotImpl::load_payload(
+    const protos_json::db_proto::LoadRequest &req) {
+  return rpc_client_->Call<protos_json::dynamic_proto::Payload>("load_payload",
+                                                                {req});
+}
+protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_payload_list(
+    const protos_json::db_proto::LoadListRequest &req) {
+  return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
+      "load_payload_list", {req});
+}
+
+void Robot::RobotImpl::set_tcp(
+    const protos_json::posture_proto::CartesianPose &req) {
+  rpc_client_->Call<void>("set_tcp", {req});
+}
+protos_json::posture_proto::CartesianPose Robot::RobotImpl::get_tcp() {
+  return rpc_client_->Call<protos_json::posture_proto::CartesianPose>(
+      "get_tcp", {});
+}
+void Robot::RobotImpl::set_kin_factor(
+    const protos_json::kin_factor_proto::KinFactor &req) {
+  rpc_client_->Call<void>("set_kin_factor", {req});
+}
+protos_json::kin_factor_proto::KinFactor Robot::RobotImpl::get_kin_factor() {
+  return rpc_client_->Call<protos_json::kin_factor_proto::KinFactor>(
+      "get_kin_factor", {});
+}
+void Robot::RobotImpl::save_tcp(
+    const protos_json::kinematic_proto::SaveTcpRequest &req) {
+  rpc_client_->Call<void>("save_tcp", {req});
+}
+protos_json::posture_proto::CartesianPose Robot::RobotImpl::load_tcp(
+    const protos_json::db_proto::LoadRequest &req) {
+  return rpc_client_->Call<protos_json::posture_proto::CartesianPose>(
+      "load_tcp", {req});
+}
+protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_tcp_list(
+    const protos_json::db_proto::LoadListRequest &req) {
+  return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
+      "load_tcp_list", {req});
+}
+protos_json::posture_proto::Pose Robot::RobotImpl::load_pose(
+    const protos_json::db_proto::LoadRequest &req) {
+  return rpc_client_->Call<protos_json::posture_proto::Pose>("load_pose",
+                                                             {req});
+}
+void Robot::RobotImpl::save_pose(
+    const protos_json::posture_proto::SavePoseRequest &req) {
+  rpc_client_->Call<void>("save_pose", {req});
+}
+protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_pose_list(
+    const protos_json::db_proto::LoadListRequest &req) {
+  return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
+      "load_pose_list", {req});
+}
+protos_json::posture_proto::CartesianFrame Robot::RobotImpl::load_frame(
+    const protos_json::db_proto::LoadRequest &req) {
+  return rpc_client_->Call<protos_json::posture_proto::CartesianFrame>(
+      "load_frame", {req});
+}
+void Robot::RobotImpl::save_frame(
+    const protos_json::posture_proto::SaveFrameRequest &req) {
+  rpc_client_->Call<void>("save_frame", {req});
+}
+protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_frame_list(
+    const protos_json::db_proto::LoadListRequest &req) {
+  return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
+      "load_frame_list", {req});
+}
+protos_json::structure_proto::Structure Robot::RobotImpl::load_structure(
+    const protos_json::db_proto::LoadRequest &req) {
+  return rpc_client_->Call<protos_json::structure_proto::Structure>(
+      "load_structure", {req});
+}
+void Robot::RobotImpl::save_structure(
+    const protos_json::structure_proto::SaveStructureRequest &req) {
+  rpc_client_->Call<void>("save_structure", {req});
+}
+protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_structure_list(
+    const protos_json::db_proto::LoadListRequest &req) {
+  return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
+      "load_structure_list", {req});
+}
+protos_json::modbus_proto::Modbus Robot::RobotImpl::load_modbus(
+    const protos_json::db_proto::LoadRequest &req) {
+  return rpc_client_->Call<protos_json::modbus_proto::Modbus>("load_modbus",
+                                                              {req});
+}
+void Robot::RobotImpl::save_modbus(
+    const protos_json::modbus_proto::SaveModbusRequest &req) {
+  rpc_client_->Call<void>("save_modbus", {req});
+}
+void Robot::RobotImpl::set_modbus_timeout(
+    const protos_json::modbus_proto::SetModbusTimeoutRequest &req) {
+  rpc_client_->Call<void>("set_modbus_timeout", {req});
+}
+void Robot::RobotImpl::set_modbus_retry(
+    const protos_json::modbus_proto::SetModbusRetryRequest &req) {
+  rpc_client_->Call<void>("set_modbus_retry", {req});
+}
+void Robot::RobotImpl::disconnect_modbus(
+    const protos_json::modbus_proto::DisconnectModbusRequest &req) {
+  rpc_client_->Call<void>("disconnect_modbus", {req});
+}
+protos_json::db_proto::LoadListResponse Robot::RobotImpl::load_modbus_list(
+    const protos_json::db_proto::LoadListRequest &req) {
+  return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
+      "load_modbus_list", {req});
+}
+protos_json::modbus_proto::ModbusRegister
+Robot::RobotImpl::load_modbus_register(
+    const protos_json::modbus_proto::LoadModbusRegisterRequest &req) {
+  return rpc_client_->Call<protos_json::modbus_proto::ModbusRegister>(
+      "load_modbus_register", {req});
+}
+void Robot::RobotImpl::save_modbus_register(
+    const protos_json::modbus_proto::SaveModbusRegisterRequest &req) {
+  rpc_client_->Call<void>("save_modbus_register", {req});
+}
+protos_json::db_proto::LoadListResponse
+Robot::RobotImpl::load_modbus_register_list(
+    const protos_json::modbus_proto::LoadModbusRegisterListRequest &req) {
+  return rpc_client_->Call<protos_json::db_proto::LoadListResponse>(
+      "load_modbus_register_list", {req});
+}
+void Robot::RobotImpl::write_single_coil(
+    const protos_json::modbus_proto::SetCoilRequest &req) {
+  rpc_client_->Call<void>("write_single_coil", {req});
+}
+void Robot::RobotImpl::write_multiple_coils(
+    const protos_json::modbus_proto::SetCoilsRequest &req) {
+  rpc_client_->Call<void>("write_multiple_coils", {req});
+}
+protos_json::modbus_proto::GetCoilsResponse Robot::RobotImpl::read_coils(
+    const protos_json::modbus_proto::GetCoilsRequest &req) {
+  return rpc_client_->Call<protos_json::modbus_proto::GetCoilsResponse>(
+      "read_coils", {req});
+}
+protos_json::modbus_proto::GetCoilsResponse
+Robot::RobotImpl::read_discrete_inputs(
+    const protos_json::modbus_proto::GetCoilsRequest &req) {
+  return rpc_client_->Call<protos_json::modbus_proto::GetCoilsResponse>(
+      "read_discrete_inputs", {req});
+}
+void Robot::RobotImpl::write_single_register(
+    const protos_json::modbus_proto::SetRegisterRequest &req) {
+  rpc_client_->Call<void>("write_single_register", {req});
+}
+void Robot::RobotImpl::write_multiple_registers(
+    const protos_json::modbus_proto::SetRegistersRequest &req) {
+  rpc_client_->Call<void>("write_multiple_registers", {req});
+}
+protos_json::modbus_proto::GetRegistersResponse
+Robot::RobotImpl::read_input_registers(
+    const protos_json::modbus_proto::GetRegistersRequest &req) {
+  return rpc_client_->Call<protos_json::modbus_proto::GetRegistersResponse>(
+      "read_input_registers", {req});
+}
+protos_json::modbus_proto::GetRegistersResponse
+Robot::RobotImpl::read_holding_registers(
+    const protos_json::modbus_proto::GetRegistersRequest &req) {
+  return rpc_client_->Call<protos_json::modbus_proto::GetRegistersResponse>(
+      "read_holding_registers", {req});
+}
+
+void Robot::RobotImpl::set_serial_baud_rate(
+    const protos_json::serial_proto::SetSerialBaudRateRequest &req) {
+  rpc_client_->Call<void>("set_serial_baud_rate", {req});
+}
+void Robot::RobotImpl::set_serial_timeout(
+    const protos_json::serial_proto::SetSerialTimeoutRequest &req) {
+  rpc_client_->Call<void>("set_serial_timeout", {req});
+}
+void Robot::RobotImpl::set_serial_parity(
+    const protos_json::serial_proto::SetSerialParityRequest &req) {
+  rpc_client_->Call<void>("set_serial_parity", {req});
+}
+void Robot::RobotImpl::write_serial(
+    const protos_json::serial_proto::WriteSerialRequest &req) {
+  rpc_client_->Call<void>("write_serial", {req});
+}
+protos_json::serial_proto::ReadSerialResponse Robot::RobotImpl::read_serial(
+    const protos_json::serial_proto::ReadSerialRequest &req) {
+  return rpc_client_->Call<protos_json::serial_proto::ReadSerialResponse>(
+      "read_serial", {req});
+}
+void Robot::RobotImpl::clear_serial(
+    const protos_json::serial_proto::ClearSerialRequest &req) {
+  rpc_client_->Call<void>("clear_serial", {req});
+}
+void Robot::RobotImpl::set_item(
+    const protos_json::storage_proto::Item &req) {
+  rpc_client_->Call<void>("set_item", {req});
+}
+protos_json::storage_proto::Item Robot::RobotImpl::get_item(
+    const protos_json::storage_proto::ItemIndex &req) {
+  return rpc_client_->Call<protos_json::storage_proto::Item>("get_item", {req});
+}
+
+protos_json::storage_proto::Items Robot::RobotImpl::get_items(
+    const protos_json::storage_proto::GetItemsRequest &req) {
+  return rpc_client_->Call<protos_json::storage_proto::Items>("get_items",
+                                                              {req});
+}
+
+void Robot::RobotImpl::enable_collision_detector() {
+  rpc_client_->Call<void>("enable_collision_detector", {});
+}
+
+void Robot::RobotImpl::disable_collision_detector() {
+  rpc_client_->Call<void>("disable_collision_detector", {});
+}
+
+void Robot::RobotImpl::set_collision_torque_diff(
+    const protos_json::safety_proto::CollisionTorqueDiff &req) {
+  rpc_client_->Call<void>("set_collision_torque_diff", {req});
+}
+
+protos_json::safety_proto::CollisionTorqueDiff
+Robot::RobotImpl::get_collision_torque_diff() {
+  return rpc_client_->Call<protos_json::safety_proto::CollisionTorqueDiff>(
+      "get_collision_torque_diff", {});
+}
+
+void Robot::RobotImpl::set_collision_detector(
+    const protos_json::safety_proto::CollisionDetector &req) {
+  rpc_client_->Call<void>("set_collision_detector", {req});
+}
+
+protos_json::safety_proto::CollisionDetector
+Robot::RobotImpl::get_collision_detector() {
+  return rpc_client_->Call<protos_json::safety_proto::CollisionDetector>(
+      "get_collision_detector", {});
+}
+
+void Robot::RobotImpl::enable_limit() {
+  rpc_client_->Call<void>("enable_limit", {});
+}
+
+void Robot::RobotImpl::disable_limit() {
+  rpc_client_->Call<void>("disable_limit", {});
+}
+
+void Robot::RobotImpl::set_joints_limit(
+    const protos_json::safety_proto::JointsLimit &req) {
+  rpc_client_->Call<void>("set_joints_limit", {req});
+}
+
+protos_json::safety_proto::JointsLimit Robot::RobotImpl::get_joints_limit() {
+  return rpc_client_->Call<protos_json::safety_proto::JointsLimit>(
+      "get_joints_limit", {});
+}
+
+void Robot::RobotImpl::set_cart_limit(
+    const protos_json::safety_proto::CartesianLimit &req) {
+  rpc_client_->Call<void>("set_cart_limit", {req});
+}
+
+protos_json::safety_proto::CartesianLimit Robot::RobotImpl::get_cart_limit() {
+  return rpc_client_->Call<protos_json::safety_proto::CartesianLimit>(
+      "get_cart_limit", {});
 }
 
 }  // namespace l_master

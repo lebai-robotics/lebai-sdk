@@ -3,7 +3,7 @@ if(NOT BUILD_CXX)
 endif()
 
 enable_language(CXX)
-set(CMAKE_CXX_STANDARD 14)
+set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 configure_file("${PROJECT_SOURCE_DIR}/sdk/config.hh.in"
@@ -41,19 +41,24 @@ function(add_cpp_example FILE_NAME)
   get_filename_component(EXAMPLE_NAME ${FILE_NAME} NAME_WE)
   get_filename_component(COMPONENT_DIR ${FILE_NAME} DIRECTORY)
   get_filename_component(COMPONENT_NAME ${COMPONENT_DIR} NAME)
+  if(COMPONENT_NAME STREQUAL "examples")
+    set(EXAMPLE_TARGET ${EXAMPLE_NAME})
+  else()
+    set(EXAMPLE_TARGET ${COMPONENT_NAME}_${EXAMPLE_NAME})
+  endif()
 
   if(UNIX)
     set(CMAKE_INSTALL_RPATH "$ORIGIN/../${CMAKE_INSTALL_LIBDIR}:$ORIGIN")
   endif()
 
-  add_executable(${EXAMPLE_NAME} ${FILE_NAME})
+  add_executable(${EXAMPLE_TARGET} ${FILE_NAME})
   target_include_directories(
-    ${EXAMPLE_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
+    ${EXAMPLE_TARGET} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
                            ${PROJECT_SOURCE_DIR}/sdk/src)
-  target_compile_features(${EXAMPLE_NAME} PRIVATE cxx_std_14)
-  target_link_libraries(${EXAMPLE_NAME} PRIVATE ${PROJECT_NAMESPACE}::lebai-cpp)
+  target_compile_features(${EXAMPLE_TARGET} PRIVATE cxx_std_17)
+  target_link_libraries(${EXAMPLE_TARGET} PRIVATE ${PROJECT_NAMESPACE}::lebai-cpp)
   if(UNIX)
-    target_link_libraries(${EXAMPLE_NAME} PRIVATE pthread)
+    target_link_libraries(${EXAMPLE_TARGET} PRIVATE pthread)
   endif()
 
   # include(GNUInstallDirs) install(TARGETS ${EXAMPLE_NAME})

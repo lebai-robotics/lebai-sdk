@@ -17,22 +17,40 @@
 #pragma once
 
 #include <lebai/robot.hh>
-#include "protos/motion.hh"
-#include "protos/system.hh"
-#include "protos/io.hh"
-#include "protos/claw.hh"
-#include "protos/led.hh"
-#include "protos/kinematic.hh"
-#include "jsonrpc_connector.hh"
-#include "protos/signal.hh"
-#include "protos/control.hh"
-#include "protos/file.hh"
-#include "protos/dynamic.hh"
-#include "protos/db.hh"
-#include "protos/modbus.hh"
-#include "protos/serial.hh"
-#include "protos/storage.hh"
-#include "protos/safety.hh"
+#include "http_jsonrpc_connector.hh"
+#include "protos_json/auto_proto.hh"
+#include "protos_json/backup_proto.hh"
+#include "protos_json/claw_proto.hh"
+#include "protos_json/control_proto.hh"
+#include "protos_json/db_proto.hh"
+#include "protos_json/dynamic_proto.hh"
+#include "protos_json/file_proto.hh"
+#include "protos_json/flange_proto.hh"
+#include "protos_json/hardware_proto.hh"
+#include "protos_json/io_proto.hh"
+#include "protos_json/kin_factor_proto.hh"
+#include "protos_json/kinematic_proto.hh"
+#include "protos_json/led_proto.hh"
+#include "protos_json/message_proto.hh"
+#include "protos_json/modbus_proto.hh"
+#include "protos_json/motion_proto.hh"
+#include "protos_json/motor_proto.hh"
+#include "protos_json/multi_devices_proto.hh"
+#include "protos_json/network_proto.hh"
+#include "protos_json/posture_proto.hh"
+#include "protos_json/plugin_proto.hh"
+#include "protos_json/quality_proto.hh"
+#include "protos_json/safety_proto.hh"
+#include "protos_json/signal_proto.hh"
+#include "protos_json/serial_proto.hh"
+#include "protos_json/shortcut_proto.hh"
+#include "protos_json/storage_proto.hh"
+#include "protos_json/structure_proto.hh"
+#include "protos_json/subscribe_proto.hh"
+#include "protos_json/system_proto.hh"
+#include "protos_json/trigger_proto.hh"
+#include "protos_json/upgrade_proto.hh"
+#include "rpc_client.hh"
 
 namespace lebai {
 namespace l_master {
@@ -42,125 +60,349 @@ class Robot::RobotImpl {
   virtual ~RobotImpl();
   std::tuple<int, std::string> call(const std::string &method,
                                     const std::string &params);
+  protos_json::system_proto::HelloData hello(
+      const protos_json::system_proto::HelloData &req);
+  void set_auto(const protos_json::auto_proto::SetAutoRequest &req);
+  protos_json::auto_proto::GetAutoResponse get_auto(
+      const protos_json::auto_proto::GetAutoRequest &req);
   bool isNetworkConnected();
-  int startSys();
-  int stopSys();
+  int start_sys();
+  int stop_sys();
   int powerdown();
   int stop();
   int estop();
-  int teachMode();
-  int endTeachMode();
-  int pause();
-  int resume();
+  int start_teach_mode();
+  int end_teach_mode();
+  int pause_move();
+  int resume_move();
   void reboot();
   // // int movej(const std::vector<double> & p, double v, double a, double t,
   // double r, bool relative);
-  motion::MotionIndex moveJoint(const motion::MoveRequest &req);
-  motion::MotionIndex moveLinear(const motion::MoveRequest &req);
-  motion::MotionIndex moveCircular(const motion::MovecRequest &req);
-  motion::MotionIndex towardJoint(const motion::MoveRequest &req);
-  motion::MotionIndex speedJoint(const motion::SpeedJRequest &req);
-  motion::MotionIndex speedLinear(const motion::SpeedLRequest &req);
-  void movePvat(const motion::MovePvatRequest &req);
-  void waitMove(const motion::MotionIndex &req);
-  motion::MotionIndex getRunningMotion();
-  motion::GetMotionStateResponse getMotionState(const motion::MotionIndex &req);
-  void stopMove();
-  system::RobotState getRobotState();
-  system::EstopReason getEstopReason();
-  system::PhyData getPhyData();
-  kinematic::KinData getKinData();
-  io::GetDioPinResponse getDI(const io::GetDioPinRequest &req);
-  io::GetDioPinsResponse getDIS(const io::GetDioPinsRequest &req);
-  io::GetDioPinResponse getDO(const io::GetDioPinRequest &req);
-  io::GetDioPinsResponse getDOS(const io::GetDioPinsRequest &req);
-  void setDO(const io::SetDoPinRequest &req);
-  io::GetAioPinResponse getAI(const io::GetAioPinRequest &req);
-  io::GetAioPinsResponse getAIS(const io::GetAioPinsRequest &req);
-  io::GetAioPinResponse getAO(const io::GetAioPinRequest &req);
-  io::GetAioPinsResponse getAOS(const io::GetAioPinsRequest &req);
-  void setDioMode(const io::SetDioModeRequest &req);
-  io::GetDiosModeResponse getDiosMode(const io::GetDiosModeRequest &req);
-  void setAO(const io::SetAoPinRequest &req);
-  void initClaw(const claw::InitClawRequest &req);
-  void setClaw(const claw::SetClawRequest &req);
-  void setLed(const led::LedData &req);
-  void setVoice(const led::VoiceData &req);
-  void setFan(const led::FanData &req);
-  void setSignal(const signal::SetSignalRequest &req);
-  signal::GetSignalResponse getSignal(const signal::GetSignalRequest &req);
-  void addSignal(const signal::SetSignalRequest &req);
-  control::TaskIndex scene(const control::StartTaskRequest &req);
-  control::TaskIds loadTaskList();
-  control::TaskStdout waitTask(const control::TaskIndex &req);
-  void pauseTask(const control::PauseRequest &req);
-  void resumeTask(const control::TaskIndex &req);
-  void cancelTask(const control::TaskIndex &req);
-  control::HookResponse execHook(const control::Exec &req);
-  control::Task loadTask(const control::TaskIndex &req);
-  control::Task loadTask();
-  claw::Claw getClaw();
-  posture::CartesianPose getForwardKin(const posture::PoseRequest &req);
-  posture::JointPose getInverseKin(const posture::GetInverseKinRequest &req);
-  posture::CartesianPose getPoseTrans(const posture::GetPoseTransRequest &req);
-  posture::CartesianPose getPoseInverse(const posture::PoseRequest &req);
-  void saveFile(const file::SaveFileRequest &req);
-  void renameFile(const file::RenameFileRequest &req);
-  file::File loadFile(const file::FileIndex &req);
-  file::LoadFileListResponse loadFileList(const file::LoadFileListRequest &req);
-  void zip(const file::ZipRequest &req);
-  void unzip(const file::UnzipRequest &req);
-  file::LoadZipListResponse loadZipList(const file::LoadZipListRequest &req);
-  void setPayload(const dynamic::SetPayloadRequest &req);
-  void setPayload(const dynamic::SetCogRequest &req);
-  void setPayload(const dynamic::SetMassRequest &req);
-  dynamic::Payload getPayload();
-  void setGravity(const posture::Position &req);
-  posture::Position getGravity();
-  void savePayload(const dynamic::SavePayloadRequest &req);
-  dynamic::Payload loadPayload(const db::LoadRequest &req);
-  db::LoadListResponse loadPayloadList(const db::LoadListRequest &req);
-  void setTcp(const posture::CartesianPose &req);
-  posture::CartesianPose getTcp();
-  void setKinFactor(const kinematic::KinFactor &req);
-  kinematic::KinFactor getKinFactor();
-  posture::CartesianPose loadTcp(const db::LoadRequest &req);
-  void writeSingleCoil(const modbus::SetCoilRequest &req);
-  void writeMultipleCoils(const modbus::SetCoilsRequest &req);
-  modbus::GetCoilsResponse readCoils(const modbus::GetCoilsRequest &req);
-  modbus::GetCoilsResponse readDiscreteInputs(
-      const modbus::GetCoilsRequest &req);
-  void writeSingleRegister(const modbus::SetRegisterRequest &req);
-  void writeMultipleRegisters(const modbus::SetRegistersRequest &req);
-  modbus::GetRegistersResponse readInputRegisters(
-      const modbus::GetRegistersRequest &req);
-  modbus::GetRegistersResponse readHoldingRegisters(
-      const modbus::GetRegistersRequest &req);
-  void setSerialBaudRateRequest(const serial::SetSerialBaudRateRequest &req);
-  void setSerialParityRequest(const serial::SetSerialParityRequest &req);
-  void setItem(const storage::Item &req);
-  storage::Item getItem(const storage::ItemIndex &req);
-  storage::Items getItems(const storage::GetItemsRequest &req);
-  void enableCollisionDetector();
-  void disableCollisionDetector();
-  void setCollisionTorqueDiff(const safety::CollisionTorqueDiff &req);
-  safety::CollisionTorqueDiff getCollisionTorqueDiff();
-  void setCollisionDetector(const safety::CollisionDetector &req);
-  safety::CollisionDetector getCollisionDetector();
-  void enableLimit();
-  void disableLimit();
-  void setJointsLimit(const safety::JointsLimit &req);
-  safety::JointsLimit getJointsLimit();
-  void setCartLimit(const safety::CartesianLimit &req);
-  safety::CartesianLimit getCartLimit();
+  protos_json::motion_proto::MotionIndex move_joint(
+      const protos_json::motion_proto::MoveRequest &req);
+  protos_json::motion_proto::MotionIndex move_joint(
+      const protos_json::motion_proto::CartesianMoveRequest &req);
+  protos_json::motion_proto::MotionIndex move_linear(
+      const protos_json::motion_proto::MoveRequest &req);
+  protos_json::motion_proto::MotionIndex move_linear(
+      const protos_json::motion_proto::CartesianMoveRequest &req);
+  protos_json::motion_proto::MotionIndex move_circular(
+      const protos_json::motion_proto::MoveCircularRequest &req);
+  protos_json::motion_proto::MotionIndex move_circular(
+      const protos_json::motion_proto::CartesianMoveCircularRequest &req);
+  protos_json::motion_proto::MotionIndex toward_joint(
+      const protos_json::motion_proto::MoveRequest &req);
+  protos_json::motion_proto::MotionIndex speed_joint(
+      const protos_json::motion_proto::SpeedJointRequest &req);
+  protos_json::motion_proto::MotionIndex speed_linear(
+      const protos_json::motion_proto::SpeedLinearRequest &req);
+  void move_pvat(const protos_json::motion_proto::MovePvatRequest &req);
+  protos_json::motion_proto::Trajectory load_trajectory(
+      const protos_json::db_proto::LoadRequest &req);
+  void save_trajectory(
+      const protos_json::motion_proto::SaveTrajectoryRequest &req);
+  protos_json::motion_proto::MotionIndex move_trajectory(
+      const protos_json::db_proto::LoadRequest &req);
+  void start_record_trajectory(
+      const protos_json::motion_proto::StartRecordTrajectoryRequest &req);
+  void end_record_trajectory(
+      const protos_json::motion_proto::EndRecordTrajectoryRequest &req);
+  protos_json::db_proto::LoadListResponse load_trajectory_list(
+      const protos_json::db_proto::LoadListRequest &req);
+  void wait_move(const protos_json::motion_proto::MotionIndex &req);
+  protos_json::motion_proto::MotionIndex get_running_motion();
+  protos_json::motion_proto::GetMotionStateResponse get_motion_state(
+      const protos_json::motion_proto::MotionIndex &req);
+  void stop_move();
+  void skip_move();
+  protos_json::system_proto::RobotState get_robot_state();
+  protos_json::system_proto::EstopReason get_estop_reason();
+  protos_json::system_proto::SystemInfo get_system_info();
+  protos_json::system_proto::RobotInfo get_robot_info();
+  protos_json::system_proto::HardwareInfo get_hardware_info();
+  protos_json::system_proto::SoftwareInfo get_software_info();
+  protos_json::network_proto::HttpResponse http(
+      const protos_json::network_proto::HttpRequest &req);
+  void clean(const protos_json::backup_proto::Options &req);
+  void backup(const protos_json::backup_proto::BackupRequest &req);
+  protos_json::backup_proto::BackupInfo get_backup_info(
+      const protos_json::backup_proto::GetBackupInfoRequest &req);
+  void restore(const protos_json::backup_proto::RestoreRequest &req);
+  void set_virtual_ip(
+      const protos_json::system_proto::SetVirtualIpRequest &req);
+  void sub_robot_state(
+      const protos_json::subscribe_proto::SubscribeRequest &req);
+  protos_json::system_proto::GetBoxDevicesResponse get_box_devices(
+      const protos_json::system_proto::GetBoxDevicesRequest &req);
+  protos_json::db_proto::Dirs get_dirs();
+  void create_dir(const protos_json::db_proto::Dir &req);
+  void update_dir(const protos_json::db_proto::UpdateDirRequest &req);
+  protos_json::shortcut_proto::ShortcutList get_short_poses();
+  void set_short_pose(const protos_json::shortcut_proto::Shortcut &req);
+  protos_json::shortcut_proto::Shortcut get_short_pose(
+      const protos_json::shortcut_proto::ShortcutIndex &req);
+  protos_json::shortcut_proto::ShortcutList get_short_tasks();
+  void set_short_task(const protos_json::shortcut_proto::Shortcut &req);
+  protos_json::shortcut_proto::Shortcut get_short_task(
+      const protos_json::shortcut_proto::ShortcutIndex &req);
+  protos_json::trigger_proto::Triggers get_triggers();
+  void set_trigger(const protos_json::trigger_proto::Trigger &req);
+  protos_json::led_proto::LedStyles get_led_styles();
+  void set_led_styles(const protos_json::led_proto::LedStyles &req);
+  protos_json::led_proto::LedStyle load_led_style(
+      const protos_json::db_proto::LoadRequest &req);
+  void save_led_style(const protos_json::led_proto::SaveLedStyleRequest &req);
+  void set_led_style(const protos_json::led_proto::LedStyleItem &req);
+  protos_json::db_proto::LoadListResponse load_led_style_list(
+      const protos_json::db_proto::LoadListRequest &req);
+  protos_json::motor_proto::ServoParams get_servo_params();
+  void set_servo_params(const protos_json::motor_proto::ServoParams &req);
+  void find_zero();
+  void set_zero(const protos_json::motor_proto::SetZeroRequest &req);
+  void set_extra_servo_params(
+      const protos_json::motor_proto::SetExtraServoParamsRequest &req);
+  void reset_extra_servo_params(
+      const protos_json::motor_proto::ResetExtraServoParamsRequest &req);
+  void set_flange_baud_rate(
+      const protos_json::flange_proto::SetFlangeBaudRateRequest &req);
+  protos_json::motion_proto::Wrench get_tcp_force();
+  void set_tcp_force(const protos_json::motion_proto::Wrench &req);
+  void set_force_mode_sensor(
+      const protos_json::motion_proto::SetForceModeSensorRequest &req);
+  void set_force_mode_param(
+      const protos_json::motion_proto::SetForceModeParamRequest &req);
+  void start_force_mode(
+      const protos_json::motion_proto::StartForceModeRequest &req);
+  void end_force_mode();
+  protos_json::plugin_proto::Plugins load_plugins();
+  protos_json::plugin_proto::PluginStore get_plugin_store();
+  protos_json::plugin_proto::PluginInfo load_plugin(
+      const protos_json::plugin_proto::PluginIndex &req);
+  protos_json::plugin_proto::CommandStdout run_plugin_cmd(
+      const protos_json::plugin_proto::PluginCmdRequest &req);
+  protos_json::plugin_proto::CommandStdout enable_plugin(
+      const protos_json::plugin_proto::PluginIndex &req);
+  protos_json::plugin_proto::CommandStdout disable_plugin(
+      const protos_json::plugin_proto::PluginIndex &req);
+  void restart_plugin_daemon(
+      const protos_json::plugin_proto::PluginIndex &req);
+  protos_json::multi_devices_proto::DiscoverRobotsResponse discover_robots();
+  protos_json::plugin_proto::CommandStdout get_plugin_daemon_stdout(
+      const protos_json::plugin_proto::PluginIndex &req);
+  protos_json::message_proto::Messages get_messages();
+  void sub_message(const protos_json::subscribe_proto::SubscribeRequest &req);
+  protos_json::hardware_proto::OtaState get_ota_state();
+  void start_ota(const protos_json::hardware_proto::StartOtaRequest &req);
+  void switch_partition(
+      const protos_json::hardware_proto::SwitchPartitionRequest &req);
+  protos_json::upgrade_proto::CheckUpgradeResponse check_upgrade();
+  void start_upgrade();
+  protos_json::upgrade_proto::CommandStdout get_upgrade_stdout();
+  protos_json::quality_proto::BoxTestResponse box_test(
+      const protos_json::quality_proto::EmptyRequest &req);
+  protos_json::quality_proto::InitRobotResponse init_robot(
+      const protos_json::quality_proto::InitRobotRequest &req);
+  protos_json::system_proto::PhyData get_phy_data();
+  void sub_phy_data(const protos_json::subscribe_proto::SubscribeRequest &req);
+  protos_json::kinematic_proto::KinData get_kin_data();
+  void sub_kin_data(const protos_json::subscribe_proto::SubscribeRequest &req);
+  protos_json::kinematic_proto::DhParams get_dh();
+  void set_dh(const protos_json::kinematic_proto::DhParams &req);
+  protos_json::io_proto::GetDioPinResponse get_di(
+      const protos_json::io_proto::GetDioPinRequest &req);
+  protos_json::io_proto::GetDioPinsResponse get_dis(
+      const protos_json::io_proto::GetDioPinsRequest &req);
+  protos_json::io_proto::GetDioPinResponse get_do(
+      const protos_json::io_proto::GetDioPinRequest &req);
+  protos_json::io_proto::GetDioPinsResponse get_dos(
+      const protos_json::io_proto::GetDioPinsRequest &req);
+  void set_do(const protos_json::io_proto::SetDoPinRequest &req);
+  void set_dos(const protos_json::io_proto::SetDoPinsRequest &req);
+  protos_json::io_proto::GetAioPinResponse get_ai(
+      const protos_json::io_proto::GetAioPinRequest &req);
+  protos_json::io_proto::GetAioPinsResponse get_ais(
+      const protos_json::io_proto::GetAioPinsRequest &req);
+  protos_json::io_proto::GetAioPinResponse get_ao(
+      const protos_json::io_proto::GetAioPinRequest &req);
+  protos_json::io_proto::GetAioPinsResponse get_aos(
+      const protos_json::io_proto::GetAioPinsRequest &req);
+  void set_dio_mode(const protos_json::io_proto::SetDioModeRequest &req);
+  protos_json::io_proto::GetDioModeResponse get_dio_mode(
+      const protos_json::io_proto::GetDioModeRequest &req);
+  protos_json::io_proto::GetDiosModeResponse get_dios_mode(
+      const protos_json::io_proto::GetDiosModeRequest &req);
+  void sub_buttons_status(
+      const protos_json::subscribe_proto::SubscribeRequest &req);
+  void enable_button(const protos_json::io_proto::ButtonIndex &req);
+  void disable_button(const protos_json::io_proto::ButtonIndex &req);
+  void set_ao(const protos_json::io_proto::SetAoPinRequest &req);
+  void set_aos(const protos_json::io_proto::SetAoPinsRequest &req);
+  void init_claw(const protos_json::claw_proto::InitClawRequest &req);
+  void set_claw(const protos_json::claw_proto::SetClawRequest &req);
+  void set_claw_ao(const protos_json::claw_proto::SetClawAoRequest &req);
+  protos_json::claw_proto::Claw get_claw();
+  protos_json::claw_proto::GetClawAiResponse get_claw_ai(
+      const protos_json::claw_proto::GetClawAiRequest &req);
+  void wait_claw_ai(const protos_json::claw_proto::WaitClawAiRequest &req);
+  void set_led(const protos_json::led_proto::LedData &req);
+  void set_voice(const protos_json::led_proto::VoiceData &req);
+  void set_fan(const protos_json::led_proto::FanData &req);
+  void set_signal(const protos_json::signal_proto::SetSignalRequest &req);
+  void set_signals(const protos_json::signal_proto::SetSignalsRequest &req);
+  protos_json::signal_proto::GetSignalResponse get_signal(
+      const protos_json::signal_proto::GetSignalRequest &req);
+  protos_json::signal_proto::GetSignalsResponse get_signals(
+      const protos_json::signal_proto::GetSignalsRequest &req);
+  void wait_signal(const protos_json::signal_proto::WaitSignalRequest &req);
+  void add_signal(const protos_json::signal_proto::SetSignalRequest &req);
+  protos_json::control_proto::TaskIndex start_task(
+      const protos_json::control_proto::StartTaskRequest &req);
+  protos_json::control_proto::TaskIds load_task_list();
+  protos_json::control_proto::Tasks load_running_tasks();
+  protos_json::control_proto::TaskStdout get_task_stdout(
+      const protos_json::control_proto::TaskIndex &req);
+  void sub_task_stdout(
+      const protos_json::subscribe_proto::SubscribeRequest &req);
+  protos_json::control_proto::TaskStdout wait_task(
+      const protos_json::control_proto::TaskIndex &req);
+  void pause_task(const protos_json::control_proto::PauseRequest &req);
+  void resume_task(const protos_json::control_proto::TaskIndex &req);
+  void cancel_task(const protos_json::control_proto::TaskIndex &req);
+  protos_json::control_proto::HookResponse exec_hook(
+      const protos_json::control_proto::TaskIndex &req);
+  protos_json::control_proto::Task load_task(
+      const protos_json::control_proto::TaskIndex &req);
+  protos_json::control_proto::Task load_task();
+  protos_json::kinematic_proto::CartesianPose get_forward_kin(
+      const protos_json::kinematic_proto::PoseRequest &req);
+  protos_json::kinematic_proto::JointPose get_inverse_kin(
+      const protos_json::kinematic_proto::GetInverseKinRequest &req);
+  protos_json::posture_proto::Manipulation measure_manipulation(
+      const protos_json::posture_proto::JointPose &req);
+  protos_json::kinematic_proto::CartesianPose get_pose_trans(
+      const protos_json::kinematic_proto::GetPoseTransRequest &req);
+  protos_json::kinematic_proto::CartesianPose get_pose_add(
+      const protos_json::kinematic_proto::GetPoseAddRequest &req);
+  protos_json::kinematic_proto::CartesianPose calc_frame(
+      const protos_json::kinematic_proto::CalcFrameRequest &req);
+  protos_json::kinematic_proto::CartesianPose calc_tcp(
+      const protos_json::kinematic_proto::CalcTcpRequest &req);
+  protos_json::kinematic_proto::CartesianPose get_pose_inverse(
+      const protos_json::kinematic_proto::PoseRequest &req);
+  void save_file(const protos_json::file_proto::SaveFileRequest &req);
+  void rename_file(const protos_json::file_proto::RenameFileRequest &req);
+  void download_file(const protos_json::file_proto::DownloadFileRequest &req);
+  protos_json::file_proto::File load_file(
+      const protos_json::file_proto::FileIndex &req);
+  protos_json::file_proto::LoadFileListResponse load_file_list(
+      const protos_json::file_proto::LoadFileListRequest &req);
+  void zip(const protos_json::file_proto::ZipRequest &req);
+  void unzip(const protos_json::file_proto::UnzipRequest &req);
+  protos_json::file_proto::LoadZipListResponse load_zip_list(
+      const protos_json::file_proto::LoadZipListRequest &req);
+  void set_payload(const protos_json::dynamic_proto::SetPayloadRequest &req);
+  void set_payload(const protos_json::dynamic_proto::SetCogRequest &req);
+  void set_payload(const protos_json::dynamic_proto::SetMassRequest &req);
+  protos_json::dynamic_proto::Payload get_payload();
+  void set_gravity(const protos_json::posture_proto::Position &req);
+  protos_json::posture_proto::Position get_gravity();
+  void save_payload(const protos_json::dynamic_proto::SavePayloadRequest &req);
+  protos_json::dynamic_proto::Payload load_payload(
+      const protos_json::db_proto::LoadRequest &req);
+  protos_json::db_proto::LoadListResponse load_payload_list(
+      const protos_json::db_proto::LoadListRequest &req);
+  void set_tcp(const protos_json::posture_proto::CartesianPose &req);
+  protos_json::posture_proto::CartesianPose get_tcp();
+  void set_kin_factor(const protos_json::kin_factor_proto::KinFactor &req);
+  protos_json::kin_factor_proto::KinFactor get_kin_factor();
+  void save_tcp(const protos_json::kinematic_proto::SaveTcpRequest &req);
+  protos_json::posture_proto::CartesianPose load_tcp(
+      const protos_json::db_proto::LoadRequest &req);
+  protos_json::db_proto::LoadListResponse load_tcp_list(
+      const protos_json::db_proto::LoadListRequest &req);
+  protos_json::posture_proto::Pose load_pose(
+      const protos_json::db_proto::LoadRequest &req);
+  void save_pose(const protos_json::posture_proto::SavePoseRequest &req);
+  protos_json::db_proto::LoadListResponse load_pose_list(
+      const protos_json::db_proto::LoadListRequest &req);
+  protos_json::posture_proto::CartesianFrame load_frame(
+      const protos_json::db_proto::LoadRequest &req);
+  void save_frame(const protos_json::posture_proto::SaveFrameRequest &req);
+  protos_json::db_proto::LoadListResponse load_frame_list(
+      const protos_json::db_proto::LoadListRequest &req);
+  protos_json::structure_proto::Structure load_structure(
+      const protos_json::db_proto::LoadRequest &req);
+  void save_structure(
+      const protos_json::structure_proto::SaveStructureRequest &req);
+  protos_json::db_proto::LoadListResponse load_structure_list(
+      const protos_json::db_proto::LoadListRequest &req);
+  protos_json::modbus_proto::Modbus load_modbus(
+      const protos_json::db_proto::LoadRequest &req);
+  void save_modbus(const protos_json::modbus_proto::SaveModbusRequest &req);
+  void set_modbus_timeout(
+      const protos_json::modbus_proto::SetModbusTimeoutRequest &req);
+  void set_modbus_retry(
+      const protos_json::modbus_proto::SetModbusRetryRequest &req);
+  void disconnect_modbus(
+      const protos_json::modbus_proto::DisconnectModbusRequest &req);
+  protos_json::db_proto::LoadListResponse load_modbus_list(
+      const protos_json::db_proto::LoadListRequest &req);
+  protos_json::modbus_proto::ModbusRegister load_modbus_register(
+      const protos_json::modbus_proto::LoadModbusRegisterRequest &req);
+  void save_modbus_register(
+      const protos_json::modbus_proto::SaveModbusRegisterRequest &req);
+  protos_json::db_proto::LoadListResponse load_modbus_register_list(
+      const protos_json::modbus_proto::LoadModbusRegisterListRequest &req);
+  void write_single_coil(const protos_json::modbus_proto::SetCoilRequest &req);
+  void write_multiple_coils(
+      const protos_json::modbus_proto::SetCoilsRequest &req);
+  protos_json::modbus_proto::GetCoilsResponse read_coils(
+      const protos_json::modbus_proto::GetCoilsRequest &req);
+  protos_json::modbus_proto::GetCoilsResponse read_discrete_inputs(
+      const protos_json::modbus_proto::GetCoilsRequest &req);
+  void write_single_register(
+      const protos_json::modbus_proto::SetRegisterRequest &req);
+  void write_multiple_registers(
+      const protos_json::modbus_proto::SetRegistersRequest &req);
+  protos_json::modbus_proto::GetRegistersResponse read_input_registers(
+      const protos_json::modbus_proto::GetRegistersRequest &req);
+  protos_json::modbus_proto::GetRegistersResponse read_holding_registers(
+      const protos_json::modbus_proto::GetRegistersRequest &req);
+  void set_serial_baud_rate(
+      const protos_json::serial_proto::SetSerialBaudRateRequest &req);
+  void set_serial_timeout(
+      const protos_json::serial_proto::SetSerialTimeoutRequest &req);
+  void set_serial_parity(
+      const protos_json::serial_proto::SetSerialParityRequest &req);
+  void write_serial(const protos_json::serial_proto::WriteSerialRequest &req);
+  protos_json::serial_proto::ReadSerialResponse read_serial(
+      const protos_json::serial_proto::ReadSerialRequest &req);
+  void clear_serial(const protos_json::serial_proto::ClearSerialRequest &req);
+  void set_item(const protos_json::storage_proto::Item &req);
+  protos_json::storage_proto::Item get_item(
+      const protos_json::storage_proto::ItemIndex &req);
+  protos_json::storage_proto::Items get_items(
+      const protos_json::storage_proto::GetItemsRequest &req);
+  void enable_collision_detector();
+  void disable_collision_detector();
+  void set_collision_torque_diff(
+      const protos_json::safety_proto::CollisionTorqueDiff &req);
+  protos_json::safety_proto::CollisionTorqueDiff get_collision_torque_diff();
+  void set_collision_detector(
+      const protos_json::safety_proto::CollisionDetector &req);
+  protos_json::safety_proto::CollisionDetector get_collision_detector();
+  void enable_limit();
+  void disable_limit();
+  void set_joints_limit(const protos_json::safety_proto::JointsLimit &req);
+  protos_json::safety_proto::JointsLimit get_joints_limit();
+  void set_cart_limit(const protos_json::safety_proto::CartesianLimit &req);
+  protos_json::safety_proto::CartesianLimit get_cart_limit();
 
  protected:
-  std::unique_ptr<JSONRpcConnector> json_rpc_connector_;
-  double timeout_ = 1.0;
+  std::unique_ptr<HttpJsonRpcConnector> http_json_rpc_connector_;
+  std::unique_ptr<RpcClient> rpc_client_;
   const uint16_t simulation_port_ = 3030;
   const uint16_t physical_machine_port_ = 3031;
-  // int jsonrpc_id_ = 0;
-  // WebSocketEndPoint endpoint_;
 };
 }  // namespace l_master
 }  // namespace lebai

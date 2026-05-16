@@ -5,7 +5,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 <modelVersion>4.0.0</modelVersion>
 
-<groupId>@JAVA_PACKAGE@</groupId>
+<groupId>@JAVA_MAVEN_GROUP_ID@</groupId>
 <artifactId>@JAVA_EXAMPLE_PROJECT@</artifactId>
 <version>@PROJECT_VERSION@</version>
 <packaging>jar</packaging>
@@ -42,17 +42,6 @@
   <url>https://github.com/lebai-robotics/lebai-sdk/issues</url>
 </issueManagement>
 
-<distributionManagement>
-  <snapshotRepository>
-    <id>ossrh</id>
-    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-  </snapshotRepository>
-  <repository>
-    <id>ossrh</id>
-    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-  </repository>
-</distributionManagement>
-
 <properties>
   <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   <exec.mainClass>@JAVA_MAIN_CLASS@</exec.mainClass>
@@ -62,7 +51,7 @@
 
 <dependencies>
   <dependency>
-    <groupId>@JAVA_PACKAGE@</groupId>
+    <groupId>@JAVA_MAVEN_GROUP_ID@</groupId>
     <artifactId>@JAVA_PROJECT@</artifactId>
     <version>[@PROJECT_VERSION@,)</version>
     <type>jar</type>

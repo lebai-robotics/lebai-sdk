@@ -18,12 +18,10 @@
 #pragma once
 
 #include "lebai/gripper.hh"
+#include "modbus_rtu_client.hh"
+
 #include <memory>
 #include <string>
-
-// Forward declarations for ModbusLib
-class ModbusClient;
-class ModbusClientPort;
 
 namespace lebai {
 namespace l_master {
@@ -53,8 +51,7 @@ class Gripper::GripperImpl {
   unsigned int baud_rate_ = 115200;
   uint8_t modbus_address_ = 1;
 
-  ModbusClientPort* port_;
-  std::unique_ptr<ModbusClient> client_;
+  std::unique_ptr<ModbusRtuClient> client_;
 };
 
 }  // namespace l_master

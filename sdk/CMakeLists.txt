@@ -1,29 +1,37 @@
 add_library(lebai-cpp)
-file(GLOB PROTOS_SRC RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "src/protos/*.cc")
 target_sources(lebai-cpp
   PRIVATE
     src/robot.cc
     src/robot_impl.cc
-    src/jsonrpc_connector.cc
     src/discovery.cc
     src/discovery_impl.cc
     src/lua_robot.cc
     src/lua_robot_impl.cc
     src/gripper.cc
     src/gripper_impl.cc
-    ${PROTOS_SRC}
+    src/modbus_rtu_client.cc
     )
 target_include_directories(lebai-cpp
   PUBLIC
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<BUILD_INTERFACE:${CMAKE_SOURCE_DIR}/third>
-    $<INSTALL_INTERFACE:include>
-  PRIVATE
-    ${CMAKE_BINARY_DIR}/_deps/modbuslib-src/src)
-target_compile_features(lebai-cpp PUBLIC cxx_std_14)
+    $<INSTALL_INTERFACE:include>)
+target_compile_features(lebai-cpp PUBLIC cxx_std_17)
 
-# Link modbus as a static library - use $<BUILD_INTERFACE:> to exclude from export
-target_link_libraries(lebai-cpp PRIVATE $<BUILD_INTERFACE:modbus>)
+if(LEBAI_NLOHMANN_JSON_TARGET)
+  target_link_libraries(lebai-cpp PRIVATE
+    "$<BUILD_INTERFACE:${LEBAI_NLOHMANN_JSON_TARGET}>")
+endif()
+
+if(LEBAI_HTTPLIB_TARGET)
+  target_link_libraries(lebai-cpp PRIVATE
+    "$<BUILD_INTERFACE:${LEBAI_HTTPLIB_TARGET}>")
+endif()
+
+if(LEBAI_JSON_RPC_CXX_TARGET)
+  target_link_libraries(lebai-cpp PRIVATE
+    "$<BUILD_INTERFACE:${LEBAI_JSON_RPC_CXX_TARGET}>")
+endif()
 
 if(WIN32)
   target_link_libraries(lebai-cpp INTERFACE iphlpapi ws2_32)

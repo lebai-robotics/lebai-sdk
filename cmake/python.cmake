@@ -7,9 +7,10 @@ set(CMAKE_SWIG_FLAGS)
 find_package(SWIG REQUIRED)
 include(UseSWIG)
 
-# if(${SWIG_VERSION} VERSION_GREATER_EQUAL 4)
-#   list(APPEND CMAKE_SWIG_FLAGS "-doxygen")
-# endif()
+list(APPEND CMAKE_SWIG_FLAGS "-features" "autodoc=1")
+if(${SWIG_VERSION} VERSION_GREATER_EQUAL 4)
+  list(APPEND CMAKE_SWIG_FLAGS "-doxygen")
+endif()
 
 if(UNIX AND NOT APPLE)
   list(APPEND CMAKE_SWIG_FLAGS "-DSWIGWORDSIZE64")
@@ -111,7 +112,8 @@ endforeach()
 ## Python Packaging  ##
 #######################
 #file(MAKE_DIRECTORY python/${PYTHON_PROJECT})
-file(GENERATE OUTPUT ${PYTHON_PROJECT_DIR}/__init__.py CONTENT "__version__ = \"${PROJECT_VERSION}\"\n")
+file(COPY ${PROJECT_SOURCE_DIR}/python/${PYTHON_PROJECT}/ DESTINATION ${PYTHON_PROJECT_DIR})
+file(APPEND ${PYTHON_PROJECT_DIR}/__init__.py "\n__version__ = \"${PROJECT_VERSION}\"\n")
 # file(GENERATE OUTPUT ${PYTHON_PROJECT_DIR}/__init__.py CONTENT "")
 
 configure_file(
@@ -151,6 +153,9 @@ search_python_module(
 add_custom_command(
   OUTPUT python/dist/timestamp
   COMMAND ${CMAKE_COMMAND} -E remove_directory dist
+  COMMAND ${CMAKE_COMMAND} -E remove_directory build
+  COMMAND ${CMAKE_COMMAND} -E remove_directory ${PYTHON_PROJECT}.egg-info
+  COMMAND ${CMAKE_COMMAND} -E remove_directory ${PYTHON_PROJECT}/.libs
   COMMAND ${CMAKE_COMMAND} -E make_directory ${PYTHON_PROJECT}/.libs
   # Don't need to copy static lib on Windows.
   COMMAND ${CMAKE_COMMAND} -E $<IF:$<STREQUAL:$<TARGET_PROPERTY:lebai-cpp,TYPE>,SHARED_LIBRARY>,copy,true>
@@ -171,6 +176,8 @@ add_custom_command(
   DEPENDS
     python/setup.py
     python/pyproject.toml
+    ${PROJECT_SOURCE_DIR}/python/${PYTHON_PROJECT}/__init__.py
+    ${PROJECT_SOURCE_DIR}/python/${PYTHON_PROJECT}/robot.py
     ${PROJECT_NAMESPACE}::lebai-cpp
     # ${PROJECT_NAMESPACE}::posture
     # ${PROJECT_NAMESPACE}::motion

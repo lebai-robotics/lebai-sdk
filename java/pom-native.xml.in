@@ -5,7 +5,7 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 <modelVersion>4.0.0</modelVersion>
 
-<groupId>@JAVA_PACKAGE@</groupId>
+<groupId>@JAVA_MAVEN_GROUP_ID@</groupId>
 <artifactId>@JAVA_NATIVE_PROJECT@</artifactId>
 <version>@PROJECT_VERSION@</version>
 <packaging>jar</packaging>
@@ -42,21 +42,11 @@
   <url>https://github.com/lebai-robotics/lebai-sdk/issues</url>
 </issueManagement>
 
-<distributionManagement>
-  <snapshotRepository>
-    <id>ossrh</id>
-    <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-  </snapshotRepository>
-  <repository>
-    <id>ossrh</id>
-    <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-  </repository>
-</distributionManagement>
-
 <properties>
   <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   <maven.compiler.source>1.8</maven.compiler.source>
   <maven.compiler.target>1.8</maven.compiler.target>
+  <central.autoPublish>false</central.autoPublish>
 </properties>
 
 <build>
@@ -81,8 +71,24 @@
     </plugin>
     <plugin>
       <groupId>org.apache.maven.plugins</groupId>
+      <artifactId>maven-javadoc-plugin</artifactId>
+      <version>3.6.3</version>
+      <configuration>
+        <failOnError>false</failOnError>
+      </configuration>
+      <executions>
+        <execution>
+          <id>attach-javadocs</id>
+          <goals>
+            <goal>jar</goal>
+          </goals>
+        </execution>
+      </executions>
+    </plugin>
+    <plugin>
+      <groupId>org.apache.maven.plugins</groupId>
       <artifactId>maven-gpg-plugin</artifactId>
-      <version>1.6</version>
+      <version>3.2.7</version>
       <executions>
         <execution>
           <id>sign-artifacts</id>
@@ -91,13 +97,16 @@
             <goal>sign</goal>
           </goals>
           <configuration>
+            <passphrase>${env.MAVEN_GPG_PASSPHRASE}</passphrase>
             <gpgArguments>
-              @GPG_ARGS@
+              <arg>--pinentry-mode</arg>
+              <arg>loopback</arg>
             </gpgArguments>
           </configuration>
         </execution>
       </executions>
     </plugin>
+@JAVA_CENTRAL_PUBLISHING_PLUGIN@
   </plugins>
 </build>
 </project>

@@ -5,6 +5,12 @@ endif()
 if(POLICY CMP0135)
   cmake_policy(SET CMP0135 NEW)
 endif()
+if(POLICY CMP0091)
+  cmake_policy(SET CMP0091 NEW)
+endif()
+set(CMAKE_POLICY_VERSION_MINIMUM
+    3.5
+    CACHE STRING "Minimum policy version for fetched dependencies" FORCE)
 # SWIG policies - use modern SWIG target naming
 if(POLICY CMP0078)
   cmake_policy(SET CMP0078 NEW)
@@ -15,12 +21,16 @@ endif()
 
 project(
   lebai
-  VERSION 1.4.4
+  VERSION 2.0.0
   LANGUAGES CXX)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
+# Keep Windows native packages self-contained for C# users that do not have the
+# Visual C++ redistributable installed.
+set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
 
 set(PROJECT_NAMESPACE lebai)
 
@@ -72,8 +82,6 @@ else()
   # Currently Only support static build for windows
   option(BUILD_SHARED_LIBS "Build shared libraries (.dll)." OFF)
   add_compile_definitions(_USE_MATH_DEFINES)
-  add_compile_definitions(_WEBSOCKETPP_CPP11_RANDOM_DEVICE_)
-  add_compile_definitions(_WINSOCK_DEPRECATED_NO_WARNINGS)  # Suppress inet_addr deprecation from websocketpp
   # add_compile_definitions(NOMINMAX) add_compile_definitions(_DEBUG)
   if(WIN32)
     add_definitions(-D_WIN32_WINNT=0x0601)
@@ -132,30 +140,63 @@ endif()
 # Disable CTest targets
 set_property(GLOBAL PROPERTY CTEST_TARGETS_ADDED 1)
 include(CTest)
-include(cpp)
-
-# Fetch ModbusLib
-message(STATUS "Fetching ModbusLib...")
 include(FetchContent)
-set(BUILD_SHARED_LIBS_SAVE ${BUILD_SHARED_LIBS})
-set(BUILD_SHARED_LIBS OFF) # Force ModbusLib to build as static
-set(MB_CLIENT_DISABLE OFF CACHE BOOL "Enable Modbus client" FORCE)
-set(MB_SERVER_DISABLE ON CACHE BOOL "Disable Modbus server" FORCE)
-set(MB_EXAMPLES_ENABLED OFF CACHE BOOL "Disable ModbusLib examples" FORCE)
-set(MB_TESTS_ENABLED OFF CACHE BOOL "Disable ModbusLib tests" FORCE)
-FetchContent_Declare(
-  ModbusLib
-  GIT_REPOSITORY https://github.com/serhmarch/ModbusLib.git
-  GIT_TAG        main  # or specify a specific tag/commit
 
-)
-FetchContent_MakeAvailable(ModbusLib)
-# Set modbus as a static library that won't be installed
-set_target_properties(modbus PROPERTIES
-  POSITION_INDEPENDENT_CODE ON
-  EXCLUDE_FROM_ALL TRUE
-)
-set(BUILD_SHARED_LIBS ${BUILD_SHARED_LIBS_SAVE})
+find_package(nlohmann_json QUIET)
+if(NOT nlohmann_json_FOUND)
+  message(STATUS "Fetching nlohmann-json...")
+  FetchContent_Declare(
+    nlohmann-json
+    GIT_REPOSITORY https://github.com/nlohmann/json.git
+    GIT_TAG v3.11.2)
+  FetchContent_MakeAvailable(nlohmann-json)
+endif()
+if(TARGET nlohmann_json::nlohmann_json)
+  set(LEBAI_NLOHMANN_JSON_TARGET nlohmann_json::nlohmann_json)
+elseif(TARGET nlohmann_json)
+  set(LEBAI_NLOHMANN_JSON_TARGET nlohmann_json)
+endif()
+
+find_package(httplib QUIET)
+if(NOT httplib_FOUND)
+  message(STATUS "Fetching cpp-httplib...")
+  FetchContent_Declare(
+    cpp-httplib
+    GIT_REPOSITORY https://github.com/yhirose/cpp-httplib.git
+    GIT_TAG v0.20.0)
+  set(HTTPLIB_USE_OPENSSL_IF_AVAILABLE OFF CACHE BOOL "Disable optional cpp-httplib OpenSSL support" FORCE)
+  set(HTTPLIB_USE_ZLIB_IF_AVAILABLE OFF CACHE BOOL "Disable optional cpp-httplib zlib support" FORCE)
+  set(HTTPLIB_USE_BROTLI_IF_AVAILABLE OFF CACHE BOOL "Disable optional cpp-httplib brotli support" FORCE)
+  set(HTTPLIB_USE_ZSTD_IF_AVAILABLE OFF CACHE BOOL "Disable optional cpp-httplib zstd support" FORCE)
+  set(HTTPLIB_INSTALL OFF CACHE BOOL "Disable fetched cpp-httplib install rules" FORCE)
+  FetchContent_MakeAvailable(cpp-httplib)
+endif()
+if(TARGET httplib::httplib)
+  set(LEBAI_HTTPLIB_TARGET httplib::httplib)
+elseif(TARGET httplib)
+  set(LEBAI_HTTPLIB_TARGET httplib)
+endif()
+
+find_package(jsonrpc-cpp QUIET)
+if(NOT jsonrpc-cpp_FOUND)
+  message(STATUS "Fetching json-rpc-cxx...")
+  FetchContent_Declare(
+    json-rpc-cxx
+    GIT_REPOSITORY https://github.com/jsonrpcx/json-rpc-cxx.git
+    GIT_TAG v0.3.2)
+  set(COMPILE_TESTS OFF CACHE BOOL "Disable json-rpc-cxx tests" FORCE)
+  set(COMPILE_EXAMPLES OFF CACHE BOOL "Disable json-rpc-cxx examples" FORCE)
+  FetchContent_MakeAvailable(json-rpc-cxx)
+  unset(COMPILE_TESTS CACHE)
+  unset(COMPILE_EXAMPLES CACHE)
+endif()
+if(TARGET unofficial::json-rpc-cxx::json-rpc-cxx)
+  set(LEBAI_JSON_RPC_CXX_TARGET unofficial::json-rpc-cxx::json-rpc-cxx)
+elseif(TARGET json-rpc-cxx)
+  set(LEBAI_JSON_RPC_CXX_TARGET json-rpc-cxx)
+endif()
+
+include(cpp)
 
 if(WIN32
    AND (BUILD_DOTNET

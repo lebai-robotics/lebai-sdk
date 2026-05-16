@@ -1,9 +1,8 @@
 %module l_master
-%include  "jsonbase.i"
+%include  "common.i"
 
 
 %{
-// #include "lebai/jsonbase.hh"
 // #include "lebai/posture.hh"
 // #include "lebai/motion.hh"
 #include "lebai/robot.hh"
@@ -68,8 +67,6 @@
 
 // __STR__(lebai::MoveParam)
 // __STR__(lebai::MoveRequest)
-// %ignore lebai::JSONBase;
-// %import "lebai/jsonbase.hh"
 // %import "lebai/posture.hh"
 // %import "lebai/motion.hh"
 %include "lebai/robot.hh"
@@ -91,7 +88,6 @@
 // %template(DoubleVector) std::vector<double>;
 // %{
 // #include <lebai-sdk/robot.hh>
-// #include <lebai-sdk/jsonbase.hh>
 // #include <lebai-sdk/product.hh>
 // #include <lebai-sdk/factory.hh>
 // %}
@@ -105,6 +101,5 @@
 
 // // Process symbols in header
 // %include "lebai-sdk/robot.hh"
-// %include "lebai-sdk/jsonbase.hh"
 // %include "lebai-sdk/product.hh"
 // %include "lebai-sdk/factory.hh"

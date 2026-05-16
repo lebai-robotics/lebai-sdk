@@ -1,0 +1,84 @@
+name: .NET build
+run-name: ${{ github.actor }} .NET build
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  linux-dotnet:
+    name: Linux .NET native ${{ matrix.rid }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - rid: linux-x64
+            runner: ubuntu-22.04
+          - rid: linux-arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8.0
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Install native build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y swig
+
+      - name: Configure
+        run: cmake -S . -B build -DBUILD_DOTNET=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_EXAMPLES=OFF
+
+      - name: Build .NET package
+        run: cmake --build build --target dotnet_package
+
+      - name: Upload native assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: lebai-dotnet-native-${{ matrix.rid }}
+          path: build/dotnet/native-assets/**
+
+      - name: Upload packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: lebai-dotnet-packages-${{ matrix.rid }}
+          path: build/dotnet/packages/*.nupkg
+
+  windows-dotnet:
+    name: Windows .NET native win-x64
+    runs-on: windows-2022
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8.0
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Install SWIG
+        shell: pwsh
+        run: choco install swig -y --no-progress
+
+      - name: Configure
+        run: cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DBUILD_DOTNET=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_EXAMPLES=OFF
+
+      - name: Build .NET package
+        run: cmake --build build --config Release --target dotnet_package
+
+      - name: Upload native assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: lebai-dotnet-native-win-x64
+          path: build/dotnet/native-assets/**
+
+      - name: Upload packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: lebai-dotnet-packages-win-x64
+          path: build/dotnet/packages/*.nupkg

@@ -1,0 +1,111 @@
+name: C++ release
+run-name: ${{ github.actor }} C++ release
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  github-pages:
+    name: GitHub Pages
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install documentation tooling
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake git doxygen graphviz python3-pip python3-dev
+
+      - name: Configure documentation
+        run: cmake -S . -B build -DBUILD_DOCUMENTATION=ON -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF
+
+      - name: Build documentation
+        run: cmake --build build --target doc
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./build/html
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+
+  linux-cpp-package:
+    name: Linux ${{ matrix.name }} C++ package
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: x64
+            runner: ubuntu-22.04
+          - name: arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install build tooling
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake git python3-pip python3-dev doxygen graphviz dpkg-dev
+
+      - name: Configure
+        run: cmake -S . -B build -DBUILD_DEB=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF
+
+      - name: Build and pack
+        run: |
+          cmake --build build
+          cd build
+          cpack
+
+      - name: Upload package
+        uses: actions/upload-artifact@v4
+        with:
+          name: lebai-linux-${{ matrix.name }}-deb
+          path: build/*.deb
+
+  windows-cpp-package:
+    name: Windows x64 C++ package
+    runs-on: windows-2022
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install NSIS
+        run: choco install nsis -y --no-progress
+
+      - name: Configure
+        run: cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DBUILD_NSIS=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Pack
+        run: |
+          cd build
+          cpack -C Release
+
+      - name: Upload package
+        uses: actions/upload-artifact@v4
+        with:
+          name: lebai-win-x64-exe
+          path: build/*.exe

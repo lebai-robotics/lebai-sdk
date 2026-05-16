@@ -1,4 +1,4 @@
-%module gripper
+%module gripper_module
 
 %include "std_string.i"
 %include "stdint.i"

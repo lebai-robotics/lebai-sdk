@@ -1,5 +1,5 @@
 %module l_master
-%include  "jsonbase.i"
+%include  "common.i"
 
 // Exception handling for Java
 %include "exception.i"
@@ -41,6 +41,8 @@
 #include "lebai/lua_robot.hh"
 #include "lebai/gripper.hh"
 %}
+
+%rename(NativeRobot) lebai::l_master::Robot;
 
 %extend lebai::l_master::KinematicsForwardResp {
   std::string __repr__() {

@@ -1,4 +1,4 @@
-%module gripper
+%module gripper_module
 
 %include "std_string.i"
 %include "stdint.i"
@@ -27,9 +27,6 @@
         return "Gripper object for RS485/Modbus RTU communication";
     }
 }
-
-// Rename methods to follow Java naming conventions if needed
-%rename(setAmplitude) lebai::l_master::Gripper::SetAmplitude;
 
 // Include the gripper header file
 %include "lebai/gripper.hh"

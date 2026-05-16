@@ -1,171 +1,179 @@
-# Languages
+# lebai-sdk
+
 [![zh](https://img.shields.io/badge/lang-zh-red.svg)](https://github.com/lebai-robotics/lebai-sdk/blob/master/README.md)
 [![en](https://img.shields.io/badge/lang-en-green.svg)](https://github.com/lebai-robotics/lebai-sdk/blob/master/README.en.md)
 
-lebai-sdk的源代码仓库，可以用于控制乐白机械臂.
+乐白机器人 SDK，用于发现、连接和控制乐白机械臂。当前重构版本为
+`2.0.0`，核心 C++ SDK 已迁移到 `json-rpc-cxx` + `nlohmann/json` 的
+JSON-RPC 实现，并通过 SWIG 生成 Python、.NET 和 Java 绑定。
 
-## amd64架构
+## 状态
 
-| OS     | C++ | Python | C# | Java |
-|:-------|-----|--------|----|------| 
-| Linux  | [![Status][cpp_linux_svg]][cpp_linux_link] | [![Status][python_linux_svg]][python_linux_link] | [![Status][dotnet_linux_svg]][dotnet_linux_link] | TODO |
-| Windows | TODO | [![Status][python_windows_svg]][python_windows_link] | [![Status][dotnet_windows_svg]][dotnet_windows_link] | TODO |
+| 模块 | CI |
+| --- | --- |
+| 总发布 | [![Release][release_svg]][release_link] |
+| C++ 发布 | [![C++ release][cpp_release_svg]][cpp_release_link] |
+| Python 发布 | [![Python release][python_release_svg]][python_release_link] |
+| .NET 发布 | [![.NET release][dotnet_release_svg]][dotnet_release_link] |
+| Java 发布 | [![Java release][java_release_svg]][java_release_link] |
 
-## aarch64架构
-| OS     | Python |
-|:-------|--------|
-| Linux  | [![Status][python_linux_aarch64_svg]][python_linux_aarch64_link] |
+[release_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/release.yml/badge.svg
+[release_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/release.yml
+[cpp_release_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/cpp_release.yml/badge.svg
+[cpp_release_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/cpp_release.yml
+[python_release_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/python_release.yml/badge.svg
+[python_release_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/python_release.yml
+[dotnet_release_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/dotnet_release.yml/badge.svg
+[dotnet_release_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/dotnet_release.yml
+[java_release_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/java_release.yml/badge.svg
+[java_release_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/java_release.yml
 
+## SDK 组成
 
-**上图中显示TODO的地方表示该平台该语言的实现还存在问题，没有完全测试通过，后续会陆续完成。**
+SDK 公共接口主要分为四部分：
 
-[cpp_linux_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_cpp_release.yml/badge.svg
-[cpp_linux_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_cpp_release.yml
-[python_linux_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_python_release.yml/badge.svg
-[python_linux_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_python_release.yml
-[dotnet_linux_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_dotnet_release.yml/badge.svg
-[dotnet_linux_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_dotnet_release.yml
-[python_windows_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/windows_python_release.yml/badge.svg
-[python_windows_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/windows_python_release.yml
-[dotnet_windows_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/windows_dotnet_release.yaml/badge.svg
-[dotnet_windows_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/windows_dotnet_release.yaml
+- `Discovery`: 发现局域网内的乐白控制器和设备。
+- `Robot`: 机器人主控制接口，包含运动、IO、任务、配置、系统等 RPC。
+- `LuaRobot`: 面向 Lua 风格控制器通信的兼容接口。
+- `Gripper`: 直接 RS485 夹爪接口，独立于主 Robot JSON-RPC 通道。
 
-[python_linux_aarch64_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_python_aarch64_release.yml/badge.svg
-[python_linux_aarch64_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/linux_python_aarch64_release.yml
-
-**SDK使用需要乐白机械臂的控制器软件版本大于等于`3.1.5`，您可以在机械臂WEB界面左上方查看当前版本号.**
-
-[SDK在线文档](http://help.lebai.ltd/sdk/)中包含了lua语言的接口（本项目参考了lua语言进行接口设置，但是本项目和lua语言的接口无直接关系）
-
-# 包管理直接安装
-
-## python
-python开发可以直接从[PyPI](https://pypi.org/project/pylebai/)安装.
-
-```
-pip install lebai
-```
-目前Linux平台(amd64, aarch64)支持的Python版本有:
-- `cp3.6`
-- `cp3.7`
-- `cp3.8`
-- `cp3.9`
-- `cp3.10`
-- `cp3.11`
-- `cp3.12`
-- `pp3.7`
-- `pp3.8`
-- `pp3.9`
-- `pp3.10`
-
-目前Windows平台支持的Python版本有:
-- `3.8`
-- `3.9`
-- `3.10`
-- `3.11`
-- `3.12`
-
-
-
-python开发可以直接从[PyPI](https://pypi.org/project/pylebai/)安装.
-
-
-## .net
-.net平台开发可以直接从[Nuget](https://www.nuget.org/packages/lebai/)安装，使用C#进行开发.
-
-```
-dotnet add package lebai
-```
-目前支持的.net版本有
-- `6.0`
-
-
-# 从源代码构建安装
-
-## Ubuntu&&Debian平台
-### 依赖
-- gcc or clang support c++14
-- cmake >= 3.18
-- swig >= 4.0
-- python3 >= 3.5 (可选,如果需要生成python的接口库)
-- doxygen (可选,如果需要C++文档)
-- jdk, maven(可选,如果需要生成java的接口库)
-
-相对旧的发行版系统cmake和swig版本过低，不能使用，可以通过pip安装较新的版本:
-```bash
-sudo apt install build-essential python3-pip dpkg-dev
-sudo pip3 install -i https://pypi.tuna.tsinghua.edu.cn/simple -r requirements.txt
-# 如果需要生成文档，还需要安装doxygen
-sudo apt install doxygen graphviz
-# 如果需要生成python3的wrapper包
-sudo apt install python3-dev python3-setuptools
-```
-
-
-### 编译
-```bash
-# 生成编译配置
-cmake -S. -Bbuild -DBUILD_PYTHON=ON -DBUILD_DEB=ON -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF
-# 生成编译配置，只C++,同时生成DEB包
-cmake -S. -Bbuild -DBUILD_PYTHON=OFF -DBUILD_DEB=ON -DBUILD_TESTING=OFF 
-# 编译
-cmake --build build
-# 运行单元测试
-cmake --build build --target test
-## 生成DEB包
-cd build
-cpack
-```
-
-## Windows平台 Visual Studio
-### 依赖
-- Visual Studio(C++ Support)
-- CMake >= 3.18
-- python3 >= 3.5 (可选,如果需要生成python的接口库)
-
-安装python库时，选择 `Download debug binaries`
-
-在Visual Studio中载入CMake工程，即可以生成构建运行测试等.
-
-目前Windows平台下python的binding部分还存在问题无法工作.
-
-
-
-## 编译选项
-
- - BUILD_PYTHON: 是否编译python3接口 默认为OFF
- - PYTHONPATH: PYTHON的安装目录
- - BUILD_DOTNET: 是否编译.NET接口 默认为OFF（请先安装好.NET的开发环境）
- - BUILD_JAVA: 是否编译JAVA接口 默认为OFF（请先安装好JDK和Maven）
- - BUILD_TESTING: 是否编译C++测试程序 默认为ON 
- - TEST_ROBOT_IP: 测试程序的机器人IP地址，正确的设置该值用于单元测试 默认为127.0.0.1
- - BUILD_EXAMPLES: 是否编译示例程序 默认为ON
- - BUILD_DEB: 是否生成DEB包的构建 默认为OFF
- - ENABLE_TSAN: 编译是否启用Thread sanitizer检查 默认为OFF
-
-## 使用
-您可以通过docs目录下的文档了解更多各语言的信息.
+## 安装
 
 ### Python
-build目录下会生成python的whl包，可以直接使用:
-```python
-cd build/python/dist
-## 安装
-pip3 install pylebai-xxx.whl
-### XXX取决于您的sdk版本，python版本，操作系统平台.
-## 卸载
-pip3 uninstall pylebai
+
+Python 包名为 `pylebai`：
+
+```bash
+pip install pylebai
 ```
 
+更多说明见 [docs/python.md](docs/python.md)。
 
+### .NET / C#
 
+NuGet 包名为 `lebai`：
 
-# 第三方库
-lebai-sdk使用如下第三方软件:
+```bash
+dotnet add package lebai
+```
 
-| 软件名      | 协议 | 官方网站 | 
-| ----------- | ----------- |----------- |
-| Asio      | [MPL2](https://www.mozilla.org/en-US/MPL/2.0/FAQ/)  | https://think-async.com/Asio/ |
-| rapidjson      | MIT  | https://rapidjson.org/ |
-| websocketpp      | BSD  | https://www.zaphoyd.com/websocketpp |
-| mdns | public domain | https://github.com/mjansson/mdns |
+`lebai` NuGet 包包含 Linux x64、Linux arm64 和 Windows x64 native runtime
+assets，C# 用户不需要额外安装平台 runtime 包。更多说明见
+[docs/dotnet.md](docs/dotnet.md)。
+
+### Java
+
+Java Maven 坐标为：
+
+```xml
+<dependency>
+  <groupId>io.github.liufang-robot</groupId>
+  <artifactId>lebai-java</artifactId>
+  <version>2.0.0</version>
+</dependency>
+```
+
+Java 源码包名仍为 `org.sdk.lebai`，以保持现有 SWIG API 兼容。更多说明见
+[docs/java.md](docs/java.md)。
+
+## 从源码构建
+
+### Linux
+
+基础依赖：
+
+- C++14 编译器，例如 GCC 或 Clang
+- CMake 3.15+
+- SWIG 4.0+
+- Python 3 和 venv，构建 Python 包时需要
+- .NET SDK，构建 C# 包时需要
+- JDK 11 和 Maven，构建 Java 包时需要
+- Doxygen 和 Graphviz，构建文档时需要
+
+Ubuntu / Debian 示例：
+
+```bash
+sudo apt install build-essential cmake python3-dev python3-venv \
+  doxygen graphviz openjdk-11-jdk maven
+```
+
+如果系统 SWIG 版本过旧，可以使用用户级安装：
+
+```bash
+uv tool install swig
+swig -version
+```
+
+常用构建命令：
+
+```bash
+cmake -S . -B build -DBUILD_TESTING=ON -DBUILD_EXAMPLES=ON
+cmake --build build
+ctest --test-dir build --output-on-failure
+```
+
+构建语言绑定：
+
+```bash
+cmake -S . -B build-python -DBUILD_PYTHON=ON -DBUILD_TESTING=OFF
+cmake --build build-python --target python_package
+
+cmake -S . -B build-dotnet -DBUILD_DOTNET=ON -DBUILD_TESTING=OFF
+cmake --build build-dotnet --target dotnet_package
+
+cmake -S . -B build-java -DBUILD_JAVA=ON -DBUILD_TESTING=OFF -DSKIP_GPG=ON
+cmake --build build-java --target java_package
+```
+
+### Windows
+
+推荐使用 Visual Studio 2022 + CMake。构建 C#、Python 或 Java 绑定时，还需要
+对应语言的 SDK、SWIG 和 Maven/JDK 等工具。Windows native 包使用静态 MSVC
+runtime，以减少 C# 用户对额外 Visual C++ Redistributable 的依赖。
+
+## 常用 CMake 选项
+
+| 选项 | 默认值 | 说明 |
+| --- | --- | --- |
+| `BUILD_CXX` | `ON` | 构建 C++ SDK |
+| `BUILD_PYTHON` | `OFF` | 构建 Python 绑定 |
+| `BUILD_DOTNET` | `OFF` | 构建 .NET / C# 绑定 |
+| `BUILD_JAVA` | `OFF` | 构建 Java 绑定 |
+| `BUILD_TESTING` | `ON` | 构建测试程序 |
+| `BUILD_EXAMPLES` | `ON` | 构建示例程序 |
+| `BUILD_DEB` | `OFF` | 生成 Debian 包 |
+| `BUILD_DOCUMENTATION` | `OFF` | 生成 Doxygen 文档 |
+| `TEST_ROBOT_IP` | `127.0.0.1` | 测试目标控制器 IP |
+| `ENABLE_TSAN` | `OFF` | 启用 ThreadSanitizer |
+
+本地模拟 L master controller 测试目标通常使用 `127.0.0.1:3030`。
+
+## 文档
+
+- [docs/architecture.md](docs/architecture.md): SDK 分层和请求流。
+- [docs/rpc-protocol.md](docs/rpc-protocol.md): RPC 协议、wire name 映射和迁移策略。
+- [docs/develop.md](docs/develop.md): 添加新 RPC/API 的开发流程。
+- [docs/bindings.md](docs/bindings.md): SWIG 绑定和语言包结构。
+- [docs/python.md](docs/python.md): Python 使用说明。
+- [docs/dotnet.md](docs/dotnet.md): .NET / C# 使用说明。
+- [docs/java.md](docs/java.md): Java/Maven 使用和发布说明。
+- [docs/faq.md](docs/faq.md): 常见问题。
+
+## 第三方依赖
+
+| 软件 | 协议 | 说明 |
+| --- | --- | --- |
+| Asio | MPL-2.0 | 串口/异步通信基础设施 |
+| mdns | Public Domain | 设备发现 |
+| nlohmann/json | MIT | JSON DTO 和序列化 |
+| cpp-httplib | MIT | HTTP transport |
+| json-rpc-cxx | MIT | JSON-RPC request/response |
+| SWIG | GPL-compatible | Python/.NET/Java 绑定生成 |
+
+## 协议和支持
+
+SDK 使用需要乐白机械臂控制器软件版本大于等于 `3.1.5`。控制器版本可以在机械臂
+Web 界面左上方查看。
+
+Lua 接口文档可参考 [SDK 在线文档](http://help.lebai.ltd/sdk/)。本 SDK 的
+Robot API 正在按 `lebai-proto` RPC 协议逐步迁移和校准。

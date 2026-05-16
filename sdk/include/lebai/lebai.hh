@@ -11,23 +11,34 @@
  *
  * 您也可以基于本开发包创建使用其它语言的开发包.
  *
+ * # SDK 组成
+ * SDK 的公共接口主要分为四部分:
+ *
+ * - \ref lebai::zeroconf::Discovery "Discovery": 用于在局域网内发现 Lebai
+ *   控制器和设备.
+ * - \ref lebai::l_master::Robot "Robot": 主要的机器人控制器接口, 包括运动、
+ *   IO、任务、配置和系统 RPC 调用.
+ * - \ref lebai::l_master::LuaRobot "LuaRobot": 面向 Lua 风格控制器通信的兼容接口.
+ * - \ref lebai::l_master::Gripper "Gripper": 直接 RS485 夹爪接口, 独立于 Robot
+ *   的 JSON-RPC 主控制链路.
+ *
  * # 如何开始
  * 查阅 \ref README.md "README" 文档,了解如何构建和安装本开发包.
  *
  * # ChangeLog
- *  查阅 \ref doc/changelog.md.
+ *  查阅 \ref docs/changelog.md.
  *
  * # Python
- * 查看 \ref doc/python.md 来获取使用python开发相关的内容.
+ * 查看 \ref docs/python.md 来获取使用python开发相关的内容.
  *
  * # .net
- * 查看 \ref doc/dotnet.md 来获取在.net中使用C\#开发相关的内容.
+ * 查看 \ref docs/dotnet.md 来获取在.net中使用C\#开发相关的内容.
  *
  * # Develop
- * 如果需要开发sdk，添加新的功能，可以参考 \ref doc/develop.md.
+ * 如果需要开发sdk，添加新的功能，可以参考 \ref docs/develop.md.
  *
  * # FAQ *
- * 参考 \ref doc/faq.md.
+ * 参考 \ref docs/faq.md.
  *
  *
  */

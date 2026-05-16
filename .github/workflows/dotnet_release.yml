@@ -1,0 +1,148 @@
+name: .NET release
+run-name: ${{ github.actor }} .NET release
+
+on:
+  workflow_dispatch:
+  workflow_call:
+    secrets:
+      LEBAI_NUGET_KEY:
+        required: false
+
+jobs:
+  linux_dotnet_native:
+    name: Linux .NET native ${{ matrix.rid }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - rid: linux-x64
+            runner: ubuntu-22.04
+          - rid: linux-arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8.0
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Install native build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y swig
+
+      - name: Configure
+        run: cmake -S . -B build -DBUILD_DOTNET=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_EXAMPLES=OFF
+
+      - name: Build .NET package
+        run: cmake --build build --target dotnet_package
+
+      - name: Upload native assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: lebai-dotnet-native-${{ matrix.rid }}
+          path: build/dotnet/native-assets/**
+
+      - name: Upload per-RID packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: lebai-dotnet-packages-${{ matrix.rid }}
+          path: build/dotnet/packages/*.nupkg
+
+  windows_dotnet_native:
+    name: Windows .NET native win-x64
+    runs-on: windows-2022
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8.0
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Install SWIG
+        shell: pwsh
+        run: choco install swig -y
+
+      - name: Configure
+        run: cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DBUILD_DOTNET=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_EXAMPLES=OFF
+
+      - name: Build .NET package
+        run: cmake --build build --config Release --target dotnet_package
+
+      - name: Upload native assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: lebai-dotnet-native-win-x64
+          path: build/dotnet/native-assets/**
+
+      - name: Upload per-RID packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: lebai-dotnet-packages-win-x64
+          path: build/dotnet/packages/*.nupkg
+
+  dotnet_multirid_package:
+    name: Pack multi-RID .NET NuGet
+    needs:
+      - linux_dotnet_native
+      - windows_dotnet_native
+    runs-on: ubuntu-22.04
+    env:
+      NUGET_API_KEY: ${{ secrets.LEBAI_NUGET_KEY }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 8.0
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+
+      - name: Install native build tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y swig unzip
+
+      - name: Download native assets
+        uses: actions/download-artifact@v4
+        with:
+          pattern: lebai-dotnet-native-*
+          path: dotnet-native-artifacts
+
+      - name: Build aggregate package
+        run: bash scripts/dotnet_pack_multirid.sh build-dotnet-multirid dotnet-native-artifacts
+
+      - name: Verify aggregate package contents
+        run: |
+          package="$(find build-dotnet-multirid/dotnet/packages -maxdepth 1 -name 'lebai.[0-9]*.nupkg' | sort | tail -n 1)"
+          unzip -l "${package}" | tee package-files.txt
+          grep -q 'runtimes/linux-x64/native/lebai-native.so' package-files.txt
+          grep -q 'runtimes/linux-arm64/native/lebai-native.so' package-files.txt
+          grep -q 'runtimes/win-x64/native/lebai-native.dll' package-files.txt
+          unzip -p "${package}" lebai.nuspec | tee package.nuspec
+          ! grep -q 'lebai.runtime' package.nuspec
+
+      - name: Smoke test local package
+        run: bash scripts/dotnet_smoke_local_package.sh build-dotnet-multirid/dotnet/packages "$(awk '/project\\s*\\(/,/)/' CMakeLists.txt | grep -Po 'VERSION\\s*\\K[0-9]+\\.[0-9]+\\.[0-9]+')"
+
+      - name: Upload aggregate package
+        uses: actions/upload-artifact@v4
+        with:
+          name: lebai-dotnet-nupkg
+          path: |
+            build-dotnet-multirid/dotnet/packages/lebai.*.nupkg
+            build-dotnet-multirid/dotnet/packages/lebai.*.snupkg
+
+      - name: Publish aggregate package
+        if: env.NUGET_API_KEY != ''
+        run: |
+          package="$(find build-dotnet-multirid/dotnet/packages -maxdepth 1 -name 'lebai.[0-9]*.nupkg' | sort | tail -n 1)"
+          dotnet nuget push "${package}" \
+            --api-key "${NUGET_API_KEY}" \
+            --source https://api.nuget.org/v3/index.json \
+            --skip-duplicate

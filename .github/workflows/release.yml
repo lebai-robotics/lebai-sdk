@@ -5,33 +5,27 @@ on:
       - master
 
 jobs:
-  linux-cpp-x64:
-    uses: ./.github/workflows/linux_cpp_release.yml
-  linux-cpp-arm64:
-    uses: ./.github/workflows/linux_cpp_arm64_release.yml
-  linux-python-x64:
-    uses: ./.github/workflows/linux_python_release.yml
+  cpp:
+    uses: ./.github/workflows/cpp_release.yml
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+  python:
+    uses: ./.github/workflows/python_release.yml
     secrets: inherit
-  linux-dotnet-x64:
-    uses: ./.github/workflows/linux_dotnet_release.yml
+  dotnet:
+    uses: ./.github/workflows/dotnet_release.yml
     secrets: inherit
-  win-cpp-x64:
-    uses: ./.github/workflows/windows_cpp_release.yml
-  win-python-x64:
-    uses: ./.github/workflows/windows_python_release.yml
-    secrets: inherit
-  win-dotnet-x64:
-    uses: ./.github/workflows/windows_dotnet_release.yml
+  java:
+    uses: ./.github/workflows/java_release.yml
     secrets: inherit
   release:
     needs:
-      - linux-cpp-x64
-      - linux-cpp-arm64
-      - linux-python-x64
-      - linux-dotnet-x64
-      - win-cpp-x64
-      - win-python-x64
-      - win-dotnet-x64
+      - cpp
+      - python
+      - dotnet
+      - java
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -48,41 +42,22 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: lebai-linux-arm64-deb
-      - name: Download linux x64 nupkg
+      - name: Download dotnet nupkg
         uses: actions/download-artifact@v4
         with:
-          name: lebai-linux-x64-nupkg
-      - name: Download linux x64 whl
+          name: lebai-dotnet-nupkg
+      - name: Download Java jars
         uses: actions/download-artifact@v4
         with:
-          name: lebai-linux-x64-whl
+          name: lebai-java-jars
+      - name: Download Python wheels
+        uses: actions/download-artifact@v4
+        with:
+          name: lebai-python-wheels
       - name: Download win x64 exe
         uses: actions/download-artifact@v4
         with:
           name: lebai-win-x64-exe
-      - name: Download win x86 exe
-        uses: actions/download-artifact@v4
-        with:
-          name: lebai-win-Win32-exe
-      - name: Download win x64 deb
-        uses: actions/download-artifact@v4
-        with:
-          name: lebai-win-x64-nupkg
-      - uses: actions/download-artifact@v4
-        with:
-          name: lebai-win-x64-38-whl
-      - uses: actions/download-artifact@v4
-        with:
-          name: lebai-win-x64-39-whl
-      - uses: actions/download-artifact@v4
-        with:
-          name: lebai-win-x64-310-whl
-      - uses: actions/download-artifact@v4
-        with:
-          name: lebai-win-x64-311-whl
-      - uses: actions/download-artifact@v4
-        with:
-          name: lebai-win-x64-312-whl
       - name: Display structure of downloaded files
         run: ls -l
       - name: Extract Project Version
@@ -101,4 +76,5 @@ jobs:
             *.exe,
             *.deb,
             *.nupkg,
+            *.jar,
             *.whl
