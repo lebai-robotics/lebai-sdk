@@ -101,6 +101,13 @@ jobs:
       - name: Upload native package to Maven Central Portal
         if: env.MAVEN_CENTRAL_USERNAME != '' && env.MAVEN_CENTRAL_PASSWORD != '' && env.MAVEN_GPG_PRIVATE_KEY != '' && env.MAVEN_GPG_PASSPHRASE != ''
         run: |
+          version="$(awk '/project\s*\(/,/)/' CMakeLists.txt | grep -Po 'VERSION\s*\K[0-9]+\.[0-9]+\.[0-9]+')"
+          artifact="lebai-${{ matrix.native-id }}"
+          existing_url="https://repo.maven.apache.org/maven2/io/github/liufang-robot/${artifact}/${version}/${artifact}-${version}.pom"
+          if curl --head --fail --silent --show-error "${existing_url}" >/dev/null; then
+            echo "${artifact} ${version} already exists in Maven Central; skipping deploy."
+            exit 0
+          fi
           cmake -S . -B build -DBUILD_JAVA=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DSKIP_GPG=OFF -DJAVA_ENABLE_MAVEN_CENTRAL=ON -DJAVA_MAVEN_GROUP_ID="${JAVA_MAVEN_GROUP_ID}"
           cmake --build build --target java_native_deploy
 
@@ -163,7 +170,9 @@ jobs:
           $verifyHome = Join-Path $env:RUNNER_TEMP "gpg-public-key-check"
           New-Item -ItemType Directory -Force -Path $verifyHome | Out-Null
           $verifyHome = ($verifyHome -replace "\\", "/")
-          $verifyHome = ($verifyHome -replace "^([A-Za-z]):", { "/$($args[0].Groups[1].Value.ToLower())" })
+          if ($verifyHome -match "^([A-Za-z]):(.*)$") {
+            $verifyHome = "/$($matches[1].ToLower())$($matches[2])"
+          }
           $env:GNUPGHOME = $verifyHome
           foreach ($keyserver in @("keyserver.ubuntu.com", "keys.openpgp.org", "pgp.mit.edu")) {
             & gpg --batch --keyserver "hkps://$keyserver" --recv-keys $fingerprint
@@ -177,7 +186,20 @@ jobs:
 
       - name: Upload native package to Maven Central Portal
         if: env.MAVEN_CENTRAL_USERNAME != '' && env.MAVEN_CENTRAL_PASSWORD != '' && env.MAVEN_GPG_PRIVATE_KEY != '' && env.MAVEN_GPG_PASSPHRASE != ''
+        shell: pwsh
         run: |
+          $version = ((Get-Content CMakeLists.txt -Raw) -match 'project\s*\([\s\S]*?VERSION\s+([0-9]+\.[0-9]+\.[0-9]+)') | Out-Null; $version = $matches[1]
+          $artifact = "lebai-win32-x86-64"
+          $existingUrl = "https://repo.maven.apache.org/maven2/io/github/liufang-robot/$artifact/$version/$artifact-$version.pom"
+          try {
+            Invoke-WebRequest -Uri $existingUrl -Method Head -UseBasicParsing | Out-Null
+            Write-Host "$artifact $version already exists in Maven Central; skipping deploy."
+            exit 0
+          } catch {
+            if ($_.Exception.Response -and [int]$_.Exception.Response.StatusCode -ne 404) {
+              throw
+            }
+          }
           cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DBUILD_JAVA=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DSKIP_GPG=OFF -DJAVA_ENABLE_MAVEN_CENTRAL=ON -DJAVA_MAVEN_GROUP_ID="${{ env.JAVA_MAVEN_GROUP_ID }}"
           cmake --build build --config Release --target java_native_deploy
 
@@ -284,5 +306,12 @@ jobs:
       - name: Upload Java package to Maven Central Portal
         if: env.MAVEN_CENTRAL_USERNAME != '' && env.MAVEN_CENTRAL_PASSWORD != '' && env.MAVEN_GPG_PRIVATE_KEY != '' && env.MAVEN_GPG_PASSPHRASE != ''
         run: |
+          version="$(awk '/project\s*\(/,/)/' CMakeLists.txt | grep -Po 'VERSION\s*\K[0-9]+\.[0-9]+\.[0-9]+')"
+          artifact="lebai-java"
+          existing_url="https://repo.maven.apache.org/maven2/io/github/liufang-robot/${artifact}/${version}/${artifact}-${version}.pom"
+          if curl --head --fail --silent --show-error "${existing_url}" >/dev/null; then
+            echo "${artifact} ${version} already exists in Maven Central; skipping deploy."
+            exit 0
+          fi
           cmake -S . -B build -DBUILD_JAVA=ON -DUNIVERSAL_JAVA_PACKAGE=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_EXAMPLES=OFF -DBUILD_TESTING=OFF -DSKIP_GPG=OFF -DJAVA_ENABLE_MAVEN_CENTRAL=ON -DJAVA_MAVEN_GROUP_ID="${JAVA_MAVEN_GROUP_ID}"
           cmake --build build --target java_deploy
