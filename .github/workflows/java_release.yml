@@ -162,6 +162,8 @@ jobs:
           }
           $verifyHome = Join-Path $env:RUNNER_TEMP "gpg-public-key-check"
           New-Item -ItemType Directory -Force -Path $verifyHome | Out-Null
+          $verifyHome = ($verifyHome -replace "\\", "/")
+          $verifyHome = ($verifyHome -replace "^([A-Za-z]):", { "/$($args[0].Groups[1].Value.ToLower())" })
           $env:GNUPGHOME = $verifyHome
           foreach ($keyserver in @("keyserver.ubuntu.com", "keys.openpgp.org", "pgp.mit.edu")) {
             & gpg --batch --keyserver "hkps://$keyserver" --recv-keys $fingerprint
