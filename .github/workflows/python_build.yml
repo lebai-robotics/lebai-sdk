@@ -1,4 +1,5 @@
-name: Windows Python build
+name: Python build
+run-name: ${{ github.actor }} Python build
 
 on:
   workflow_dispatch:
@@ -8,8 +9,36 @@ permissions:
   contents: read
 
 jobs:
-  windows-python-build:
-    runs-on: windows-latest
+  linux-python:
+    name: Linux ${{ matrix.name }} Python wheels
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: amd64
+            runner: ubuntu-22.04
+            container: quay.io/pypa/manylinux_2_28_x86_64
+          - name: aarch64
+            runner: ubuntu-24.04-arm
+            container: quay.io/pypa/manylinux_2_28_aarch64
+    runs-on: ${{ matrix.runner }}
+    container: ${{ matrix.container }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build and smoke-test wheels
+        run: scripts/build_python_wheels_manylinux.sh wheelhouse
+
+      - name: Upload wheels
+        uses: actions/upload-artifact@v4
+        with:
+          name: lebai-linux-${{ matrix.name }}-whl
+          path: wheelhouse/*.whl
+
+  windows-python:
+    name: Windows x64 Python wheel
+    runs-on: windows-2022
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,7 +59,7 @@ jobs:
         run: python.exe -m pip install --upgrade build setuptools wheel delvewheel
 
       - name: Configure
-        run: cmake -S. -Bbuild -G "Visual Studio 17 2022" -DBUILD_PYTHON=ON -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF -DBUILD_DOCUMENTATION=OFF -DFETCH_PYTHON_DEPS=OFF -DPython3_EXECUTABLE="${{ env.pythonLocation }}\python.exe"
+        run: cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DBUILD_PYTHON=ON -DBUILD_TESTING=OFF -DBUILD_EXAMPLES=OFF -DBUILD_DOCUMENTATION=OFF -DFETCH_PYTHON_DEPS=OFF -DPython3_EXECUTABLE="${{ env.pythonLocation }}\python.exe"
 
       - name: Build
         run: cmake --build build --config Release --target python_package

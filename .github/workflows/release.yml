@@ -5,10 +5,8 @@ on:
       - master
 
 jobs:
-  linux-cpp-x64:
-    uses: ./.github/workflows/linux_cpp_release.yml
-  linux-cpp-arm64:
-    uses: ./.github/workflows/linux_cpp_arm64_release.yml
+  cpp:
+    uses: ./.github/workflows/cpp_release.yml
   python:
     uses: ./.github/workflows/python_release.yml
     secrets: inherit
@@ -18,16 +16,12 @@ jobs:
   java:
     uses: ./.github/workflows/java_release.yml
     secrets: inherit
-  win-cpp-x64:
-    uses: ./.github/workflows/windows_cpp_release.yml
   release:
     needs:
-      - linux-cpp-x64
-      - linux-cpp-arm64
+      - cpp
       - python
       - dotnet
       - java
-      - win-cpp-x64
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -60,10 +54,6 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: lebai-win-x64-exe
-      - name: Download win x86 exe
-        uses: actions/download-artifact@v4
-        with:
-          name: lebai-win-Win32-exe
       - name: Display structure of downloaded files
         run: ls -l
       - name: Extract Project Version

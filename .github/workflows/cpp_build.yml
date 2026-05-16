@@ -1,0 +1,108 @@
+name: C++ build
+run-name: ${{ github.actor }} C++ build
+
+on:
+  workflow_dispatch:
+  pull_request:
+
+jobs:
+  linux-cpp-test:
+    name: Linux x64 C++ test
+    runs-on: ubuntu-latest
+    container:
+      image: ubuntu:22.04
+      options: --user 0
+    services:
+      lmaster:
+        image: registry.cn-shanghai.aliyuncs.com/lebai/l-master:3.1.6
+        options: >-
+          --health-cmd="curl -f http://localhost:8080 || exit 1"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install build tooling
+        run: |
+          apt-get update
+          apt-get install -y build-essential cmake git python3-pip python3-dev curl
+
+      - name: Configure
+        run: |
+          LM_IP=$(getent hosts lmaster | awk '{print $1}')
+          echo "LM_IP: $LM_IP"
+          cmake -S . -B build \
+            -DBUILD_TESTING=ON \
+            -DBUILD_EXAMPLES=OFF \
+            -DBUILD_DOCUMENTATION=OFF \
+            -DTEST_ROBOT_IP=$LM_IP
+
+      - name: Build
+        run: cmake --build build
+
+      - name: Run tests
+        run: ctest --test-dir build --output-on-failure
+
+  linux-cpp-package:
+    name: Linux ${{ matrix.name }} C++ package
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - name: x64
+            runner: ubuntu-22.04
+          - name: arm64
+            runner: ubuntu-24.04-arm
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install build tooling
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake git python3-pip python3-dev
+
+      - name: Configure
+        run: cmake -S . -B build -DBUILD_DEB=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_EXAMPLES=OFF
+
+      - name: Build and pack
+        run: |
+          cmake --build build
+          cd build
+          cpack
+
+      - name: Upload package
+        uses: actions/upload-artifact@v4
+        with:
+          name: lebai-linux-${{ matrix.name }}-deb
+          path: build/*.deb
+
+  windows-cpp-package:
+    name: Windows x64 C++ package
+    runs-on: windows-2022
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install NSIS
+        run: choco install nsis -y --no-progress
+
+      - name: Configure
+        run: cmake -S . -B build -G "Visual Studio 17 2022" -A x64 -DBUILD_NSIS=ON -DBUILD_DOCUMENTATION=OFF -DBUILD_EXAMPLES=OFF
+
+      - name: Build
+        run: cmake --build build --config Release
+
+      - name: Pack
+        run: |
+          cd build
+          cpack -C Release
+
+      - name: Upload package
+        uses: actions/upload-artifact@v4
+        with:
+          name: lebai-win-x64-exe
+          path: build/*.exe

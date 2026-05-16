@@ -49,7 +49,7 @@ expect_contains("${java_release}" "uses: actions/setup-java@v4" "modern Java set
 expect_contains("${java_release}" "runner: ubuntu-24.04-arm" "Linux arm64 Java release runner")
 expect_contains("${java_release}" "native-id: linux-x86-64" "Linux x64 native artifact matrix value")
 expect_contains("${java_release}" "native-id: linux-aarch64" "Linux arm64 native artifact matrix value")
-expect_contains("${java_release}" "name: lebai-java-native-${{ matrix.native-id }}" "Linux matrix native artifact upload")
+expect_contains("${java_release}" [=[name: lebai-java-native-${{ matrix.native-id }}]=] "Linux matrix native artifact upload")
 expect_contains("${java_release}" "lebai-java-native-win32-x86-64" "Windows x64 native artifact")
 expect_contains("${java_release}" "name: lebai-java-jars" "aggregate Java jar artifact")
 expect_contains("${java_release}" "MAVEN_CENTRAL_USERNAME" "Maven Central credential")
@@ -59,6 +59,8 @@ expect_contains("${java_release}" "java_native_deploy" "native deploy step")
 expect_contains("${java_release}" "java_deploy" "main deploy step")
 
 expect_contains("${java_build}" "uses: actions/setup-java@v4" "modern Java build setup action")
+expect_contains("${java_build}" "ubuntu-24.04-arm" "Java build Linux arm64 runner")
+expect_contains("${java_build}" "windows-2022" "Java build Windows x64 runner")
 expect_contains("${java_build}" "cmake --build build --target java_package" "Java package build target")
 expect_not_contains("${java_build}" "softprops/action-gh-release" "legacy Java release action")
 

@@ -44,7 +44,7 @@ environment used to build wheels:
 python3 -m pip install --user build wheel twine
 ```
 
-The CI workflow in `.github/workflows/linux_cpp_build.yml` is the best reference for a known-good Linux build sequence.
+The CI workflow in `.github/workflows/cpp_build.yml` is the best reference for a known-good Linux build sequence.
 
 If the distro SWIG package is unavailable or too old, install a user-level SWIG
 executable with `uv` instead of writing into system Python directories:
