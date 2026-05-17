@@ -74,6 +74,26 @@ read_project_file(dotnet_release ".github/workflows/dotnet_release.yml")
 read_project_file(java_build ".github/workflows/java_build.yml")
 read_project_file(java_release ".github/workflows/java_release.yml")
 read_project_file(release_workflow ".github/workflows/release.yml")
+read_project_file(cpp_cmake "cmake/cpp.cmake")
+read_project_file(readme "README.md")
+
+expect_contains("${readme}" "[![Release][release_svg]][release_link]" "README overall release badge")
+expect_not_contains("${readme}" "cpp_release_svg" "README reusable C++ release badge")
+expect_not_contains("${readme}" "python_release_svg" "README reusable Python release badge")
+expect_not_contains("${readme}" "dotnet_release_svg" "README reusable .NET release badge")
+expect_not_contains("${readme}" "java_release_svg" "README reusable Java release badge")
+foreach(class_link IN ITEMS
+  "classlebai_1_1zeroconf_1_1Discovery.html"
+  "classlebai_1_1l__master_1_1Robot.html"
+  "classlebai_1_1l__master_1_1LuaRobot.html"
+  "classlebai_1_1l__master_1_1Gripper.html")
+  expect_not_contains("${readme}" "${class_link}" "README hard-coded Doxygen link ${class_link}")
+endforeach()
+
+expect_contains("${cpp_cmake}" "CPACK_DEBIAN_PACKAGE_ARCHITECTURE \"amd64\"" "C++ deb amd64 architecture")
+expect_contains("${cpp_cmake}" "CPACK_DEBIAN_PACKAGE_ARCHITECTURE \"arm64\"" "C++ deb arm64 architecture")
+expect_contains("${cpp_cmake}" "CPACK_PACKAGE_FILE_NAME" "C++ deb architecture-specific filename")
+expect_contains("${cpp_cmake}" "\${CPACK_PACKAGE_NAME}-\${CPACK_PACKAGE_VERSION}-\${CPACK_DEBIAN_PACKAGE_ARCHITECTURE}" "C++ deb filename format")
 
 foreach(content_name IN ITEMS
   cpp_build

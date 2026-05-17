@@ -44,6 +44,9 @@ if(JAVA_ENABLE_MAVEN_CENTRAL)
       <configuration>
         <publishingServerId>central</publishingServerId>
         <autoPublish>${central.autoPublish}</autoPublish>
+        <waitUntil>published</waitUntil>
+        <waitMaxTime>3600</waitMaxTime>
+        <waitPollingInterval>10</waitPollingInterval>
       </configuration>
     </plugin>]=])
 else()
