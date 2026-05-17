@@ -12,21 +12,9 @@ JSON-RPC 实现，并通过 SWIG 生成 Python、.NET 和 Java 绑定。
 | 模块 | CI |
 | --- | --- |
 | 总发布 | [![Release][release_svg]][release_link] |
-| C++ 发布 | [![C++ release][cpp_release_svg]][cpp_release_link] |
-| Python 发布 | [![Python release][python_release_svg]][python_release_link] |
-| .NET 发布 | [![.NET release][dotnet_release_svg]][dotnet_release_link] |
-| Java 发布 | [![Java release][java_release_svg]][java_release_link] |
 
 [release_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/release.yml/badge.svg
 [release_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/release.yml
-[cpp_release_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/cpp_release.yml/badge.svg
-[cpp_release_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/cpp_release.yml
-[python_release_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/python_release.yml/badge.svg
-[python_release_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/python_release.yml
-[dotnet_release_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/dotnet_release.yml/badge.svg
-[dotnet_release_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/dotnet_release.yml
-[java_release_svg]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/java_release.yml/badge.svg
-[java_release_link]: https://github.com/lebai-robotics/lebai-sdk/actions/workflows/java_release.yml
 
 ## SDK 组成
 
