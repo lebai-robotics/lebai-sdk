@@ -77,6 +77,7 @@ if(UNIX)
     set(CPACK_PACKAGE_VERSION ${PROJECT_VERSION})
     set(CPACK_PACKAGE_CONTACT "liufang_robot@outlook.com")
     set(CPACK_DEBIAN_PACKAGE_MAINTAINER "liufang <${CPACK_PACKAGE_CONTACT}>")
+    # Keep GitHub Release assets distinct when x64 and arm64 debs are staged together.
     if(CMAKE_SYSTEM_PROCESSOR MATCHES "^(x86_64|amd64|AMD64)$")
       set(CPACK_DEBIAN_PACKAGE_ARCHITECTURE "amd64")
     elseif(CMAKE_SYSTEM_PROCESSOR MATCHES "^(aarch64|arm64|ARM64)$")
