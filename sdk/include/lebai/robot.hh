@@ -179,6 +179,8 @@ struct BackupInfoData {
   RobotInfoData robot;
   HardwareInfoData hardware;
   SoftwareInfoData software;
+  int64_t timestamp_seconds = 0;
+  int32_t timestamp_nanos = 0;
   BackupOptionsData option;
 };
 
@@ -203,7 +205,9 @@ struct MessageData {
 };
 
 struct OtaStateData {
-  std::string step;     /*!< 升级步骤. */
+  std::string address;   /*!< 硬件地址. */
+  std::string partition; /*!< 固件分区. */
+  std::string step;      /*!< 升级步骤. */
   uint32_t progress = 0; /*!< 升级进度. */
 };
 
@@ -284,9 +288,11 @@ struct WrenchData {
 };
 
 struct PluginInfoData {
-  std::string name;        /*!< 插件名称. */
-  std::string description; /*!< 插件描述. */
-  std::string homepage;    /*!< 项目主页. */
+  std::string name;          /*!< 插件名称. */
+  std::vector<std::string> boxs; /*!< 适用机箱型号. */
+  std::vector<std::string> arms; /*!< 适用手臂型号. */
+  std::string description;   /*!< 插件描述. */
+  std::string homepage;      /*!< 项目主页. */
   bool auto_restart = false; /*!< daemon异常退出后是否自动启动. */
   bool web = false;          /*!< 是否具备Web功能. */
   bool daemon = false;       /*!< 是否具备Daemon功能. */
@@ -1091,11 +1097,12 @@ class Robot {
    * @brief 设置力控参数.
    *
    * @param damping 阻尼.
-   * @param gain 增益.
-   * @param max_vel 最大速度，长度为6.
+   * @param mass 物体重量.
+   * @param force_threshold 启动力阈值.
+   * @param torque_threshold 启动力矩阈值.
    */
-  void set_force_mode_param(double damping, double gain,
-                            const std::vector<double> &max_vel);
+  void set_force_mode_param(double damping, double mass,
+                            double force_threshold, double torque_threshold);
   /**
    * @brief 开始力控模式.
    *
@@ -1200,6 +1207,7 @@ class Robot {
                         const std::string &partition);
   void start_upgrade();
   int box_test();
+  int box_test(const std::string &time, const std::string &auth);
   std::string init_robot(const std::string &time, const std::string &auth,
                          const RobotInfoData &info);
   /**

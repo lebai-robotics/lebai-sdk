@@ -8,19 +8,15 @@
 
 namespace protos_json::quality_proto {
 
-struct EmptyRequest {
-};
-
-inline void to_json(nlohmann::json &json, const EmptyRequest &) {
-  json = nlohmann::json::object();
-}
-
-inline void from_json(const nlohmann::json &, EmptyRequest &) {}
-
 struct Auth {
   std::string time;
   std::string auth;
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(Auth, time, auth)
+};
+
+struct EmptyRequest {
+  Auth auth;
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(EmptyRequest, auth)
 };
 
 struct BoxTestResponse {

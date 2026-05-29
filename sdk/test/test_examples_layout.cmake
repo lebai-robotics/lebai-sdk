@@ -14,6 +14,7 @@ endfunction()
 
 foreach(path IN ITEMS
   "examples/robot/robot.cc"
+  "examples/robot/claw.cc"
   "examples/robot/robot.py"
   "examples/robot/RobotExample.cs"
   "examples/robot/RobotExample.java"

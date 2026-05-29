@@ -1,5 +1,12 @@
 # ChangeLog
 
+## 2.0.2
+
+添加 C++ 机器人夹爪 JSON-RPC 手动验证示例。
+修正多处 C++ JSON-RPC DTO 与 `lebai-proto` 不一致的字段名和响应字段。
+将力控参数 API 对齐 `SetForceModeParamRequest` 的 `mass`、
+`force_threshold`、`torque_threshold` 字段。
+
 ## 2.0.1
 
 调整 C++ 示例和测试二进制输出目录，避免示例目标名和测试二进制混在

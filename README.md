@@ -4,7 +4,7 @@
 [![en](https://img.shields.io/badge/lang-en-green.svg)](https://github.com/lebai-robotics/lebai-sdk/blob/master/README.en.md)
 
 乐白机器人 SDK，用于发现、连接和控制乐白机械臂。当前重构版本为
-`2.0.1`，核心 C++ SDK 已迁移到 `json-rpc-cxx` + `nlohmann/json` 的
+`2.0.2`，核心 C++ SDK 已迁移到 `json-rpc-cxx` + `nlohmann/json` 的
 JSON-RPC 实现，并通过 SWIG 生成 Python、.NET 和 Java 绑定。
 
 ## 状态
@@ -57,7 +57,7 @@ Java Maven 坐标为：
 <dependency>
   <groupId>io.github.liufang-robot</groupId>
   <artifactId>lebai-java</artifactId>
-  <version>2.0.1</version>
+  <version>2.0.2</version>
 </dependency>
 ```
 
