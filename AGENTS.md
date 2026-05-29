@@ -12,12 +12,12 @@ project documentation under `docs/`.
   commands unless explicitly requested.
 - Define a verifiable goal for each change and run the narrowest useful build
   or test before reporting completion.
-- For every PR change, bump the patch version, for example from `x.x.0` to
-  `x.x.1`, and update the corresponding project/package version references.
-  Start with `CMakeLists.txt` `project(... VERSION ...)`; generated package
-  templates for Python, .NET, and Java consume `PROJECT_VERSION`, but checked-in
-  docs, `Doxyfile` `PROJECT_NUMBER`, or generated headers that hard-code the
-  version must be reviewed too.
+- For every PR change, including docs-only and workflow-only PRs, bump the
+  patch version, for example from `x.x.0` to `x.x.1`, and update the
+  corresponding project/package version references. Start with `CMakeLists.txt`
+  `project(... VERSION ...)`; generated package templates for Python, .NET,
+  Java, and Doxygen consume `PROJECT_VERSION`, but checked-in docs or generated
+  headers that hard-code the version must be reviewed too.
 
 ## Purpose
 
