@@ -52,6 +52,27 @@ function(add_cpp_example FILE_NAME)
   endif()
 
   add_executable(${EXAMPLE_TARGET} ${FILE_NAME})
+  if(COMPONENT_NAME STREQUAL "examples")
+    set(EXAMPLE_SUBDIR examples)
+    set(EXAMPLE_INSTALL_RPATH "$ORIGIN/../../${CMAKE_INSTALL_LIBDIR}:$ORIGIN")
+  else()
+    set(EXAMPLE_SUBDIR "examples/${COMPONENT_NAME}")
+    set(EXAMPLE_INSTALL_RPATH "$ORIGIN/../../../${CMAKE_INSTALL_LIBDIR}:$ORIGIN")
+  endif()
+  set(EXAMPLE_RUNTIME_DIR
+      "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR}/${EXAMPLE_SUBDIR}")
+  set_target_properties(${EXAMPLE_TARGET} PROPERTIES
+    OUTPUT_NAME ${EXAMPLE_NAME}
+    INSTALL_RPATH "${EXAMPLE_INSTALL_RPATH}"
+    RUNTIME_OUTPUT_DIRECTORY "${EXAMPLE_RUNTIME_DIR}")
+  foreach(OutputConfig IN LISTS CMAKE_CONFIGURATION_TYPES)
+    string(TOUPPER ${OutputConfig} OUTPUTCONFIG)
+    set(EXAMPLE_RUNTIME_DIR_${OUTPUTCONFIG}
+        "${CMAKE_BINARY_DIR}/${OutputConfig}/${CMAKE_INSTALL_BINDIR}/${EXAMPLE_SUBDIR}")
+    set_target_properties(${EXAMPLE_TARGET} PROPERTIES
+      RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG}
+      "${EXAMPLE_RUNTIME_DIR_${OUTPUTCONFIG}}")
+  endforeach()
   target_include_directories(
     ${EXAMPLE_TARGET} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}
                            ${PROJECT_SOURCE_DIR}/sdk/src)

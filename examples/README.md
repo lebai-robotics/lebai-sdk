@@ -3,6 +3,10 @@
 This directory keeps small examples for the public SDK surfaces across supported
 languages.
 
+When C++ examples are enabled, CMake keeps unique target names such as
+`robot_robot`, but writes the executables under `build/bin/examples/<area>/`;
+for example, `robot_robot` produces `build/bin/examples/robot/robot`.
+
 ## Robot
 
 - C++: `robot/robot.cc`

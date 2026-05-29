@@ -21,7 +21,7 @@ endif()
 
 project(
   lebai
-  VERSION 2.0.0
+  VERSION 2.0.1
   LANGUAGES CXX)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
@@ -268,7 +268,7 @@ if(BUILD_DOCUMENTATION AND DOXYGEN_FOUND)
     message(FATAL_ERROR "Doxygen is needed to build the documentation.")
   endif()
 
-  set(doxyfile_in ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile)
+  set(doxyfile_in ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in)
   set(doxyfile ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile)
 
   configure_file(${doxyfile_in} ${doxyfile} @ONLY)
