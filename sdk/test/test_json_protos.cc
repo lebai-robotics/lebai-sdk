@@ -92,6 +92,28 @@ TEST(JsonBackupProtoTest, RequestsSerializeControllerFields) {
   EXPECT_EQ(backup_json.at("file"), "sdk_probe.zip");
 }
 
+TEST(JsonBackupProtoTest, RestoreRequestSerializesControllerFields) {
+  protos_json::backup_proto::RestoreRequest req;
+  req.file = "sdk_probe.zip";
+  req.option.data = true;
+
+  const nlohmann::json json = req;
+
+  EXPECT_EQ(json.at("file"), "sdk_probe.zip");
+  EXPECT_TRUE(json.at("option").at("data"));
+}
+
+TEST(JsonBackupProtoTest, BackupInfoParsesTimestamp) {
+  const auto parsed = nlohmann::json{
+      {"timestamp", {{"seconds", 10}, {"nanos", 20}}},
+      {"option", {{"tmp", true}}},
+  }.get<protos_json::backup_proto::BackupInfo>();
+
+  EXPECT_EQ(parsed.timestamp.seconds, 10);
+  EXPECT_EQ(parsed.timestamp.nanos, 20);
+  EXPECT_TRUE(parsed.option.tmp);
+}
+
 TEST(JsonFlangeProtoTest, SetFlangeBaudRateRequestSerializesBaudRate) {
   protos_json::flange_proto::SetFlangeBaudRateRequest req;
   req.baud_rate = 115200;
@@ -167,6 +189,12 @@ TEST(JsonModbusProtoTest, LoadModbusRegisterListRequestSerializesDevice) {
 }
 
 TEST(JsonClawProtoTest, ClawAiRequestAndResponseUseAddressAndValue) {
+  protos_json::claw_proto::InitClawRequest init_req;
+  init_req.force = true;
+  const nlohmann::json init_json = init_req;
+  EXPECT_TRUE(init_json.at("force"));
+  EXPECT_FALSE(init_json.contains("force_initilization"));
+
   protos_json::claw_proto::SetClawAoRequest set_ao;
   set_ao.address = 1;
   set_ao.value = 2.5;
@@ -192,6 +220,47 @@ TEST(JsonClawProtoTest, ClawAiRequestAndResponseUseAddressAndValue) {
   EXPECT_DOUBLE_EQ(wait_json.at("value"), 0.5);
   EXPECT_EQ(wait_json.at("relation"), "GTE");
   EXPECT_DOUBLE_EQ(response.value, 1.5);
+}
+
+TEST(JsonIoProtoTest, SetDioModeRequestUsesProtoFieldName) {
+  protos_json::io_proto::SetDioModeRequest req;
+  req.device = protos_json::io_proto::IoDevice::EXTRA;
+  req.pin = 3;
+  req.mode = true;
+
+  const nlohmann::json json = req;
+
+  EXPECT_EQ(json.at("device"), "EXTRA");
+  EXPECT_EQ(json.at("pin"), 3);
+  EXPECT_TRUE(json.at("mode"));
+  EXPECT_FALSE(json.contains("value"));
+}
+
+TEST(JsonLedProtoTest, FanDataUsesProtoFieldName) {
+  protos_json::led_proto::FanData req;
+  req.mode = 1;
+
+  const nlohmann::json json = req;
+
+  EXPECT_EQ(json.at("mode"), 1);
+  EXPECT_FALSE(json.contains("fan"));
+}
+
+TEST(JsonMotionProtoTest, SetForceModeParamRequestUsesProtoFieldNames) {
+  protos_json::motion_proto::SetForceModeParamRequest req;
+  req.damping = 0.1;
+  req.mass = 1.2;
+  req.force_threshold = 3.4;
+  req.torque_threshold = 5.6;
+
+  const nlohmann::json json = req;
+
+  EXPECT_DOUBLE_EQ(json.at("damping"), 0.1);
+  EXPECT_DOUBLE_EQ(json.at("mass"), 1.2);
+  EXPECT_DOUBLE_EQ(json.at("force_threshold"), 3.4);
+  EXPECT_DOUBLE_EQ(json.at("torque_threshold"), 5.6);
+  EXPECT_FALSE(json.contains("gain"));
+  EXPECT_FALSE(json.contains("max_vel"));
 }
 
 TEST(JsonPostureProtoTest, ManipulationRequestAndResponseRoundTrip) {
@@ -290,9 +359,12 @@ TEST(JsonIoProtoTest, DioModeResponsesParseModeLabels) {
 }
 
 TEST(JsonHardwareProtoTest, OtaStateParsesControllerPayload) {
-  const auto json = nlohmann::json::parse(R"({"step":"NONE","progress":0})");
+  const auto json = nlohmann::json::parse(
+      R"({"address":"FLANGE","partition":"A","step":"NONE","progress":0})");
   const auto parsed = json.get<protos_json::hardware_proto::OtaState>();
 
+  EXPECT_EQ(parsed.address, "FLANGE");
+  EXPECT_EQ(parsed.partition, "A");
   EXPECT_EQ(parsed.step, "NONE");
   EXPECT_EQ(parsed.progress, 0U);
 }
@@ -446,6 +518,29 @@ TEST(JsonSystemProtoTest, EstopReasonRejectsInvalidOutboundValue) {
       static_cast<protos_json::system_proto::EstopReason>(999);
 
   EXPECT_THROW(static_cast<void>(nlohmann::json(invalid)), std::runtime_error);
+}
+
+TEST(JsonPluginProtoTest, PluginInfoParsesProtoCompatibilityLists) {
+  const auto json = nlohmann::json::parse(R"({
+    "name":"plugin",
+    "boxs":["LM3"],
+    "arms":["J6M1"],
+    "description":"demo",
+    "homepage":"https://example.test",
+    "auto_restart":true,
+    "web":false,
+    "daemon":true,
+    "cmd":true,
+    "enable":false
+  })");
+
+  const auto parsed = json.get<protos_json::plugin_proto::PluginInfo>();
+
+  ASSERT_EQ(parsed.boxs.size(), 1U);
+  ASSERT_EQ(parsed.arms.size(), 1U);
+  EXPECT_EQ(parsed.boxs.front(), "LM3");
+  EXPECT_EQ(parsed.arms.front(), "J6M1");
+  EXPECT_TRUE(parsed.auto_restart);
 }
 
 TEST(JsonControlProtoTest, StartTaskRequestSerializesExpectedFields) {
@@ -1011,17 +1106,23 @@ TEST(JsonUpgradeProtoTest, UpgradeResponsesParseControllerPayloads) {
 }
 
 TEST(JsonQualityProtoTest, RequestsAndResponsesRoundTrip) {
+  protos_json::quality_proto::EmptyRequest empty;
+  empty.auth.time = "now";
+  empty.auth.auth = "token";
+
   protos_json::quality_proto::InitRobotRequest req;
   req.auth.time = "now";
   req.auth.auth = "token";
   req.info.name = "robot";
 
+  const nlohmann::json empty_json = empty;
   const nlohmann::json req_json = req;
   const auto box = nlohmann::json{{"status", 1}}
                        .get<protos_json::quality_proto::BoxTestResponse>();
   const auto init = nlohmann::json{{"cup", "ok"}}
                         .get<protos_json::quality_proto::InitRobotResponse>();
 
+  EXPECT_EQ(empty_json.at("auth").at("auth"), "token");
   EXPECT_EQ(req_json.at("auth").at("auth"), "token");
   EXPECT_EQ(req_json.at("info").at("name"), "robot");
   EXPECT_EQ(box.status, 1);

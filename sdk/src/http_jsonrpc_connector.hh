@@ -4,6 +4,8 @@
 #include <jsonrpccxx/common.hpp>
 #include <jsonrpccxx/iclientconnector.hpp>
 
+#include <cstdlib>
+#include <iostream>
 #include <mutex>
 #include <sstream>
 #include <string>
@@ -23,6 +25,10 @@ class HttpJsonRpcConnector : public jsonrpccxx::IClientConnector {
 
   auto Send(const std::string& request) -> std::string override {
     std::lock_guard<std::mutex> lock(mutex_);
+    const bool debug = JsonRpcDebugEnabled();
+    if (debug) {
+      std::cerr << "[lebai-jsonrpc] request: " << request << std::endl;
+    }
     const auto response =
         http_client_.Post("/jsonrpc", request, "application/json");
     if (!response || response->status != 200) {
@@ -40,10 +46,20 @@ class HttpJsonRpcConnector : public jsonrpccxx::IClientConnector {
       throw jsonrpccxx::JsonRpcException(
           -32003, message.str());
     }
+    if (debug) {
+      std::cerr << "[lebai-jsonrpc] response: " << response->body
+                << std::endl;
+    }
     return response->body;
   }
 
  private:
+  static auto JsonRpcDebugEnabled() -> bool {
+    const char* value = std::getenv("LEBAI_JSONRPC_DEBUG");
+    return value != nullptr && std::string(value) != "0" &&
+           std::string(value) != "false";
+  }
+
   std::mutex mutex_;
   httplib::Client http_client_;
 };

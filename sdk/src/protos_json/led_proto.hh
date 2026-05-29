@@ -22,8 +22,8 @@ struct VoiceData {
 };
 
 struct FanData {
-  int fan{};
-  NLOHMANN_DEFINE_TYPE_INTRUSIVE(FanData, fan)
+  int mode{};
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(FanData, mode)
 };
 
 struct LedStyleLedData {

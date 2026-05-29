@@ -141,8 +141,8 @@ struct GetAioPinsResponse {
 struct SetDioModeRequest {
   IoDevice device{IoDevice::ROBOT};
   uint32_t pin{};
-  bool value{};
-  NLOHMANN_DEFINE_TYPE_INTRUSIVE(SetDioModeRequest, device, pin, value)
+  bool mode{};
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(SetDioModeRequest, device, pin, mode)
 };
 
 struct GetDioModeRequest {

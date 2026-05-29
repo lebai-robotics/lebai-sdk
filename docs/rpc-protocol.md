@@ -9,6 +9,18 @@
 The published `lebai-proto` spec is the source of truth for which RPCs,
 services, requests, and responses exist.
 
+When adding or reviewing `sdk/src/protos_json` DTOs, copy JSON field names from
+the proto message, including `json_name` overrides. Do not invent field names
+from public C++ parameter names. For example, `lebai.claw.InitClawRequest` uses
+the wire field `force`, even though the legacy C++ public parameter is named
+`force_initilization`.
+
+Backward-compatible response parsers may accept older controller fields in
+addition to proto fields, but outgoing request DTOs must not serialize fields
+that are absent from `lebai-proto`. If the public API does not expose required
+proto request data, add an API overload or change the API deliberately; do not
+map unrelated legacy parameters to proto fields.
+
 ## Wire Name Rule
 
 The controller wire method name is not always written exactly like the proto
