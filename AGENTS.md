@@ -12,6 +12,8 @@ project documentation under `docs/`.
   commands unless explicitly requested.
 - Define a verifiable goal for each change and run the narrowest useful build
   or test before reporting completion.
+- Use Conventional Commits for commit messages, for example
+  `feat(examples): simplify gripper position cli`.
 - For every PR change, including docs-only and workflow-only PRs, bump the
   patch version, for example from `x.x.0` to `x.x.1`, and update the
   corresponding project/package version references. Start with `CMakeLists.txt`

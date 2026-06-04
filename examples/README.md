@@ -23,7 +23,8 @@ for example, `robot_robot` produces `build/bin/examples/robot/robot`.
 - Java: `gripper/GripperExample.java`
 
 The gripper examples use direct RS485/Modbus RTU and require a real serial port.
-They print usage and exit if no serial port argument is supplied.
+They accept an optional position argument and default to `50` when it is
+omitted.
 
 ## Discovery
 

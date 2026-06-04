@@ -13,20 +13,31 @@
 # limitations under the License.
 
 import sys
-import time
-from pylebai import gripper
 
 def main():
     # Check command line arguments
-    if len(sys.argv) != 2:
-        print(f"Usage: {sys.argv[0]} <serial_port>", file=sys.stderr)
-        print(f"Example (Windows): {sys.argv[0]} COM3", file=sys.stderr)
-        print(f"Example (Linux): {sys.argv[0]} /dev/ttyUSB0", file=sys.stderr)
+    if len(sys.argv) < 2 or len(sys.argv) > 3:
+        print(f"Usage: {sys.argv[0]} <serial_port> [position]", file=sys.stderr)
+        print(f"Example (Windows): {sys.argv[0]} COM3 50", file=sys.stderr)
+        print(f"Example (Linux): {sys.argv[0]} /dev/ttyUSB0 50", file=sys.stderr)
         return 1
 
     port_name = sys.argv[1]
+    position = 50
+    if len(sys.argv) == 3:
+        try:
+            if sys.argv[2].startswith("-"):
+                raise ValueError()
+            position = int(sys.argv[2], 10)
+            if position > 100:
+                raise ValueError()
+        except ValueError:
+            print(f"Invalid position: {sys.argv[2]}", file=sys.stderr)
+            return 1
 
     try:
+        from pylebai import gripper
+
         print(f"Connecting to gripper on port: {port_name}")
 
         # Create gripper instance
@@ -35,12 +46,8 @@ def main():
         direct_gripper = gripper.Gripper(port_name)
 
         print("Gripper connected successfully!")
-        direct_gripper.set_position(30)
-        time.sleep(1)
-        direct_gripper.set_position(70)
-        time.sleep(5)
-        direct_gripper.do_calibration()
-        time.sleep(5)
+        print(f"Setting gripper position to: {position}")
+        direct_gripper.set_position(position)
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)
         return 1

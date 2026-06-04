@@ -52,6 +52,7 @@ Project-specific guidance for coding agents working in this repository.
 - Start with the docs listed in `AGENTS.md`.
 - Keep public API changes aligned with implementation, DTOs, bindings, tests,
   and examples.
+- Use Conventional Commits when committing completed work.
 - Prefer focused edits in `sdk/include/lebai`, `sdk/src`, `sdk/src/protos_json`,
   and `sdk/test`.
 - If a task changes public behavior, review whether `docs/changelog.md` should
