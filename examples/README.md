@@ -10,6 +10,7 @@ for example, `robot_robot` produces `build/bin/examples/robot/robot`.
 ## Robot
 
 - C++: `robot/robot.cc`
+- C++ claw JSON-RPC smoke: `robot/claw.cc`
 - Python: `robot/robot.py`
 - C#: `robot/RobotExample.cs`
 - Java: `robot/RobotExample.java`
