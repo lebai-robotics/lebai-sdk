@@ -1,11 +1,17 @@
 # ChangeLog
 
+## 2.0.3
+
+简化各语言夹爪示例，使其只设置一个位置，并支持通过可选命令行参数传入位置。
+
 ## 2.0.2
 
 添加 C++ 机器人夹爪 JSON-RPC 手动验证示例。
 修正多处 C++ JSON-RPC DTO 与 `lebai-proto` 不一致的字段名和响应字段。
 将力控参数 API 对齐 `SetForceModeParamRequest` 的 `mass`、
 `force_threshold`、`torque_threshold` 字段。
+Breaking: `set_force_mode_param` 签名由 `(damping, gain, max_vel)` 调整为
+`(damping, mass, force_threshold, torque_threshold)`。
 
 ## 2.0.1
 
