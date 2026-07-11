@@ -903,7 +903,7 @@ final residual-gap report rather than silently omitting a binding.
 ```bash
 ./build-final/bin/test_http_jsonrpc_connector
 ./build-final/bin/test_lua_robot_client
-./build-final/bin/test_robot \
+timeout 60s ./build-final/bin/test_robot \
   --gtest_filter='RobotTest.TestForceModeConfigSmoke:RobotTest.TestSignal'
 ./build-final/bin/test_lua_robot
 ```

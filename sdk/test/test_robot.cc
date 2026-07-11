@@ -16,6 +16,7 @@
 #include <gtest/gtest.h>
 #include <algorithm>
 #include <chrono>
+#include <exception>
 #include <future>
 #include <thread>
 #include <math.h>
@@ -835,15 +836,59 @@ TEST_F(RobotTest, TestSignal) {
   std::this_thread::sleep_for(std::chrono::milliseconds(100));
   EXPECT_EQ(30, robot_.get_signal(0));
   robot_.set_signal(201, 0);
-  auto wait_result = std::async(std::launch::async, [] {
-    l_master::Robot waiter(TEST_L_MASTER_IP, true);
-    waiter.wait_signal(201, 77, "EQ");
-  });
+  auto wait_result = std::async(std::launch::async,
+                                [this] { robot_.wait_signal(201, 77, "EQ"); });
   std::this_thread::sleep_for(std::chrono::milliseconds(100));
-  robot_.set_signal(201, 77);
-  EXPECT_EQ(wait_result.wait_for(std::chrono::seconds(5)),
-            std::future_status::ready);
-  EXPECT_NO_THROW(wait_result.get());
+
+  auto set_result =
+      std::async(std::launch::async, [this] { robot_.set_signal(201, 77); });
+  const auto collect_ready_future = [](std::future<void>& result,
+                                       const char* operation) {
+    try {
+      result.get();
+      return true;
+    } catch (const std::exception& exception) {
+      ADD_FAILURE() << operation << " failed: " << exception.what();
+    } catch (...) {
+      ADD_FAILURE() << operation << " failed with an unknown exception";
+    }
+    return false;
+  };
+
+  const auto set_status = set_result.wait_for(std::chrono::seconds(5));
+  EXPECT_EQ(set_status, std::future_status::ready);
+  bool set_collected = false;
+  bool set_succeeded = false;
+  if (set_status == std::future_status::ready) {
+    set_succeeded = collect_ready_future(set_result, "same-object set_signal");
+    set_collected = true;
+  }
+
+  if (!set_succeeded) {
+    try {
+      l_master::Robot cleanup_robot(TEST_L_MASTER_IP, true);
+      cleanup_robot.set_signal(201, 77);
+    } catch (const std::exception& exception) {
+      ADD_FAILURE() << "cleanup set_signal failed: " << exception.what();
+    } catch (...) {
+      ADD_FAILURE() << "cleanup set_signal failed with an unknown exception";
+    }
+  }
+
+  if (!set_collected) {
+    const auto cleanup_set_status =
+        set_result.wait_for(std::chrono::seconds(5));
+    EXPECT_EQ(cleanup_set_status, std::future_status::ready);
+    if (cleanup_set_status == std::future_status::ready) {
+      collect_ready_future(set_result, "same-object set_signal after cleanup");
+    }
+  }
+
+  const auto wait_status = wait_result.wait_for(std::chrono::seconds(5));
+  EXPECT_EQ(wait_status, std::future_status::ready);
+  if (wait_status == std::future_status::ready) {
+    collect_ready_future(wait_result, "same-object wait_signal");
+  }
   robot_.add_signal(10, 50);
   robot_.set_signal(10, 60);
   std::this_thread::sleep_for(std::chrono::milliseconds(100));

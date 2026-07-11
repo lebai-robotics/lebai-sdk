@@ -127,6 +127,28 @@ set_target_properties(test_rpc_client PROPERTIES
   ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 add_test(NAME TestRpcClient COMMAND test_rpc_client WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/sdk/test)
 
+add_executable(test_http_jsonrpc_connector test_http_jsonrpc_connector.cc)
+target_include_directories(test_http_jsonrpc_connector PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${PROJECT_SOURCE_DIR}/sdk/src
+)
+target_link_libraries(test_http_jsonrpc_connector PRIVATE
+  gtest)
+if(LEBAI_NLOHMANN_JSON_TARGET)
+  target_link_libraries(test_http_jsonrpc_connector PRIVATE ${LEBAI_NLOHMANN_JSON_TARGET})
+endif()
+if(LEBAI_HTTPLIB_TARGET)
+  target_link_libraries(test_http_jsonrpc_connector PRIVATE ${LEBAI_HTTPLIB_TARGET})
+endif()
+if(LEBAI_JSON_RPC_CXX_TARGET)
+  target_link_libraries(test_http_jsonrpc_connector PRIVATE ${LEBAI_JSON_RPC_CXX_TARGET})
+endif()
+set_target_properties(test_http_jsonrpc_connector PROPERTIES
+  INSTALL_RPATH
+  ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+add_test(NAME TestHttpJsonRpcConnector COMMAND test_http_jsonrpc_connector WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/sdk/test)
+set_tests_properties(TestHttpJsonRpcConnector PROPERTIES TIMEOUT 10)
+
 add_executable(test_robot_api test_robot_api.cc)
 target_include_directories(test_robot_api PUBLIC
   ${CMAKE_CURRENT_SOURCE_DIR}
@@ -165,6 +187,7 @@ set_target_properties(test_robot PROPERTIES
   INSTALL_RPATH 
   ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})  
 add_test(NAME TestRobot COMMAND test_robot WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/sdk/test)
+set_tests_properties(TestRobot PROPERTIES TIMEOUT 300)
 
 
 
