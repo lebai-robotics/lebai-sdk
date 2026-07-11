@@ -79,6 +79,19 @@ set_target_properties(test_lua_robot_client PROPERTIES
 add_test(NAME TestLuaRobotClient COMMAND test_lua_robot_client WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/sdk/test)
 set_tests_properties(TestLuaRobotClient PROPERTIES TIMEOUT 10)
 
+add_executable(test_discovery_accumulator test_discovery_accumulator.cc)
+target_include_directories(test_discovery_accumulator PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${PROJECT_SOURCE_DIR}/sdk/src
+)
+target_link_libraries(test_discovery_accumulator PRIVATE
+  ${PROJECT_NAMESPACE}::lebai-cpp
+  gtest)
+set_target_properties(test_discovery_accumulator PROPERTIES
+  INSTALL_RPATH
+  ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+add_test(NAME TestDiscoveryAccumulator COMMAND test_discovery_accumulator WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/sdk/test)
+
 add_test(
   NAME DotnetPackagingTemplates
   COMMAND ${CMAKE_COMMAND}

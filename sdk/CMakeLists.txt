@@ -4,6 +4,7 @@ target_sources(lebai-cpp
     src/robot.cc
     src/robot_impl.cc
     src/discovery.cc
+    src/discovery_accumulator.cc
     src/discovery_impl.cc
     src/lua_robot.cc
     src/lua_robot_impl.cc
