@@ -1091,11 +1091,12 @@ class Robot {
    * @brief 设置力控参数.
    *
    * @param damping 阻尼.
-   * @param gain 增益.
-   * @param max_vel 最大速度，长度为6.
+   * @param mass 质量.
+   * @param force_threshold 力阈值.
+   * @param torque_threshold 力矩阈值.
    */
-  void set_force_mode_param(double damping, double gain,
-                            const std::vector<double> &max_vel);
+  void set_force_mode_param(double damping, double mass,
+                            double force_threshold, double torque_threshold);
   /**
    * @brief 开始力控模式.
    *
@@ -1199,7 +1200,14 @@ class Robot {
   void switch_partition(const std::string &address,
                         const std::string &partition);
   void start_upgrade();
-  int box_test();
+  /**
+   * @brief Run the quality-platform box test.
+   *
+   * @param time Quality-platform authentication time.
+   * @param auth Quality-platform authentication value.
+   * @return Test status returned by the quality platform.
+   */
+  int box_test(const std::string &time, const std::string &auth);
   std::string init_robot(const std::string &time, const std::string &auth,
                          const RobotInfoData &info);
   /**
@@ -1449,9 +1457,9 @@ class Robot {
   /**
    * @brief 初始化夹爪
    *
-   * @param force_initilization 是否强制初始化
+   * @param force 是否强制初始化
    */
-  void init_claw(bool force_initilization);
+  void init_claw(bool force);
   /**
    * @brief
    * 设置夹爪力度（力控）和幅度（位控）.如果在闭合过程中抓取到物体，则不再继续闭合以避免夹坏物体，判断的准则为这里设置的力的大小.

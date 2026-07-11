@@ -6,6 +6,16 @@
 电机参数、质量平台和虚拟 IP 相关的 snake_case RPC 接口，并继续使用
 `json-rpc-cxx` + `nlohmann/json` DTO 迁移模式。
 
+Breaking C++ API changes replace
+`Robot::set_force_mode_param(double, double, const std::vector<double>&)` with
+`Robot::set_force_mode_param(double damping, double mass, double force_threshold, double torque_threshold)`
+and `Robot::box_test()` with
+`Robot::box_test(const std::string& time, const std::string& auth)`. The request
+adapters also correct the controller wire fields for force-mode parameters
+(`damping`, `mass`, `force_threshold`, and `torque_threshold`), quality
+authentication (`auth.time` and `auth.auth`), claw initialization (`force`),
+DIO modes (`mode` as `INPUT` or `OUTPUT`), and fan control (`mode`).
+
 更新 SDK 版本号，作为 SDK2 风格 JSON-RPC API 迁移版本。
 
 ## 1.4.4

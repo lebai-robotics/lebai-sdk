@@ -127,6 +127,22 @@ set_target_properties(test_rpc_client PROPERTIES
   ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 add_test(NAME TestRpcClient COMMAND test_rpc_client WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/sdk/test)
 
+add_executable(test_robot_api test_robot_api.cc)
+target_include_directories(test_robot_api PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${PROJECT_SOURCE_DIR}/sdk/src
+)
+target_link_directories(test_robot_api PRIVATE
+  ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}
+)
+target_link_libraries(test_robot_api PRIVATE
+  ${PROJECT_NAMESPACE}::lebai-cpp
+  gtest)
+set_target_properties(test_robot_api PROPERTIES
+  INSTALL_RPATH
+  ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+add_test(NAME TestRobotApi COMMAND test_robot_api WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/sdk/test)
+
 add_executable(test_robot test_robot.cc)
 if(DEFINED TEST_ROBOT_IP)
   target_compile_definitions(test_robot PRIVATE TEST_L_MASTER_IP="${TEST_ROBOT_IP}")

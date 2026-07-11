@@ -1176,16 +1176,14 @@ void Robot::set_force_mode_sensor(const std::string &sensor,
   impl_->set_force_mode_sensor(req);
 }
 
-void Robot::set_force_mode_param(double damping, double gain,
-                                 const std::vector<double> &max_vel) {
-  if (max_vel.size() != 6) {
-    throw std::invalid_argument("force mode max_vel must have 6 values");
-  }
-
+void Robot::set_force_mode_param(double damping, double mass,
+                                 double force_threshold,
+                                 double torque_threshold) {
   protos_json::motion_proto::SetForceModeParamRequest req;
   req.damping = damping;
-  req.gain = gain;
-  req.max_vel = max_vel;
+  req.mass = mass;
+  req.force_threshold = force_threshold;
+  req.torque_threshold = torque_threshold;
   impl_->set_force_mode_param(req);
 }
 
@@ -1391,8 +1389,10 @@ void Robot::sub_task_stdout(uint64_t interval_min, uint64_t interval_max) {
   impl_->sub_task_stdout(makeSubscribeRequest(interval_min, interval_max));
 }
 
-int Robot::box_test() {
+int Robot::box_test(const std::string &time, const std::string &auth) {
   protos_json::quality_proto::EmptyRequest req;
+  req.auth.time = time;
+  req.auth.auth = auth;
   return impl_->box_test(req).status;
 }
 
@@ -1615,7 +1615,8 @@ void Robot::set_dio_mode(std::string device, unsigned int pin, bool value) {
   protos_json::io_proto::SetDioModeRequest req;
   req.device = convertIoDevice(device);
   req.pin = pin;
-  req.value = value;
+  req.mode = value ? protos_json::io_proto::DigitalMode::OUTPUT
+                   : protos_json::io_proto::DigitalMode::INPUT;
   impl_->set_dio_mode(req);
 }
 bool Robot::get_dio_mode(std::string device, unsigned int pin) {
@@ -1648,9 +1649,9 @@ void Robot::disable_button(std::string device, unsigned int pin) {
   impl_->disable_button(req);
 }
 
-void Robot::init_claw(bool force_initilization) {
+void Robot::init_claw(bool force) {
   protos_json::claw_proto::InitClawRequest req;
-  req.force_initilization = force_initilization;
+  req.force = force;
   impl_->init_claw(req);
 }
 
@@ -1726,7 +1727,7 @@ void Robot::set_fan(unsigned int status) {
     return;
   }
   protos_json::led_proto::FanData typed_req;
-  typed_req.fan = static_cast<int>(status);
+  typed_req.mode = static_cast<int>(status);
   impl_->set_fan(typed_req);
 }
 
