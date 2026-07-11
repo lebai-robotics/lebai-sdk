@@ -52,6 +52,19 @@ set_target_properties(test_modbus_rtu_client PROPERTIES
   ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 add_test(NAME TestModbusRtuClient COMMAND test_modbus_rtu_client WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/sdk/test)
 
+add_executable(test_timed_operation test_timed_operation.cc)
+target_include_directories(test_timed_operation PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${PROJECT_SOURCE_DIR}/sdk/src
+)
+target_link_libraries(test_timed_operation PRIVATE
+  ${PROJECT_NAMESPACE}::lebai-cpp
+  gtest)
+set_target_properties(test_timed_operation PROPERTIES
+  INSTALL_RPATH
+  ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+add_test(NAME TestTimedOperation COMMAND test_timed_operation WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/sdk/test)
+
 add_test(
   NAME DotnetPackagingTemplates
   COMMAND ${CMAKE_COMMAND}

@@ -10,6 +10,7 @@ target_sources(lebai-cpp
     src/gripper.cc
     src/gripper_impl.cc
     src/modbus_rtu_client.cc
+    src/timed_operation.cc
     )
 target_include_directories(lebai-cpp
   PUBLIC
