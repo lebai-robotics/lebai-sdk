@@ -705,6 +705,11 @@ int Robot::towardj(const std::vector<double> &joint_positions, double a,
 
 void Robot::move_pvat(std::vector<double> p, std::vector<double> v,
                       std::vector<double> a, double t) {
+  if (p.size() != v.size() || p.size() != a.size()) {
+    throw std::invalid_argument(
+        "move_pvat requires p, v, and a to have equal lengths");
+  }
+
   protos_json::motion_proto::MovePvatRequest req;
   for (std::size_t i = 0; i < p.size(); i++) {
     protos_json::motion_proto::JointMove joint;
