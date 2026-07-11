@@ -2,6 +2,8 @@
 
 #include <asio/steady_timer.hpp>
 
+#include <exception>
+
 namespace lebai {
 
 TimedOperationResult run_timed_operation(
@@ -9,6 +11,7 @@ TimedOperationResult run_timed_operation(
     const std::function<void(std::function<void(std::error_code)>)>& start,
     const std::function<void()>& cancel) {
   TimedOperationResult result;
+  std::exception_ptr start_error;
   bool completed = false;
   bool cancel_called = false;
 
@@ -28,18 +31,33 @@ TimedOperationResult run_timed_operation(
     }
   });
 
-  start([&](std::error_code error) {
-    if (completed) {
-      return;
-    }
+  try {
+    start([&](std::error_code error) {
+      if (completed) {
+        return;
+      }
 
+      completed = true;
+      result.error = error;
+      std::error_code ignored;
+      deadline.cancel(ignored);
+    });
+  } catch (...) {
+    start_error = std::current_exception();
     completed = true;
-    result.error = error;
+
     std::error_code ignored;
     deadline.cancel(ignored);
-  });
+    if (!cancel_called) {
+      cancel_called = true;
+      cancel();
+    }
+  }
 
   io.run();
+  if (start_error) {
+    std::rethrow_exception(start_error);
+  }
   return result;
 }
 

@@ -3,6 +3,7 @@
 #include <asio.hpp>
 
 #include <chrono>
+#include <stdexcept>
 #include <system_error>
 
 #include "timed_operation.hh"
@@ -90,6 +91,64 @@ TEST(TimedOperationTest, OperationErrorIsReturned) {
 
   EXPECT_EQ(operation_error, result.error);
   EXPECT_FALSE(result.timed_out);
+}
+
+TEST(TimedOperationTest, SynchronousStartFailureCancelsAndDrainsBeforeRethrow) {
+  asio::io_context io;
+  asio::steady_timer failed_operation(io);
+  failed_operation.expires_after(std::chrono::milliseconds(0));
+  int cancel_calls = 0;
+  bool operation_completed = false;
+  bool caught_start_error = false;
+
+  try {
+    lebai::run_timed_operation(
+        io, kPendingDuration,
+        [&](auto complete) {
+          failed_operation.async_wait(
+              [&, complete](const std::error_code& error) {
+                operation_completed = true;
+                complete(error);
+              });
+          throw std::length_error("known start failure");
+        },
+        [&] {
+          ++cancel_calls;
+          std::error_code ignored;
+          failed_operation.cancel(ignored);
+        });
+    ADD_FAILURE() << "Expected std::length_error";
+  } catch (const std::length_error& error) {
+    caught_start_error = true;
+    EXPECT_STREQ("known start failure", error.what());
+  } catch (const std::exception& error) {
+    ADD_FAILURE() << "Expected std::length_error, got: " << error.what();
+  } catch (...) {
+    ADD_FAILURE() << "Expected std::length_error, got a non-standard exception";
+  }
+
+  EXPECT_TRUE(caught_start_error);
+  EXPECT_EQ(1, cancel_calls);
+  EXPECT_TRUE(operation_completed);
+
+  asio::steady_timer next_operation(io);
+  next_operation.expires_after(std::chrono::milliseconds(0));
+  const auto next_error = std::make_error_code(std::errc::connection_refused);
+  const auto next_result = lebai::run_timed_operation(
+      io, kPendingDuration,
+      [&](auto complete) {
+        next_operation.async_wait(
+            [complete, next_error](const std::error_code&) {
+              complete(next_error);
+            });
+      },
+      [&] {
+        std::error_code ignored;
+        next_operation.cancel(ignored);
+      });
+
+  EXPECT_EQ(next_error, next_result.error);
+  EXPECT_FALSE(next_result.timed_out);
 }
 
 TEST(TimedOperationTest, LateCompletionAfterTimeoutIsIgnored) {
