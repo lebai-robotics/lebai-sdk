@@ -65,6 +65,20 @@ set_target_properties(test_timed_operation PROPERTIES
   ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 add_test(NAME TestTimedOperation COMMAND test_timed_operation WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/sdk/test)
 
+add_executable(test_lua_robot_client test_lua_robot_client.cc)
+target_include_directories(test_lua_robot_client PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${PROJECT_SOURCE_DIR}/sdk/src
+)
+target_link_libraries(test_lua_robot_client PRIVATE
+  ${PROJECT_NAMESPACE}::lebai-cpp
+  gtest)
+set_target_properties(test_lua_robot_client PROPERTIES
+  INSTALL_RPATH
+  ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+add_test(NAME TestLuaRobotClient COMMAND test_lua_robot_client WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/sdk/test)
+set_tests_properties(TestLuaRobotClient PROPERTIES TIMEOUT 10)
+
 add_test(
   NAME DotnetPackagingTemplates
   COMMAND ${CMAKE_COMMAND}
