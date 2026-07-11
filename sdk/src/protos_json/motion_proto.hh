@@ -68,10 +68,11 @@ struct SetForceModeSensorRequest {
 
 struct SetForceModeParamRequest {
   double damping{};
-  double gain{};
-  std::vector<double> max_vel;
-  NLOHMANN_DEFINE_TYPE_INTRUSIVE(SetForceModeParamRequest, damping, gain,
-                                 max_vel)
+  double mass{};
+  double force_threshold{};
+  double torque_threshold{};
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(SetForceModeParamRequest, damping, mass,
+                                 force_threshold, torque_threshold)
 };
 
 struct Rotation {

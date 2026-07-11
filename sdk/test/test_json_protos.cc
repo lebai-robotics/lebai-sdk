@@ -194,6 +194,13 @@ TEST(JsonClawProtoTest, ClawAiRequestAndResponseUseAddressAndValue) {
   EXPECT_DOUBLE_EQ(response.value, 1.5);
 }
 
+TEST(JsonClawProtoTest, InitClawRequestSerializesForce) {
+  protos_json::claw_proto::InitClawRequest req;
+  req.force = true;
+
+  EXPECT_EQ(nlohmann::json(req), (nlohmann::json{{"force", true}}));
+}
+
 TEST(JsonPostureProtoTest, ManipulationRequestAndResponseRoundTrip) {
   protos_json::posture_proto::JointPose req;
   req.joint = {0.0, 1.0, 2.0};
@@ -287,6 +294,51 @@ TEST(JsonIoProtoTest, DioModeResponsesParseModeLabels) {
   ASSERT_EQ(batch.modes.size(), 2U);
   EXPECT_FALSE(batch.modes.front());
   EXPECT_TRUE(batch.modes.back());
+}
+
+TEST(JsonIoProtoTest, SetDioModeRequestSerializesMode) {
+  protos_json::io_proto::SetDioModeRequest req;
+  req.device = protos_json::io_proto::IoDevice::EXTRA;
+  req.pin = 4;
+  req.mode = protos_json::io_proto::DigitalMode::OUTPUT;
+
+  EXPECT_EQ(nlohmann::json(req),
+            (nlohmann::json{{"device", "EXTRA"},
+                            {"pin", 4},
+                            {"mode", "OUTPUT"}}));
+}
+
+TEST(JsonIoProtoTest, DigitalModeSerializesInput) {
+  const nlohmann::json json = protos_json::io_proto::DigitalMode::INPUT;
+
+  EXPECT_EQ(json, "INPUT");
+}
+
+TEST(JsonIoProtoTest, DigitalModeDeserializesProtocolLabels) {
+  EXPECT_EQ(nlohmann::json("INPUT")
+                .get<protos_json::io_proto::DigitalMode>(),
+            protos_json::io_proto::DigitalMode::INPUT);
+  EXPECT_EQ(nlohmann::json("OUTPUT")
+                .get<protos_json::io_proto::DigitalMode>(),
+            protos_json::io_proto::DigitalMode::OUTPUT);
+}
+
+TEST(JsonIoProtoTest, DigitalModeRejectsUnknownLabelAsJsonTypeError) {
+  EXPECT_THROW(
+      static_cast<void>(nlohmann::json("INVALID")
+                            .get<protos_json::io_proto::DigitalMode>()),
+      nlohmann::json::type_error);
+}
+
+TEST(JsonIoProtoTest, DigitalModeRejectsNonStringValuesAsJsonTypeError) {
+  EXPECT_THROW(static_cast<void>(
+                   nlohmann::json(1)
+                       .get<protos_json::io_proto::DigitalMode>()),
+               nlohmann::json::type_error);
+  EXPECT_THROW(static_cast<void>(
+                   nlohmann::json(true)
+                       .get<protos_json::io_proto::DigitalMode>()),
+               nlohmann::json::type_error);
 }
 
 TEST(JsonHardwareProtoTest, OtaStateParsesControllerPayload) {
@@ -645,6 +697,20 @@ TEST(JsonMotionProtoTest, StartForceModeRequestSerializesLimitAndWrench) {
   EXPECT_DOUBLE_EQ(json.at("wrench").at("torque").at("z"), 2.0);
 }
 
+TEST(JsonMotionProtoTest, SetForceModeParamRequestSerializesProtocolFields) {
+  protos_json::motion_proto::SetForceModeParamRequest req;
+  req.damping = 0.1;
+  req.mass = 2.0;
+  req.force_threshold = 3.0;
+  req.torque_threshold = 4.0;
+
+  EXPECT_EQ(nlohmann::json(req),
+            (nlohmann::json{{"damping", 0.1},
+                            {"mass", 2.0},
+                            {"force_threshold", 3.0},
+                            {"torque_threshold", 4.0}}));
+}
+
 TEST(JsonMotionProtoTest, TrajectoryParsesControllerPayload) {
   protos_json::motion_proto::StartRecordTrajectoryRequest start_req;
   start_req.kind = "PVAT";
@@ -886,6 +952,23 @@ TEST(JsonLedProtoTest, LedStylesParseControllerPayload) {
   EXPECT_EQ(parsed.styles.at("5").led.mode, "OPEN_LED");
   EXPECT_EQ(parsed.styles.at("5").led.colors.front(), "GREEN");
   EXPECT_EQ(parsed.styles.at("5").volume, "MID");
+}
+
+TEST(JsonLedProtoTest, FanDataSerializesMode) {
+  protos_json::led_proto::FanData fan;
+  fan.mode = 2;
+
+  EXPECT_EQ(nlohmann::json(fan), (nlohmann::json{{"mode", 2}}));
+}
+
+TEST(JsonQualityProtoTest, EmptyRequestSerializesAuth) {
+  protos_json::quality_proto::EmptyRequest req;
+  req.auth.time = "123";
+  req.auth.auth = "signature";
+
+  EXPECT_EQ(nlohmann::json(req),
+            (nlohmann::json{{"auth", {{"time", "123"},
+                                       {"auth", "signature"}}}}));
 }
 
 TEST(JsonLedProtoTest, LedStyleParsesControllerDefaults) {

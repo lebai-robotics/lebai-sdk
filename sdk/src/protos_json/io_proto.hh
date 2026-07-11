@@ -3,6 +3,7 @@
 #include <nlohmann/json.hpp>
 
 #include <cstdint>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -138,11 +139,40 @@ struct GetAioPinsResponse {
   NLOHMANN_DEFINE_TYPE_INTRUSIVE(GetAioPinsResponse, values)
 };
 
+enum class DigitalMode {
+  INPUT = 0,
+  OUTPUT = 1,
+};
+
+inline void from_json(const nlohmann::json& json, DigitalMode& mode) {
+  const auto value = json.get<std::string>();
+  if (value == "INPUT") {
+    mode = DigitalMode::INPUT;
+  } else if (value == "OUTPUT") {
+    mode = DigitalMode::OUTPUT;
+  } else {
+    throw nlohmann::json::type_error::create(302, "invalid digital mode",
+                                             &json);
+  }
+}
+
+inline void to_json(nlohmann::json& json, const DigitalMode& mode) {
+  switch (mode) {
+    case DigitalMode::INPUT:
+      json = "INPUT";
+      return;
+    case DigitalMode::OUTPUT:
+      json = "OUTPUT";
+      return;
+  }
+  throw std::runtime_error("invalid digital mode");
+}
+
 struct SetDioModeRequest {
   IoDevice device{IoDevice::ROBOT};
   uint32_t pin{};
-  bool value{};
-  NLOHMANN_DEFINE_TYPE_INTRUSIVE(SetDioModeRequest, device, pin, value)
+  DigitalMode mode{DigitalMode::INPUT};
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(SetDioModeRequest, device, pin, mode)
 };
 
 struct GetDioModeRequest {

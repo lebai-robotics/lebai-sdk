@@ -8,8 +8,8 @@
 namespace protos_json::claw_proto {
 
 struct InitClawRequest {
-  bool force_initilization{};
-  NLOHMANN_DEFINE_TYPE_INTRUSIVE(InitClawRequest, force_initilization)
+  bool force{};
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(InitClawRequest, force)
 };
 
 struct SetClawRequest {
