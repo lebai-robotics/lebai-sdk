@@ -1,6 +1,9 @@
 #ifdef _WIN32
 #include <winsock2.h>
 #else
+#include <arpa/inet.h>
+#include <netinet/in.h>
+#include <sys/socket.h>
 #include <unistd.h>
 #endif
 
@@ -23,6 +26,16 @@
 namespace {
 
 constexpr char kSuccessResponse[] = R"({"jsonrpc":"2.0","id":1,"result":true})";
+
+#ifdef _WIN32
+using NativeSocket = SOCKET;
+using SocketLength = int;
+constexpr NativeSocket kInvalidSocket = INVALID_SOCKET;
+#else
+using NativeSocket = int;
+using SocketLength = socklen_t;
+constexpr NativeSocket kInvalidSocket = -1;
+#endif
 
 class LocalHttpServer {
  public:
@@ -69,7 +82,7 @@ class BoundNonListeningSocket {
  public:
   BoundNonListeningSocket() {
     socket_ = ::socket(AF_INET, SOCK_STREAM, 0);
-    if (socket_ == INVALID_SOCKET) {
+    if (socket_ == kInvalidSocket) {
       throw std::runtime_error("failed to create port reservation socket");
     }
 
@@ -78,12 +91,12 @@ class BoundNonListeningSocket {
     address.sin_addr.s_addr = htonl(INADDR_LOOPBACK);
     address.sin_port = 0;
     if (::bind(socket_, reinterpret_cast<sockaddr*>(&address),
-               static_cast<socklen_t>(sizeof(address))) != 0) {
+               static_cast<SocketLength>(sizeof(address))) != 0) {
       Close();
       throw std::runtime_error("failed to bind port reservation socket");
     }
 
-    socklen_t address_length = static_cast<socklen_t>(sizeof(address));
+    SocketLength address_length = static_cast<SocketLength>(sizeof(address));
     if (::getsockname(socket_, reinterpret_cast<sockaddr*>(&address),
                       &address_length) != 0) {
       Close();
@@ -102,17 +115,17 @@ class BoundNonListeningSocket {
 
  private:
   void Close() noexcept {
-    if (socket_ != INVALID_SOCKET) {
+    if (socket_ != kInvalidSocket) {
 #ifdef _WIN32
       ::closesocket(socket_);
 #else
       ::close(socket_);
 #endif
-      socket_ = INVALID_SOCKET;
+      socket_ = kInvalidSocket;
     }
   }
 
-  socket_t socket_{INVALID_SOCKET};
+  NativeSocket socket_{kInvalidSocket};
   int port_{-1};
 };
 
