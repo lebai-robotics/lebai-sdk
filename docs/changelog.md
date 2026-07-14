@@ -16,6 +16,9 @@ adapters also correct the controller wire fields for force-mode parameters
 authentication (`auth.time` and `auth.auth`), claw initialization (`force`),
 DIO modes (`mode` as `INPUT` or `OUTPUT`), and fan control (`mode`).
 
+Gripper auto-calibration disable now writes value `2` to register `40090`
+while enable retains value `3`.
+
 更新 SDK 版本号，作为 SDK2 风格 JSON-RPC API 迁移版本。
 
 ## 1.4.4
