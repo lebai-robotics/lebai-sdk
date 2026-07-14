@@ -98,8 +98,10 @@ main package only contains the RID built by that job.
 
 `.github/workflows/dotnet_release.yml` is the aggregate .NET release workflow.
 It builds native assets for Linux x64, Linux arm64, and Windows x64, packs one
-multi-RID `lebai` NuGet package, smoke-tests it, and publishes to NuGet using
-the `LEBAI_NUGET_KEY` secret when that secret is configured.
+multi-RID `lebai` NuGet package, smoke-tests it, and publishes to NuGet through
+Trusted Publishing. The `nuget` GitHub environment restricts publishing to the
+release branch, while the `NUGET_USER` secret identifies the NuGet.org profile
+whose trusted policy authorizes `.github/workflows/dotnet_release.yml`.
 
 `multi-RID` means the package contains native assets for multiple .NET Runtime
 Identifiers, for example:

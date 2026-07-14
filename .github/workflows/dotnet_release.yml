@@ -5,8 +5,8 @@ on:
   workflow_dispatch:
   workflow_call:
     secrets:
-      LEBAI_NUGET_KEY:
-        required: false
+      NUGET_USER:
+        required: true
 
 jobs:
   linux_dotnet_native:
@@ -92,8 +92,10 @@ jobs:
       - linux_dotnet_native
       - windows_dotnet_native
     runs-on: ubuntu-22.04
-    env:
-      NUGET_API_KEY: ${{ secrets.LEBAI_NUGET_KEY }}
+    permissions:
+      contents: read
+      id-token: write
+    environment: nuget
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -138,8 +140,15 @@ jobs:
             build-dotnet-multirid/dotnet/packages/lebai.*.nupkg
             build-dotnet-multirid/dotnet/packages/lebai.*.snupkg
 
+      - name: Authenticate to NuGet
+        id: nuget_login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
       - name: Publish aggregate package
-        if: env.NUGET_API_KEY != ''
+        env:
+          NUGET_API_KEY: ${{ steps.nuget_login.outputs.NUGET_API_KEY }}
         run: |
           package="$(find build-dotnet-multirid/dotnet/packages -maxdepth 1 -name 'lebai.[0-9]*.nupkg' | sort | tail -n 1)"
           dotnet nuget push "${package}" \
