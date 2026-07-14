@@ -100,6 +100,17 @@ add_test(
     -DBUILD_CONFIG=$<CONFIG>
     -P ${CMAKE_CURRENT_SOURCE_DIR}/test_install_headers.cmake)
 
+find_package(Python3 QUIET COMPONENTS Interpreter)
+if(Python3_Interpreter_FOUND)
+  add_test(
+    NAME PythonModuleVersions
+    COMMAND ${CMAKE_COMMAND}
+      -DPROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR}
+      -DTEST_ROOT=${CMAKE_CURRENT_BINARY_DIR}/python-module-versions
+      -DPYTHON_EXECUTABLE=${Python3_EXECUTABLE}
+      -P ${CMAKE_CURRENT_SOURCE_DIR}/test_python_module_versions.cmake)
+endif()
+
 add_test(
   NAME DotnetPackagingTemplates
   COMMAND ${CMAKE_COMMAND}
