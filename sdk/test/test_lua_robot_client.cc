@@ -263,12 +263,25 @@ TEST(LuaRobotClientTest, ReadsResponseFragmentedBeforeCrLf) {
   EXPECT_TRUE(server.finish().empty());
 }
 
+TEST(LuaRobotClientTest, ReadsControllerTabLfResponseTerminator) {
+  LoopbackServer server([](tcp::socket& socket) {
+    read_exact_request(socket, "print(controller_value())");
+    write_all(socket, "value\t\n");
+  });
+  auto client = connect_client(server.port());
+
+  if (client) {
+    EXPECT_EQ("value", client->call("controller_value()"));
+  }
+  EXPECT_TRUE(server.finish().empty());
+}
+
 TEST(LuaRobotClientTest, PreservesCoalescedResponseForNextCall) {
   std::promise<void> release_server;
   auto release = release_server.get_future().share();
   LoopbackServer server([&](tcp::socket& socket) {
     read_exact_request(socket, "print(first())");
-    write_all(socket, "one\r\ntwo\r\n");
+    write_all(socket, "one\r\ntwo\t\n");
     read_exact_request(socket, "print(second())");
     release.wait_for(kServerWatchdog);
   });
@@ -308,7 +321,7 @@ TEST(LuaRobotClientTest, SilentPeerReportsConfiguredTimeout) {
   EXPECT_TRUE(server.finish().empty());
 }
 
-TEST(LuaRobotClientTest, EofBeforeCrLfReportsIncompleteResponse) {
+TEST(LuaRobotClientTest, EofBeforeTerminatorReportsIncompleteResponse) {
   LoopbackServer server([](tcp::socket& socket) {
     read_exact_request(socket, "print(partial())");
     write_all(socket, "partial");
@@ -373,6 +386,10 @@ TEST(LuaRobotClientTest, RejectsInvalidConfiguration) {
   message =
       capture_invalid_argument([&] { Client client("127.0.0.1", config); });
   expect_message_contains(message, "maximum response size");
+}
+
+TEST(LuaRobotClientTest, DefaultTimeoutAllowsQueuedControllerExecution) {
+  EXPECT_EQ(30s, Client::Config{}.timeout);
 }
 
 }  // namespace

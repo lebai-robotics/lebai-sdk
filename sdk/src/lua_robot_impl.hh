@@ -30,7 +30,7 @@ class LuaRobot::LuaRobotImpl {
  public:
   struct Config {
     uint16_t port{5180};
-    std::chrono::milliseconds timeout{1000};
+    std::chrono::milliseconds timeout{30000};
     std::size_t max_response_bytes{1000};
   };
 

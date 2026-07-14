@@ -36,7 +36,7 @@
 - `sdk/src/robot.cc`: corrected adapters and `move_pvat` validation.
 - `sdk/src/protos_json/{motion,claw,io,led,quality}_proto.hh`: protocol field names and enum mapping.
 - `sdk/src/http_jsonrpc_connector.hh`: request-scoped clients and method-aware timeouts.
-- `sdk/src/lua_robot_impl.{hh,cc}`: completed connect and CRLF-framed timed reads.
+- `sdk/src/lua_robot_impl.{hh,cc}`: completed connect and controller-framed timed reads.
 - `sdk/src/discovery_impl.{hh,cc}`: per-resolution callback state and accumulator integration.
 - `sdk/src/gripper_impl.cc`: disable value `2` from named protocol constants.
 - `sdk/CMakeLists.txt`: new internal sources and installed Lua header.
@@ -425,7 +425,7 @@ and maximum response bytes. Test through `LuaRobotImpl` on an ephemeral port:
 - `"abc"` and `"\r\n"` in separate writes returns `"abc"`;
 - `"one\r\ntwo\r\n"` in one write is returned across two calls;
 - accepted connection with no response times out;
-- EOF before CRLF throws;
+- EOF before a complete response terminator throws;
 - data beyond the configured maximum throws.
 
 Coordinate server state with promises and join every server thread. For the
@@ -453,11 +453,13 @@ resolver, socket, config, and bounded `asio::streambuf`. Resolve and connect via
 `run_timed_operation`; cancel resolver and close socket on timeout. Wrap errors
 as descriptive `std::runtime_error`.
 
-For `call`, use `async_read_until(socket_, response_buffer_, "\r\n")` through
-the runner. Capture `bytes_transferred`, copy exactly that many bytes, consume
-exactly that many, verify the CRLF suffix, remove it, and leave any extra bytes
-in the stream buffer. Keep the public port at 5180 and the public constructor
-unchanged.
+For `call`, use `async_read_until` with a match condition that recognizes both
+controller terminators (`CRLF` and `TAB+LF`) without matching plain newlines in
+multiline errors. Capture `bytes_transferred`, copy and consume exactly that
+many bytes, verify and remove the two-byte suffix, and leave any extra bytes in
+the stream buffer. Keep the public port at 5180 and the public constructor
+unchanged. Use a 30-second default deadline for queued controller execution;
+tests inject shorter deadlines.
 
 - [ ] **Step 4: Run focused and existing Lua tests**
 

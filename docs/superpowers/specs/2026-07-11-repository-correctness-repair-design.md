@@ -176,18 +176,21 @@ completion rules.
 `call()` will:
 
 1. send the existing `print(...)` command;
-2. asynchronously read until the protocol CRLF delimiter;
+2. asynchronously read until either controller response terminator, `CRLF` or
+   `TAB+LF`, while ignoring plain newlines inside multiline errors;
 3. enforce a finite read deadline;
-4. return one response without the CRLF delimiter;
+4. return one response without its two-byte delimiter;
 5. preserve any bytes read beyond the first delimiter for the next call.
 
 A bounded `asio::streambuf` prevents an unframed peer from growing memory
 without limit. Timeout, disconnect, oversized response, and malformed framing
 all throw descriptive `std::runtime_error` exceptions.
 
-The default controller port remains 5180. Port, timeout, and maximum response
-size may be injected only through the internal implementation constructor so
-unit tests can use an ephemeral local server without changing the public API.
+The default controller port remains 5180 and the default deadline is 30 seconds
+to cover controller-side execution queued before a `call()`. Port, timeout, and
+maximum response size may be injected only through the internal implementation
+constructor so unit tests can use an ephemeral local server without changing
+the public API.
 
 ### Lua Tests
 

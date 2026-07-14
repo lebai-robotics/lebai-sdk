@@ -45,6 +45,27 @@ std::runtime_error transport_error(const char* operation,
                             " failed: " + error.message());
 }
 
+class LuaResponseTerminator {
+ public:
+  using result_type = void;
+
+  template <typename Iterator>
+  std::pair<Iterator, bool> operator()(Iterator begin, Iterator end) const {
+    for (auto current = begin; current != end; ++current) {
+      if (*current != '\r' && *current != '\t') continue;
+
+      auto next = current;
+      ++next;
+      if (next == end) return {current, false};
+      if (*next == '\n') {
+        ++next;
+        return {next, true};
+      }
+    }
+    return {end, false};
+  }
+};
+
 }  // namespace
 
 LuaRobot::LuaRobotImpl::LuaRobotImpl(const std::string& ip)
@@ -132,7 +153,7 @@ std::string LuaRobot::LuaRobotImpl::call(const std::string& lua_code) {
         io_context_, config_.timeout,
         [this, &bytes_transferred](auto complete) {
           asio::async_read_until(
-              socket_, response_buffer_, "\r\n",
+              socket_, response_buffer_, LuaResponseTerminator{},
               [&bytes_transferred, complete](const std::error_code& error,
                                              std::size_t bytes) {
                 bytes_transferred = bytes;
@@ -167,8 +188,9 @@ std::string LuaRobot::LuaRobotImpl::call(const std::string& lua_code) {
   }
   response_buffer_.consume(bytes_transferred);
 
-  if (response.size() < 2 ||
-      response.compare(response.size() - 2, 2, "\r\n") != 0) {
+  if (response.size() < 2 || response.back() != '\n' ||
+      (response[response.size() - 2] != '\r' &&
+       response[response.size() - 2] != '\t')) {
     throw std::runtime_error("Lua robot response has invalid framing");
   }
   response.resize(response.size() - 2);
