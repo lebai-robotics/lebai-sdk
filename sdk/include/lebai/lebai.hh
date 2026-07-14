@@ -1,5 +1,10 @@
 #pragma once
 
+#include "lebai/discovery.hh"
+#include "lebai/gripper.hh"
+#include "lebai/lua_robot.hh"
+#include "lebai/robot.hh"
+
 /*! \mainpage lebai
  * [TOC]
  * # 概述
@@ -33,6 +38,9 @@
  *
  * # .net
  * 查看 \ref docs/dotnet.md 来获取在.net中使用C\#开发相关的内容.
+ *
+ * # Java
+ * 查看 \ref docs/java.md "Java平台应用文档" 来获取使用Java开发相关的内容.
  *
  * # Develop
  * 如果需要开发sdk，添加新的功能，可以参考 \ref docs/develop.md.

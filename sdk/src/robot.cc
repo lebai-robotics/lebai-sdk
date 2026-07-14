@@ -192,6 +192,8 @@ static BackupInfoData convertToBackupInfoData(
   data.robot = convertToRobotInfoData(info.robot);
   data.hardware = convertToHardwareInfoData(info.hardware);
   data.software = convertToSoftwareInfoData(info.software);
+  data.timestamp_seconds = info.timestamp.seconds;
+  data.timestamp_nanos = info.timestamp.nanos;
   data.option.tmp = info.option.tmp;
   data.option.syslog = info.option.syslog;
   data.option.arm = info.option.arm;
@@ -1218,6 +1220,8 @@ static PluginInfoData convertPluginInfo(
     const protos_json::plugin_proto::PluginInfo &plugin) {
   PluginInfoData data;
   data.name = plugin.name;
+  data.boxs = plugin.boxs;
+  data.arms = plugin.arms;
   data.description = plugin.description;
   data.homepage = plugin.homepage;
   data.auto_restart = plugin.auto_restart;
@@ -1328,6 +1332,8 @@ std::vector<MessageData> Robot::get_messages() {
 OtaStateData Robot::get_ota_state() {
   const auto state = impl_->get_ota_state();
   OtaStateData data;
+  data.address = state.address;
+  data.partition = state.partition;
   data.step = state.step;
   data.progress = state.progress;
   return data;

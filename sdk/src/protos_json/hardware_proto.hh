@@ -21,9 +21,24 @@ struct SwitchPartitionRequest {
 };
 
 struct OtaState {
+  std::string address;
+  std::string partition;
   std::string step;
   uint32_t progress{};
-  NLOHMANN_DEFINE_TYPE_INTRUSIVE(OtaState, step, progress)
 };
+
+inline void to_json(nlohmann::json &json, const OtaState &state) {
+  json = nlohmann::json{{"address", state.address},
+                        {"partition", state.partition},
+                        {"step", state.step},
+                        {"progress", state.progress}};
+}
+
+inline void from_json(const nlohmann::json &json, OtaState &state) {
+  state.address = json.value("address", std::string{});
+  state.partition = json.value("partition", std::string{});
+  state.step = json.value("step", std::string{});
+  state.progress = json.value("progress", 0U);
+}
 
 }  // namespace protos_json::hardware_proto

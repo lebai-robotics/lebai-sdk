@@ -3,9 +3,14 @@
 This directory keeps small examples for the public SDK surfaces across supported
 languages.
 
+When C++ examples are enabled, CMake keeps unique target names such as
+`robot_robot`, but writes the executables under `build/bin/examples/<area>/`;
+for example, `robot_robot` produces `build/bin/examples/robot/robot`.
+
 ## Robot
 
 - C++: `robot/robot.cc`
+- C++ claw JSON-RPC smoke: `robot/claw.cc`
 - Python: `robot/robot.py`
 - C#: `robot/RobotExample.cs`
 - Java: `robot/RobotExample.java`
@@ -18,7 +23,8 @@ languages.
 - Java: `gripper/GripperExample.java`
 
 The gripper examples use direct RS485/Modbus RTU and require a real serial port.
-They print usage and exit if no serial port argument is supplied.
+They accept an optional position argument and default to `50` when it is
+omitted.
 
 ## Discovery
 

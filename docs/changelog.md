@@ -1,26 +1,46 @@
 # ChangeLog
 
+## 2.0.4
+
+Breaking: remove the unauthenticated `Robot::box_test()` overload. Callers must
+now provide the quality-platform `time` and `auth` values explicitly.
+
+Serialize DIO modes with the controller `INPUT` and `OUTPUT` labels and keep
+all four force-mode parameters required in the internal request DTO. Validate
+`move_pvat` vector lengths before dispatch.
+
+Allow concurrent blocking JSON-RPC calls with method-aware deadlines. Bound
+Lua resolve, connect, and response operations; accept both controller response
+terminators and preserve coalesced replies. Isolate mDNS response state per
+discovery operation and associate PTR, SRV, TXT, A, and AAAA records correctly.
+
+Correct gripper auto-calibration disable, install the public Lua header,
+enforce Python build dependency versions, and require the C++ core for every
+SDK configuration.
+
+## 2.0.3
+
+简化各语言夹爪示例，使其只设置一个位置，并支持通过可选命令行参数传入位置。
+
+## 2.0.2
+
+添加 C++ 机器人夹爪 JSON-RPC 手动验证示例。
+修正多处 C++ JSON-RPC DTO 与 `lebai-proto` 不一致的字段名和响应字段。
+将力控参数 API 对齐 `SetForceModeParamRequest` 的 `mass`、
+`force_threshold`、`torque_threshold` 字段。
+Breaking: `set_force_mode_param` 签名由 `(damping, gain, max_vel)` 调整为
+`(damping, mass, force_threshold, torque_threshold)`。
+
+## 2.0.1
+
+调整 C++ 示例和测试二进制输出目录，避免示例目标名和测试二进制混在
+`build/bin` 下；机器人示例移除依赖外部插件商店的默认调用。
+
 ## 2.0.0
 
 扩展 C++ RPC API 覆盖，补齐备份、法兰、硬件升级、订阅、DH、轨迹、
 电机参数、质量平台和虚拟 IP 相关的 snake_case RPC 接口，并继续使用
 `json-rpc-cxx` + `nlohmann/json` DTO 迁移模式。
-
-Breaking C++ API changes replace
-`Robot::set_force_mode_param(double, double, const std::vector<double>&)` with
-`Robot::set_force_mode_param(double damping, double mass, double force_threshold, double torque_threshold)`
-and `Robot::box_test()` with
-`Robot::box_test(const std::string& time, const std::string& auth)`. The request
-adapters also correct the controller wire fields for force-mode parameters
-(`damping`, `mass`, `force_threshold`, and `torque_threshold`), quality
-authentication (`auth.time` and `auth.auth`), claw initialization (`force`),
-DIO modes (`mode` as `INPUT` or `OUTPUT`), and fan control (`mode`).
-
-Gripper auto-calibration disable now writes value `2` to register `40090`
-while enable retains value `3`.
-
-Lua controller calls now accept both `CRLF` and controller `TAB+LF` response
-terminators, preserve coalesced replies, and use a 30-second default deadline.
 
 更新 SDK 版本号，作为 SDK2 风格 JSON-RPC API 迁移版本。
 

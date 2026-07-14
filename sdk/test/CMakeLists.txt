@@ -19,6 +19,13 @@ FetchContent_MakeAvailable(googletest)
 # find_package(GTest CONFIG REQUIRED)
 # find_package(Threads)
 
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY
+    "${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_BINDIR}/tests")
+foreach(OutputConfig IN LISTS CMAKE_CONFIGURATION_TYPES)
+  string(TOUPPER ${OutputConfig} OUTPUTCONFIG)
+  set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_${OUTPUTCONFIG}
+      "${CMAKE_BINARY_DIR}/${OutputConfig}/${CMAKE_INSTALL_BINDIR}/tests")
+endforeach()
 
 add_executable(test_json_protos test_json_protos.cc)
 target_include_directories(test_json_protos PUBLIC

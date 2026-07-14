@@ -20,6 +20,8 @@ struct PluginStore {
 
 struct PluginInfo {
   std::string name;
+  std::vector<std::string> boxs;
+  std::vector<std::string> arms;
   std::string description;
   std::string homepage;
   bool auto_restart{};
@@ -27,9 +29,33 @@ struct PluginInfo {
   bool daemon{};
   bool cmd{};
   bool enable{};
-  NLOHMANN_DEFINE_TYPE_INTRUSIVE(PluginInfo, name, description, homepage,
-                                 auto_restart, web, daemon, cmd, enable)
 };
+
+inline void from_json(const nlohmann::json &json, PluginInfo &plugin) {
+  plugin.name = json.value("name", std::string{});
+  plugin.boxs = json.value("boxs", std::vector<std::string>{});
+  plugin.arms = json.value("arms", std::vector<std::string>{});
+  plugin.description = json.value("description", std::string{});
+  plugin.homepage = json.value("homepage", std::string{});
+  plugin.auto_restart = json.value("auto_restart", false);
+  plugin.web = json.value("web", false);
+  plugin.daemon = json.value("daemon", false);
+  plugin.cmd = json.value("cmd", false);
+  plugin.enable = json.value("enable", false);
+}
+
+inline void to_json(nlohmann::json &json, const PluginInfo &plugin) {
+  json = nlohmann::json{{"name", plugin.name},
+                        {"boxs", plugin.boxs},
+                        {"arms", plugin.arms},
+                        {"description", plugin.description},
+                        {"homepage", plugin.homepage},
+                        {"auto_restart", plugin.auto_restart},
+                        {"web", plugin.web},
+                        {"daemon", plugin.daemon},
+                        {"cmd", plugin.cmd},
+                        {"enable", plugin.enable}};
+}
 
 struct Plugins {
   std::vector<PluginInfo> plugins;

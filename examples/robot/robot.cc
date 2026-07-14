@@ -78,9 +78,6 @@ int main(int argc, char **argv) {
     const auto plugins = robot.load_plugins();
     std::cout << "installed plugins: " << plugins.size() << std::endl;
 
-    const auto store = robot.get_plugin_store();
-    std::cout << "plugin store entries: " << store.size() << std::endl;
-
     const auto dh = robot.get_dh();
     std::cout << "dh params: " << dh.size() << std::endl;
 

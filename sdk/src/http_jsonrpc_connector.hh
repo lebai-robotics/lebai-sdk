@@ -6,7 +6,9 @@
 #include <nlohmann/json.hpp>
 
 #include <chrono>
+#include <cstdlib>
 #include <ctime>
+#include <iostream>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -31,6 +33,11 @@ class HttpJsonRpcConnector : public jsonrpccxx::IClientConnector {
   }
 
   auto Send(const std::string& request) -> std::string override {
+    const bool debug = JsonRpcDebugEnabled();
+    if (debug) {
+      std::cerr << "[lebai-jsonrpc] request: " << request << std::endl;
+    }
+
     httplib::Client http_client(host_, port_);
     const auto connect_timeout = TimeoutParts(timeouts_.connect);
     const auto read_timeout = TimeoutParts(
@@ -40,7 +47,6 @@ class HttpJsonRpcConnector : public jsonrpccxx::IClientConnector {
                                        connect_timeout.second);
     http_client.set_read_timeout(read_timeout.first, read_timeout.second);
     http_client.set_write_timeout(write_timeout.first, write_timeout.second);
-
     const auto response =
         http_client.Post("/jsonrpc", request, "application/json");
     if (!response || response->status != 200) {
@@ -56,6 +62,10 @@ class HttpJsonRpcConnector : public jsonrpccxx::IClientConnector {
                 << httplib::to_string(response.error());
       }
       throw jsonrpccxx::JsonRpcException(-32003, message.str());
+    }
+    if (debug) {
+      std::cerr << "[lebai-jsonrpc] response: " << response->body
+                << std::endl;
     }
     return response->body;
   }
@@ -98,6 +108,12 @@ class HttpJsonRpcConnector : public jsonrpccxx::IClientConnector {
     const auto microseconds = timeout - seconds;
     return {static_cast<time_t>(seconds.count()),
             static_cast<time_t>(microseconds.count())};
+  }
+
+  static auto JsonRpcDebugEnabled() -> bool {
+    const char* value = std::getenv("LEBAI_JSONRPC_DEBUG");
+    return value != nullptr && std::string(value) != "0" &&
+           std::string(value) != "false";
   }
 
   std::string host_;

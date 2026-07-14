@@ -120,17 +120,23 @@ cmake --build build --target test
 
 ### Defined test executables
 
-- `sdk/test/test_protos.cc`
+- `sdk/test/test_json_protos.cc`
+- `sdk/test/test_modbus_rtu_client.cc`
+- `sdk/test/test_rpc_client.cc`
 - `sdk/test/test_robot.cc`
 - `sdk/test/test_lua_robot.cc`
 - `sdk/test/test_discovery.cc`
 
 CTest names are:
 
-- `TestProtos`
+- `TestJsonProtos`
+- `TestModbusRtuClient`
+- `TestRpcClient`
 - `TestRobot`
 - `TestLuaRobot`
 - `TestDiscovery`
+
+Built test executables are placed under `build/bin/tests/`.
 
 `TEST_ROBOT_IP` is compiled into the robot-facing tests; if not set, they default to `127.0.0.1`.
 

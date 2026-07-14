@@ -7,12 +7,20 @@ namespace lebai.app
     {
         static int Main(string[] args)
         {
-            if (args.Length != 1)
+            if (args.Length < 1 || args.Length > 2)
             {
-                Console.Error.WriteLine($"Usage: {AppDomain.CurrentDomain.FriendlyName} <serial_port>");
-                Console.Error.WriteLine($"Example (Windows): {AppDomain.CurrentDomain.FriendlyName} COM3");
-                Console.Error.WriteLine($"Example (Linux): {AppDomain.CurrentDomain.FriendlyName} /dev/ttyUSB0");
-                return 0;
+                Console.Error.WriteLine($"Usage: {AppDomain.CurrentDomain.FriendlyName} <serial_port> [position]");
+                Console.Error.WriteLine($"Example (Windows): {AppDomain.CurrentDomain.FriendlyName} COM3 50");
+                Console.Error.WriteLine($"Example (Linux): {AppDomain.CurrentDomain.FriendlyName} /dev/ttyUSB0 50");
+                return 1;
+            }
+
+            uint position = 50;
+            if (args.Length == 2 &&
+                (!uint.TryParse(args[1], out position) || position > 100))
+            {
+                Console.Error.WriteLine($"Invalid position: {args[1]}");
+                return 1;
             }
 
             try
@@ -20,10 +28,8 @@ namespace lebai.app
                 using (var gripper = new Gripper(args[0]))
                 {
                     Console.WriteLine("Gripper connected.");
-                    gripper.set_position(30);
-                    gripper.set_position(70);
-                    gripper.do_calibration();
-                    Console.WriteLine($"Calibrated: {gripper.is_calibrated()}");
+                    Console.WriteLine($"Setting gripper position to: {position}");
+                    gripper.set_position(position);
                 }
                 return 0;
             }
