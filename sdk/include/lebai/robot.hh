@@ -1095,8 +1095,8 @@ class Robot {
    * @param force_threshold 力阈值.
    * @param torque_threshold 力矩阈值.
    */
-  void set_force_mode_param(double damping, double mass,
-                            double force_threshold, double torque_threshold);
+  void set_force_mode_param(double damping, double mass, double force_threshold,
+                            double torque_threshold);
   /**
    * @brief 开始力控模式.
    *

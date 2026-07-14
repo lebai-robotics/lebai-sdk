@@ -156,7 +156,7 @@ void ExpectTransportError(lebai::HttpJsonRpcConnector& connector,
 TEST(HttpJsonRpcConnectorTest, RejectsNegativeTimeoutDurations) {
   struct TimeoutField {
     const char* name;
-    std::chrono::microseconds lebai::HttpJsonRpcTimeouts::* value;
+    std::chrono::microseconds lebai::HttpJsonRpcTimeouts::*value;
   };
   const TimeoutField timeout_fields[] = {
       {"connect", &lebai::HttpJsonRpcTimeouts::connect},

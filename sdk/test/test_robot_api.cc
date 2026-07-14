@@ -22,10 +22,10 @@
 
 #include "lebai/robot.hh"
 
-using ForceModeSignature =
-    void (lebai::l_master::Robot::*)(double, double, double, double);
-using BoxTestSignature = int (lebai::l_master::Robot::*)(
-    const std::string &, const std::string &);
+using ForceModeSignature = void (lebai::l_master::Robot::*)(double, double,
+                                                            double, double);
+using BoxTestSignature = int (lebai::l_master::Robot::*)(const std::string&,
+                                                         const std::string&);
 
 static_assert(
     std::is_same_v<decltype(&lebai::l_master::Robot::set_force_mode_param),
@@ -74,7 +74,7 @@ TEST(RobotApiTest, MovePvatRejectsMismatchedVectorLengths) {
                               std::vector<double>(3, 0.0), "a longer than p");
 }
 
-int main(int argc, char **argv) {
+int main(int argc, char** argv) {
   testing::InitGoogleTest(&argc, argv);
   return RUN_ALL_TESTS();
 }
