@@ -76,6 +76,7 @@ read_project_file(java_release ".github/workflows/java_release.yml")
 read_project_file(release_workflow ".github/workflows/release.yml")
 read_project_file(cpp_cmake "cmake/cpp.cmake")
 read_project_file(readme "README.md")
+read_project_file(bindings_doc "docs/bindings.md")
 
 expect_contains("${readme}" "[![Release][release_svg]][release_link]" "README overall release badge")
 expect_not_contains("${readme}" "cpp_release_svg" "README reusable C++ release badge")
@@ -139,5 +140,36 @@ expect_contains("${release_workflow}" "pages: write" "top-level release Pages pe
 expect_contains("${release_workflow}" "id-token: write" "top-level release Pages OIDC permission for reusable C++ release")
 expect_contains("${release_workflow}" "uses: ./.github/workflows/python_release.yml" "top-level Python release workflow")
 expect_contains("${release_workflow}" "uses: ./.github/workflows/dotnet_release.yml" "top-level .NET release workflow")
+expect_contains("${release_workflow}" [=[
+  dotnet:
+    uses: ./.github/workflows/dotnet_release.yml
+    secrets: inherit
+    permissions:
+      contents: read
+      id-token: write
+]=] "top-level .NET release OIDC permission")
 expect_contains("${release_workflow}" "uses: ./.github/workflows/java_release.yml" "top-level Java release workflow")
 expect_not_contains("${release_workflow}" "Win32" "legacy Windows 32-bit release artifact")
+
+expect_contains("${dotnet_release}" "NUGET_USER:" ".NET release NuGet username secret")
+expect_not_contains("${dotnet_release}" "LEBAI_NUGET_KEY" ".NET release long-lived NuGet API key")
+expect_contains("${dotnet_release}" [=[
+  dotnet_multirid_package:
+    name: Pack multi-RID .NET NuGet
+    needs:
+      - linux_dotnet_native
+      - windows_dotnet_native
+    runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      id-token: write
+    environment: nuget
+]=] ".NET package Trusted Publishing job configuration")
+expect_contains("${dotnet_release}" "uses: NuGet/login@v1" ".NET release NuGet OIDC login")
+expect_contains("${dotnet_release}" "id: nuget_login" ".NET release NuGet login step ID")
+expect_contains("${dotnet_release}" [=[user: ${{ secrets.NUGET_USER }}]=] ".NET release NuGet login username")
+expect_contains("${dotnet_release}" [=[steps.nuget_login.outputs.NUGET_API_KEY]=] ".NET release temporary NuGet API key")
+expect_not_contains("${dotnet_release}" "if: env.NUGET_API_KEY != ''" ".NET release API-key conditional")
+
+expect_contains("${bindings_doc}" "Trusted Publishing" ".NET release authentication documentation")
+expect_not_contains("${bindings_doc}" "LEBAI_NUGET_KEY" ".NET release long-lived API key documentation")
