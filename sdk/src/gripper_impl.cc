@@ -15,6 +15,7 @@
  */
 
 #include "gripper_impl.hh"
+#include "gripper_protocol.hh"
 
 #include <chrono>
 #include <iostream>
@@ -34,8 +35,6 @@ constexpr uint16_t kCalibrationCommandRegister = 0x9C48;
 constexpr uint16_t kCalibrationStateRegister = 0x9C49;
 constexpr uint16_t kVolatileVelocityRegister = 0x9C4A;
 constexpr uint16_t kPersistentVelocityRegister = 0x9C4B;
-constexpr uint16_t kAutoCalibrationRegister = 40090;
-
 void validate_percent(unsigned int value, const char* name) {
   if (value > 100) {
     throw std::invalid_argument(std::string(name) +
@@ -146,13 +145,16 @@ bool Gripper::GripperImpl::IsCalibrated() const {
 }
 
 void Gripper::GripperImpl::TurnOnAutoCalibration() {
-  write_single_as_multiple(*client_, kAutoCalibrationRegister, 3,
+  write_single_as_multiple(*client_, gripper_protocol::kAutoCalibrationRegister,
+                           gripper_protocol::kAutoCalibrationEnableValue,
                            "turn on auto calibration");
 }
 
 void Gripper::GripperImpl::TurnOffAutoCalibration() {
   try {
-    client_->write_single_register(kAutoCalibrationRegister, 0x03);
+    client_->write_single_register(
+        gripper_protocol::kAutoCalibrationRegister,
+        gripper_protocol::kAutoCalibrationDisableValue);
   } catch (const std::exception& e) {
     throw std::runtime_error("Failed to turn off auto calibration: " +
                              std::string(e.what()));

@@ -1,4 +1,5 @@
 #include "modbus_rtu_client.hh"
+#include "gripper_protocol.hh"
 
 #include <gtest/gtest.h>
 
@@ -9,6 +10,7 @@
 namespace {
 
 using lebai::l_master::ModbusRtuClient;
+namespace gripper_protocol = lebai::l_master::gripper_protocol;
 
 TEST(ModbusRtuClientTest, BuildsReadHoldingRegistersRequest) {
   const auto frame =
@@ -36,18 +38,30 @@ TEST(ModbusRtuClientTest, BuildsWriteMultipleRegistersRequest) {
   EXPECT_NO_THROW(ModbusRtuClient::validate_crc(frame));
 }
 
-TEST(ModbusRtuClientTest, BuildsWriteSingleRegisterRequest) {
-  const auto frame =
-      ModbusRtuClient::build_write_single_register_request(1, 40090, 3);
+TEST(ModbusRtuClientTest, BuildsDisableAutoCalibrationRequest) {
+  EXPECT_EQ(40090, gripper_protocol::kAutoCalibrationRegister);
+  EXPECT_EQ(3, gripper_protocol::kAutoCalibrationEnableValue);
+  EXPECT_EQ(2, gripper_protocol::kAutoCalibrationDisableValue);
+  EXPECT_NE(gripper_protocol::kAutoCalibrationEnableValue,
+            gripper_protocol::kAutoCalibrationDisableValue);
 
-  ASSERT_EQ(frame.size(), 8U);
-  EXPECT_EQ(frame[0], 0x01);
-  EXPECT_EQ(frame[1], 0x06);
-  EXPECT_EQ(frame[2], 0x9C);
-  EXPECT_EQ(frame[3], 0x9A);
-  EXPECT_EQ(frame[4], 0x00);
-  EXPECT_EQ(frame[5], 0x03);
-  EXPECT_NO_THROW(ModbusRtuClient::validate_crc(frame));
+  const auto frame = ModbusRtuClient::build_write_single_register_request(
+      1, gripper_protocol::kAutoCalibrationRegister,
+      gripper_protocol::kAutoCalibrationDisableValue);
+
+  const std::vector<uint8_t> expected = {0x01, 0x06, 0x9C, 0x9A,
+                                         0x00, 0x02, 0x06, 0x74};
+  EXPECT_EQ(expected, frame);
+}
+
+TEST(ModbusRtuClientTest, BuildsEnableAutoCalibrationRequest) {
+  const auto frame = ModbusRtuClient::build_write_multiple_registers_request(
+      1, gripper_protocol::kAutoCalibrationRegister,
+      {gripper_protocol::kAutoCalibrationEnableValue});
+
+  const std::vector<uint8_t> expected = {0x01, 0x10, 0x9C, 0x9A, 0x00, 0x01,
+                                         0x02, 0x00, 0x03, 0xA7, 0xA2};
+  EXPECT_EQ(expected, frame);
 }
 
 TEST(ModbusRtuClientTest, ParsesReadHoldingRegistersResponse) {
@@ -63,8 +77,7 @@ TEST(ModbusRtuClientTest, ParsesReadHoldingRegistersResponse) {
 }
 
 TEST(ModbusRtuClientTest, RejectsBadCrc) {
-  const std::vector<uint8_t> frame = {0x01, 0x03, 0x02, 0x00,
-                                      0x2A, 0x00, 0x00};
+  const std::vector<uint8_t> frame = {0x01, 0x03, 0x02, 0x00, 0x2A, 0x00, 0x00};
 
   EXPECT_THROW(ModbusRtuClient::validate_crc(frame), std::runtime_error);
 }
