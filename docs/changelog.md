@@ -2,21 +2,19 @@
 
 ## 2.0.4
 
-Breaking: remove the unauthenticated `Robot::box_test()` overload. Callers must
-now provide the quality-platform `time` and `auth` values explicitly.
+破坏性变更：移除无需鉴权的 `Robot::box_test()` 重载。调用方现在必须显式
+传入质量平台的 `time` 和 `auth` 参数。
 
-Serialize DIO modes with the controller `INPUT` and `OUTPUT` labels and keep
-all four force-mode parameters required in the internal request DTO. Validate
-`move_pvat` vector lengths before dispatch.
+DIO 模式按照控制器协议序列化为 `INPUT` 和 `OUTPUT`，并要求内部请求 DTO
+必须包含全部四个力控参数。在发送请求前校验 `move_pvat` 各向量的长度。
 
-Allow concurrent blocking JSON-RPC calls with method-aware deadlines. Bound
-Lua resolve, connect, and response operations; accept both controller response
-terminators and preserve coalesced replies. Isolate mDNS response state per
-discovery operation and associate PTR, SRV, TXT, A, and AAAA records correctly.
+支持阻塞 JSON-RPC 调用并发执行，并根据方法类型设置超时时间。为 Lua 的
+域名解析、连接和响应操作设置边界，支持控制器的两种响应结束符，并保留一次
+读取中合并返回的后续响应。隔离每次 mDNS 发现操作的响应状态，并正确关联
+PTR、SRV、TXT、A 和 AAAA 记录。
 
-Correct gripper auto-calibration disable, install the public Lua header,
-enforce Python build dependency versions, and require the C++ core for every
-SDK configuration.
+修正夹爪自动标定的禁用操作，安装公开的 Lua 头文件，强制校验 Python 构建
+依赖版本，并要求所有 SDK 构建配置都包含 C++ 核心库。
 
 ## 2.0.3
 
