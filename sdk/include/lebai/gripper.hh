@@ -105,13 +105,13 @@ class Gripper {
   bool is_calibrated() const;
   /**
    * @brief 打开自动校准功能.
-   * @note 请求的寄存器地址为40009,0x9C49。
+   * @note 请求的寄存器地址为40090,0x9C9A。
    *
    */
   void turn_on_auto_calibration();
   /**
    * @brief 关闭自动校准功能.
-   * @note 请求的寄存器地址为40009,0x9C49。
+   * @note 请求的寄存器地址为40090,0x9C9A。
    *
    */
   void turn_off_auto_calibration();

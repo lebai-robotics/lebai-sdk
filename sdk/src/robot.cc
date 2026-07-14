@@ -707,6 +707,11 @@ int Robot::towardj(const std::vector<double> &joint_positions, double a,
 
 void Robot::move_pvat(std::vector<double> p, std::vector<double> v,
                       std::vector<double> a, double t) {
+  if (p.size() != v.size() || p.size() != a.size()) {
+    throw std::invalid_argument(
+        "move_pvat requires p, v, and a to have equal lengths");
+  }
+
   protos_json::motion_proto::MovePvatRequest req;
   for (std::size_t i = 0; i < p.size(); i++) {
     protos_json::motion_proto::JointMove joint;
@@ -1395,10 +1400,6 @@ void Robot::sub_task_stdout(uint64_t interval_min, uint64_t interval_max) {
   impl_->sub_task_stdout(makeSubscribeRequest(interval_min, interval_max));
 }
 
-int Robot::box_test() {
-  return box_test("", "");
-}
-
 int Robot::box_test(const std::string &time, const std::string &auth) {
   protos_json::quality_proto::EmptyRequest req;
   req.auth.time = time;
@@ -1625,7 +1626,8 @@ void Robot::set_dio_mode(std::string device, unsigned int pin, bool value) {
   protos_json::io_proto::SetDioModeRequest req;
   req.device = convertIoDevice(device);
   req.pin = pin;
-  req.mode = value;
+  req.mode = value ? protos_json::io_proto::DigitalMode::OUTPUT
+                   : protos_json::io_proto::DigitalMode::INPUT;
   impl_->set_dio_mode(req);
 }
 bool Robot::get_dio_mode(std::string device, unsigned int pin) {
@@ -1658,9 +1660,9 @@ void Robot::disable_button(std::string device, unsigned int pin) {
   impl_->disable_button(req);
 }
 
-void Robot::init_claw(bool force_initilization) {
+void Robot::init_claw(bool force) {
   protos_json::claw_proto::InitClawRequest req;
-  req.force = force_initilization;
+  req.force = force;
   impl_->init_claw(req);
 }
 

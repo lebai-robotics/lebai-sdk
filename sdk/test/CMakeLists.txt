@@ -59,6 +59,65 @@ set_target_properties(test_modbus_rtu_client PROPERTIES
   ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 add_test(NAME TestModbusRtuClient COMMAND test_modbus_rtu_client WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/sdk/test)
 
+add_executable(test_timed_operation test_timed_operation.cc)
+target_include_directories(test_timed_operation PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${PROJECT_SOURCE_DIR}/sdk/src
+)
+target_link_libraries(test_timed_operation PRIVATE
+  ${PROJECT_NAMESPACE}::lebai-cpp
+  gtest)
+set_target_properties(test_timed_operation PROPERTIES
+  INSTALL_RPATH
+  ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+add_test(NAME TestTimedOperation COMMAND test_timed_operation WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/sdk/test)
+
+add_executable(test_lua_robot_client test_lua_robot_client.cc)
+target_include_directories(test_lua_robot_client PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${PROJECT_SOURCE_DIR}/sdk/src
+)
+target_link_libraries(test_lua_robot_client PRIVATE
+  ${PROJECT_NAMESPACE}::lebai-cpp
+  gtest)
+set_target_properties(test_lua_robot_client PROPERTIES
+  INSTALL_RPATH
+  ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+add_test(NAME TestLuaRobotClient COMMAND test_lua_robot_client WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/sdk/test)
+set_tests_properties(TestLuaRobotClient PROPERTIES TIMEOUT 10)
+
+add_executable(test_discovery_accumulator test_discovery_accumulator.cc)
+target_include_directories(test_discovery_accumulator PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${PROJECT_SOURCE_DIR}/sdk/src
+)
+target_link_libraries(test_discovery_accumulator PRIVATE
+  ${PROJECT_NAMESPACE}::lebai-cpp
+  gtest)
+set_target_properties(test_discovery_accumulator PROPERTIES
+  INSTALL_RPATH
+  ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+add_test(NAME TestDiscoveryAccumulator COMMAND test_discovery_accumulator WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/sdk/test)
+
+add_test(
+  NAME InstallHeaders
+  COMMAND ${CMAKE_COMMAND}
+    -DBUILD_DIR=${CMAKE_BINARY_DIR}
+    -DINSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/install-headers/$<CONFIG>
+    -DBUILD_CONFIG=$<CONFIG>
+    -P ${CMAKE_CURRENT_SOURCE_DIR}/test_install_headers.cmake)
+
+find_package(Python3 QUIET COMPONENTS Interpreter)
+if(Python3_Interpreter_FOUND)
+  add_test(
+    NAME PythonModuleVersions
+    COMMAND ${CMAKE_COMMAND}
+      -DPROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR}
+      -DTEST_ROOT=${CMAKE_CURRENT_BINARY_DIR}/python-module-versions
+      -DPYTHON_EXECUTABLE=${Python3_EXECUTABLE}
+      -P ${CMAKE_CURRENT_SOURCE_DIR}/test_python_module_versions.cmake)
+endif()
+
 add_test(
   NAME DotnetPackagingTemplates
   COMMAND ${CMAKE_COMMAND}
@@ -134,6 +193,44 @@ set_target_properties(test_rpc_client PROPERTIES
   ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
 add_test(NAME TestRpcClient COMMAND test_rpc_client WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/sdk/test)
 
+add_executable(test_http_jsonrpc_connector test_http_jsonrpc_connector.cc)
+target_include_directories(test_http_jsonrpc_connector PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${PROJECT_SOURCE_DIR}/sdk/src
+)
+target_link_libraries(test_http_jsonrpc_connector PRIVATE
+  gtest)
+if(LEBAI_NLOHMANN_JSON_TARGET)
+  target_link_libraries(test_http_jsonrpc_connector PRIVATE ${LEBAI_NLOHMANN_JSON_TARGET})
+endif()
+if(LEBAI_HTTPLIB_TARGET)
+  target_link_libraries(test_http_jsonrpc_connector PRIVATE ${LEBAI_HTTPLIB_TARGET})
+endif()
+if(LEBAI_JSON_RPC_CXX_TARGET)
+  target_link_libraries(test_http_jsonrpc_connector PRIVATE ${LEBAI_JSON_RPC_CXX_TARGET})
+endif()
+set_target_properties(test_http_jsonrpc_connector PROPERTIES
+  INSTALL_RPATH
+  ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+add_test(NAME TestHttpJsonRpcConnector COMMAND test_http_jsonrpc_connector WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/sdk/test)
+set_tests_properties(TestHttpJsonRpcConnector PROPERTIES TIMEOUT 10)
+
+add_executable(test_robot_api test_robot_api.cc)
+target_include_directories(test_robot_api PUBLIC
+  ${CMAKE_CURRENT_SOURCE_DIR}
+  ${PROJECT_SOURCE_DIR}/sdk/src
+)
+target_link_directories(test_robot_api PRIVATE
+  ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR}
+)
+target_link_libraries(test_robot_api PRIVATE
+  ${PROJECT_NAMESPACE}::lebai-cpp
+  gtest)
+set_target_properties(test_robot_api PROPERTIES
+  INSTALL_RPATH
+  ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})
+add_test(NAME TestRobotApi COMMAND test_robot_api WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/sdk/test)
+
 add_executable(test_robot test_robot.cc)
 if(DEFINED TEST_ROBOT_IP)
   target_compile_definitions(test_robot PRIVATE TEST_L_MASTER_IP="${TEST_ROBOT_IP}")
@@ -156,6 +253,7 @@ set_target_properties(test_robot PROPERTIES
   INSTALL_RPATH 
   ${CMAKE_BINARY_DIR}/${CMAKE_INSTALL_LIBDIR})  
 add_test(NAME TestRobot COMMAND test_robot WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/sdk/test)
+set_tests_properties(TestRobot PROPERTIES TIMEOUT 300)
 
 
 

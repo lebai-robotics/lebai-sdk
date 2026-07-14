@@ -14,43 +14,187 @@
  * limitations under the License.
  */
 
-#include <exception>
-#include <iostream>
 #include "lua_robot_impl.hh"
+
+#include <stdexcept>
+#include <string>
+#include <utility>
+
+#include "timed_operation.hh"
 
 namespace lebai {
 namespace l_master {
-LuaRobot::LuaRobotImpl::LuaRobotImpl(const std::string &ip) {
-  io_service_ = std::make_unique<asio::io_service>();
-  connect(ip);
-}
-LuaRobot::LuaRobotImpl::~LuaRobotImpl() {
-  if (socket_) {
-    socket_->close();
+
+namespace {
+
+LuaRobot::LuaRobotImpl::Config validate_config(
+    LuaRobot::LuaRobotImpl::Config config) {
+  if (config.timeout <= std::chrono::milliseconds::zero()) {
+    throw std::invalid_argument("Lua robot timeout must be positive");
   }
-}
-int LuaRobot::LuaRobotImpl::connect(const std::string &ip) {
-  asio::ip::tcp::resolver resolver(*io_service_);
-  auto endpoint_iterator = resolver.resolve({ip, "5180"});
-  socket_ = std::make_unique<asio::ip::tcp::socket>(*io_service_);
-  doConnect(endpoint_iterator);
-  return 0;
-}
-void LuaRobot::LuaRobotImpl::send(const std::string &lua_code) {
-  asio::write(*socket_, asio::buffer(lua_code.c_str(), lua_code.size()));
-  return;
+  if (config.max_response_bytes < 2) {
+    throw std::invalid_argument(
+        "Lua robot maximum response size must be at least 2 bytes");
+  }
+  return config;
 }
 
-std::string LuaRobot::LuaRobotImpl::call(const std::string &lua_code) {
-  std::string print_lua_code = "print(" + lua_code + ")";
-  asio::write(*socket_,
-              asio::buffer(print_lua_code.c_str(), print_lua_code.size()));
-  std::string ret;
-  // Max 1000 return string size.
-  ret.resize(1000);
-  size_t len = socket_->read_some(asio::buffer(ret));
-  ret = ret.substr(0, len - 2);
-  return ret;
+std::runtime_error transport_error(const char* operation,
+                                   const std::error_code& error) {
+  return std::runtime_error(std::string("Lua robot ") + operation +
+                            " failed: " + error.message());
+}
+
+class LuaResponseTerminator {
+ public:
+  using result_type = void;
+
+  template <typename Iterator>
+  std::pair<Iterator, bool> operator()(Iterator begin, Iterator end) const {
+    for (auto current = begin; current != end; ++current) {
+      if (*current != '\r' && *current != '\t') continue;
+
+      auto next = current;
+      ++next;
+      if (next == end) return {current, false};
+      if (*next == '\n') {
+        ++next;
+        return {next, true};
+      }
+    }
+    return {end, false};
+  }
+};
+
+}  // namespace
+
+LuaRobot::LuaRobotImpl::LuaRobotImpl(const std::string& ip)
+    : LuaRobotImpl(ip, Config{}) {}
+
+LuaRobot::LuaRobotImpl::LuaRobotImpl(const std::string& ip, Config config)
+    : config_(validate_config(std::move(config))),
+      resolver_(io_context_),
+      socket_(io_context_),
+      response_buffer_(config_.max_response_bytes) {
+  connect(ip);
+}
+
+LuaRobot::LuaRobotImpl::~LuaRobotImpl() noexcept {
+  try {
+    resolver_.cancel();
+  } catch (...) {
+  }
+  std::error_code ignored;
+  socket_.close(ignored);
+}
+
+void LuaRobot::LuaRobotImpl::connect(const std::string& ip) {
+  asio::ip::tcp::resolver::results_type endpoints;
+  const auto service = std::to_string(config_.port);
+  const auto resolve_result = run_timed_operation(
+      io_context_, config_.timeout,
+      [this, &ip, &service, &endpoints](auto complete) {
+        resolver_.async_resolve(
+            ip, service,
+            [&endpoints, complete](
+                const std::error_code& error,
+                asio::ip::tcp::resolver::results_type result) {
+              if (!error) {
+                endpoints = std::move(result);
+              }
+              complete(error);
+            });
+      },
+      [this] { resolver_.cancel(); });
+
+  if (resolve_result.timed_out) {
+    throw std::runtime_error("Lua robot resolve timed out");
+  }
+  if (resolve_result.error) {
+    throw transport_error("resolve", resolve_result.error);
+  }
+
+  const auto connect_result = run_timed_operation(
+      io_context_, config_.timeout,
+      [this, &endpoints](auto complete) {
+        asio::async_connect(
+            socket_, endpoints,
+            [complete](const std::error_code& error,
+                       const asio::ip::tcp::endpoint&) { complete(error); });
+      },
+      [this] {
+        std::error_code ignored;
+        socket_.close(ignored);
+      });
+
+  if (connect_result.timed_out) {
+    throw std::runtime_error("Lua robot connect timed out");
+  }
+  if (connect_result.error) {
+    throw transport_error("connect", connect_result.error);
+  }
+}
+
+void LuaRobot::LuaRobotImpl::send(const std::string& lua_code) {
+  std::error_code error;
+  asio::write(socket_, asio::buffer(lua_code), error);
+  if (error) {
+    throw transport_error("send", error);
+  }
+}
+
+std::string LuaRobot::LuaRobotImpl::call(const std::string& lua_code) {
+  send("print(" + lua_code + ")");
+
+  std::size_t bytes_transferred = 0;
+  TimedOperationResult read_result;
+  try {
+    read_result = run_timed_operation(
+        io_context_, config_.timeout,
+        [this, &bytes_transferred](auto complete) {
+          asio::async_read_until(
+              socket_, response_buffer_, LuaResponseTerminator{},
+              [&bytes_transferred, complete](const std::error_code& error,
+                                             std::size_t bytes) {
+                bytes_transferred = bytes;
+                complete(error);
+              });
+        },
+        [this] {
+          std::error_code ignored;
+          socket_.close(ignored);
+        });
+  } catch (const std::length_error&) {
+    throw std::runtime_error("Lua robot maximum response size exceeded");
+  }
+
+  if (read_result.timed_out) {
+    throw std::runtime_error("Lua robot response timed out");
+  }
+  if (read_result.error == asio::error::not_found) {
+    throw std::runtime_error("Lua robot maximum response size exceeded");
+  }
+  if (read_result.error == asio::error::eof) {
+    throw std::runtime_error("Lua robot incomplete response before EOF");
+  }
+  if (read_result.error) {
+    throw transport_error("response read", read_result.error);
+  }
+
+  std::string response(bytes_transferred, '\0');
+  if (!response.empty()) {
+    asio::buffer_copy(asio::buffer(response.data(), response.size()),
+                      response_buffer_.data(), response.size());
+  }
+  response_buffer_.consume(bytes_transferred);
+
+  if (response.size() < 2 || response.back() != '\n' ||
+      (response[response.size() - 2] != '\r' &&
+       response[response.size() - 2] != '\t')) {
+    throw std::runtime_error("Lua robot response has invalid framing");
+  }
+  response.resize(response.size() - 2);
+  return response;
 }
 
 }  // namespace l_master

@@ -1206,7 +1206,13 @@ class Robot {
   void switch_partition(const std::string &address,
                         const std::string &partition);
   void start_upgrade();
-  int box_test();
+  /**
+   * @brief Run the quality-platform box test.
+   *
+   * @param time Quality-platform authentication time.
+   * @param auth Quality-platform authentication value.
+   * @return Test status returned by the quality platform.
+   */
   int box_test(const std::string &time, const std::string &auth);
   std::string init_robot(const std::string &time, const std::string &auth,
                          const RobotInfoData &info);
@@ -1457,9 +1463,9 @@ class Robot {
   /**
    * @brief 初始化夹爪
    *
-   * @param force_initilization 是否强制初始化
+   * @param force 是否强制初始化
    */
-  void init_claw(bool force_initilization);
+  void init_claw(bool force);
   /**
    * @brief
    * 设置夹爪力度（力控）和幅度（位控）.如果在闭合过程中抓取到物体，则不再继续闭合以避免夹坏物体，判断的准则为这里设置的力的大小.

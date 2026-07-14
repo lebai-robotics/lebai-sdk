@@ -2,7 +2,6 @@
 
 #include <nlohmann/json.hpp>
 
-#include <optional>
 #include <stdexcept>
 #include <string>
 #include <vector>
@@ -68,50 +67,13 @@ struct SetForceModeSensorRequest {
 };
 
 struct SetForceModeParamRequest {
-  std::optional<double> damping;
-  std::optional<double> mass;
-  std::optional<double> force_threshold;
-  std::optional<double> torque_threshold;
+  double damping{};
+  double mass{};
+  double force_threshold{};
+  double torque_threshold{};
+  NLOHMANN_DEFINE_TYPE_INTRUSIVE(SetForceModeParamRequest, damping, mass,
+                                 force_threshold, torque_threshold)
 };
-
-inline void to_json(nlohmann::json &json,
-                    const SetForceModeParamRequest &request) {
-  json = nlohmann::json::object();
-  if (request.damping.has_value()) {
-    json["damping"] = *request.damping;
-  }
-  if (request.mass.has_value()) {
-    json["mass"] = *request.mass;
-  }
-  if (request.force_threshold.has_value()) {
-    json["force_threshold"] = *request.force_threshold;
-  }
-  if (request.torque_threshold.has_value()) {
-    json["torque_threshold"] = *request.torque_threshold;
-  }
-}
-
-inline void from_json(const nlohmann::json &json,
-                      SetForceModeParamRequest &request) {
-  request.damping.reset();
-  request.mass.reset();
-  request.force_threshold.reset();
-  request.torque_threshold.reset();
-  if (json.contains("damping") && !json.at("damping").is_null()) {
-    request.damping = json.at("damping").get<double>();
-  }
-  if (json.contains("mass") && !json.at("mass").is_null()) {
-    request.mass = json.at("mass").get<double>();
-  }
-  if (json.contains("force_threshold") &&
-      !json.at("force_threshold").is_null()) {
-    request.force_threshold = json.at("force_threshold").get<double>();
-  }
-  if (json.contains("torque_threshold") &&
-      !json.at("torque_threshold").is_null()) {
-    request.torque_threshold = json.at("torque_threshold").get<double>();
-  }
-}
 
 struct Rotation {
   Position euler_zyx;

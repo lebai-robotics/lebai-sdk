@@ -16,39 +16,39 @@
 
 #pragma once
 
-#include <iostream>
-#include <lebai/lua_robot.hh>
 #include <asio.hpp>
+#include <lebai/lua_robot.hh>
+
+#include <chrono>
+#include <cstddef>
+#include <cstdint>
+#include <string>
 
 namespace lebai {
 namespace l_master {
 class LuaRobot::LuaRobotImpl {
  public:
-  LuaRobotImpl(const ::std::string &ip);
-  virtual ~LuaRobotImpl();
-  int connect(const std::string &ip);
-  void send(const std::string &lua_code);
-  std::string call(const std::string &lua_code);
+  struct Config {
+    uint16_t port{5180};
+    std::chrono::milliseconds timeout{30000};
+    std::size_t max_response_bytes{1000};
+  };
 
- protected:
-  void doConnect(asio::ip::tcp::resolver::iterator endpoint_iterator) {
-    asio::async_connect(
-        *socket_, endpoint_iterator,
-        [this](std::error_code ec, asio::ip::tcp::resolver::iterator) {
-          if (!ec) {
-            std::cerr << "Connect ok.\n";
-          } else {
-            std::cerr << "Connect failed.\n";
-            std::cerr << "error code " << ec.message() << "\n";
-          }
-        });
-  }
-  double timeout_ = 1.0;
-  const uint16_t port_ = 5180;
-  std::unique_ptr<asio::io_service> io_service_;
-  std::unique_ptr<asio::ip::tcp::socket> socket_;
-  // asio::deadline_timer deadline_;
-  bool connnected_ = false;
+  explicit LuaRobotImpl(const std::string& ip);
+  LuaRobotImpl(const std::string& ip, Config config);
+  virtual ~LuaRobotImpl() noexcept;
+
+  void send(const std::string& lua_code);
+  std::string call(const std::string& lua_code);
+
+ private:
+  void connect(const std::string& ip);
+
+  Config config_;
+  asio::io_context io_context_;
+  asio::ip::tcp::resolver resolver_;
+  asio::ip::tcp::socket socket_;
+  asio::streambuf response_buffer_;
 };
 }  // namespace l_master
 }  // namespace lebai

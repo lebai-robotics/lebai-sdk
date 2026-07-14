@@ -4,12 +4,14 @@ target_sources(lebai-cpp
     src/robot.cc
     src/robot_impl.cc
     src/discovery.cc
+    src/discovery_accumulator.cc
     src/discovery_impl.cc
     src/lua_robot.cc
     src/lua_robot_impl.cc
     src/gripper.cc
     src/gripper_impl.cc
     src/modbus_rtu_client.cc
+    src/timed_operation.cc
     )
 target_include_directories(lebai-cpp
   PUBLIC
@@ -39,7 +41,7 @@ endif()
 
 set_target_properties(lebai-cpp PROPERTIES
   VERSION ${PROJECT_VERSION}
-  PUBLIC_HEADER "include/lebai/robot.hh;include/lebai/lebai.hh;include/lebai/discovery.hh;include/lebai/config.hh;include/lebai/gripper.hh"
+  PUBLIC_HEADER "include/lebai/robot.hh;include/lebai/lebai.hh;include/lebai/discovery.hh;include/lebai/config.hh;include/lebai/gripper.hh;include/lebai/lua_robot.hh"
   )
 add_library(${PROJECT_NAMESPACE}::lebai-cpp ALIAS lebai-cpp)
 

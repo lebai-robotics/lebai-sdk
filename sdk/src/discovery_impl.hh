@@ -27,7 +27,8 @@ class Discovery::DiscoveryImpl {
   std::vector<ControllerInfo> resolve();
 
  private:
-  void send_mdns_query(mdns_query_t* query, size_t count);
+  std::vector<ControllerInfo> send_mdns_query(mdns_query_t* query,
+                                              size_t count);
   int open_client_sockets(int* sockets, int max_sockets, int port);
   const std::string PTR_ = "_lebai._tcp.local";
 };
