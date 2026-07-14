@@ -93,6 +93,14 @@ set_target_properties(test_discovery_accumulator PROPERTIES
 add_test(NAME TestDiscoveryAccumulator COMMAND test_discovery_accumulator WORKING_DIRECTORY ${PROJECT_SOURCE_DIR}/sdk/test)
 
 add_test(
+  NAME InstallHeaders
+  COMMAND ${CMAKE_COMMAND}
+    -DBUILD_DIR=${CMAKE_BINARY_DIR}
+    -DINSTALL_PREFIX=${CMAKE_CURRENT_BINARY_DIR}/install-headers/$<CONFIG>
+    -DBUILD_CONFIG=$<CONFIG>
+    -P ${CMAKE_CURRENT_SOURCE_DIR}/test_install_headers.cmake)
+
+add_test(
   NAME DotnetPackagingTemplates
   COMMAND ${CMAKE_COMMAND}
     -DPROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR}
