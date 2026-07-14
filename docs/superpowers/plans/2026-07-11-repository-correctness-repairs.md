@@ -29,7 +29,6 @@
 - `sdk/test/test_discovery_accumulator.cc`: network-independent discovery tests.
 - `sdk/test/test_install_headers.cmake`: staged public-header install assertions.
 - `sdk/test/test_python_module_versions.cmake`: offline old-module/fake-pip fixture.
-- `sdk/test/test_build_without_cxx.cmake`: isolated `BUILD_CXX=OFF` configure test.
 
 **Modify:**
 
@@ -46,7 +45,9 @@
 - `sdk/test/test_robot.cc`: protocol-correct force-mode smoke call and same-object signal wait.
 - `sdk/test/test_modbus_rtu_client.cc`: gripper disable frame regression.
 - `cmake/python.cmake`: include module helper and require `setuptools>=61.0`.
-- `examples/CMakeLists.txt`: guard C++ examples behind `BUILD_CXX`.
+- `CMakeLists.txt`: reject unsupported `BUILD_CXX=OFF` configurations early.
+- `cmake/cpp.cmake`: always define the mandatory C++ core.
+- `README.md`: remove the obsolete `BUILD_CXX` option row.
 - `docs/changelog.md`: breaking APIs and correctness fixes.
 
 ## Chunk 1: RPC Schemas And Public API
@@ -759,50 +760,51 @@ git add cmake/python.cmake cmake/python_modules.cmake sdk/test/CMakeLists.txt \
 git commit -m "fix: enforce python build dependency versions"
 ```
 
-### Task 12: Make `BUILD_CXX=OFF` configure with default examples
+### Task 12: Make the mandatory C++ core explicit
 
 **Files:**
 
-- Create: `sdk/test/test_build_without_cxx.cmake`
-- Modify: `sdk/test/CMakeLists.txt`
-- Modify: `examples/CMakeLists.txt`
+- Modify: `CMakeLists.txt`
+- Modify: `cmake/cpp.cmake`
+- Modify: `README.md`
 
-- [ ] **Step 1: Add an isolated nested-configure test**
+- [ ] **Step 1: Confirm binding ownership**
 
-Configure a temporary build with `BUILD_CXX=OFF`, `BUILD_EXAMPLES=ON`, and
-`BUILD_PYTHON/DOTNET/JAVA/DOCUMENTATION/DEB/TESTING=OFF`. Pass populated
-FetchContent source directories from the outer build when available. Assert
-configure exits zero and does not report unknown `add_cpp_example`.
+Verify that every Python, .NET, and Java native binding target links to
+`lebai-cpp`. Record the C++ library as a mandatory core rather than an optional
+language sibling.
 
-- [ ] **Step 2: Run and verify RED**
+- [ ] **Step 2: Characterize the misleading failure**
 
 ```bash
-cmake -S . -B build -DBUILD_TESTING=ON
-ctest --test-dir build -R BuildWithoutCxx --output-on-failure
+cmake -S . -B build-no-cxx -DBUILD_CXX=OFF -DBUILD_EXAMPLES=ON
 ```
 
-Expected: nested configure fails at `examples/CMakeLists.txt` with unknown
-`add_cpp_example`.
+Expected before the correction: configuration reaches examples and fails with
+the unrelated unknown `add_cpp_example` command.
 
-- [ ] **Step 3: Guard only the C++ example loop**
+- [ ] **Step 3: Reject the unsupported configuration early**
 
-Wrap the C++ glob and `add_cpp_example` loop in `if(BUILD_CXX)`. Leave .NET,
-Java, and Python example branches controlled by their existing options.
+Remove the `BUILD_CXX` option. Retain an early compatibility check that rejects
+an explicitly supplied legacy `BUILD_CXX=OFF` and explains that all bindings
+depend on `lebai-cpp`. Remove the silent early return from `cmake/cpp.cmake`
+and remove the obsolete README option row.
 
-- [ ] **Step 4: Run and verify GREEN**
+- [ ] **Step 4: Verify the contract**
 
 ```bash
-ctest --test-dir build -R BuildWithoutCxx --output-on-failure
+cmake -S . -B build-no-cxx -DBUILD_CXX=OFF
+cmake -S . -B build
 ```
 
-Expected: nested configure succeeds with examples left ON.
+Expected: the first configure fails immediately with the mandatory-core
+diagnostic; the normal configure succeeds.
 
-- [ ] **Step 5: Commit the option repair**
+- [ ] **Step 5: Commit the contract correction**
 
 ```bash
-git add examples/CMakeLists.txt sdk/test/CMakeLists.txt \
-  sdk/test/test_build_without_cxx.cmake
-git commit -m "fix: support configuring without cxx targets"
+git add CMakeLists.txt cmake/cpp.cmake README.md
+git commit -m "fix: require cxx core library"
 ```
 
 ### Task 13: Run bindings and full integration verification
@@ -835,19 +837,18 @@ ctest --test-dir build-final --output-on-failure \
 
 Expected: configure/build succeeds and every hermetic test passes.
 
-- [ ] **Step 3: Verify install and C++-disabled configuration explicitly**
+- [ ] **Step 3: Verify install and the mandatory C++ contract explicitly**
 
 ```bash
 cmake -E remove_directory /tmp/lebai-sdk-correctness-install
 cmake --install build-final --prefix /tmp/lebai-sdk-correctness-install
 test -f /tmp/lebai-sdk-correctness-install/include/lebai/lua_robot.hh
 cmake -E remove_directory build-no-cxx
-cmake -S . -B build-no-cxx -DBUILD_CXX=OFF -DBUILD_EXAMPLES=ON \
-  -DBUILD_PYTHON=OFF -DBUILD_DOTNET=OFF -DBUILD_JAVA=OFF \
-  -DBUILD_DOCUMENTATION=OFF -DBUILD_DEB=OFF -DBUILD_TESTING=OFF
+cmake -S . -B build-no-cxx -DBUILD_CXX=OFF
 ```
 
-Expected: install includes Lua header and no-C++ configure succeeds.
+Expected: install includes the Lua header and the no-C++ configure fails with
+the documented mandatory-core diagnostic.
 
 - [ ] **Step 4: Build binding targets where toolchains are available**
 

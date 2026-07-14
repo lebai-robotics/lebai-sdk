@@ -114,9 +114,12 @@ if(UNIX)
   endif()
 endif()
 
-# By default only the C++ library is built.
-option(BUILD_CXX "Build C++ library" ON)
-message(STATUS "Build C++ library: ${BUILD_CXX}")
+# The C++ core is required by every language binding.
+if(DEFINED BUILD_CXX AND NOT BUILD_CXX)
+  message(FATAL_ERROR
+    "BUILD_CXX=OFF is not supported: lebai-cpp is the core library used by all SDK bindings")
+endif()
+message(STATUS "Build C++ core library: ON")
 
 option(BUILD_PYTHON "Build Python Library" OFF)
 message(STATUS "Build Python: ${BUILD_PYTHON}")

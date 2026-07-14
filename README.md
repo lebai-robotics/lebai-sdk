@@ -123,7 +123,6 @@ runtime，以减少 C# 用户对额外 Visual C++ Redistributable 的依赖。
 
 | 选项 | 默认值 | 说明 |
 | --- | --- | --- |
-| `BUILD_CXX` | `ON` | 构建 C++ SDK |
 | `BUILD_PYTHON` | `OFF` | 构建 Python 绑定 |
 | `BUILD_DOTNET` | `OFF` | 构建 .NET / C# 绑定 |
 | `BUILD_JAVA` | `OFF` | 构建 Java 绑定 |

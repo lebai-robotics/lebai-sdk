@@ -312,18 +312,15 @@ post-install recheck without network access, user-site changes, or host package
 modification. A no-op fake installer separately verifies that a failed recheck
 is fatal.
 
-### C++-Disabled Configuration
+### Mandatory C++ Core
 
-When `BUILD_CXX=OFF`, `examples/CMakeLists.txt` must not enumerate or call the
-C++-only `add_cpp_example` helper. Language-specific example handling remains
-controlled by its own build options.
-
-A configure regression test will use the documented default
-`BUILD_EXAMPLES=ON` together with `BUILD_CXX=OFF` and assert successful
-generation. It explicitly sets `BUILD_PYTHON=OFF`, `BUILD_DOTNET=OFF`,
-`BUILD_JAVA=OFF`, `BUILD_DOCUMENTATION=OFF`, `BUILD_DEB=OFF`, and
-`BUILD_TESTING=OFF`, so success cannot depend on unrelated language toolchains
-or test dependencies.
+`lebai-cpp` is the core implementation linked by the Python, .NET, and Java
+bindings, so `BUILD_CXX=OFF` is not a supported SDK configuration. Keep the
+legacy variable check for a clear compatibility diagnostic, but stop
+advertising `BUILD_CXX` as an option and reject an explicitly supplied `OFF`
+immediately before dependency or example configuration. The C++ build module
+must no longer silently return as though a useful binding-only build were
+possible.
 
 ## Error And Compatibility Policy
 
@@ -356,7 +353,7 @@ build directory:
 2. the full hermetic CTest suite;
 3. C++ SDK and examples build;
 4. staged installation contains `lua_robot.hh`;
-5. `BUILD_CXX=OFF` configures with default examples enabled;
+5. `BUILD_CXX=OFF` fails immediately with the documented mandatory-core error;
 6. Python package configuration handles an old setuptools version correctly,
    and the package target succeeds after dependency upgrade;
 7. enabled Python, .NET, and Java SWIG compilation where toolchains are
