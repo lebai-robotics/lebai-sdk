@@ -15,6 +15,15 @@ for example, `robot_robot` produces `build/bin/examples/robot/robot`.
 - C#: `robot/RobotExample.cs`
 - Java: `robot/RobotExample.java`
 
+The task-output example starts a named task, waits for it to finish, and prints
+the task's captured standard output. The named task must already exist on the
+controller and contain a print line, such as `print("Hello from task")`:
+
+- C++: `robot/example_run_task_and_get_print_result.cc`
+- Python: `robot/example_run_task_and_get_print_result.py`
+- C#: `robot/ExampleRunTaskAndGetPrintResult.cs`
+- Java: `robot/ExampleRunTaskAndGetPrintResult.java`
+
 ## Gripper
 
 - C++: `gripper/gripper.cc`

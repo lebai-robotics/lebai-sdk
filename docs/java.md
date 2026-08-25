@@ -8,7 +8,7 @@ Java 构件发布到 Maven Central 后，可以在应用项目中依赖主包：
 <dependency>
   <groupId>io.github.liufang-robot</groupId>
   <artifactId>lebai-java</artifactId>
-  <version>2.0.4</version>
+  <version>2.0.5</version>
 </dependency>
 ```
 
