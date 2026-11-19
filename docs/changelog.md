@@ -1,5 +1,10 @@
 # ChangeLog
 
+## 2.0.8
+
+升级 Maven Central 发布插件至 `0.12.0`，修复 Maven 3.10.0 将本地仓库元数据
+打入 Java 发布包、导致 Maven Central 校验失败的问题。
+
 ## 2.0.7
 
 恢复 Linux x86_64 和 ARM64 的 CPython 3.8 wheel 构建。发布到 PyPI 前，
