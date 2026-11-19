@@ -39,7 +39,7 @@ if(JAVA_ENABLE_MAVEN_CENTRAL)
     <plugin>
       <groupId>org.sonatype.central</groupId>
       <artifactId>central-publishing-maven-plugin</artifactId>
-      <version>0.9.0</version>
+      <version>0.12.0</version>
       <extensions>true</extensions>
       <configuration>
         <publishingServerId>central</publishingServerId>
