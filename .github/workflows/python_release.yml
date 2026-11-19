@@ -18,6 +18,11 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          # Newer manylinux images no longer ship CPython 3.8.
+          - name: amd64
+            runner: ubuntu-22.04
+            container: quay.io/pypa/manylinux_2_28_x86_64:2026.05.02-2
+            python-tag: cp38
           - name: amd64
             runner: ubuntu-22.04
             container: quay.io/pypa/manylinux_2_28_x86_64
@@ -46,6 +51,10 @@ jobs:
             runner: ubuntu-22.04
             container: quay.io/pypa/manylinux_2_28_x86_64
             python-tag: cp315
+          - name: aarch64
+            runner: ubuntu-24.04-arm
+            container: quay.io/pypa/manylinux_2_28_aarch64:2026.05.02-2
+            python-tag: cp38
           - name: aarch64
             runner: ubuntu-24.04-arm
             container: quay.io/pypa/manylinux_2_28_aarch64
@@ -158,8 +167,11 @@ jobs:
           path: dist
           merge-multiple: true
 
-      - name: List wheels
-        run: ls -l dist
+      - name: Verify CPython 3.8 wheels for all release platforms
+        run: |
+          ls dist/pylebai-*-cp38-cp38-win_amd64.whl \
+             dist/pylebai-*-cp38-cp38-manylinux*_x86_64.whl \
+             dist/pylebai-*-cp38-cp38-manylinux*_aarch64.whl
 
       - name: Check wheels
         run: |
