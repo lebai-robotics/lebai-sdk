@@ -1,5 +1,10 @@
 # ChangeLog
 
+## 2.0.7
+
+恢复 Linux x86_64 和 ARM64 的 CPython 3.8 wheel 构建。发布到 PyPI 前，
+CI 会检查这两个 Linux wheel 和 Windows x64 的 CPython 3.8 wheel 是否齐全。
+
 ## 2.0.4
 
 破坏性变更：移除无需鉴权的 `Robot::box_test()` 重载。调用方现在必须显式
